@@ -1,0 +1,153 @@
+{
+  "project": "스프링부트-입문",
+  "title": "사수 없이 시작하는 스프링부트",
+  "status": "in_progress",
+  "current_step": "step_5_chapters",
+  "created_at": "2026-03-01",
+  "updated_at": "2026-03-03",
+
+  "steps": {
+    "step_1_seed": {
+      "name": "씨앗",
+      "status": "done",
+      "artifact": "planning/seed-v2.md",
+      "artifact_version": 2,
+      "review": {
+        "insight": "pass",
+        "audit": "pass"
+      },
+      "questions_pending": 0
+    },
+    "step_2_code": {
+      "name": "코드 해부",
+      "status": "done",
+      "artifact": "planning/code-analysis-v1.md",
+      "artifact_version": 1,
+      "review": {
+        "insight": "pass",
+        "audit": "pass"
+      },
+      "questions_pending": 0
+    },
+    "step_3_scenario": {
+      "name": "시나리오+버전",
+      "status": "done",
+      "artifact": "planning/scenario-v1.md",
+      "artifact_version": 1,
+      "versions_created": ["v0.1", "v0.2", "v0.3", "v0.4", "v0.5"],
+      "review": {
+        "insight": "pass",
+        "audit": "pass"
+      },
+      "questions_pending": 0
+    },
+    "step_4_outline": {
+      "name": "뼈대",
+      "status": "done",
+      "artifact": "planning/outline-v1.md",
+      "artifact_version": 1,
+      "gap_analysis": "done",
+      "review": {
+        "insight": "pass",
+        "audit": "conditional_pass"
+      },
+      "questions_pending": 0
+    },
+    "step_5_chapters": {
+      "name": "챕터 집필",
+      "status": "in_progress",
+      "chapters": [
+        {
+          "id": "CH01",
+          "title": "Hello World가 뜨기까지",
+          "version": "v0.1",
+          "status": "done",
+          "artifact": "chapters/01-Hello-World가-뜨기까지.md",
+          "review": {
+            "insight": "pass",
+            "intent_watch": "pass",
+            "audit": "pass"
+          },
+          "questions_pending": 0
+        },
+        {
+          "id": "CH02",
+          "title": "글 목록을 보여주자",
+          "version": "v0.2",
+          "status": "in_progress",
+          "artifact": null,
+          "review": {
+            "insight": null,
+            "intent_watch": null,
+            "audit": null
+          },
+          "questions_pending": 2
+        },
+        {
+          "id": "CH03",
+          "title": "데이터를 저장하는 순간",
+          "version": "v0.3",
+          "status": "pending",
+          "artifact": null,
+          "review": {
+            "insight": null,
+            "intent_watch": null,
+            "audit": null
+          },
+          "questions_pending": 0
+        },
+        {
+          "id": "CH04",
+          "title": "우리 집에 자물쇠 달기",
+          "version": "v0.4",
+          "status": "pending",
+          "artifact": null,
+          "review": {
+            "insight": null,
+            "intent_watch": null,
+            "audit": null
+          },
+          "questions_pending": 0
+        },
+        {
+          "id": "CH05",
+          "title": "세상에 내보내기",
+          "version": "v0.5",
+          "status": "pending",
+          "artifact": null,
+          "review": {
+            "insight": null,
+            "intent_watch": null,
+            "audit": null
+          },
+          "questions_pending": 0
+        }
+      ]
+    },
+    "step_6_prologue": {
+      "name": "프롤로그+로드맵",
+      "status": "pending",
+      "artifacts": {
+        "prologue": null,
+        "roadmap": null
+      },
+      "review": {
+        "audit": null
+      }
+    },
+    "step_7_finish": {
+      "name": "마무리",
+      "status": "pending",
+      "artifacts": {
+        "preface": null,
+        "afterword": null,
+        "appendix": null
+      },
+      "final_title": null,
+      "total_pages": null,
+      "review": {
+        "audit": null
+      }
+    }
+  }
+}
