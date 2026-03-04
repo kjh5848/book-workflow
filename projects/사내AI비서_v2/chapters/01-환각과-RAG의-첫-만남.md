@@ -10,6 +10,24 @@
 
 ### 입사 3일 차, 첫 번째 임무
 
+<!-- [GEMINI PROMPT: 01_chapter-opening]
+path: assets/CH01/01_chapter-opening.png
+A minimalist black and white technical diagram with a strict 16:9 aspect ratio
+on a solid white background. No shading, no 3D effects, only clean thin line art.
+The entire assembly of icons, lines, and text is perfectly centered globally
+within the 16:9 frame, leaving generous and equal white space on all sides.
+
+A minimalist line-art person icon sitting at a desk with a laptop.
+Above the laptop, a large speech bubble from an off-screen figure (team lead)
+containing text 'AI 비서 만들어봐'. The person has a small thought bubble
+with a question mark '?'. On the desk, a sticky note labeled 'Wi-Fi PW'.
+To the right of the person, a minimalist line-art chat window icon with
+a robot face inside, representing the AI assistant to be built.
+Korean label at bottom: '입사 3일 차, 첫 번째 미션'.
+Style: scene-opener
+-->
+![챕터 오프닝](../assets/CH01/01_chapter-opening.png)
+
 입사 3일 차였다. 아직 사내 Wi-Fi 비밀번호를 포스트잇에 적어 모니터에 붙여놓던 시절이었다.
 
 오전 10시, 팀장이 자리로 왔다.
@@ -64,6 +82,27 @@ GPT든 Claude든 Gemini든 마찬가지다. 자기가 학습한 데이터에 없
 
 커넥트의 연차 규정은 공개된 인터넷 어디에도 없다. 그러니 LLM이 알 방법이 없다. 근로기준법 기반으로 그럴듯한 답을 만들어낸 것뿐이다.
 
+<!-- [GEMINI PROMPT: 01_hallucination-outsider]
+path: assets/CH01/01_hallucination-outsider.png
+A minimalist black and white technical diagram with a strict 16:9 aspect ratio
+on a solid white background. No shading, no 3D effects, only clean thin line art.
+The entire assembly of icons, lines, and text is perfectly centered globally
+within the 16:9 frame, leaving generous and equal white space on all sides.
+
+Left side: a minimalist line-art person icon in a suit labeled 'LLM (외부인)',
+with a large speech bubble containing a confident checkmark and text '근로기준법에
+따르면...' — representing confident but wrong answers.
+Right side: a minimalist line-art building icon labeled '회사 내부' with a locked
+door icon. Behind the door, three stacked document icons labeled '사내 규정'.
+A dashed arrow from the person toward the locked door with a large X mark on it,
+indicating the person cannot access internal documents.
+Below the person: small icons of books, newspapers, globe labeled '공개 데이터 (학습 완료)'.
+Korean label at bottom: 'LLM은 공개 데이터는 알지만, 사내 문서는 읽은 적 없다'.
+Style: metaphor-diagram
+-->
+![LLM 환각 비유](../assets/CH01/01_hallucination-outsider.png)
+*그림 1-1: LLM은 세상의 공개 데이터는 학습했지만, 우리 회사 내부 문서는 읽은 적이 없다.*
+
 ---
 
 ### 문서를 직접 넣어주면 되지 않을까?
@@ -86,6 +125,26 @@ LLM에는 한 번에 처리할 수 있는 텍스트 길이 한도가 있다. 문
 
 문서를 통째로 넣는 방식은 임시방편이었다.
 
+<!-- [GEMINI PROMPT: 01_context-overflow]
+path: assets/CH01/01_context-overflow.png
+A minimalist black and white technical diagram with a strict 16:9 aspect ratio
+on a solid white background. No shading, no 3D effects, only clean thin line art.
+The entire assembly of icons, lines, and text is perfectly centered globally
+within the 16:9 frame, leaving generous and equal white space on all sides.
+
+Center: a minimalist line-art rectangle representing a prompt window labeled
+'프롬프트 창'. Inside the window, three stacked document icons labeled '인사규정',
+'보안지침', '복지정책'. Above the window, five more document icons are falling
+toward the window but overflowing — some tilted and sticking out above the top edge.
+A dashed horizontal line near the top of the window labeled '컨텍스트 한도'.
+The documents above the line are drawn with lighter/thinner strokes to indicate
+they cannot fit. A small warning triangle icon with '!' at the top right corner.
+Korean labels below: '문서가 많아지면 프롬프트에 다 넣을 수 없다'.
+Style: limitation-diagram
+-->
+![컨텍스트 넘침](../assets/CH01/01_context-overflow.png)
+*그림 1-2: 문서를 통째로 넣는 방식의 한계. 문서가 늘어나면 프롬프트 창이 넘친다.*
+
 ---
 
 ### RAG — "오픈북 시험"으로 바꾸기
@@ -95,6 +154,26 @@ LLM에는 한 번에 처리할 수 있는 텍스트 길이 한도가 있다. 문
 LLM이 모든 사내 문서를 외울 필요가 있을까? 사람도 비슷한 문제를 해결한 방식이 있다. 시험에서 모든 내용을 통째로 외우는 대신, 오픈북을 허용하면 된다. 시험지가 나오면 그 문제와 관련된 페이지를 찾아서 보면서 답하는 것이다.
 
 LLM도 마찬가지다. 사내 문서 전체를 외울 필요가 없다. 질문이 들어왔을 때, **그 질문과 관련된 문서 조각만 찾아서 LLM에게 건네주면 된다.**
+
+<!-- [GEMINI PROMPT: 01_openbook-exam]
+path: assets/CH01/01_openbook-exam.png
+A minimalist black and white technical diagram with a strict 16:9 aspect ratio
+on a solid white background. No shading, no 3D effects, only clean thin line art.
+The entire assembly of icons, lines, and text is perfectly centered globally
+within the 16:9 frame, leaving generous and equal white space on all sides.
+
+Left side: a minimalist line-art person icon sitting at a desk, stressed, with a
+closed book labeled '전체 암기' and a thought bubble with '???' — representing a
+closed-book exam. A large X mark over this scene.
+Right side: the same person icon, relaxed, with an open book on the desk labeled
+'관련 페이지만', a magnifying glass icon pointing at the open page, and a light
+bulb above the head — representing an open-book exam. A large O mark over this scene.
+An arrow from left to right labeled '오픈북 전환'.
+Korean labels: left '클로즈드북 (전부 외우기)', right '오픈북 (필요한 것만 찾기)'.
+Style: metaphor-comparison
+-->
+![오픈북 시험 비유](../assets/CH01/01_openbook-exam.png)
+*그림 1-3: 클로즈드북 vs 오픈북. RAG는 LLM에게 오픈북 시험을 치르게 하는 것이다.*
 
 이것이 **RAG** — Retrieval-Augmented Generation, 검색 증강 생성이다.
 
@@ -117,7 +196,7 @@ flowchart LR
 
     Before ~~~ After
 ```
-*그림 1-1: LLM 단독 호출과 RAG의 차이. RAG는 질문마다 관련 문서를 찾아서 LLM에 건네준다.*
+*그림 1-4: LLM 단독 호출과 RAG의 차이. RAG는 질문마다 관련 문서를 찾아서 LLM에 건네준다.*
 
 1. 사내 문서들을 미리 **벡터 DB**에 조각으로 나눠 저장해 놓는다 (오픈북 준비)
 2. 질문이 들어오면, 그 질문과 의미가 비슷한 문서 조각을 벡터 DB에서 찾는다 (관련 페이지 찾기)
@@ -166,11 +245,27 @@ v0.0/
 > 이 챕터는 더미 문서(3개)로 동작을 확인하는 맛보기 버전이다.
 > 실제 PDF/DOCX 파싱과 영속 저장은 CH04(VectorDB 구축)에서 다룬다.
 
-> **패키지 설치**: 이 챕터의 코드를 실행하려면 다음 패키지가 필요하다.
-> ```bash
-> pip install langchain-ollama langchain-chroma langchain-classic
-> ```
-> `langchain_classic`은 `RetrievalQA` 체인이 들어있는 패키지다. CH05에서 LCEL로 전환하면 더 이상 사용하지 않는다.
+---
+
+### 실습 환경 구축
+
+> Python, Ollama, Docker 설치가 아직 안 되어 있다면 **부록(환경 설정)** 을 먼저 참고하자.
+
+```bash
+# Ollama에 LLM과 임베딩 모델 다운로드
+ollama pull deepseek-r1:8b
+ollama pull nomic-embed-text
+
+# 패키지 설치 (v0.0/requirements.txt)
+pip install -r requirements.txt
+```
+
+| 패키지 | 용도 |
+|--------|------|
+| `langchain-ollama` | Ollama LLM/임베딩 연동 |
+| `langchain-chroma` | ChromaDB 벡터 저장소 |
+| `langchain-classic` | RetrievalQA 체인 (CH05에서 LCEL로 전환) |
+| `chromadb` | 벡터 DB |
 
 ---
 
@@ -199,7 +294,7 @@ python step1_fail.py
   desc: step1_fail.py 실행 결과 — LLM이 존재하지 않는 커넥트 신입사원 연차 규정을 그럴듯하게 답하는 터미널 화면
 ] -->
 ![step1 실행 결과](../assets/CH01/01_step1-hallucination.png)
-*그림 1-2: step1_fail.py 실행 결과. 자신감 있게 답하지만 실제 커넥트 규정과 다르다.*
+*그림 1-5: step1_fail.py 실행 결과. 자신감 있게 답하지만 실제 커넥트 규정과 다르다.*
 
 ---
 
@@ -236,7 +331,7 @@ python step2_context.py
   desc: step2_context.py 실행 결과 — 규정 내용을 프롬프트에 직접 주입했을 때 정확한 답변이 나오는 터미널 화면
 ] -->
 ![step2 실행 결과](../assets/CH01/01_step2-context.png)
-*그림 1-3: step2_context.py 실행 결과. 문서를 직접 넣으니 정확하게 답한다.*
+*그림 1-6: step2_context.py 실행 결과. 문서를 직접 넣으니 정확하게 답한다.*
 
 ---
 
@@ -315,7 +410,7 @@ python step3_rag.py
   desc: step3_rag.py 실행 결과 — 벡터DB에서 검색된 문서 출처([인사규정]) 와 함께 정확한 답변이 나오는 터미널 화면
 ] -->
 ![step3 실행 결과](../assets/CH01/01_step3-rag.png)
-*그림 1-4: step3_rag.py 실행 결과. [인사규정] 문서를 찾아서 답변하고, 어디서 가져왔는지 출처까지 보여준다.*
+*그림 1-7: step3_rag.py 실행 결과. [인사규정] 문서를 찾아서 답변하고, 어디서 가져왔는지 출처까지 보여준다.*
 
 이제 답변과 함께 어느 문서를 참고했는지가 나온다. 환각이 사라지고, 출처가 생겼다.
 
@@ -342,7 +437,7 @@ python step3_rag_no_chunking.py
   desc: step3_rag.py와 step3_rag_no_chunking.py 실행 결과 비교 — 청킹 여부에 따른 검색 정확도 차이를 보여주는 터미널 화면
 ] -->
 ![청킹 비교 결과](../assets/CH01/01_no-chunking-compare.png)
-*그림 1-5: 청킹 여부에 따른 검색 결과 비교. 조각으로 나누면 관련 문서만 정확히 찾는다.*
+*그림 1-8: 청킹 여부에 따른 검색 결과 비교. 조각으로 나누면 관련 문서만 정확히 찾는다.*
 
 왜 문서를 조각으로 나눠야 하는지 체감할 수 있다. 청킹 전략의 상세 비교는 CH08(검색 품질 튜닝)에서 다룬다.
 

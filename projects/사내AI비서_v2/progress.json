@@ -74,6 +74,19 @@
             "audit": "conditional_pass"
           },
           "questions_pending": 0
+        },
+        {
+          "id": "CH02",
+          "title": "일단 사내 시스템부터",
+          "version": "v0.1",
+          "status": "done",
+          "artifact": "chapters/02-일단-사내-시스템부터.md",
+          "review": {
+            "insight": "pass",
+            "intent_watch": "pass",
+            "audit": "pass"
+          },
+          "questions_pending": 0
         }
       ]
     },
