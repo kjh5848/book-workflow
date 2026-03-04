@@ -63,6 +63,19 @@ Phase 5 ── 완성
 - 새 책 프로젝트를 시작한다.
 - 먼저 책 이름(프로젝트 폴더명)을 물어본다.
 - `projects/[책이름]/` 디렉토리 구조를 생성한다 (아래 "프로젝트 폴더 구조" 참조).
+- **디렉토리 생성 시 주의**: `mkdir -p path/{a,b}` 형태의 brace expansion을 사용하지 않는다. 각 디렉토리를 개별적으로 생성하거나, 한 줄에 하나씩 나열한다.
+  ```bash
+  mkdir -p projects/[책이름]/planning
+  mkdir -p projects/[책이름]/chapters
+  mkdir -p projects/[책이름]/book/front
+  mkdir -p projects/[책이름]/book/body
+  mkdir -p projects/[책이름]/book/back
+  mkdir -p projects/[책이름]/versions
+  mkdir -p projects/[책이름]/questions/pending
+  mkdir -p projects/[책이름]/questions/done
+  mkdir -p projects/[책이름]/code
+  mkdir -p projects/[책이름]/review
+  ```
 - `.claude/progress-template.json`을 복사하여 `projects/[책이름]/progress.json` 생성.
 - **완성 코드 입력 안내**: `code/` 폴더에 완성 코드를 넣거나 GitHub URL을 달라고 안내한다.
 - 코드 사전 스캔 → STEP 1(씨앗 심기) 순서로 진행한다.
