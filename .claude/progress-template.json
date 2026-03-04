@@ -74,7 +74,7 @@
       "status": "pending",
       "artifacts": {
         "preface": null,
-        "afterword": null,
+        "epilogue": null,
         "appendix": null
       },
       "final_title": null,

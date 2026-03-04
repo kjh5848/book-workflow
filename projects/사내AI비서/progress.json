@@ -83,7 +83,7 @@
       "status": "done",
       "artifacts": {
         "preface": "book/front/preface.md",
-        "afterword": "book/back/afterword.md",
+        "epilogue": "book/back/epilogue.md",
         "appendix": "book/back/appendix.md"
       },
       "final_title": "회사 문서, 이제 물어보면 됩니다",

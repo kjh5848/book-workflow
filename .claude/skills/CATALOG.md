@@ -13,7 +13,8 @@
 | `writing/` | `claude-sonnet-4-6` | C1, C2, C3, C4, C5, D2 | storytelling, style, box-style, project-buildup |
 | `planning/` | `claude-sonnet-4-6` | B1, B2, B6, D6 | gap-analysis, pagination |
 | `code/` | `claude-sonnet-4-6` | A1, A2, A3, A4, A5, B3, B4 | code-analysis, code-explanation |
-| `visual/` | `claude-haiku-4-5-20251001` | B4, B5 | mermaid |
+| `visual/` | `claude-haiku-4-5-20251001` | B4, B5 | mermaid, image |
+| `screenshot/` | — | — | terminal-capture, browser-capture, capture.py |
 | `review/` | `claude-opus-4-6` | D1, D3, D4, D5 | review-rules |
 
 ---

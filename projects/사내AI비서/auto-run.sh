@@ -46,7 +46,7 @@ run_claude "STEP 6 프롤로그" \
 
 # STEP 7: 마무리
 run_claude "STEP 7 마무리" \
-  "마무리. ${COMMON} book/front/preface.md(서문), book/back/afterword.md(맺음말), book/back/appendix.md(부록)를 생성하라. 최종 제목을 확정하고 progress.json을 업데이트하라."
+  "마무리. ${COMMON} book/front/preface.md(서문), book/back/epilogue.md(에필로그), book/back/appendix.md(부록)를 생성하라. 최종 제목을 확정하고 progress.json을 업데이트하라."
 
 log "========================================"
 log "전체 워크플로우 완료!"
