@@ -46,25 +46,21 @@ v0.0/
 
 ## Part 2. 사내 시스템 만들기
 
-### CH02: "일단 사내 시스템부터" — FastAPI로 CRUD 만들기 (v0.1)
+### CH02: "일단 사내 시스템부터" — 사내 시스템 소개 (v0.1)
 
-**핵심 개념**: REST API, Pydantic, psycopg2, CRUD 패턴
-**기술**: FastAPI, PostgreSQL 16, psycopg2, Pydantic 2
-**버전 성과**: API로 직원/연차/매출 CRUD 동작
-**예상 분량**: ~10p
+**핵심 개념**: REST API, CRUD 패턴
+**기술**: (코드 없음 — 소개 챕터. 완성 시스템을 실행하고 Swagger UI로 확인)
+**버전 성과**: Swagger UI에서 직원/연차/매출 CRUD 동작 확인 + API 엔드포인트 목록
+**예상 분량**: ~8p
 
 **코드 실습 분류**:
 ```
-v0.1/app/
-├── models.py      [실습] 데이터 모델 (dataclass)
-├── schemas.py     [실습] Pydantic 요청/응답 스키마
-├── database.py    [실습] DB 연결 패턴 (Context Manager)
-├── crud.py        [실습] CRUD 함수 + 매개변수화 쿼리
-├── api.py         [설명] REST API 라우터
-├── main.py        [참고] FastAPI 앱 진입점
-└── views.py       (제외) Jinja2 Admin UI
+(코드 없음)
+- Swagger UI 캡처 (API 전체 목록, CRUD 테스트)
+- API 엔드포인트 표 (10개)
+- 코드가 궁금한 독자를 위한 code/v0.1/app/ 안내
 ```
-**실습 요약**: 실습 4개 / 설명 1개 / 참고 1개
+**실습 요약**: 설명 0 / 실습 0 / 소개 중심 (UI 캡처)
 
 ---
 
@@ -267,15 +263,15 @@ CH06[■■■] CH07[■□□] CH08[■■■] CH09[■■■] CH10[■■■]
 Part 0 (도입부): 프롤로그 4p + 부록(환경설정) 4p = 8p
 ─────────────────────────────────────────────────────
 Part 1: CH01(12p)                              = 12p
-Part 2: CH02(10p) + CH03(9p)                  = 19p
+Part 2: CH02(8p) + CH03(9p)                   = 17p
 Part 3: CH04(11p) + CH05(10p)                 = 21p
 Part 4: CH06(10p) + CH07(8p)                  = 18p
 Part 5: CH08(12p) + CH09(10p) + CH10(10p)     = 32p
 ─────────────────────────────────────────────────────
-총계: 8 + 12 + 19 + 21 + 18 + 32 = 110p
+총계: 8 + 12 + 17 + 21 + 18 + 32 = 108p
 ```
 
-> 권장 100p 초과 8p. 허용 범위. 갭 분석 반영 시 약간 추가될 수 있음.
+> 권장 100p 초과 8p. 허용 범위.
 
 ---
 
@@ -284,7 +280,7 @@ Part 5: CH08(12p) + CH09(10p) + CH10(10p)     = 32p
 | 챕터 | 버전 | 핵심 기술 | 완성 코드 대비 차이 |
 |------|------|----------|--------------|
 | CH01 | v0.0 | Ollama, LangChain, ChromaDB | 완성 코드와 동일 (교육용 단순화) |
-| CH02 | v0.1 | FastAPI, psycopg2, Pydantic | views.py/templates 제외 |
+| CH02 | v0.1 | (소개) REST API, CRUD 개념 | 코드 없음 — Swagger UI 캡처만 |
 | CH03 | v0.2 | (개념) | 코드 없음 |
 | CH04 | v0.3 | pypdf, ko-sroberta, ChromaDB | 완성 코드와 동일 |
 | CH05 | v0.4 | LCEL, WindowMemory | templates/session 제외 |

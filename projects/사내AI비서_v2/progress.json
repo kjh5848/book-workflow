@@ -113,6 +113,19 @@
             "audit": "pass"
           },
           "questions_pending": 0
+        },
+        {
+          "id": "CH05",
+          "title": "드디어 답해준다",
+          "version": "v0.4",
+          "status": "done",
+          "artifact": "chapters/05-드디어-답해준다.md",
+          "review": {
+            "insight": "pass",
+            "intent_watch": "pass",
+            "audit": "pass"
+          },
+          "questions_pending": 0
         }
       ]
     },
