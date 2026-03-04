@@ -100,6 +100,19 @@
             "audit": "pass"
           },
           "questions_pending": 0
+        },
+        {
+          "id": "CH04",
+          "title": "문서를 지식으로 바꾸다",
+          "version": "v0.3",
+          "status": "done",
+          "artifact": "chapters/04-문서를-지식으로-바꾸다.md",
+          "review": {
+            "insight": "pass",
+            "intent_watch": "pass",
+            "audit": "pass"
+          },
+          "questions_pending": 0
         }
       ]
     },
