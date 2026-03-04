@@ -4,7 +4,7 @@
   "status": "in_progress",
   "current_step": "step_5_chapters",
   "created_at": "2026-03-04",
-  "updated_at": "2026-03-04",
+  "updated_at": "2026-03-05",
 
   "steps": {
     "step_1_seed": {
@@ -66,12 +66,12 @@
           "id": "CH01",
           "title": "환각과 RAG의 첫 만남",
           "version": "v0.0",
-          "status": "draft",
+          "status": "done",
           "artifact": "chapters/01-환각과-RAG의-첫-만남.md",
           "review": {
-            "insight": null,
-            "intent_watch": null,
-            "audit": null
+            "insight": "pass",
+            "intent_watch": "pass",
+            "audit": "conditional_pass"
           },
           "questions_pending": 0
         }
