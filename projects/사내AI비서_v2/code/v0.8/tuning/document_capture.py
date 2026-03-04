@@ -423,7 +423,7 @@ def ingest_to_vectordb(
 
 def run_capture_pipeline() -> None:
     """문서 캡처 + 인제스천 파이프라인 데모를 실행한다."""
-    console.rule("[bold blue]CH10 문서 캡처 + 인제스천 파이프라인[/bold blue]")
+    console.rule("[bold blue]v0.8 문서 캡처 + 인제스천 파이프라인[/bold blue]")
 
     all_documents: list[dict[str, Any]] = []
 

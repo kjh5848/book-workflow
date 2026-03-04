@@ -1,5 +1,5 @@
 """
-CH09 LangChain 연결 전략 — 휴가 잔여 조회 도구.
+v0.8 휴가 잔여 조회 도구.
 
 @tool 데코레이터를 사용하여 LangChain Agent에서 호출 가능한 도구를 정의합니다.
 PostgreSQL에서 직원 휴가 정보를 조회합니다 (docker-compose up -d 필요).

@@ -1,7 +1,7 @@
 """
-CH09 LangChain 연결 전략 — CLI 실행 진입점.
+v0.7 LangChain 연결 전략 — CLI 실행 진입점.
 
-Q/A 사내 AI AI 비서 LangChain Agent를 대화형 CLI로 실행합니다.
+사내 AI 비서 LangChain Agent를 대화형 CLI로 실행합니다.
 Agent 초기화, Router 동작, Tool 실행 결과를 터미널에서 확인할 수 있습니다.
 
 실행 방법:
@@ -109,7 +109,7 @@ def run_interactive_mode(agent: object) -> None:
     Args:
         agent: ConnectHRAgent 인스턴스
     """
-    print("\nQ/A 사내 AI AI 비서가 준비되었습니다.")
+    print("\n사내 AI 비서가 준비되었습니다.")
     print("종료하려면 'q' 또는 'quit'를 입력하십시오.")
     print("데모 시나리오를 보려면 'demo'를 입력하십시오.")
     print("캐시 통계를 보려면 'stats'를 입력하십시오.")
@@ -172,7 +172,7 @@ def main() -> None:
     Agent를 초기화하고 대화형 CLI를 시작합니다.
     """
     print_separator()
-    print("Q/A 사내 AI AI 비서 — CH09 LangChain 연결 전략 예제")
+    print("사내 AI 비서 — v0.7 LangChain 연결 전략 예제")
     print_separator()
 
     # --- INPUT: 환경 확인 ---

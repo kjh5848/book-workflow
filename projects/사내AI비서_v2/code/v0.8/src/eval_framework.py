@@ -499,7 +499,7 @@ def run_full_evaluation_demo() -> None:
     테스트 질문 30개를 로드하고, 튜닝 전후를 시뮬레이션하여
     Precision@k, Recall@k, MRR 지표를 비교합니다.
     """
-    console.rule("[bold blue]CH10 RAG 튜닝 평가 프레임워크 데모[/bold blue]")
+    console.rule("[bold blue]v0.8 RAG 튜닝 평가 프레임워크 데모[/bold blue]")
 
     # --- INPUT: 질문 로드 ---
     questions = load_test_questions()

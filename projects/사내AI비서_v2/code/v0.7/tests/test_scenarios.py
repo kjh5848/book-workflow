@@ -1,7 +1,7 @@
-"""CH09 대표 시나리오 테스트.
+"""v0.7 대표 시나리오 테스트.
 
-CH08의 QueryRouter 테스트를 그대로 유지하며,
-CH09 고유 기능(캐시, 모니터링, tools/ 분리)을 추가 검증한다.
+이전 버전의 QueryRouter 테스트를 그대로 유지하며,
+v0.7 고유 기능(캐시, 모니터링, tools/ 분리)을 추가 검증한다.
 
 실행 방법:
     python -m pytest tests/test_scenarios.py -v
@@ -24,7 +24,7 @@ from src.router import QueryRouter
 
 
 # ---------------------------------------------------------------------------
-# 1. QueryRouter 테스트 (CH08 그대로)
+# 1. QueryRouter 테스트 (이전 버전과 동일)
 # ---------------------------------------------------------------------------
 
 class TestQueryRouter(unittest.TestCase):
@@ -80,7 +80,7 @@ class TestQueryRouter(unittest.TestCase):
 
 
 # ---------------------------------------------------------------------------
-# 2. 도구 import 테스트 (CH09: mcp_tools → tools/ 분리)
+# 2. 도구 import 테스트 (v0.7: mcp_tools → tools/ 분리)
 # ---------------------------------------------------------------------------
 
 class TestToolsImport(unittest.TestCase):
@@ -96,7 +96,7 @@ class TestToolsImport(unittest.TestCase):
 
 
 # ---------------------------------------------------------------------------
-# 3. 캐시 테스트 (CH09 신규)
+# 3. 캐시 테스트 (v0.7 신규)
 # ---------------------------------------------------------------------------
 
 class TestResponseCache(unittest.TestCase):
@@ -134,7 +134,7 @@ class TestResponseCache(unittest.TestCase):
 
 
 # ---------------------------------------------------------------------------
-# 4. 모니터링 테스트 (CH09 신규)
+# 4. 모니터링 테스트 (v0.7 신규)
 # ---------------------------------------------------------------------------
 
 class TestTokenTracker(unittest.TestCase):

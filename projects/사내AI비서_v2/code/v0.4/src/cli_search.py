@@ -189,7 +189,7 @@ def run_interactive_mode(
         embedding_model_name: 임베딩 모델 HuggingFace ID
     """
     print(f"\n{SEPARATOR}")
-    print("  🔎 Q/A 사내 AI VectorDB CLI 검색 도구")
+    print("  🔎 사내 AI 비서 VectorDB CLI 검색 도구")
     print(f"  📁 ChromaDB: {chroma_dir}")
     print(f"  📦 컬렉션: {collection_name}")
     print("  💡 종료: quit / exit / q")

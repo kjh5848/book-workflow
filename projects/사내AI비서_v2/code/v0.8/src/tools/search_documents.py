@@ -1,9 +1,9 @@
 """
-CH09 LangChain 연결 전략 — 문서 검색 도구.
+v0.8 문서 검색 도구.
 
 @tool 데코레이터를 사용하여 LangChain Agent에서 호출 가능한 도구를 정의합니다.
 ChromaDB 벡터 검색을 우선 사용하며, ChromaDB가 없으면
-data/docs/ 원본 문서를 파싱하여 자동 구축합니다 (CH07/CH08 동일 파이프라인).
+data/docs/ 원본 문서를 파싱하여 자동 구축합니다.
 """
 
 import os
@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 def _build_vectorstore():
     """ChromaDB Collection을 생성한다. 없으면 data/docs/에서 자동 구축한다.
 
-    CH07/CH08과 동일한 파이프라인: docs → 파싱 → 청킹 → 임베딩 → ChromaDB 저장.
+    docs → 파싱 → 청킹 → 임베딩 → ChromaDB 저장 파이프라인.
 
     Returns:
         chromadb.Collection 또는 None (구축 실패 시).
@@ -147,7 +147,7 @@ def search_documents(query: str) -> list[dict]:
     """사내 규정, 가이드라인, 정책 등 비정형 문서 내용을 검색합니다.
 
     ChromaDB 벡터 검색을 사용합니다. ChromaDB가 없으면 data/docs/ 원본
-    문서를 파싱하여 자동 구축합니다 (CH07/CH08과 동일 파이프라인).
+    문서를 파싱하여 자동 구축합니다.
 
     Args:
         query: 검색할 질문 또는 키워드 (예: "연차 사용 규정", "재택근무 조건")

@@ -1,4 +1,4 @@
-# CH10 RAG 튜닝 — 되는 수준에서 쓸만한 수준으로
+# v0.8 RAG 튜닝 — 되는 수준에서 쓸만한 수준으로
 
 > 사내 문서 기반 AI 업무 비서 (RAG + MCP) — 10장 실습 코드
 
@@ -48,8 +48,8 @@ docker-compose up -d
 이 챕터의 예제 코드를 클론하십시오.
 
 ```bash
-git clone https://github.com/{repo}/CH10_RAG_튜닝
-cd CH10_RAG_튜닝
+git clone https://github.com/{repo}/v0.8_RAG_튜닝
+cd v0.8_RAG_튜닝
 ```
 
 환경 변수를 설정하십시오.
@@ -140,7 +140,7 @@ uvicorn app.main:app --reload --port 8010
 
 ```
 ════════════════════════════════════════════
-CH10 RAG 튜닝 평가 프레임워크 데모
+v0.8 RAG 튜닝 평가 프레임워크 데모
 ════════════════════════════════════════════
 테스트 질문 로드 완료: 30개
 ┌──────────┬──────┐
@@ -206,12 +206,12 @@ flowchart TD
 ## 파일 구조
 
 ```
-CH10_RAG_튜닝/
+v0.8_RAG_튜닝/
 ├── README.md                  # 이 파일
 ├── requirements.txt           # 의존성 패키지
 ├── .env.example               # 환경 변수 템플릿
 ├── docker-compose.yml         # PostgreSQL 인프라
-├── app/                       # 웹 UI (CH09 기반)
+├── app/                       # 웹 UI
 │   ├── main.py                # FastAPI 앱 진입점
 │   ├── chat_api.py            # 채팅 API 라우터
 │   └── database.py            # DB 연결 관리

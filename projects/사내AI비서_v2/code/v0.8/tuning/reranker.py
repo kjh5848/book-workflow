@@ -351,7 +351,7 @@ def print_comparison_tables(comparison: dict) -> None:
 
 def run_reranker_experiment() -> None:
     """리랭커 실험 전체를 실행합니다."""
-    console.rule("[bold blue]CH10 ReRanker 실험[/bold blue]")
+    console.rule("[bold blue]v0.8 ReRanker 실험[/bold blue]")
 
     # --- INPUT: 검색기 및 리랭커 생성 ---
     reranker = create_reranker(use_simple=False)

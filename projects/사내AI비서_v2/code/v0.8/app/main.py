@@ -21,7 +21,7 @@ from .chat_api import router as chat_router
 # ---------------------------------------------------------------------------
 
 app = FastAPI(
-    title="ConnectHR CH10 - RAG 튜닝",
+    title="ConnectHR v0.8 - RAG 튜닝",
     description="RAG 튜닝 + 평가 프레임워크 + 실험 데모",
     version="1.0.0",
 )
@@ -50,4 +50,4 @@ async def root() -> RedirectResponse:
 @app.get("/health")
 async def health() -> dict:
     """서버 상태를 반환한다."""
-    return {"status": "ok", "chapter": "CH10", "title": "RAG 튜닝"}
+    return {"status": "ok", "version": "v0.8", "title": "RAG 튜닝"}

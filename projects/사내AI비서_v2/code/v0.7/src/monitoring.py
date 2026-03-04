@@ -1,5 +1,5 @@
 """
-CH09 LangChain 연결 전략 — 구조화된 로깅 및 Langfuse 모니터링.
+v0.7 LangChain 연결 전략 — 구조화된 로깅 및 Langfuse 모니터링.
 
 JSON 형식의 구조화된 로그 포맷, 토큰 사용량 추적, Langfuse 연동을 제공합니다.
 Langfuse 패키지가 설치되지 않은 경우 자동으로 비활성화됩니다.

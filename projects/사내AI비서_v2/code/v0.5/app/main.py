@@ -29,7 +29,7 @@ PROJECT_ROOT = Path(__file__).parent.parent
 
 app = FastAPI(
     title="메타코딩 RAG Q&A 엔진",
-    description="CH07 - LCEL 기반 RAG 체인 + 멀티턴 채팅 UI",
+    description="v0.5 - LCEL 기반 RAG 체인 + 멀티턴 채팅 UI",
     version="1.0.0",
 )
 
@@ -99,7 +99,7 @@ async def health_check() -> dict[str, str]:
     Returns:
         {"status": "ok"} 딕셔너리
     """
-    return {"status": "ok", "service": "CH07 RAG Q&A 엔진"}
+    return {"status": "ok", "service": "사내 AI 비서 RAG Q&A 엔진"}
 
 
 if __name__ == "__main__":

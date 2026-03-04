@@ -3,7 +3,7 @@
 - 파일 형식: xlsx
 - 총 시트: 1개
 - 추출 글자 수: 633자
-- 원본 경로: `/Users/nomadlab/Desktop/김주혁/workspace/coding-study/집필에이전트-claude/projects/RAG기술서_v3/examples/CH06_VectorDB_구축/data/docs/finance/FIN_부서별_예산기안서.xlsx`
+- 원본 경로: `data/docs/finance/FIN_부서별_예산기안서.xlsx`
 
 ---
 

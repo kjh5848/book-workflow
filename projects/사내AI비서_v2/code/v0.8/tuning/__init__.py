@@ -1,4 +1,4 @@
-"""CH10 RAG 튜닝 - 튜닝 실험 패키지.
+"""v0.8 RAG 튜닝 - 튜닝 실험 패키지.
 
 모듈 목록:
   chunk_experiment     - Fixed-size vs Semantic 청킹 비교

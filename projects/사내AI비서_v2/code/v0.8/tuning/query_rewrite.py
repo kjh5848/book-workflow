@@ -336,7 +336,7 @@ def merge_multi_query_results(
 
 def run_query_rewrite_experiment() -> None:
     """Query Rewrite 전체 실험을 실행합니다."""
-    console.rule("[bold blue]CH10 Query Rewrite 실험[/bold blue]")
+    console.rule("[bold blue]v0.8 Query Rewrite 실험[/bold blue]")
 
     # LLM 로드 시도
     llm = load_llm()

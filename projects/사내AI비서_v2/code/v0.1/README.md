@@ -1,6 +1,6 @@
-# CH03 LLM의 한계와 RAG의 필요성
+# v0.1 LLM의 한계와 RAG의 필요성
 
-> 사내 문서 기반 AI 업무 비서 (RAG + MCP) - 3장 실습 코드
+> 사내 AI 비서 (RAG + MCP) - v0.1 실습 코드
 
 ## 학습 목표
 
@@ -12,7 +12,7 @@
 ## 폴더 구조
 
 ```
-CH03_LLM의_한계와_RAG의_필요성/
+v0.1/
 ├── step1_fail.py              # [실패] LLM 단독 질의 → 환각 체험
 ├── step2_context.py           # [임시 해결] Context Injection
 ├── step3_rag.py               # [성공] RAG + 청킹 적용
@@ -56,7 +56,7 @@ ollama serve
 ## 설치 및 실행
 
 ```bash
-cd examples/CH03_LLM의_한계와_RAG의_필요성
+cd code/v0.1
 python3.12 -m venv .venv
 source .venv/bin/activate   # Windows: .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
@@ -100,7 +100,7 @@ python step4_rag.py
 | `nomic-embed-text` 관련 오류 | 임베딩 모델 미다운로드 | `ollama pull nomic-embed-text` |
 | 응답이 너무 느림 | RAM 부족 | `deepseek-r1:1.5b` 소형 모델로 전환 |
 
-## 다음 챕터
+## 다음 버전
 
-- **CH04**: FastAPI + PostgreSQL로 사내 시스템(직원/휴가/매출 CRUD)을 구축합니다.
-- **CH06**: 이 챕터의 인메모리 ChromaDB를 디스크에 영속화하고 실제 PDF 문서를 인덱싱합니다.
+- **v0.2**: FastAPI + PostgreSQL로 사내 시스템(직원/휴가/매출 CRUD)을 구축합니다.
+- **v0.3**: 인메모리 ChromaDB를 디스크에 영속화하고 실제 PDF 문서를 인덱싱합니다.

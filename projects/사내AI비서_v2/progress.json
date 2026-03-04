@@ -126,6 +126,19 @@
             "audit": "pass"
           },
           "questions_pending": 0
+        },
+        {
+          "id": "CH06",
+          "title": "연차도, 규정도, 한번에",
+          "version": "v0.6",
+          "status": "done",
+          "artifact": "chapters/06-연차도-규정도-한번에.md",
+          "review": {
+            "insight": "pass",
+            "intent_watch": "pass",
+            "audit": "pass"
+          },
+          "questions_pending": 0
         }
       ]
     },

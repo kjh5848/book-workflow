@@ -1,5 +1,5 @@
 """
-CH09 LangChain 연결 전략 — 도구(Tools) 패키지 초기화.
+v0.7 LangChain 연결 전략 — 도구(Tools) 패키지 초기화.
 
 이 패키지는 LangChain Agent가 사용하는 4종 MCP 도구를 제공합니다.
 """

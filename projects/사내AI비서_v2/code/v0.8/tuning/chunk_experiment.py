@@ -381,7 +381,7 @@ def print_experiment_table(
 
 def run_all_experiments() -> None:
     """모든 청킹 실험을 순서대로 실행합니다."""
-    console.rule("[bold blue]CH10 청킹 전략 실험[/bold blue]")
+    console.rule("[bold blue]v0.8 청킹 전략 실험[/bold blue]")
 
     # --- INPUT: 문서 로드 ---
     text = load_sample_document()

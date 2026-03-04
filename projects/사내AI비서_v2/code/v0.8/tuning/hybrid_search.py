@@ -456,7 +456,7 @@ def print_hybrid_demo(
 
 def run_hybrid_search_experiment() -> None:
     """하이브리드 검색 전체 실험을 실행합니다."""
-    console.rule("[bold blue]CH10 하이브리드 검색 실험[/bold blue]")
+    console.rule("[bold blue]v0.8 하이브리드 검색 실험[/bold blue]")
 
     # --- INPUT: 검색기 생성 ---
     console.print("[cyan]BM25 검색기 초기화 중...[/cyan]")

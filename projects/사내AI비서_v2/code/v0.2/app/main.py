@@ -1,7 +1,7 @@
 """
 FastAPI 애플리케이션 진입점.
 
-Q/A 사내 AI AI 비서 CH04 -- 사내 CRUD 시스템 + Admin UI를 시작합니다.
+사내 AI 비서 v0.2 -- 사내 CRUD 시스템 + Admin UI를 시작합니다.
   - /admin/*   : Jinja2 Admin UI (views.py)
   - /api/*     : REST JSON API (api.py)
   - /          : /admin/dashboard 로 리다이렉트
@@ -27,8 +27,8 @@ load_dotenv()
 # [PROCESS] FastAPI 앱 생성 및 라우터 등록
 # ------------------------------------------------------------------
 app = FastAPI(
-    title="Q/A 사내 AI 사내 시스템",
-    description="CH04 FastAPI + PostgreSQL CRUD 시스템",
+    title="사내 AI 비서 — CRUD 시스템",
+    description="v0.2 FastAPI + PostgreSQL CRUD 시스템",
     version="1.0.0",
 )
 
@@ -61,7 +61,7 @@ if __name__ == "__main__":
     port = int(os.getenv("FASTAPI_PORT", "8000"))
 
     print("=" * 55)
-    print("  Q/A 사내 AI 사내 시스템 (CH04)")
+    print("  사내 AI 비서 — CRUD 시스템 (v0.2)")
     print(f"  Admin UI : http://localhost:{port}/admin/dashboard")
     print(f"  API 문서 : http://localhost:{port}/docs")
     print("=" * 55)

@@ -530,7 +530,7 @@ def compare_strategies(
 
 def run_parser_comparison() -> None:
     """문서 파싱 전략 비교 데모를 실행한다."""
-    console.rule("[bold blue]CH10 문서 파싱 전략 비교[/bold blue]")
+    console.rule("[bold blue]v0.8 문서 파싱 전략 비교[/bold blue]")
 
     # --- PDF 비교 ---
     pdf_files = list(DATA_DIR.glob("*.pdf")) + list((DATA_DIR / "docs").rglob("*.pdf"))

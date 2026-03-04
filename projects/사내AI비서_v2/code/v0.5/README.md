@@ -1,6 +1,6 @@
-# CH07 RAG Q&A 엔진
+# v0.5 RAG Q&A 엔진
 
-> 사내 문서 기반 AI 업무 비서 (RAG + MCP) - Chapter 07 실습 코드
+> 사내 AI 비서 — 사내 문서 기반 RAG Q&A 엔진 (v0.5 실습 코드)
 
 ## 학습 목표
 
@@ -13,19 +13,19 @@
 
 - Python 3.10+
 - Ollama (로컬 LLM, 기본값) 또는 OpenAI API (선택)
-- ChromaDB (CH06 생성 데이터 또는 data/docs/ 자동 구축)
+- ChromaDB (v0.4에서 생성한 데이터 또는 data/docs/ 자동 구축)
 
 ## 독립 실행 안내
 
-CH06의 ChromaDB가 없어도 실행할 수 있습니다. `data/chroma_db/` 폴더가 비어 있으면 `data/docs/`의 원본 문서(PDF/DOCX/XLSX 6종)를 자동으로 파싱·청킹·임베딩하여 ChromaDB를 구축합니다.
+v0.4의 ChromaDB가 없어도 실행할 수 있습니다. `data/chroma_db/` 폴더가 비어 있으면 `data/docs/`의 원본 문서(PDF/DOCX/XLSX 6종)를 자동으로 파싱·청킹·임베딩하여 ChromaDB를 구축합니다.
 
 ## 설치 및 실행
 
 이 챕터의 예제 코드를 클론합니다.
 
 ```bash
-git clone https://github.com/{repo}/ch07-rag-qa-engine
-cd ch07-rag-qa-engine
+git clone https://github.com/{repo}/v0.5-rag-qa-engine
+cd v0.5-rag-qa-engine
 ```
 
 환경 변수를 설정합니다.
@@ -103,7 +103,7 @@ flowchart LR
 ## 파일 구조
 
 ```
-CH07_RAG_QA_엔진/
+v0.5/
 ├── README.md
 ├── requirements.txt
 ├── .env.example
@@ -127,7 +127,7 @@ CH07_RAG_QA_엔진/
 │   └── js/
 │       └── chat.js           # Fetch 기반 채팅 로직 (ex02 qa.js 패턴)
 ├── data/
-│   ├── docs/                 # 원본 문서 (PDF/DOCX/XLSX, CH06과 동일)
+│   ├── docs/                 # 원본 문서 (PDF/DOCX/XLSX, v0.4와 동일)
 │   └── chroma_db/            # ChromaDB (없으면 data/docs/에서 자동 구축)
 └── outputs/
     └── .gitkeep

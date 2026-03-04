@@ -1,6 +1,6 @@
-# CH08 — 정형 MCP + 비정형 RAG 통합 에이전트 설계
+# v0.6 — 정형 MCP + 비정형 RAG 통합 에이전트 설계
 
-> RAG 기술서 Chapter 08: QueryRouter + ReAct Agent + MCP Tools + 채팅 UI
+> 사내 AI 비서 v0.6: QueryRouter + ReAct Agent + MCP Tools + 채팅 UI
 
 ## 개요
 
@@ -24,7 +24,7 @@
 ## 빠른 시작
 
 ```bash
-cd CH08_통합_에이전트_설계
+cd v0.6
 python3.12 -m venv .venv
 source .venv/bin/activate
 cp .env.example .env
@@ -56,7 +56,7 @@ docker compose up -d
 
 ### 3단계: LLM 준비
 
-CH08은 Tool Calling이 필요하므로 `llama3.1:8b`를 사용합니다.
+v0.6은 Tool Calling이 필요하므로 `llama3.1:8b`를 사용합니다.
 
 ```bash
 ollama pull llama3.1:8b
@@ -78,7 +78,7 @@ uvicorn app.main:app --reload --port 8008
 ## 프로젝트 구조
 
 ```
-CH08_통합_에이전트_설계/
+v0.6/
 ├── README.md               # 이 파일
 ├── requirements.txt        # Python 의존성 (버전 고정)
 ├── .env.example            # 환경 변수 템플릿

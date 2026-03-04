@@ -1,7 +1,7 @@
-"""CH10 RAG 튜닝 — 듀얼모드 CLI 진입점.
+"""v0.8 RAG 튜닝 — 듀얼모드 CLI 진입점.
 
 두 가지 모드를 지원한다:
-  (1) 에이전트 CLI: CH09과 동일한 대화형 Q/A 비서
+  (1) 에이전트 CLI: 대화형 사내 AI 비서
   (2) 실험 메뉴: RAG 튜닝 실험 선택/실행
 
 실행 방법:
@@ -43,7 +43,7 @@ setup_logging(
 logger = logging.getLogger(__name__)
 
 # ===================================================================
-# (1) 에이전트 CLI 모드 (CH09 동일)
+# (1) 에이전트 CLI 모드
 # ===================================================================
 
 DEMO_QUERIES: list[str] = [
@@ -99,7 +99,7 @@ def run_demo_mode(agent: object) -> None:
 
 def run_interactive_mode(agent: object) -> None:
     """사용자와 대화형으로 질문을 주고받는 CLI를 실행합니다."""
-    print("\nQ/A 사내 AI 비서가 준비되었습니다.")
+    print("\n사내 AI 비서가 준비되었습니다.")
     print("종료하려면 'q' 또는 'quit'를 입력하십시오.")
     print("데모 시나리오를 보려면 'demo'를 입력하십시오.")
     print("캐시 통계를 보려면 'stats'를 입력하십시오.")
@@ -155,7 +155,7 @@ def run_interactive_mode(agent: object) -> None:
 def run_agent_cli(demo: bool = False) -> None:
     """에이전트 CLI를 시작합니다."""
     print_separator()
-    print("Q/A 사내 AI 비서 — CH10 RAG 튜닝 예제")
+    print("사내 AI 비서 — v0.8 RAG 튜닝")
     print_separator()
 
     provider = os.getenv("LLM_PROVIDER", "ollama")
@@ -187,7 +187,7 @@ def run_agent_cli(demo: bool = False) -> None:
 
 
 # ===================================================================
-# (2) 실험 메뉴 모드 (CH10 신규)
+# (2) 실험 메뉴 모드 (v0.8 신규)
 # ===================================================================
 
 EXPERIMENTS = {
@@ -296,7 +296,7 @@ def run_all_experiments() -> None:
 def run_experiment_menu() -> None:
     """실험 선택 메뉴를 표시하고 실행합니다."""
     print_separator()
-    print("CH10 RAG 튜닝 - 실험 선택 메뉴")
+    print("v0.8 RAG 튜닝 - 실험 선택 메뉴")
     print_separator()
     print("\n이 챕터에서는 RAG 품질을 개선하는 다양한 튜닝 기법을 실험합니다.")
     print("각 실험은 ChromaDB 없이 인메모리 샘플 데이터로 독립 실행 가능합니다.\n")
@@ -351,9 +351,9 @@ def main() -> None:
 
     # 대화형 모드 선택
     print_separator()
-    print("CH10 RAG 튜닝 — 메인 메뉴")
+    print("v0.8 RAG 튜닝 — 메인 메뉴")
     print_separator()
-    print("\n  1. 에이전트 CLI  (Q/A 사내 AI 비서)")
+    print("\n  1. 에이전트 CLI  (사내 AI 비서)")
     print("  2. 실험 메뉴    (RAG 튜닝 실험)")
     print("  3. 데모 모드    (에이전트 시나리오 자동 실행)")
     print()

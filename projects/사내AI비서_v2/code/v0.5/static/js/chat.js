@@ -1,5 +1,5 @@
 /**
- * CH07 RAG Q&A 채팅 로직
+ * v0.5 RAG Q&A 채팅 로직
  *
  * ex02의 qa.js 패턴을 기반으로 작성된 Fetch 기반 채팅 스크립트.
  * 멀티턴 대화: 세션 ID를 localStorage에 저장하여 이전 대화 맥락을 유지한다.

@@ -422,7 +422,7 @@ def print_experiment_table(title: str, results: list[dict]) -> None:
 
 def run_all_retriever_experiments() -> None:
     """모든 Retriever 튜닝 실험을 실행합니다."""
-    console.rule("[bold blue]CH10 Retriever 튜닝 실험[/bold blue]")
+    console.rule("[bold blue]v0.8 Retriever 튜닝 실험[/bold blue]")
 
     # --- INPUT: 검색기 생성 ---
     if USE_SAMPLE_DATA:

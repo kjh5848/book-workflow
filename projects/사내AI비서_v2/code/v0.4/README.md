@@ -1,6 +1,6 @@
-# CH06 VectorDB 구축
+# v0.4 VectorDB 구축
 
-> 사내 문서 기반 AI 업무 비서 (RAG + MCP) — 6장 실습 코드
+> 사내 AI 비서 — v0.4 문서를 지식으로 바꾸다 실습 코드
 
 ## 학습 목표
 
@@ -30,8 +30,8 @@ flowchart TD
 이 챕터의 예제 코드 저장소를 클론합니다.
 
 ```bash
-git clone https://github.com/{repo}/CH06_VectorDB_구축
-cd CH06_VectorDB_구축
+git clone https://github.com/{repo}/v0.4_VectorDB_구축
+cd v0.4_VectorDB_구축
 ```
 
 환경 변수를 설정합니다.
@@ -100,7 +100,7 @@ python src/cli_search.py --query "비밀번호 정책" --top-k 3
 
 ```
 ============================================================
-Q/A 사내 AI VectorDB 구축 파이프라인 시작
+사내 AI 비서 VectorDB 구축 파이프라인 시작
 ============================================================
 실행 Step: [1, 2]
 문서 디렉토리: ./data/docs

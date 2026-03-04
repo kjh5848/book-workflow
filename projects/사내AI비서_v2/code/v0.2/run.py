@@ -1,4 +1,4 @@
-"""CH04 서버 실행 스크립트."""
+"""v0.2 사내 CRUD 시스템 서버 실행 스크립트."""
 
 import os
 
@@ -13,7 +13,7 @@ if __name__ == "__main__":
     port = int(os.getenv("FASTAPI_PORT", "8000"))
 
     print("=" * 55)
-    print("  Q/A 사내 AI 사내 시스템 (CH04)")
+    print("  사내 AI 비서 — CRUD 시스템 (v0.2)")
     print(f"  Admin UI : http://localhost:{port}/admin/dashboard")
     print(f"  API 문서 : http://localhost:{port}/docs")
     print("=" * 55)

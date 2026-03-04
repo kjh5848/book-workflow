@@ -393,7 +393,7 @@ class ContextualCompressionRetrieverDemo:
 
 def run_advanced_retriever_experiment() -> None:
     """고급 Retriever 세 가지를 비교 실험합니다."""
-    console.rule("[bold blue]CH10 고급 Retriever 실험[/bold blue]")
+    console.rule("[bold blue]v0.8 고급 Retriever 실험[/bold blue]")
 
     # 테스트용 문서 세트
     test_documents = [

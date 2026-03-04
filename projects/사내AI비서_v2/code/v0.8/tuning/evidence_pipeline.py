@@ -254,7 +254,7 @@ def format_evidence_response(result: dict[str, Any]) -> dict[str, Any]:
 
 def run_evidence_demo() -> None:
     """답변 근거 시스템 데모를 실행한다."""
-    console.rule("[bold blue]CH10 답변 근거 시스템 데모[/bold blue]")
+    console.rule("[bold blue]v0.8 답변 근거 시스템 데모[/bold blue]")
 
     # --- 비정형 질문 데모 ---
     console.print("\n[bold cyan]1. 비정형 질문 (문서 검색 + 캡처 이미지)[/bold cyan]")

@@ -1,5 +1,5 @@
 """
-CH06 VectorDB 구축 파이프라인 메인 오케스트레이터.
+v0.4 VectorDB 구축 파이프라인 메인 오케스트레이터.
 
 Step 1 (Python 파싱) → Step 2 (청킹 + 임베딩 + ChromaDB 저장) → Step 3 (CLI 검증)
 세 단계를 순서대로 또는 선택적으로 실행합니다.
@@ -159,7 +159,7 @@ def parse_arguments() -> argparse.Namespace:
         파싱된 인수 네임스페이스
     """
     parser = argparse.ArgumentParser(
-        description="CH06 VectorDB 구축 파이프라인 — 문서를 파싱, 청킹, 임베딩하여 ChromaDB에 저장합니다.",
+        description="v0.4 VectorDB 구축 파이프라인 — 문서를 파싱, 청킹, 임베딩하여 ChromaDB에 저장합니다.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 실행 예시:
@@ -218,7 +218,7 @@ def parse_arguments() -> argparse.Namespace:
 
 
 def main() -> None:
-    """CH06 VectorDB 구축 파이프라인 메인 진입점.
+    """v0.4 VectorDB 구축 파이프라인 메인 진입점.
 
     1. argparse로 실행 옵션 파싱
     2. 선택된 Step 순서대로 실행
@@ -229,7 +229,7 @@ def main() -> None:
     steps_to_run = sorted(set(args.step))
 
     print("\n" + "=" * 60)
-    print("  🚀 Q/A 사내 AI VectorDB 구축 파이프라인")
+    print("  🚀 사내 AI 비서 VectorDB 구축 파이프라인")
     print("=" * 60)
     print(f"  📁 문서: {_rel_path(args.docs_dir)}")
 

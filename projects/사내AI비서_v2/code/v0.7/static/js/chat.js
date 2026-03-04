@@ -1,11 +1,11 @@
 /**
- * MetaCoding CH08 - 채팅 UI 스크립트
+ * 사내 AI 비서 v0.7 - 채팅 UI 스크립트
  * Gemini 스타일 채팅 인터페이스 + 로컬스토리지 대화 기록
  */
 
 'use strict';
 
-const STORAGE_KEY = 'metacoding_ch08_chat';
+const STORAGE_KEY = 'connecthr_v07_chat';
 
 // ============================================================
 // 1. 쿼리 전송 (메인 진입점)

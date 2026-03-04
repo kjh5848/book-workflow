@@ -1,4 +1,4 @@
-# CH08 통합 에이전트 설계 - 의존성
+# v0.6 통합 에이전트 설계 - 의존성
 # 설치: pip install -r requirements.txt
 
 # FastAPI 웹 프레임워크

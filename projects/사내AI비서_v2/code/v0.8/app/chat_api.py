@@ -2,7 +2,7 @@
 
 FastAPI 라우터로 채팅 UI 서빙과 POST /api/chat 엔드포인트를 제공한다.
 ConnectHRAgent(use_agent=True) 또는 단순 RAG 검색(use_agent=False)을 지원한다.
-CH09에서는 응답 캐시 연동이 추가되었다.
+응답 캐시 연동을 지원한다.
 
 IPO 패턴:
   Input  - ChatRequest(query, use_agent)

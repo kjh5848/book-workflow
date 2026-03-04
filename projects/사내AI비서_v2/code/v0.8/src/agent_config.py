@@ -1,5 +1,5 @@
 """
-CH09 LangChain 연결 전략 — LangChain Agent 구성.
+v0.8 LangChain Agent 구성.
 
 Router 전략, RAG Chain, MCP Tools를 결합한 LangChain Agent의 표준 구성을 정의합니다.
 Timeout/Retry 설정과 응답 캐시를 통해 운영 환경에 적합한 안정성을 제공합니다.
@@ -31,7 +31,7 @@ RETRY_MAX_ATTEMPTS: int = 3      # 최대 재시도 횟수
 RETRY_DELAY_SECONDS: float = 2.0 # 재시도 간격 (초)
 
 # --- 시스템 프롬프트 ---
-SYSTEM_PROMPT = """당신은 Q/A 사내 AI AI 비서입니다.
+SYSTEM_PROMPT = """당신은 사내 AI 비서입니다.
 사내 인사(HR) 시스템과 문서를 연결하여 직원들의 업무 질문에 정확하게 답변합니다.
 
 [보유 도구]
@@ -192,7 +192,7 @@ def _build_rag_chain(llm: Any) -> Any:
 
 
 def _classify_route(query: str, router: Optional[QueryRouter] = None) -> str:
-    """CH08의 QueryRouter를 활용하여 라우팅 경로를 결정합니다.
+    """QueryRouter를 활용하여 라우팅 경로를 결정합니다.
 
     3단계 라우팅 전략(규칙 → 스키마 → LLM)을 사용합니다.
     QueryRouter 결과를 에이전트 내부 경로명으로 매핑합니다:
@@ -228,7 +228,7 @@ def _classify_route(query: str, router: Optional[QueryRouter] = None) -> str:
 
 
 class ConnectHRAgent:
-    """Q/A 사내 AI AI 비서 에이전트.
+    """사내 AI 비서 에이전트.
 
     LangChain Agent, Router, RAG Chain, MCP Tools를 통합하여
     정형/비정형/복합 질문에 모두 대응합니다.
@@ -371,7 +371,7 @@ class ConnectHRAgent:
                 logger.info("[ConnectHRAgent] 캐시 응답 반환")
                 return cached
 
-        # ② Router로 경로 결정 (CH08의 3단계 QueryRouter 사용)
+        # ② Router로 경로 결정 (3단계 QueryRouter 사용)
         route = _classify_route(query, router=self._router)
 
         # ③ 경로별 실행

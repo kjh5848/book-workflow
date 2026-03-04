@@ -1,1 +1,1 @@
-"""CH09 LangChain 연결 전략 패키지."""
+"""v0.7 LangChain 연결 전략 패키지."""

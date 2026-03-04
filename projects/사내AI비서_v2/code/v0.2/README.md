@@ -1,6 +1,6 @@
-# CH04 FastAPI 기본 시스템
+# v0.2 사내 CRUD 시스템
 
-> 사내 문서 기반 AI 업무 비서 (RAG + MCP) - CH04 실습 코드
+> 사내 AI 비서 — CH02 "일단 사내 시스템부터" 실습 코드
 
 ## 목적 및 학습 목표
 
@@ -44,8 +44,8 @@ metacoding_db     running (healthy)
 이 챕터의 예제 코드를 클론합니다.
 
 ```bash
-git clone https://github.com/{repo}/CH04_FastAPI_기본_시스템
-cd CH04_FastAPI_기본_시스템
+git clone https://github.com/{repo}/v0.2
+cd v0.2
 ```
 
 환경 변수를 설정합니다.
@@ -89,11 +89,11 @@ python app/main.py
 
 ```
 =======================================================
-  Q/A 사내 AI 사내 시스템 (CH04)
+  사내 AI 비서 — CRUD 시스템 (v0.2)
   Admin UI : http://localhost:8000/admin/dashboard
   API 문서 : http://localhost:8000/docs
 =======================================================
-INFO:     Will watch for changes in these directories: ['/path/to/CH04']
+INFO:     Will watch for changes in these directories: ['/path/to/v0.2']
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
 INFO:     Started reloader process [12345] using WatchFiles
 INFO:     Started server process [12346]
@@ -123,7 +123,7 @@ flowchart LR
 ```
 
 ```
-CH04_FastAPI_기본_시스템/
+v0.2/
 ├── README.md
 ├── requirements.txt
 ├── .env.example

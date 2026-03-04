@@ -79,7 +79,7 @@ _DB_ERROR_MSG = (
 def _build_vectorstore() -> Any:
     """ChromaDB VectorStore를 생성한다. 없으면 data/docs/에서 자동 구축한다.
 
-    CH07과 동일한 파이프라인: docs → 파싱 → 청킹 → 임베딩 → ChromaDB 저장.
+    v0.5와 동일한 파이프라인: docs → 파싱 → 청킹 → 임베딩 → ChromaDB 저장.
 
     Returns:
         chromadb.Collection 또는 None (구축 실패 시).
@@ -127,7 +127,7 @@ def _build_vectorstore() -> Any:
 def _parse_and_chunk_docs(chunk_size: int = 500, overlap: int = 100) -> list[dict]:
     """data/docs/의 원본 PDF/DOCX/XLSX를 파싱→청킹하여 딕셔너리 리스트로 반환한다.
 
-    CH07의 _parse_and_chunk_docs()와 동일한 파이프라인.
+    v0.5의 _parse_and_chunk_docs()와 동일한 파이프라인.
 
     Returns:
         {"content": str, "source": str, "page": int} 형태의 딕셔너리 리스트.
@@ -345,7 +345,7 @@ def search_documents(query: str, k: int = 3) -> dict:
     """사내 문서에서 관련 내용을 벡터 검색한다.
 
     ChromaDB 벡터 검색을 사용한다. ChromaDB가 없으면 data/docs/ 원본 문서를
-    파싱하여 자동 구축한 후 검색한다 (CH07과 동일한 파이프라인).
+    파싱하여 자동 구축한 후 검색한다 (v0.5와 동일한 파이프라인).
 
     Args:
         query: 검색 쿼리 (자연어 질문).

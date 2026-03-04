@@ -1,4 +1,4 @@
--- CH08 통합 에이전트 설계 - PostgreSQL 스키마 및 샘플 데이터
+-- v0.6 통합 에이전트 설계 - PostgreSQL 스키마 및 샘플 데이터
 -- 실행: docker-compose up -d (자동 초기화)
 -- 또는: psql -U rag_user -d rag_db -f data/schema.sql
 
