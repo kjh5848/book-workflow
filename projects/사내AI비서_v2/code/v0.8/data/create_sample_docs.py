@@ -82,7 +82,7 @@ def create_sample_pdf(output_path: Path) -> None:
 
     # 표지
     elements.append(Spacer(1, 40 * mm))
-    elements.append(Paragraph("MetaCoding Inc.", title_style))
+    elements.append(Paragraph("사내 AI 비서 Inc.", title_style))
     elements.append(Paragraph("Employment Rules v1.0", heading_style))
     elements.append(Spacer(1, 10 * mm))
     elements.append(Paragraph("2025.01.01", body_style))
@@ -91,7 +91,7 @@ def create_sample_pdf(output_path: Path) -> None:
     # 본문
     sections = [
         ("1. General Provisions", [
-            "Article 1 (Purpose): These rules prescribe the working conditions and duties of employees at MetaCoding Inc.",
+            "Article 1 (Purpose): These rules prescribe the working conditions and duties of employees at 사내 AI 비서 Inc.",
             "Article 2 (Scope): These rules apply to all full-time employees of the company.",
             "Article 3 (Definitions): 'Employee' refers to a person who has signed an employment contract with the company.",
         ]),
@@ -190,7 +190,7 @@ def create_sample_docx(output_path: Path) -> None:
     title = doc.add_heading("2025 H1 Sales Report", level=0)
     title.alignment = WD_ALIGN_PARAGRAPH.CENTER
 
-    doc.add_paragraph("MetaCoding Inc. | Confidential")
+    doc.add_paragraph("사내 AI 비서 Inc. | Confidential")
     doc.add_paragraph("Report Date: 2025-07-01")
     doc.add_paragraph("")
 

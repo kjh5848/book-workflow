@@ -2,7 +2,7 @@
 
 - 파일 형식: docx
 - 추출 글자 수: 896자
-- 원본 경로: `/Users/nomadlab/Desktop/김주혁/workspace/coding-study/집필에이전트-claude/projects/RAG기술서_v3/examples/v0.8/data/docs/security/SEC_보안규정_v1.0.docx`
+- 원본 경로: `data/docs/security/SEC_보안규정_v1.0.docx`
 
 ---
 
