@@ -112,18 +112,29 @@
 - 경로: projects/[책이름]/
 - progress.json 확인 후 현재 상태 파악
 
+## 워크플로우
+- .claude/workflow/step5-챕터집필.md (실행 흐름)
+- .claude/workflow/review-guide.md (검토 체크리스트)
+
 ## 컨텍스트 파일 (읽어야 할 것)
 - planning/seed-v1.md (의도, 핵심 메시지, 의도 밖 범위)
-- planning/outline-v1.md (CH[N+1] 섹션)
+- planning/outline-v1.md (CH[N+1] 섹션 — 코드 분류, 이미지 계획)
 - planning/scenario-v1.md (해당 버전 시나리오)
 - chapters/[이전 챕터].md (브릿지 문장 확인)
-- review/revision-log.md (수정 이력 확인)
+- answers.md (이전 STEP 답변 누적)
+- review/feedback-log.md (이전 검토 피드백)
+- review/revision-log.md (수정 이력)
 
 ## 이번 챕터 변수
 - 핵심 개념: ...
 - 버전: v0.[N+1]
-- 코드 분류: [실습] N개, [설명] N개
+- 코드 분류: [실습] N개, [설명] N개, [참고] N개
 - 이전 챕터 브릿지: "..."
+- 에셋 경로: assets/CH[N+1]/{diagram, terminal, gemini}/
+
+## 에이전트 디스패치 순서
+writer → illustrator → editor
+(Phase 5a: 글 작성 → Phase 5b: 이미지 생성 → Phase 5c: 검토)
 
 ## 명령
 `챕터 작성 [N+1]` 실행

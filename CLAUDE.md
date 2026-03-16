@@ -49,14 +49,14 @@ Phase 5 ── 완성
 | 명령어 | STEP | 산출물 | 상세 |
 |--------|------|--------|------|
 | `새 책 만들기` | — | 프로젝트 디렉토리 | 아래 참조 |
-| `씨앗 심기` | 1 | `planning/seed.md` | `workflow/step1-씨앗.md` |
-| `코드 분석` | 2 | `planning/code-analysis.md` | `workflow/step2-코드해부.md` |
-| `시나리오 설계` | 3 | `planning/scenario.md` + `versions/` | `workflow/step3-시나리오.md` |
-| `뼈대 세우기` | 4 | `planning/outline.md` | `workflow/step4-뼈대.md` |
-| `챕터 작성 [N]` | 5 | `chapters/NN-제목.md` | `workflow/step5-챕터집필.md` |
-| `검토 [챕터]` | — | `review/feedback-log.md` | `workflow/review-guide.md` |
-| `프롤로그 생성` | 6 | `book/프롤로그.md` | `workflow/step6-프롤로그.md` |
-| `마무리` | 7 | `book/에필로그.md` 등 | `workflow/step7-마무리.md` |
+| `씨앗 심기` | 1 | `planning/seed.md` | `.claude/workflow/step1-씨앗.md` |
+| `코드 분석` | 2 | `planning/code-analysis.md` | `.claude/workflow/step2-코드해부.md` |
+| `시나리오 설계` | 3 | `planning/scenario.md` + `versions/` | `.claude/workflow/step3-시나리오.md` |
+| `뼈대 세우기` | 4 | `planning/outline.md` | `.claude/workflow/step4-뼈대.md` |
+| `챕터 작성 [N]` | 5 | `chapters/NN-제목.md` | `.claude/workflow/step5-챕터집필.md` |
+| `검토 [챕터]` | — | `review/feedback-log.md` | `.claude/workflow/review-guide.md` |
+| `프롤로그 생성` | 6 | `book/프롤로그.md` | `.claude/workflow/step6-프롤로그.md` |
+| `마무리` | 7 | `book/에필로그.md` 등 | `.claude/workflow/step7-마무리.md` |
 | `이어하기` | — | — | `prompts/next-session-*.md` 읽기 |
 | `현재 상태` | — | 터미널 출력 | progress.json 기반 |
 
@@ -119,7 +119,7 @@ projects/[책이름]/
 
 ## 검토 모드 (3개)
 
-산출물 완성 후 체크리스트를 돌리는 검증 단계. 상세: `workflow/review-guide.md`
+산출물 완성 후 체크리스트를 돌리는 검증 단계. 상세: `.claude/workflow/review-guide.md`
 
 | 검토 모드 | 발동 시점 | 핵심 |
 |-----------|----------|------|
@@ -146,5 +146,5 @@ projects/[책이름]/
 | `.claude/rules/structure.md` | 버전관리, 워크플로우 진행, progress.json, 질문/선택 규칙 |
 | `.claude/skills/CATALOG.md` | 22개 스킬 카탈로그 |
 | `.claude/agents/` | 에이전트 5개 (analyst-architect, writer, editor, illustrator, publisher) |
-| `workflow/step[N]-*.md` | STEP별 실행 가이드 |
-| `workflow/review-guide.md` | 검토 모드 체크리스트 |
+| `.claude/workflow/step[N]-*.md` | STEP별 실행 가이드 |
+| `.claude/workflow/review-guide.md` | 검토 모드 체크리스트 |

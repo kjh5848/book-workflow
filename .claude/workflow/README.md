@@ -52,7 +52,7 @@ Phase 5 ── 완성
 ## 워크플로우 파일 구조
 
 ```
-workflow/
+.claude/workflow/
 ├── README.md                    # 이 파일
 ├── step1-씨앗.md                # STEP 1: 의도 확립
 ├── step2-코드해부.md             # STEP 2: 코드 분석

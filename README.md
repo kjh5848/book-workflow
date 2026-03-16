@@ -60,7 +60,7 @@ CLAUDE.md              ← 핵심 정책 + 명령어 라우팅 (~165줄)
 │   ├── screenshot/    ← 브라우저/터미널 캡처
 │   └── review/        ← 검토 판정, 체크리스트
 │
-├── workflow/          ← 7 STEP 실행 가이드
+├── .claude/workflow/  ← 7 STEP 실행 가이드
 │   ├── step1~7.md     ← 각 STEP 절차 상세
 │   └── review-guide.md
 │
@@ -75,7 +75,7 @@ CLAUDE.md              ← 핵심 정책 + 명령어 라우팅 (~165줄)
 |------|------|----------|------|
 | 핵심 정책 | `CLAUDE.md` | 매 턴 자동 | 아이덴티티, 라우팅, 스타일 가드레일 |
 | 스킬 | `.claude/skills/*/SKILL.md` | 명령어 실행 시 on-demand | 상세 규칙, 예시, 상수 |
-| 워크플로우 | `workflow/step*.md` | 명령어 실행 시 Read | STEP별 절차 가이드 |
+| 워크플로우 | `.claude/workflow/step*.md` | 명령어 실행 시 Read | STEP별 절차 가이드 |
 
 ## 워크플로우 (7 STEP)
 
