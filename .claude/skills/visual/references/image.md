@@ -2,11 +2,13 @@
 
 ## 0. 시각 자료 유형별 도구 선택
 
-| 유형 | 도구 | 생성 시점 |
-|------|------|----------|
-| 흐름도, 아키텍처, 시퀀스 다이어그램 | **Mermaid** | 집필 중 즉시 |
-| 개념 일러스트 / 비유 이미지 | **Gemini Image** | 집필 완료 후 배치 생성 |
-| 실습 결과 스크린샷 (터미널/UI) | **Direct Capture** | 예제 코드 실행 후 |
+| 유형 | 도구 | 서브폴더 | 생성 시점 |
+|------|------|---------|----------|
+| 흐름도, 아키텍처, 시퀀스 다이어그램 | **Mermaid** | `diagram/` | 집필 중 즉시 |
+| 개념 인포그래픽 / 비유 이미지 | **Gemini Image** | `gemini/` | 집필 완료 후 배치 생성 |
+| 실습 결과 스크린샷 (터미널/UI) | **Direct Capture** | `terminal/` | 예제 코드 실행 후 |
+
+개념도는 **인포그래픽 스타일로 비유를 시각화**한다. 추상적 개념을 일상적 사물로 치환하여 한눈에 이해할 수 있도록 한다.
 
 집필 시점에는 Gemini 이미지와 실습 캡처를 만들 수 없으므로, 유형에 맞는 **플레이스홀더**를 삽입한다.
 캡션은 집필 시점에 미리 작성한다.
@@ -15,14 +17,20 @@
 
 ## 0.5. 경로 규칙
 
-모든 이미지(Gemini 생성, 실습 캡처)는 **챕터별 단일 폴더**에 저장한다.
+모든 이미지는 **챕터별 폴더 + 유형별 서브폴더**에 저장한다.
 
 ```
 projects/{책이름}/
 ├── chapters/NN-제목.md        <- 챕터 원고
 ├── assets/
-│   ├── CH01/                  <- CH01의 모든 이미지
+│   ├── CH01/
+│   │   ├── diagram/           <- Mermaid/D2 렌더링
+│   │   ├── terminal/          <- 터미널 캡처
+│   │   └── gemini/            <- Gemini 개념도
 │   ├── CH02/
+│   │   ├── diagram/
+│   │   ├── terminal/
+│   │   └── gemini/
 │   └── ...
 ```
 
@@ -30,8 +38,15 @@ projects/{책이름}/
 
 | 용도 | 경로 기준 | 형식 | 예시 |
 |------|----------|------|------|
-| `path:` (스크립트용) | 프로젝트 루트 | `assets/CH{N}/{id}.png` | `assets/CH01/01_chapter-opening.png` |
-| `![alt](src)` (마크다운) | 챕터 파일 위치 | `../assets/CH{N}/{id}.png` | `../assets/CH01/01_chapter-opening.png` |
+| `path:` (스크립트용) | 프로젝트 루트 | `assets/CH{N}/{subfolder}/{id}.png` | `assets/CH01/gemini/01_auth-flow.png` |
+| `![alt](src)` (마크다운) | 챕터 파일 위치 | `../assets/CH{N}/{subfolder}/{id}.png` | `../assets/CH01/gemini/01_auth-flow.png` |
+
+**서브폴더 매핑:**
+| 플레이스홀더 | 서브폴더 |
+|-------------|---------|
+| `[GEMINI PROMPT]` | `gemini/` |
+| `[CAPTURE NEEDED]` (터미널) | `terminal/` |
+| Mermaid/D2 렌더링 | `diagram/` |
 
 > **주의**: 챕터 파일이 `chapters/` 안에 있으므로 `![alt](assets/...)` 는 오류. 반드시 `../assets/...` 를 사용한다.
 
@@ -45,24 +60,24 @@ projects/{책이름}/
 
 ```markdown
 <!-- [GEMINI PROMPT: {NN}_{identifier}]
-path: assets/CH{N}/{NN}_{identifier}.png
+path: assets/CH{N}/gemini/{NN}_{identifier}.png
 {§3 베이스 스타일 + 프로젝트 아이콘 사전 조합 프롬프트}
 Style: {style-tag}
 -->
-![{캡션}](../assets/CH{N}/{NN}_{identifier}.png)
+![{캡션}](../assets/CH{N}/gemini/{NN}_{identifier}.png)
 *그림 {N}-{순번}: {캡션}*
 ```
 
 **예시:**
 ```markdown
 <!-- [GEMINI PROMPT: 03_rag-flow]
-path: assets/CH03/03_rag-flow.png
+path: assets/CH03/gemini/03_rag-flow.png
 Minimalist flat-design infographic illustrating RAG pipeline. Three stages:
 Document → Embedding → Vector DB → Query → LLM Response.
 White background, Korean labels, 16:9 aspect ratio.
 Style: architecture-infographic
 -->
-![RAG 파이프라인](../assets/CH03/03_rag-flow.png)
+![RAG 파이프라인](../assets/CH03/gemini/03_rag-flow.png)
 *그림 3-2: RAG 파이프라인의 전체 흐름*
 ```
 
@@ -73,20 +88,20 @@ Gemini 이미지가 아니므로 프롬프트 없이 **무엇을 캡처할지**�
 
 ```markdown
 <!-- [CAPTURE NEEDED: {NN}_{identifier}
-  path: assets/CH{N}/{NN}_{identifier}.png
+  path: assets/CH{N}/terminal/{NN}_{identifier}.png
   desc: {어떤 명령을 실행하고 어떤 상태를 보여주는지}
 ] -->
-![{캡션}](../assets/CH{N}/{NN}_{identifier}.png)
+![{캡션}](../assets/CH{N}/terminal/{NN}_{identifier}.png)
 *그림 {N}-{순번}: {캡션}*
 ```
 
 **예시:**
 ```markdown
 <!-- [CAPTURE NEEDED: 04_first-answer
-  path: assets/CH04/04_first-answer.png
+  path: assets/CH04/terminal/04_first-answer.png
   desc: `python main.py` 실행 후 RAG 비서가 첫 번째 질문에 답변한 터미널 화면
 ] -->
-![첫 번째 RAG 응답](../assets/CH04/04_first-answer.png)
+![첫 번째 RAG 응답](../assets/CH04/terminal/04_first-answer.png)
 *그림 4-3: 비서가 처음으로 올바른 답변을 돌려준 순간*
 ```
 
@@ -122,8 +137,9 @@ Gemini 이미지가 아니므로 프롬프트 없이 **무엇을 캡처할지**�
 
 **Base Prompt:**
 ```
-A minimalist black and white technical diagram with a strict 16:9 aspect ratio
-on a solid white background. No shading, no 3D effects, only clean thin line art.
+A minimalist black and white infographic-style technical diagram with a strict 16:9
+aspect ratio on a solid white background. No shading, no 3D effects, only clean thin
+line art. Use everyday metaphors to visualize abstract concepts.
 The entire assembly of icons, lines, and text is perfectly centered globally
 within the 16:9 frame, leaving generous and equal white space on all sides.
 ```
@@ -169,16 +185,16 @@ HTML 주석 블록은 제거한다.
 **Before (플레이스홀더):**
 ```markdown
 <!-- [GEMINI PROMPT: 03_rag-flow]
-path: assets/CH03/03_rag-flow.png
+path: assets/CH03/gemini/03_rag-flow.png
 ...prompt...
 -->
-![RAG 파이프라인](../assets/CH03/03_rag-flow.png)
+![RAG 파이프라인](../assets/CH03/gemini/03_rag-flow.png)
 *그림 3-2: RAG 파이프라인의 전체 흐름*
 ```
 
 **After (이미지 준비 완료):**
 ```markdown
-<img src="../assets/CH03/03_rag-flow.png" width="720" alt="RAG 파이프라인">
+<img src="../assets/CH03/gemini/03_rag-flow.png" width="720" alt="RAG 파이프라인">
 
 *그림 3-2: RAG 파이프라인의 전체 흐름*
 ```
