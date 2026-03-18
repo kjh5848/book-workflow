@@ -1,4 +1,4 @@
-# 스킬 카탈로그 (22개)
+# 스킬 카탈로그 (23개)
 
 하나의 작업만 수행하고 결과를 돌려주는 원자적 도구. 판단하지 않는다.
 
@@ -14,6 +14,7 @@
 | `planning/` | `claude-sonnet-4-6` | B1, B2, B6, D6 | gap-analysis, pagination |
 | `code/` | `claude-sonnet-4-6` | A1, A2, A3, A4, A5, B3, B4 | code-analysis, code-explanation |
 | `visual/` | `claude-haiku-4-5-20251001` | B5 | mermaid, image |
+| `image-analyzer/` | `claude-sonnet-4-6` | E1 | analysis-guide |
 | `screenshot/` | — | — | terminal-capture, browser-capture, capture.py |
 | `review/` | `claude-opus-4-6` | D1, D3, D4, D5 | review-rules |
 
@@ -76,7 +77,7 @@
 | 2. 코드 해부 | A1, A2, A3, A4 |
 | 3. 시나리오+버전 | A5, B1, B2 + 인사이트 검토(B5, D6) |
 | 4. 뼈대 | B3, B4, B5, B6, C4, D6 |
-| 5. 챕터 집필 | C1, C2, C3, C5, D1, D2, D3, D4 |
+| 5. 챕터 집필 | C1, C2, C3, C5, D1, D2, D3, D4, E1 |
 | 6. 프롤로그 | C2 |
 | 7. 마무리 | C2, C4, D6 |
 
@@ -116,3 +117,4 @@
 | D4 | 포맷-검증기 | D.검증 | 5 | 의도감시 | review/ |
 | D5 | 의도-대조기 | D.검증 | — | 의도감시 | review/ |
 | D6 | 분량-계산기 | D.검증 | 4, 7 | 인사이트, 감수 | planning/ |
+| E1 | 이미지-분석기 | E.이미지 | 5 | — | image-analyzer/ |

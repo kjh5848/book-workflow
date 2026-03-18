@@ -185,8 +185,14 @@
 // ── 자동 크기 조절 이미지 ──
 // 남은 페이지 공간을 감지하여 이미지 크기를 자동으로 조절합니다.
 // max-width: 이미지 최대 너비 비율 (0.0~1.0)
+// style: 이미지 테두리 프리셋
+//   "plain"          — 효과 없음 (기본값)
+//   "bordered"       — 프라이머리 컬러(#2563eb) 테두리
+//   "shadow"         — 오른쪽/아래 그림자 효과
+//   "bordered-shadow" — 프라이머리 테두리 + 그림자
+//   "minimal"        — 얇은 회색 테두리
 // 이미지가 남은 공간보다 크면 자동 축소, 너무 작아지면 다음 페이지로 넘김
-#let auto-image(path, alt: none, max-width: 0.7) = layout(size => context {
+#let auto-image(path, alt: none, max-width: 0.7, style: "plain") = layout(size => context {
   let target-width = size.width * max-width
   let img = image(path, width: target-width)
   let img-size = measure(img)
@@ -206,10 +212,53 @@
     target-width
   }
 
-  if alt != none {
-    figure(image(path, width: final-width), caption: [#alt])
+  // 스타일별 이미지 래핑
+  let styled-img = if style == "bordered" {
+    block(
+      stroke: 2pt + rgb("#2563eb"),
+      radius: 4pt,
+      clip: true,
+      image(path, width: final-width)
+    )
+  } else if style == "shadow" {
+    block(
+      stroke: (
+        left: 0.5pt + rgb("#e0e0e0"),
+        top: 0.5pt + rgb("#e0e0e0"),
+        right: 2pt + rgb("#c0c0c0"),
+        bottom: 2pt + rgb("#c0c0c0"),
+      ),
+      radius: 4pt,
+      clip: true,
+      image(path, width: final-width)
+    )
+  } else if style == "bordered-shadow" {
+    block(
+      stroke: (
+        left: 2pt + rgb("#2563eb"),
+        top: 2pt + rgb("#2563eb"),
+        right: 3pt + rgb("#1d4ed8"),
+        bottom: 3pt + rgb("#1d4ed8"),
+      ),
+      radius: 4pt,
+      clip: true,
+      image(path, width: final-width)
+    )
+  } else if style == "minimal" {
+    block(
+      stroke: 0.5pt + rgb("#e5e7eb"),
+      radius: 2pt,
+      clip: true,
+      image(path, width: final-width)
+    )
   } else {
-    align(center, image(path, width: final-width))
+    image(path, width: final-width)
+  }
+
+  if alt != none {
+    figure(styled-img, caption: [#alt])
+  } else {
+    align(center, styled-img)
   }
 })
 

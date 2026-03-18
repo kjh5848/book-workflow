@@ -57,6 +57,7 @@ Phase 5 ── 완성
 | `검토 [챕터]` | — | `review/feedback-log.md` | `.claude/workflow/review-guide.md` |
 | `프롤로그 생성` | 6 | `book/프롤로그.md` | `.claude/workflow/step6-프롤로그.md` |
 | `마무리` | 7 | `book/에필로그.md` 등 | `.claude/workflow/step7-마무리.md` |
+| `이미지 분석` | 5 | `[GEMINI PROMPT]` 플레이스홀더 | illustrator + image-analyzer 스킬 |
 | `이어하기` | — | — | `prompts/next-session-*.md` 읽기 |
 | `현재 상태` | — | 터미널 출력 | progress.json 기반 |
 

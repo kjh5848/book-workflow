@@ -68,11 +68,43 @@ steps: [5, 7]
 
 ## 워크플로우
 
+### 1. 디자인 선택 (첫 빌드 시 1회)
+
+1. 카탈로그 안내 → `component-catalog.pdf` 열어서 보여줌
+2. 컴포넌트별 번호 선택 요청 (기본값: 전체 1번)
+3. 선택 결과 → `--design` 인자로 변환
+4. progress.json에 선택 저장 (이후 빌드에서 재사용)
+
+### 2. D2 다이어그램 변환
+
+기존 챕터의 Mermaid 다이어그램을 D2로 변환하고 PNG로 렌더링한다.
+
+1. 챕터 마크다운에서 ` ```mermaid ` 코드블록 탐색
+2. `mermaid_to_d2.py`로 D2 코드 자동 변환 → 수동 검수
+3. D2 → SVG → 색상 치환(모노톤) → PNG (pub-d2-diagram 스킬)
+4. 챕터 마크다운의 Mermaid 코드블록을 `![설명](PNG경로)` 이미지 참조로 교체
+
+- 꺾인선(orthogonal) 라우팅: `--layout elk` 필수
+- 프라이머리 컬러(파란 계열) + 화이트 배경만 허용
+- typst_builder.py의 Mermaid 렌더링은 레거시 하위호환용으로 잔존
+
+### 3. PDF 빌드 파이프라인
+
 ```
-build → layout-check → 판단 → image-optimize/page-fit → rebuild
+[1/6] 마크다운 통합 + 전처리 (주석 제거, 이미지 경로, <br> 변환)
+[2/6] 이미지 공백 자동 제거 (autocrop)
+[3/6] Pandoc 변환 (MD → Typst)
+[4/6] 후처리 + 템플릿 병합
+      ├── fix_typst_content() (이미지→auto-image, 라벨 제거, 수평선)
+      └── design_assembler → 선택된 컴포넌트 결합 → book_base 조립
+[5/6] Typst 컴파일 → PDF
+[6/6] 레이아웃 분석
 ```
 
-최대 3회 반복. 반복 후에도 이슈가 남으면 사용자에게 보고.
+### 4. 레이아웃 검수 루프
+
+build → layout-check → 이슈 있으면 → image-optimize/page-fit → rebuild
+최대 3회 반복. 이후에도 이슈 남으면 유저에게 보고.
 
 ## 입출력
 

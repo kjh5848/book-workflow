@@ -81,6 +81,47 @@ CH[N] 완료!
 | `프롤로그 생성` | 코드 없이 전체 개념을 이야기로 |
 | `마무리` | 서문, 맺음말, 부록, 최종 제목 |
 
+### PDF 빌드 (인쇄소)
+
+STEP 7 완료 후 publisher 에이전트가 PDF를 생성한다. 4단계 워크플로우로 진행.
+
+**1단계: 디자인 선택** (첫 빌드 시 1회)
+
+`component-catalog.pdf`를 보고 컴포넌트별 디자인 번호를 선택한다. 프리셋(전체 동일) 또는 믹스매치(컴포넌트별 선택) 가능.
+
+```bash
+python3 book/build_pdf_typst.py --design 1                              # 프리셋
+python3 book/build_pdf_typst.py --design "body=2,heading=1,code=2"      # 믹스매치
+```
+
+**2단계: D2 다이어그램 변환**
+
+Mermaid 다이어그램을 D2로 변환하고 PNG로 렌더링한다.
+
+```bash
+# Mermaid → D2 자동 변환
+python3 mermaid_to_d2.py --extract chapters/01-시작.md --outdir assets/CH01/diagram/
+
+# D2 → PNG (꺾인선 라우팅)
+d2 --layout elk --pad 40 input.d2 output.svg
+rsvg-convert -d 144 -p 144 output.svg -o output.png
+```
+
+**3단계: PDF 빌드 파이프라인** (6단계)
+
+```
+[1/6] 마크다운 통합 + 전처리 (주석 제거, 이미지 경로, <br> 변환)
+[2/6] 이미지 공백 자동 제거 (autocrop)
+[3/6] Pandoc 변환 (MD → Typst)
+[4/6] 후처리 + 템플릿 병합 (design_assembler → book_base 조립)
+[5/6] Typst 컴파일 → PDF
+[6/6] 레이아웃 분석
+```
+
+**4단계: 레이아웃 검수 루프**
+
+build → layout-check → image-optimize/page-fit → rebuild (최대 3회)
+
 ### 언제든
 
 `현재 상태` → progress.json 기반 진행률 확인

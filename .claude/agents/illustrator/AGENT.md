@@ -2,7 +2,7 @@
 name: illustrator
 description: 일러스트레이터 — 다이어그램 + 캡처 + 개념도. 시각 요소 전담
 model: haiku
-skills: [visual, design-doc-mermaid]
+skills: [visual, design-doc-mermaid, image-analyzer]
 steps: [3, 4, 5]
 ---
 
@@ -25,6 +25,7 @@ steps: [3, 4, 5]
 |------|------|----------|
 | visual | Mermaid/이미지 규칙 | skills/visual/ |
 | design-doc-mermaid | Mermaid 다이어그램 생성 | skills/design-doc-mermaid/ |
+| image-analyzer | 참고 이미지 → Gemini 프롬프트 생성 | skills/image-analyzer/ |
 
 ## 규칙
 
@@ -37,10 +38,14 @@ steps: [3, 4, 5]
 - 개념도. `[GEMINI PROMPT: 설명]` 플레이스홀더
 - 캡처. `[CAPTURE NEEDED: 설명]` 플레이스홀더
 
-**2단계 — Phase 5b: 유저 요청 시 (다이어그램 전용)**
+**2단계 — Phase 5b: 유저 요청 시 (다이어그램 + 이미지 분석)**
 - Mermaid/D2 → 이미지 렌더링
 - `[CAPTURE NEEDED]` → 유저가 screenshot 스킬을 직접 호출
 - `[GEMINI PROMPT]` → 유저가 Gemini에 수동 입력
+- **참고 이미지 분석** → 유저가 `이미지 분석` 명령 실행 시 image-analyzer 스킬로 처리
+  - 챕터 MD에 삽입된 참고 이미지를 멀티모달로 읽고 문맥을 파악
+  - 교육용 재생성을 위한 Gemini 프롬프트를 자동 생성
+  - 방식 C 플레이스홀더로 교체
 
 ### 이미지 분리 규칙
 - 하나의 이미지로 이해가 어려운 개념 → 2개로 분리 (단계별 설명)
