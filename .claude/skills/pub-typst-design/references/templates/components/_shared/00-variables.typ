@@ -1,6 +1,6 @@
 // 조판 설정 변수 — 기본값은 Design 1 (클래식 블루)
-// Design 2 variant에서 이 값들을 재정의합니다
-// 소비자: _variant/body_*.typ, _variant/heading_*.typ, _variant/code_*.typ
+// Design 2에서 body_d2.typ 상단에서 재정의. D1 파일은 값을 직접 사용 (기본값과 동일하므로)
+// 소비자: _variant/body_d2.typ(재정의), _variant/heading_d2.typ, _variant/code_d2.typ
 
 // 행간: 줄과 줄 사이 간격
 #let body-leading = 1.0em

@@ -3,7 +3,7 @@
 // 변수 재정의 (Design 2 값)
 #let body-leading = 8pt
 #let body-tracking = 0pt
-#let heading-gap = 8pt
+#let heading-gap = body-leading
 #let code-inset-x = 16pt
 #let code-inset-y = 6pt
 #let code-rule-stroke = 2pt

@@ -2,7 +2,7 @@
 #show heading.where(level: 1): it => {
   chapter-title.update(it.body)
   pagebreak(weak: true)
-  v(60pt)
+  v(60pt)  // 챕터 오프닝: 상단 1/3 여백 (출판 표준)
   block(
     width: 100%,
     below: 16pt,
