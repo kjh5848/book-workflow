@@ -13,6 +13,9 @@ from pathlib import Path
 # Mermaid 다이어그램 전역 카운터
 _mermaid_counter = 0
 
+# 콘텐츠 마커 — template+base와 content 경계 표시
+CONTENT_MARKER = "// ══ CONTENT ══"
+
 # Mermaid 커스텀 설정 파일 경로
 _MERMAID_CONFIG = Path(__file__).parent / "mermaid-config.json"
 
@@ -490,8 +493,16 @@ def merge_template_and_content(template_path: Path, content: str,
             base = ""
 
     if base:
-        return template + "\n" + base + "\n" + content
-    return template + "\n" + content
+        return template + "\n" + base + "\n" + CONTENT_MARKER + "\n" + content
+    return template + "\n" + CONTENT_MARKER + "\n" + content
+
+
+def extract_content_from_typ(typ_text: str) -> str | None:
+    """CONTENT_MARKER 이후 콘텐츠 추출. 마커 없으면 None 반환."""
+    if CONTENT_MARKER in typ_text:
+        _, content = typ_text.split(CONTENT_MARKER, 1)
+        return content.lstrip("\n")
+    return None
 
 
 # ══════════════════════════════════════
