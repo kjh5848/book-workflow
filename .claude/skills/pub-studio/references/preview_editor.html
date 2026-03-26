@@ -54,6 +54,14 @@ input[type="color"] { width: 26px; height: 26px; border: 1px solid #d1d5db; bord
 .preset-btn { flex: 1; padding: 6px 4px; font-size: 11px; border: 1px solid #d1d5db; border-radius: 6px; background: white; cursor: pointer; text-align: center; transition: all 0.15s; }
 .preset-btn.active { border-color: #2563eb; background: #eff6ff; color: #1e40af; font-weight: 600; }
 
+/* ── Saved Designs ── */
+.saved-design-item { display:flex; align-items:center; padding:5px 8px; border-radius:4px; cursor:pointer; font-size:12px; transition:background 0.1s; }
+.saved-design-item:hover { background:#f0f4ff; }
+.saved-design-item .dname { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#374151; }
+.saved-design-item .ddate { font-size:10px; color:#9ca3af; margin-right:6px; white-space:nowrap; }
+.saved-design-item .ddel { color:#d1d5db; cursor:pointer; padding:2px 4px; border-radius:3px; font-size:13px; flex-shrink:0; }
+.saved-design-item .ddel:hover { background:#fee2e2; color:#ef4444; }
+
 /* ── Image section ── */
 .img-type-section { margin-bottom: 10px; padding: 8px; background: #f8fafc; border-radius: 6px; border: 1px solid #f1f5f9; }
 .img-type-title { font-size: 11px; font-weight: 600; color: #374151; margin-bottom: 6px; }
@@ -223,6 +231,7 @@ input[type="color"] { width: 26px; height: 26px; border: 1px solid #d1d5db; bord
 .file-item input { accent-color: #2563eb; flex-shrink: 0; }
 .file-item .fname { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .file-item .fsize { font-size: 10px; color: #94a3b8; }
+.file-item .fname.version-file { color: #9ca3af; font-style: italic; }
 
 /* ── Content Editor ── */
 .content-editor { border-top: 1px solid #e2e8f0; display: flex; flex-direction: column; max-height: 50%; }
@@ -346,6 +355,19 @@ input[type="color"] { width: 26px; height: 26px; border: 1px solid #d1d5db; bord
         <div class="toggle-row"><span class="toggle-label">표 table</span><div class="toggle-group"><button class="toggle-btn active" onclick="setComponent('table','d1')">D1</button><button class="toggle-btn" onclick="setComponent('table','d2')">D2</button></div></div>
         <div class="toggle-row"><span class="toggle-label">목차 toc</span><div class="toggle-group"><button class="toggle-btn active" onclick="setComponent('toc','d1')">D1</button><button class="toggle-btn" onclick="setComponent('toc','d2')">D2</button></div></div>
       </div>
+    </div>
+  </div>
+
+  <!-- 1b. 저장된 디자인 -->
+  <div class="section" id="sec-saved-designs">
+    <div class="section-title" onclick="toggleSection('sec-saved-designs')">저장된 디자인</div>
+    <div class="section-body">
+      <div style="display:flex;gap:4px;margin-bottom:8px;">
+        <input type="text" id="design-name-input" placeholder="디자인 이름" maxlength="50"
+               style="flex:1;padding:4px 8px;font-size:12px;border:1px solid #d1d5db;border-radius:4px;">
+        <button class="action-btn" onclick="saveDesign()" style="padding:4px 10px;font-size:11px;">저장</button>
+      </div>
+      <div id="saved-design-list"></div>
     </div>
   </div>
 
@@ -567,6 +589,7 @@ input[type="color"] { width: 26px; height: 26px; border: 1px solid #d1d5db; bord
             <div class="file-selector-toolbar">
               <label class="file-select-all"><input type="checkbox" id="file-select-all" checked onchange="toggleFileSelectAll()"> 전체</label>
               <span class="file-count" id="file-count">0개 선택</span>
+              <button class="combine-btn" onclick="restageFiles()" title="소스에서 MD 파일을 다시 복사합니다">Restage</button>
               <button class="combine-btn" onclick="combineMd()">통합본 생성</button>
             </div>
             <div class="file-selector" id="file-selector"></div>
@@ -1009,6 +1032,171 @@ function resetAll() {
 function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2000); }
 
 // ══════════════════════════════════════
+// Design Save/Load
+// ══════════════════════════════════════
+
+let _designCache = {};
+
+async function fetchDesigns() {
+  try {
+    const resp = await fetch('/api/designs?full=true');
+    const data = await resp.json();
+    _designCache = data.designs || {};
+    renderDesignList();
+  } catch (e) {
+    _designCache = {};
+    renderDesignList();
+  }
+}
+
+function renderDesignList() {
+  const container = document.getElementById('saved-design-list');
+  const names = Object.keys(_designCache);
+  if (names.length === 0) {
+    container.innerHTML = '<div style="font-size:11px;color:#9ca3af;padding:8px 0;text-align:center;">저장된 디자인이 없습니다</div>';
+    return;
+  }
+  names.sort((a, b) => {
+    const ta = (_designCache[a].updated_at || '');
+    const tb = (_designCache[b].updated_at || '');
+    return tb.localeCompare(ta);
+  });
+  container.innerHTML = names.map(name => {
+    const entry = _designCache[name];
+    const date = (entry.updated_at || '').slice(0, 10);
+    const escaped = name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    return '<div class="saved-design-item" onclick="loadDesign(\'' + escaped + '\')">'
+      + '<span class="dname" title="' + name.replace(/"/g, '&quot;') + '">' + name + '</span>'
+      + '<span class="ddate">' + date + '</span>'
+      + '<span class="ddel" onclick="event.stopPropagation();deleteDesign(\'' + escaped + '\')" title="삭제">x</span>'
+      + '</div>';
+  }).join('');
+}
+
+async function saveDesign() {
+  const input = document.getElementById('design-name-input');
+  const name = input.value.trim();
+  if (!name) { showToast('디자인 이름을 입력하세요'); return; }
+
+  const resp = await fetch('/api/designs/save', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: name, state: state, overwrite: false }),
+  });
+  const data = await resp.json();
+
+  if (data.error === 'duplicate') {
+    if (confirm(data.message)) {
+      const resp2 = await fetch('/api/designs/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name, state: state, overwrite: true }),
+      });
+      const data2 = await resp2.json();
+      if (data2.ok) { showToast('\'' + name + '\' 덮어쓰기 완료'); input.value = ''; fetchDesigns(); }
+      else { showToast('저장 실패: ' + (data2.error || '')); }
+    }
+    return;
+  }
+  if (data.ok) { showToast('\'' + name + '\' 저장 완료'); input.value = ''; fetchDesigns(); }
+  else { showToast('저장 실패: ' + (data.error || '')); }
+}
+
+function loadDesign(name) {
+  const entry = _designCache[name];
+  if (!entry || !entry.state) { showToast('디자인 데이터를 찾을 수 없습니다'); return; }
+  const s = entry.state;
+  Object.assign(state, {
+    preset: s.preset || 'custom',
+    components: { ...s.components },
+    fonts: { ...s.fonts },
+    typo: { ...s.typo },
+    margins: { ...s.margins },
+    images: {
+      gemini: { ...s.images.gemini },
+      terminal: { ...s.images.terminal },
+      diagram: { ...s.images.diagram },
+    },
+    colors: { ...s.colors },
+    page: { ...s.page },
+    typoSizes: { ...s.typoSizes },
+    tocDepth: s.tocDepth || 2,
+    imageOverrides: {},
+  });
+  syncAllUI();
+  render();
+  scheduleDesignRebuild();
+  showToast('\'' + name + '\' 불러오기 완료');
+}
+
+function syncAllUI() {
+  // 프리셋 버튼
+  document.querySelectorAll('.preset-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.preset === state.preset)
+  );
+  // 컴포넌트 토글
+  syncToggleUI();
+  // 타이포 사이즈
+  syncTypoSizesUI();
+  // 폰트 셀렉트
+  const fb = document.getElementById('font-body'); if (fb) fb.value = state.fonts.body;
+  const fc = document.getElementById('font-code'); if (fc) fc.value = state.fonts.code;
+  // 타이포그래피 슬라이더
+  const typoMap = { 'body-size': state.typo.size, 'body-tracking': state.typo.tracking,
+    'body-leading': state.typo.leading, 'para-gap': state.typo.paragraphGap };
+  for (const [k, v] of Object.entries(typoMap)) {
+    const el = document.getElementById(k); if (el) el.value = v;
+    const n = document.getElementById(k + '-num'); if (n) n.value = v;
+  }
+  // 여백
+  const marginMap = { 'margin-top': state.margins.top, 'margin-bottom': state.margins.bottom,
+    'margin-left': state.margins.left, 'margin-right': state.margins.right };
+  for (const [k, v] of Object.entries(marginMap)) {
+    const el = document.getElementById(k); if (el) el.value = v;
+    const n = document.getElementById(k + '-num'); if (n) n.value = v;
+  }
+  // 색상
+  const colorMap = { 'color-primary': state.colors.primary, 'color-text': state.colors.text,
+    'color-code': state.colors.codeText, 'color-quote-bg': state.colors.quoteBg };
+  for (const [id, v] of Object.entries(colorMap)) {
+    const el = document.getElementById(id); if (el) el.value = v;
+    const hex = document.getElementById(id + '-hex'); if (hex) hex.textContent = v;
+  }
+  // 이미지 프리셋 + 너비
+  for (const type of ['gemini', 'terminal', 'diagram']) {
+    const w = state.images[type].width;
+    const p = state.images[type].preset;
+    const wEl = document.getElementById('img-w-' + type); if (wEl) wEl.value = w;
+    const wN = document.getElementById('img-w-' + type + '-num'); if (wN) wN.value = w;
+    document.querySelectorAll('.border-preset-group[data-imgtype="' + type + '"] .border-preset-btn')
+      .forEach(b => b.classList.toggle('active', b.dataset.border === p));
+  }
+  // 페이지 포맷
+  const pf = document.getElementById('page-format'); if (pf) pf.value = state.page.format;
+  // 목차 깊이
+  const td = document.getElementById('toc-depth'); if (td) td.value = state.tocDepth;
+  // 출력 모드
+  document.querySelectorAll('#output-mode-row .toggle-btn').forEach(b => {
+    const isPod = state.page.outputMode === 'pod';
+    b.classList.toggle('active', (isPod && b.textContent.trim() === 'POD') || (!isPod && b.textContent.trim() !== 'POD'));
+  });
+}
+
+async function deleteDesign(name) {
+  if (!confirm('\'' + name + '\' 디자인을 삭제하시겠습니까?')) return;
+  try {
+    const resp = await fetch('/api/designs/delete', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: name }),
+    });
+    const data = await resp.json();
+    if (data.ok) { showToast('\'' + name + '\' 삭제 완료'); fetchDesigns(); }
+    else { showToast('삭제 실패: ' + (data.error || '')); }
+  } catch (e) { showToast('서버 연결 오류'); }
+}
+
+// ══════════════════════════════════════
 // Server API
 // ══════════════════════════════════════
 
@@ -1048,21 +1236,25 @@ function renderFileSelector() {
 
   groups.forEach(g => {
     if (!g.files.length) return;
+    const checkedCount = g.files.filter(f => f.default_checked !== false).length;
+    const allChecked = checkedCount === g.files.length;
     const div = document.createElement('div');
     div.className = 'file-group';
     div.innerHTML = `<div class="file-group-header">
-      <input type="checkbox" checked data-group="${g.key}" onchange="toggleFileGroup('${g.key}', this.checked)">
-      <span>${g.label} (${g.files.length})</span>
+      <input type="checkbox" ${allChecked ? 'checked' : ''} data-group="${g.key}" onchange="toggleFileGroup('${g.key}', this.checked)">
+      <span>${g.label} (${checkedCount}/${g.files.length})</span>
     </div>`;
 
     g.files.forEach(f => {
+      const isChecked = f.default_checked !== false;
+      const isVersion = /\-v\d+\.md$/.test(f.name);
       const item = document.createElement('div');
       item.className = 'file-item';
       item.dataset.path = f.path;
       item.dataset.group = g.key;
       const sizeKB = f.size ? Math.round(f.size / 1024) : '';
-      item.innerHTML = `<input type="checkbox" checked class="file-check" data-path="${f.path}" data-group="${g.key}" onchange="onFileCheckChange()">
-        <span class="fname" onclick="openFileEditor('${f.path}')">${f.name.replace(/\.md$/, '')}</span>
+      item.innerHTML = `<input type="checkbox" ${isChecked ? 'checked' : ''} class="file-check" data-path="${f.path}" data-group="${g.key}" onchange="onFileCheckChange()">
+        <span class="fname${isVersion ? ' version-file' : ''}" onclick="openFileEditor('${f.path}')">${f.name.replace(/\.md$/, '')}</span>
         ${sizeKB ? '<span class="fsize">' + sizeKB + 'KB</span>' : ''}`;
       div.appendChild(item);
     });
@@ -1510,6 +1702,30 @@ async function exportPdf() {
 }
 
 // ══════════════════════════════════════
+// Restage
+// ══════════════════════════════════════
+
+async function restageFiles() {
+  try {
+    const resp = await fetch('/api/restage', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({})
+    });
+    const data = await resp.json();
+    if (data.ok) {
+      const s = data.staged;
+      fileList = data.files;
+      renderFileSelector();
+      showToast(`Restage: front ${s.front} + chapters ${s.chapters} + back ${s.back}`);
+    } else {
+      showToast('Restage 실패: ' + (data.error || ''));
+    }
+  } catch (e) {
+    showToast('서버 오류: ' + e.message);
+  }
+}
+
 // Combined MD
 // ══════════════════════════════════════
 
@@ -1809,6 +2025,7 @@ function goToPreviewPage(pageNum) {
   render();
   await fetchProject();
   await fetchFiles();
+  await fetchDesigns();
 
   // 서버 모드 확인 (CLI --file로 시작했을 수 있음)
   try {

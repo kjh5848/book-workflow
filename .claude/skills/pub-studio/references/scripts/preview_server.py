@@ -37,7 +37,9 @@ from verification_loop import VerificationLoop
 ROOT = Path(__file__).resolve().parents[5]  # 프로젝트 루트 (.claude/skills/pub-studio/references/scripts → 5단계 상위)
 PROJECTS_DIR = ROOT / "projects"
 HTML_FILE = Path(__file__).resolve().parent.parent / "preview_editor.html"  # references/preview_editor.html
+DESIGNS_FILE = Path(__file__).resolve().parent.parent / "designs.json"  # references/designs.json (글로벌)
 DEFAULT_PORT = 3333
+BUILD_DIR_NAME = ".pdf-build"  # 스테이징 디렉토리명
 
 
 def find_projects() -> list[dict]:
@@ -78,6 +80,92 @@ def select_project(name: str | None = None) -> Path:
 
 
 # ══════════════════════════════════════
+# 스테이징 (.pdf-build/)
+# ══════════════════════════════════════
+
+def stage_files(project_path: Path) -> dict:
+    """소스 MD 파일을 .pdf-build/md/로 복사. 스테이징 정보 반환."""
+    build_dir = project_path / BUILD_DIR_NAME
+    md_dir = build_dir / "md"
+
+    # 디렉토리 생성
+    for sub in ("front", "chapters", "back"):
+        (md_dir / sub).mkdir(parents=True, exist_ok=True)
+    (build_dir / "_mermaid_images").mkdir(parents=True, exist_ok=True)
+    (build_dir / "preview_svg").mkdir(parents=True, exist_ok=True)
+
+    staged = {"front": 0, "chapters": 0, "back": 0}
+
+    # 소스 → 스테이징 복사 매핑
+    copies = [
+        ("chapters", project_path / "chapters"),
+        ("front", project_path / "book" / "front"),
+        ("back", project_path / "book" / "back"),
+    ]
+    for group, src_dir in copies:
+        if not src_dir.exists():
+            continue
+        for f in src_dir.glob("*.md"):
+            shutil.copy2(f, md_dir / group / f.name)
+            staged[group] += 1
+
+    total = sum(staged.values())
+    print(f"  스테이징: {total}개 파일 → .pdf-build/md/")
+    return staged
+
+
+def _apply_default_checked(files: list[dict]):
+    """버전 파일 기본 선택 로직.
+
+    같은 이름의 -vN 파일이 있으면 버전 없는 파일(최신)만 체크.
+    버전 없는 파일이 없으면 가장 높은 버전만 체크.
+    """
+    # base name → 버전 번호 목록
+    bases: dict[str, list[int]] = {}
+    has_latest: dict[str, bool] = {}
+
+    for f in files:
+        stem = f["name"].rsplit(".", 1)[0]
+        m = re.match(r'^(.+)-v(\d+)$', stem)
+        if m:
+            base = m.group(1)
+            ver = int(m.group(2))
+            bases.setdefault(base, []).append(ver)
+        else:
+            has_latest[stem] = True
+
+    for f in files:
+        stem = f["name"].rsplit(".", 1)[0]
+        m = re.match(r'^(.+)-v(\d+)$', stem)
+        if m:
+            base, ver = m.group(1), int(m.group(2))
+            if base in has_latest:
+                f["default_checked"] = False
+            else:
+                f["default_checked"] = (ver == max(bases[base]))
+        else:
+            f["default_checked"] = True
+
+
+def _staging_to_source(staging_rel: str) -> str | None:
+    """스테이징 경로 → 소스 경로 변환.
+
+    .pdf-build/md/front/X → book/front/X
+    .pdf-build/md/chapters/X → chapters/X
+    .pdf-build/md/back/X → book/back/X
+    """
+    prefix = f"{BUILD_DIR_NAME}/md/"
+    if not staging_rel.startswith(prefix):
+        return None
+    inner = staging_rel[len(prefix):]
+    if inner.startswith("chapters/"):
+        return inner
+    if inner.startswith("front/") or inner.startswith("back/"):
+        return "book/" + inner
+    return None
+
+
+# ══════════════════════════════════════
 # 프로젝트 스캔 (모듈 레벨 함수)
 # ══════════════════════════════════════
 
@@ -90,20 +178,24 @@ def scan_project(project_path: Path) -> dict:
         "back": [],
         "assets": {},
     }
-    chapters_dir = project_path / "chapters"
-    if chapters_dir.exists():
-        for f in sorted(chapters_dir.glob("*.md")):
-            result["chapters"].append({
-                "name": f.name, "path": f"chapters/{f.name}", "size": f.stat().st_size,
-            })
-    front_dir = project_path / "book" / "front"
-    if front_dir.exists():
-        for f in sorted(front_dir.glob("*.md")):
-            result["front"].append({"name": f.name, "path": f"book/front/{f.name}"})
-    back_dir = project_path / "book" / "back"
-    if back_dir.exists():
-        for f in sorted(back_dir.glob("*.md")):
-            result["back"].append({"name": f.name, "path": f"book/back/{f.name}"})
+    md_dir = project_path / BUILD_DIR_NAME / "md"
+
+    # .pdf-build/md/ 에서 스캔 (스테이징된 파일)
+    for group, sub in [("chapters", "chapters"), ("front", "front"), ("back", "back")]:
+        group_dir = md_dir / sub
+        if not group_dir.exists():
+            continue
+        for f in sorted(group_dir.glob("*.md")):
+            entry = {
+                "name": f.name,
+                "path": f"{BUILD_DIR_NAME}/md/{sub}/{f.name}",
+                "size": f.stat().st_size,
+            }
+            result[group].append(entry)
+
+    # 버전 파일 기본 선택 로직 적용
+    for group_key in ("front", "chapters", "back"):
+        _apply_default_checked(result[group_key])
     assets_dir = project_path / "assets"
     if assets_dir.exists():
         for ch_dir in sorted(assets_dir.iterdir()):
@@ -281,8 +373,15 @@ def backup_file(file_path: Path) -> str | None:
 # PreviewServer
 # ══════════════════════════════════════
 
-def _load_build_config(project_path: Path, design_state: dict | None = None) -> dict:
-    """프로젝트 build_pdf_typst.py에서 CONFIG 로드."""
+def _load_build_config(
+    project_path: Path,
+    design_state: dict | None = None,
+    build_dir: Path | None = None,
+) -> dict:
+    """프로젝트 build_pdf_typst.py에서 CONFIG 로드.
+
+    build_dir이 주어지면 중간 산출물 경로를 .pdf-build/로 오버라이드.
+    """
     build_script = project_path / "book" / "build_pdf_typst.py"
     if not build_script.exists():
         raise FileNotFoundError("build_pdf_typst.py not found")
@@ -295,6 +394,10 @@ def _load_build_config(project_path: Path, design_state: dict | None = None) -> 
         components = design_state.get("components", {})
         if components:
             config["design"] = ",".join(f"{k}={v}" for k, v in components.items())
+    # 스테이징 디렉토리로 중간 산출물 경로 오버라이드
+    if build_dir:
+        config["output_md"] = build_dir / "integrated.md"
+        config["mermaid_out"] = build_dir / "_mermaid_images"
     return config
 
 
@@ -313,10 +416,14 @@ class PreviewServer:
     ):
         self._project_path = project_path
         self._port = port
+        self._build_dir = project_path / BUILD_DIR_NAME
+
+        # 스테이징: 소스 MD → .pdf-build/md/
+        stage_files(project_path)
         self._project_info = scan_project(project_path)
 
         # 서비스 객체
-        config = _load_build_config(project_path)
+        config = _load_build_config(project_path, build_dir=self._build_dir)
         self._cache = BuildCache()
         self._pipeline = BuildPipeline(config)
         self._checker = LayoutChecker()
@@ -402,7 +509,33 @@ class PreviewServer:
             "result": self._verification_result.to_dict() if self._verification_result else None,
         }
 
+    def handle_get_designs(self, include_full: bool = False) -> dict:
+        if not DESIGNS_FILE.exists():
+            return {"designs": {}}
+        store = json.loads(DESIGNS_FILE.read_text(encoding="utf-8"))
+        if include_full:
+            return store
+        summary = {}
+        for name, entry in store.get("designs", {}).items():
+            summary[name] = {
+                "created_at": entry.get("created_at"),
+                "updated_at": entry.get("updated_at"),
+            }
+        return {"designs": summary}
+
     # ── POST 핸들러 ──
+
+    def _sync_to_source(self, staging_rel: str, content: str) -> str | None:
+        """스테이징 파일 저장 후 소스에도 동기화. 소스 백업 경로 반환."""
+        source_rel = _staging_to_source(staging_rel)
+        if not source_rel:
+            return None
+        source_path = self._project_path / source_rel
+        if source_path.exists():
+            bak = backup_file(source_path)
+            source_path.write_text(content, encoding="utf-8")
+            return bak
+        return None
 
     def handle_post_save(self, data: dict) -> dict:
         rel_path = data.get("path", "")
@@ -414,9 +547,10 @@ class PreviewServer:
         current_mtime = file_path.stat().st_mtime
         if client_mtime and abs(current_mtime - client_mtime) > 1:
             return {"error": "File modified externally", "server_mtime": current_mtime}
-        bak = backup_file(file_path)
         md_text = blocks_to_md(blocks)
         file_path.write_text(md_text, encoding="utf-8")
+        # 소스 파일에도 동기화
+        bak = self._sync_to_source(rel_path, md_text)
         return {"ok": True, "backup": bak, "last_modified": file_path.stat().st_mtime}
 
     def handle_post_save_raw(self, data: dict) -> dict:
@@ -425,8 +559,9 @@ class PreviewServer:
         file_path = self._project_path / rel_path
         if not file_path.exists():
             return {"error": "File not found"}
-        bak = backup_file(file_path)
         file_path.write_text(content, encoding="utf-8")
+        # 소스 파일에도 동기화
+        bak = self._sync_to_source(rel_path, content)
         return {"ok": True, "backup": bak, "last_modified": file_path.stat().st_mtime}
 
     def handle_post_build_svg(self, data: dict) -> dict:
@@ -438,7 +573,7 @@ class PreviewServer:
         stage_run = 0
 
         try:
-            config = _load_build_config(self._project_path, design_state_dict)
+            config = _load_build_config(self._project_path, design_state_dict, build_dir=self._build_dir)
             self._pipeline.update_config(config)
 
             if is_file_mode and self._cache.file_content is not None:
@@ -484,8 +619,8 @@ class PreviewServer:
                 return 0  # cached
 
         if stage_run > 0:
-            svg_dir = self._project_path / "book" / "_preview_svg"
-            typ_path = self._project_path / "book" / "_preview.typ"
+            svg_dir = self._build_dir / "preview_svg"
+            typ_path = self._build_dir / "final.typ"
             typ_path.write_text(final_typ, encoding="utf-8")
             page_count = self._pipeline.compile_svg(typ_path, svg_dir)
             self._cache.update_stage2(svg_dir, page_count, typ_path, design_hash)
@@ -521,8 +656,8 @@ class PreviewServer:
                 skip_cover=not data.get("include_cover", True),
                 skip_toc=not data.get("include_toc", True),
             )
-            svg_dir = self._project_path / "book" / "_preview_svg"
-            typ_path = self._project_path / "book" / "_preview.typ"
+            svg_dir = self._build_dir / "preview_svg"
+            typ_path = self._build_dir / "final.typ"
             typ_path.write_text(final_typ, encoding="utf-8")
             page_count = self._pipeline.compile_svg(typ_path, svg_dir)
             self._cache.update_stage2(svg_dir, page_count, typ_path, design_hash)
@@ -548,9 +683,9 @@ class PreviewServer:
 
         def _run_verification():
             try:
-                config = _load_build_config(self._project_path, design_state_dict)
+                config = _load_build_config(self._project_path, design_state_dict, build_dir=self._build_dir)
                 typ_path = self._cache.typ_path
-                pdf_path = self._project_path / "book" / "_preview.pdf"
+                pdf_path = self._build_dir / "preview.pdf"
                 svg_dir = self._cache.svg_dir
 
                 result = self._verifier.run(
@@ -593,7 +728,7 @@ class PreviewServer:
         typ_path = self._cache.typ_path
         if not typ_path or not typ_path.exists():
             return {"ok": False, "error": "프리뷰를 먼저 빌드하세요"}
-        config = _load_build_config(self._project_path, design_state)
+        config = _load_build_config(self._project_path, design_state, build_dir=self._build_dir)
         pdf_path = Path(config["output_pdf"])
         if not self._pipeline.compile_pdf(typ_path, pdf_path):
             return {"ok": False, "error": "Typst PDF 컴파일 실패"}
@@ -636,21 +771,79 @@ class PreviewServer:
             return {"ok": True, "mode": "project"}
         return {"error": f"알 수 없는 모드: {mode}"}
 
+    def handle_post_restage(self, _data: dict) -> dict:
+        """소스 MD 재스테이징. 소스에서 변경된 파일을 .pdf-build/md/로 다시 복사."""
+        staged = stage_files(self._project_path)
+        self._project_info = scan_project(self._project_path)
+        self._cache.reset_to_project_mode()
+        return {"ok": True, "staged": staged, "files": self.handle_get_files()}
+
     def handle_post_combine_md(self, data: dict) -> dict:
         files_dict = data.get("files", {})
         if not any(files_dict.get(s) for s in ("front", "chapters", "back")):
             return {"error": "No files selected"}
         from build_pipeline import _get_typst_builder
         tb = _get_typst_builder()
-        config = _load_build_config(self._project_path)
+        config = _load_build_config(self._project_path, build_dir=self._build_dir)
         front, chapters, back = BuildPipeline.resolve_file_lists(
             self._project_path, files_dict
         )
         integrated = tb.build_integrated_md(front, chapters, back, config["mermaid_out"])
-        output_md = self._project_path / "book" / f"{self._project_path.name}_통합본.md"
+        # 통합 MD는 .pdf-build/에 저장 + book/에도 복사
+        output_md = self._build_dir / "integrated.md"
         output_md.parent.mkdir(parents=True, exist_ok=True)
         output_md.write_text(integrated, encoding="utf-8")
         return {"ok": True, "path": str(output_md.relative_to(self._project_path)), "size": len(integrated)}
+
+    def handle_post_design_save(self, data: dict) -> dict:
+        name = data.get("name", "").strip()
+        if not name:
+            return {"error": "디자인 이름을 입력하세요"}
+        if len(name) > 50:
+            return {"error": "이름은 50자 이하여야 합니다"}
+        design_state = data.get("state")
+        if not design_state:
+            return {"error": "디자인 상태가 비어있습니다"}
+        overwrite = data.get("overwrite", False)
+
+        if DESIGNS_FILE.exists():
+            store = json.loads(DESIGNS_FILE.read_text(encoding="utf-8"))
+        else:
+            store = {"_version": 1, "designs": {}}
+
+        if name in store["designs"] and not overwrite:
+            return {"error": "duplicate", "message": f"'{name}' 이미 존재합니다. 덮어쓰시겠습니까?"}
+
+        # imageOverrides는 프로젝트 종속이므로 제거
+        saved_state = {k: v for k, v in design_state.items() if k != "imageOverrides"}
+        saved_state["imageOverrides"] = {}
+
+        now = datetime.now().isoformat(timespec="seconds")
+        entry = store["designs"].get(name, {})
+        store["designs"][name] = {
+            "created_at": entry.get("created_at", now),
+            "updated_at": now,
+            "state": saved_state,
+        }
+        DESIGNS_FILE.write_text(
+            json.dumps(store, ensure_ascii=False, indent=2),
+            encoding="utf-8",
+        )
+        return {"ok": True, "name": name}
+
+    def handle_post_design_delete(self, data: dict) -> dict:
+        name = data.get("name", "").strip()
+        if not DESIGNS_FILE.exists():
+            return {"error": "저장된 디자인이 없습니다"}
+        store = json.loads(DESIGNS_FILE.read_text(encoding="utf-8"))
+        if name not in store.get("designs", {}):
+            return {"error": f"'{name}' 디자인을 찾을 수 없습니다"}
+        del store["designs"][name]
+        DESIGNS_FILE.write_text(
+            json.dumps(store, ensure_ascii=False, indent=2),
+            encoding="utf-8",
+        )
+        return {"ok": True}
 
     # ── 서버 시작 ──
 
@@ -660,9 +853,10 @@ class PreviewServer:
         port = _find_free_port(self._port)
         with http.server.HTTPServer(("", port), handler_class) as server:
             url = f"http://localhost:{port}"
-            print(f"\n  프로젝트: {self._project_path.name}")
-            print(f"  서버:     {url}")
-            print(f"  종료:     Ctrl+C\n")
+            print(f"\n  프로젝트:   {self._project_path.name}")
+            print(f"  빌드 폴더: .pdf-build/")
+            print(f"  서버:       {url}")
+            print(f"  종료:       Ctrl+C\n")
             webbrowser.open(url)
             try:
                 server.serve_forever()
@@ -717,7 +911,10 @@ class PreviewServer:
                     self._serve_json(server.handle_get_layout_issues())
                 elif path == "/api/verification-status":
                     self._serve_json(server.handle_get_verification_status())
-                elif path.startswith(("/assets/", "/chapters/", "/book/")):
+                elif path == "/api/designs":
+                    include_full = query.get("full") == "true"
+                    self._serve_json(server.handle_get_designs(include_full))
+                elif path.startswith(("/assets/", "/chapters/", "/book/", "/.pdf-build/")):
                     file_path = server._project_path / path.lstrip("/")
                     if file_path.exists() and file_path.is_file():
                         ctype, _ = mimetypes.guess_type(str(file_path))
@@ -748,7 +945,10 @@ class PreviewServer:
                     "/api/image-override": server.handle_post_image_override,
                     "/api/load-file": server.handle_post_load_file,
                     "/api/switch-mode": server.handle_post_switch_mode,
+                    "/api/designs/save": server.handle_post_design_save,
+                    "/api/designs/delete": server.handle_post_design_delete,
                     "/api/combine-md": server.handle_post_combine_md,
+                    "/api/restage": server.handle_post_restage,
                 }
 
                 handler = routes.get(path)
