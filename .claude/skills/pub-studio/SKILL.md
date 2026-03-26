@@ -8,6 +8,58 @@ user_invocable: false
 MD→Typst→PDF/SVG 전체 파이프라인을 브라우저 프리뷰 에디터로 통합한다.
 디자인 실시간 프리뷰, 개별 이미지 크기 제어, 레이아웃 검증 루프(build→check→auto-fix→rebuild)를 제공한다.
 
+## 실행 흐름
+
+publisher 에이전트가 이 스킬을 사용할 때의 흐름.
+
+### 1. 사용자에게 프리뷰 제안
+
+빌드 또는 디자인 작업 시작 전, 사용자에게 프리뷰 에디터 사용 여부를 묻는다.
+
+> **프리뷰 에디터**를 사용하면 브라우저에서 실시간으로 디자인을 확인하며 작업할 수 있습니다.
+> - 디자인 프리셋/폰트/여백 등을 즉시 변경하고 결과 확인
+> - 개별 이미지 크기를 슬라이더로 조절
+> - 레이아웃 이슈(빈 페이지, 고아줄) 자동 감지 + 수정
+>
+> **프리뷰를 사용할까요?**
+> 1. 네, 프리뷰 에디터로 작업합니다 (Recommended)
+> 2. 아니요, CLI에서 바로 PDF를 빌드합니다
+
+### 2. 프리뷰 서버 실행
+
+사용자가 1번을 선택하면 서버를 시작한다.
+
+```bash
+# 스킬 폴더 내 진입점 실행
+python3 .claude/skills/pub-studio/references/preview.py              # 프로젝트 자동 감지
+python3 .claude/skills/pub-studio/references/preview.py 사내AI비서_v2  # 프로젝트 지정
+python3 .claude/skills/pub-studio/references/preview.py --port 8080   # 포트 지정
+python3 .claude/skills/pub-studio/references/preview.py --file book/통합본.typ  # 파일 모드
+```
+
+서버가 `http://localhost:3333`에서 실행되면 브라우저가 자동으로 열린다.
+
+### 3. 작업 루프
+
+```
+사용자: 디자인 변경 (브라우저 UI)
+  → Stage 2 재조립 (~200ms) → SVG 프리뷰 갱신
+
+사용자: 글 수정 (MD 파일 저장)
+  → Stage 1 재빌드 (~5-10s) → Stage 2 → SVG 프리뷰 갱신
+
+사용자: "Verified Build" 클릭
+  → 검증 루프 (build→check→auto-fix→rebuild, 최대 3라운드)
+  → 자동수정 결과 + 수동이슈 보고
+
+사용자: "Export PDF" 클릭
+  → 최종 PDF 내보내기
+```
+
+### 4. CLI 빌드 (프리뷰 미사용)
+
+사용자가 2번을 선택하면 기존 `pdf-ty` 스킬로 바로 빌드한다.
+
 ## 아키텍처
 
 ```
@@ -26,29 +78,22 @@ preview.py  (얇은 진입점 ~40줄)
 ```
 .claude/skills/pub-studio/
 ├── SKILL.md
-└── references/scripts/
-    ├── __init__.py
-    ├── models.py              # 데이터 클래스
-    ├── build_cache.py         # 2단계 캐시
-    ├── image_registry.py      # 개별 이미지 추적/오버라이드
-    ├── build_pipeline.py      # MD→Typst→PDF/SVG
-    ├── design_engine.py       # 컴포넌트 조립
-    ├── layout_checker.py      # PDF 분석 + 심각도 분류
-    ├── verification_loop.py   # build→check→fix 사이클
-    └── preview_server.py      # HTTP 서버 + API
-
-preview.py                      # 진입점
-preview_editor.html             # UI
+└── references/
+    ├── preview.py                 # 진입점 (얇은 래퍼 ~40줄)
+    ├── preview_editor.html        # 브라우저 UI
+    └── scripts/
+        ├── __init__.py
+        ├── models.py              # 데이터 클래스
+        ├── build_cache.py         # 2단계 캐시
+        ├── image_registry.py      # 개별 이미지 추적/오버라이드
+        ├── build_pipeline.py      # MD→Typst→PDF/SVG
+        ├── design_engine.py       # 컴포넌트 조립
+        ├── layout_checker.py      # PDF 분석 + 심각도 분류
+        ├── verification_loop.py   # build→check→fix 사이클
+        └── preview_server.py      # HTTP 서버 + API
 ```
 
-## 실행
-
-```bash
-python3 preview.py                     # 프로젝트 자동 감지
-python3 preview.py 사내AI비서_v2        # 프로젝트 지정
-python3 preview.py --port 8080         # 포트 지정
-python3 preview.py --file book/통합본.typ  # 파일 모드
-```
+모든 파일이 스킬 폴더 안에 있으므로, 스킬을 복사하면 그대로 동작한다.
 
 ## 2단계 빌드 캐시
 

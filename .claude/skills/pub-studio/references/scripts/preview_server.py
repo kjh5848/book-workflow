@@ -34,9 +34,9 @@ from verification_loop import VerificationLoop
 # 프로젝트 감지 (모듈 레벨 함수 — 클래스 불필요)
 # ══════════════════════════════════════
 
-ROOT = Path(__file__).resolve().parents[4]  # 프로젝트 루트
+ROOT = Path(__file__).resolve().parents[5]  # 프로젝트 루트 (.claude/skills/pub-studio/references/scripts → 5단계 상위)
 PROJECTS_DIR = ROOT / "projects"
-HTML_FILE = ROOT / "preview_editor.html"
+HTML_FILE = Path(__file__).resolve().parent.parent / "preview_editor.html"  # references/preview_editor.html
 DEFAULT_PORT = 3333
 
 

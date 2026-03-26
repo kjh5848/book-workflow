@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """집필에이전트 v2 — PDF 디자인 프리뷰 서버
 
-실행:
-    python3 preview.py                    # 프로젝트 자동 감지
-    python3 preview.py 사내AI비서_v2       # 프로젝트 지정
-    python3 preview.py --port 8080        # 포트 지정
-    python3 preview.py --file book/통합본.typ  # 파일 모드 (.typ 직접 로드)
+실행 (프로젝트 루트에서):
+    python3 .claude/skills/pub-studio/references/preview.py                    # 프로젝트 자동 감지
+    python3 .claude/skills/pub-studio/references/preview.py 사내AI비서_v2       # 프로젝트 지정
+    python3 .claude/skills/pub-studio/references/preview.py --port 8080        # 포트 지정
+    python3 .claude/skills/pub-studio/references/preview.py --file book/통합본.typ  # 파일 모드
 """
 
 import argparse
@@ -13,7 +13,7 @@ import sys
 from pathlib import Path
 
 # pub-studio 스크립트 디렉토리를 path에 추가
-_SCRIPTS_DIR = Path(__file__).parent / ".claude" / "skills" / "pub-studio" / "references" / "scripts"
+_SCRIPTS_DIR = Path(__file__).parent / "scripts"
 if str(_SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(_SCRIPTS_DIR))
 
