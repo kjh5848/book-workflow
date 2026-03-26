@@ -1,4 +1,4 @@
-# 스킬 카탈로그 (23개 + PM 13개)
+# 스킬 카탈로그 (23개 + PM 13개 + 인쇄소 6개)
 
 하나의 작업만 수행하고 결과를 돌려주는 원자적 도구. 판단하지 않는다.
 
@@ -17,6 +17,12 @@
 | `image-analyzer/` | `claude-sonnet-4-6` | E1 | analysis-guide |
 | `screenshot/` | — | — | terminal-capture, browser-capture, capture.py |
 | `review/` | `claude-opus-4-6` | D1, D3, D4, D5 | review-rules |
+| `pub-studio/` | `claude-sonnet-4-6` | — | 프리뷰 에디터 + 검증 빌드 (8개 모듈) |
+| `pub-build/` | — | — | MD→Typst→PDF 빌드 파이프라인 |
+| `pub-typst-design/` | — | — | Typst 템플릿 + 컴포넌트 |
+| `pub-layout-check/` | — | — | PDF 레이아웃 분석 |
+| `pub-page-fit/` | — | — | 레이아웃 자동수정 전략 |
+| `pub-image-optimize/` | — | — | 이미지 공백제거 + 크기조절 |
 
 ---
 
@@ -140,3 +146,29 @@
 | G2 | 경쟁-분석 | G.GTM | 배틀카드 + Win/Loss | marketing-strategy-pmm |
 | G3 | 런치-플레이북 | G.GTM | 출시 전/중/후 체크리스트 | marketing-strategy-pmm |
 | G4 | 메시징 | G.GTM | 메시징 계층 구조 | marketing-strategy-pmm |
+
+---
+
+## 인쇄소 스킬 (publisher 에이전트 → pub-studio 통합, 6개)
+
+MD→PDF 빌드 + 디자인 프리뷰 + 레이아웃 검증을 처리하는 출판 파이프라인 스킬.
+
+| # | 스킬 | 하는 일 | 폴더 |
+|---|------|---------|------|
+| P1 | pub-studio | 프리뷰 에디터 + 검증 빌드 통합 (OOP 8모듈) | pub-studio/ |
+| P2 | pub-build | MD→Typst→PDF 빌드 파이프라인 | pub-build/ |
+| P3 | pub-typst-design | Typst 템플릿 + 컴포넌트 디자인 | pub-typst-design/ |
+| P4 | pub-layout-check | PDF 레이아웃 분석 (빈 페이지, 고아줄, 공백) | pub-layout-check/ |
+| P5 | pub-page-fit | 레이아웃 자동수정 전략 | pub-page-fit/ |
+| P6 | pub-image-optimize | 이미지 공백제거(autocrop) + 크기조절 | pub-image-optimize/ |
+
+### 의존 관계
+
+```
+pub-studio (통합)
+  ├→ pub-build (빌드 엔진)
+  ├→ pub-typst-design (템플릿)
+  ├→ pub-layout-check (분석)
+  ├→ pub-page-fit (자동수정 전략)
+  └→ pub-image-optimize (이미지 최적화)
+```

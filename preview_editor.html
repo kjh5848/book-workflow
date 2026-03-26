@@ -138,6 +138,15 @@ input[type="color"] { width: 26px; height: 26px; border: 1px solid #d1d5db; bord
 .image-placeholder.style-bordered-shadow { border-left: 2px solid var(--color-primary); border-top: 2px solid var(--color-primary); border-right: 3px solid #1d4ed8; border-bottom: 3px solid #1d4ed8; border-radius: 4px; }
 .image-placeholder.style-minimal { border: 0.5px solid #e5e7eb; border-radius: 2px; }
 
+/* ── File Mode Bar ── */
+.file-mode-bar { display: flex; align-items: center; gap: 6px; padding: 6px 12px; background: #fef3c7; border-bottom: 1px solid #fbbf24; font-size: 12px; }
+.file-mode-bar input[type="text"] { flex: 1; padding: 4px 8px; font-size: 12px; border: 1px solid #d1d5db; border-radius: 4px; font-family: "D2Coding", monospace; }
+.file-mode-bar button { padding: 4px 10px; font-size: 11px; border: 1px solid #d1d5db; border-radius: 4px; cursor: pointer; background: white; }
+.file-mode-bar button.primary { background: #2563eb; color: white; border-color: #2563eb; }
+.file-mode-badge { display: inline-block; padding: 2px 8px; font-size: 10px; border-radius: 10px; background: #fee2e2; color: #991b1b; font-weight: 600; }
+.file-mode-badge.designable { background: #dcfce7; color: #166534; }
+.sidebar.viewer-only .section:not(.section-always) { opacity: 0.4; pointer-events: none; }
+
 /* ── Page Preview ── */
 .page-preview-container { display: flex; flex-direction: column; align-items: center; gap: 20px; }
 .page-frame { width: 500px; aspect-ratio: 188/257; background: white; box-shadow: 0 4px 24px rgba(0,0,0,0.12); position: relative; overflow: hidden; }
@@ -251,6 +260,63 @@ input[type="color"] { width: 26px; height: 26px; border: 1px solid #d1d5db; bord
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+/* ── Individual Image List ── */
+.img-individual-list { max-height: 300px; overflow-y: auto; }
+.img-individual-item { display: flex; align-items: center; gap: 6px; padding: 6px 8px; border-bottom: 1px solid #f1f5f9; font-size: 11px; }
+.img-individual-item:hover { background: #f8fafc; }
+.img-individual-item .img-thumb { width: 32px; height: 32px; border-radius: 3px; background: #f1f5f9; border: 1px solid #e2e8f0; object-fit: cover; flex-shrink: 0; }
+.img-individual-item .img-info { flex: 1; min-width: 0; }
+.img-individual-item .img-name { font-weight: 600; color: #374151; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; }
+.img-individual-item .img-cat { font-size: 10px; color: #94a3b8; }
+.img-individual-item .img-width-slider { width: 60px; height: 3px; }
+.img-individual-item .img-width-val { font-size: 10px; color: #6b7280; min-width: 28px; text-align: right; font-family: "D2Coding", monospace; }
+.img-individual-item .img-reset { width: 18px; height: 18px; border: none; background: none; cursor: pointer; color: #94a3b8; font-size: 12px; padding: 0; }
+.img-individual-item .img-reset:hover { color: #ef4444; }
+.img-individual-item.overridden { background: #fffbeb; border-left: 2px solid #f59e0b; }
+.img-empty { color: #94a3b8; font-size: 11px; text-align: center; padding: 12px; }
+.img-count-badge { font-size: 10px; color: #6b7280; font-weight: 400; margin-left: 4px; }
+
+/* ── Verification ── */
+.verify-btn { padding: 4px 12px; font-size: 11px; border: 1px solid #059669; border-radius: 4px; background: #ecfdf5; color: #059669; cursor: pointer; font-weight: 600; }
+.verify-btn:hover { background: #d1fae5; }
+.verify-btn.running { opacity: 0.5; pointer-events: none; }
+.verify-banner { padding: 8px 12px; font-size: 12px; border-radius: 6px; margin: 0 12px 8px; display: none; }
+.verify-banner.success { display: block; background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; }
+.verify-banner.warning { display: block; background: #fffbeb; border: 1px solid #fde68a; color: #92400e; }
+.verify-banner.error { display: block; background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
+.verify-banner .close-banner { float: right; cursor: pointer; border: none; background: none; font-size: 14px; color: inherit; opacity: 0.6; }
+.verify-banner .close-banner:hover { opacity: 1; }
+
+/* ── Layout Issues Tab ── */
+.layout-issues { padding: 16px 20px; max-width: 900px; margin: 0 auto; }
+.layout-summary { display: flex; gap: 12px; margin-bottom: 16px; }
+.layout-stat { flex: 1; padding: 10px; border-radius: 6px; text-align: center; }
+.layout-stat.good { background: #ecfdf5; color: #065f46; }
+.layout-stat.warn { background: #fffbeb; color: #92400e; }
+.layout-stat .stat-num { font-size: 20px; font-weight: 700; }
+.layout-stat .stat-label { font-size: 11px; }
+
+.page-usage-chart { margin-bottom: 20px; }
+.page-usage-bar { display: flex; align-items: center; gap: 6px; margin-bottom: 2px; font-size: 11px; }
+.page-usage-bar .bar-label { min-width: 32px; text-align: right; color: #6b7280; }
+.page-usage-bar .bar-track { flex: 1; height: 12px; background: #f1f5f9; border-radius: 2px; overflow: hidden; cursor: pointer; }
+.page-usage-bar .bar-fill { height: 100%; border-radius: 2px; transition: width 0.3s; }
+.page-usage-bar .bar-fill.high { background: #22c55e; }
+.page-usage-bar .bar-fill.medium { background: #eab308; }
+.page-usage-bar .bar-fill.low { background: #ef4444; }
+.page-usage-bar .bar-val { min-width: 40px; font-family: "D2Coding", monospace; color: #6b7280; }
+
+.issue-list { }
+.issue-item { display: flex; align-items: flex-start; gap: 8px; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 6px; cursor: pointer; transition: background 0.1s; }
+.issue-item:hover { background: #f8fafc; }
+.issue-badge { padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: 600; flex-shrink: 0; }
+.issue-badge.auto { background: #dbeafe; color: #1e40af; }
+.issue-badge.manual { background: #fef3c7; color: #92400e; }
+.issue-page { font-size: 11px; color: #6b7280; min-width: 36px; }
+.issue-msg { font-size: 12px; color: #374151; flex: 1; }
+.issue-suggestion { font-size: 11px; color: #6b7280; margin-top: 2px; }
+.layout-empty { color: #94a3b8; text-align: center; padding: 40px 20px; font-size: 13px; }
 </style>
 </head>
 <body>
@@ -398,6 +464,16 @@ input[type="color"] { width: 26px; height: 26px; border: 1px solid #d1d5db; bord
     </div>
   </div>
 
+  <!-- 5b. 개별 이미지 -->
+  <div class="section collapsed" id="sec-image-individual">
+    <div class="section-title" onclick="toggleSection('sec-image-individual')">개별 이미지<span class="img-count-badge" id="img-count-badge"></span></div>
+    <div class="section-body">
+      <div class="img-individual-list" id="img-individual-list">
+        <div class="img-empty">빌드 후 이미지 목록이 표시됩니다</div>
+      </div>
+    </div>
+  </div>
+
   <!-- 6. 색상 -->
   <div class="section" id="sec-color">
     <div class="section-title" onclick="toggleSection('sec-color')">색상</div>
@@ -420,6 +496,7 @@ input[type="color"] { width: 26px; height: 26px; border: 1px solid #d1d5db; bord
   <div class="tab-bar">
     <div class="tab active" data-tab="catalog" onclick="switchTab('catalog')">컴포넌트 카탈로그</div>
     <div class="tab" data-tab="editor" onclick="switchTab('editor')">블록 에디터</div>
+    <div class="tab" data-tab="layout" onclick="switchTab('layout');fetchLayoutIssues()">레이아웃 이슈</div>
   </div>
   <div class="tab-content">
     <!-- 탭 1: 카탈로그 -->
@@ -480,12 +557,20 @@ input[type="color"] { width: 26px; height: 26px; border: 1px solid #d1d5db; bord
     <div class="tab-panel" id="panel-editor">
       <div class="editor-split">
         <div class="editor-left">
-          <div class="file-selector-toolbar">
-            <label class="file-select-all"><input type="checkbox" id="file-select-all" checked onchange="toggleFileSelectAll()"> 전체</label>
-            <span class="file-count" id="file-count">0개 선택</span>
-            <button class="combine-btn" onclick="combineMd()">통합본 생성</button>
+          <div class="file-mode-bar" id="file-mode-bar">
+            <input type="text" id="file-path-input" placeholder=".typ 파일 경로 (예: book/통합본.typ)">
+            <button class="primary" onclick="loadTypFile()">불러오기</button>
+            <span class="file-mode-badge" id="file-mode-badge" style="display:none"></span>
+            <button id="back-to-project" style="display:none" onclick="switchToProjectMode()">프로젝트 모드</button>
           </div>
-          <div class="file-selector" id="file-selector"></div>
+          <div id="project-file-ui">
+            <div class="file-selector-toolbar">
+              <label class="file-select-all"><input type="checkbox" id="file-select-all" checked onchange="toggleFileSelectAll()"> 전체</label>
+              <span class="file-count" id="file-count">0개 선택</span>
+              <button class="combine-btn" onclick="combineMd()">통합본 생성</button>
+            </div>
+            <div class="file-selector" id="file-selector"></div>
+          </div>
           <div class="content-editor" id="content-editor" style="display:none;">
             <div class="content-editor-header">
               <span id="editing-filename"></span>
@@ -507,12 +592,21 @@ input[type="color"] { width: 26px; height: 26px; border: 1px solid #d1d5db; bord
             <label class="build-option"><input type="checkbox" id="include-cover" checked onchange="scheduleDesignRebuild()"> 표지</label>
             <label class="build-option"><input type="checkbox" id="include-toc" checked onchange="scheduleDesignRebuild()"> 목차</label>
             <span class="build-status" id="build-status"></span>
+            <button class="verify-btn" id="verify-btn" onclick="buildVerified()">Verified Build</button>
             <button class="build-btn" onclick="exportPdf()">PDF Export</button>
           </div>
+          <div class="verify-banner" id="verify-banner"></div>
           <div class="svg-viewer" id="svg-viewer">
             <div class="svg-empty">파일을 선택하면 실시간 PDF 프리뷰가 표시됩니다.</div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- 탭 3: 레이아웃 이슈 -->
+    <div class="tab-panel" id="panel-layout">
+      <div class="layout-issues" id="layout-issues-panel">
+        <div class="layout-empty">빌드 후 레이아웃 분석 결과가 표시됩니다.<br>Verified Build 버튼으로 검증을 시작하세요.</div>
       </div>
     </div>
   </div>
@@ -538,7 +632,8 @@ const state = {
   colors: { primary: '#2563eb', text: '#1a1a1a', codeText: '#1e40af', quoteBg: '#f5f8ff' },
   page: { format: 'B5_4x6배판', outputMode: 'pod' },
   typoSizes: { h1: 26, h2: 16, h3: 13, h4: 11, code: 8, quote: 9, table: 8.5, inlineCode: 8.5 },
-  tocDepth: 2
+  tocDepth: 2,
+  imageOverrides: {}
 };
 
 const PAGE_FORMATS = {
@@ -886,7 +981,8 @@ function resetAll() {
     images: { gemini: { preset:'bordered', width:70 }, terminal: { preset:'minimal', width:70 }, diagram: { preset:'minimal', width:60 } },
     colors: { primary: '#2563eb', text: '#1a1a1a', codeText: '#1e40af', quoteBg: '#f5f8ff' },
     typoSizes: { h1: 26, h2: 16, h3: 13, h4: 11, code: 8, quote: 9, table: 8.5, inlineCode: 8.5 },
-    tocDepth: 2
+    tocDepth: 2,
+    imageOverrides: {}
   });
   document.querySelectorAll('.preset-btn').forEach(b => b.classList.toggle('active', b.dataset.preset === '1'));
   syncToggleUI();
@@ -1012,6 +1108,79 @@ function updateFileCount() {
   document.getElementById('file-count').textContent = `${selected}/${total}개 선택`;
 }
 
+// ══════════════════════════════════════
+// File Mode (파일 모드)
+// ══════════════════════════════════════
+
+let currentMode = 'project';
+let fileDesignable = true;
+
+async function loadTypFile() {
+  const pathInput = document.getElementById('file-path-input');
+  const filePath = pathInput.value.trim();
+  if (!filePath) { showToast('파일 경로를 입력하세요'); return; }
+
+  try {
+    const resp = await fetch('/api/load-file', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ path: filePath })
+    });
+    const data = await resp.json();
+    if (!data.ok) { showToast('로드 실패: ' + (data.error || '')); return; }
+
+    currentMode = 'file';
+    fileDesignable = data.designable;
+    applyFileModeUI(data.path, data.designable);
+    scheduleDesignRebuild();
+  } catch (e) {
+    showToast('서버 연결 오류');
+  }
+}
+
+async function switchToProjectMode() {
+  try {
+    await fetch('/api/switch-mode', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ mode: 'project' })
+    });
+  } catch (e) { /* ignore */ }
+
+  currentMode = 'project';
+  fileDesignable = true;
+  applyProjectModeUI();
+  scheduleDesignRebuild(true);
+}
+
+function applyFileModeUI(filePath, designable) {
+  // 프로젝트 파일 선택 UI 숨기기
+  document.getElementById('project-file-ui').style.display = 'none';
+  // 파일 모드 배지 표시
+  const badge = document.getElementById('file-mode-badge');
+  badge.style.display = 'inline-block';
+  if (designable) {
+    badge.textContent = '디자인 편집 가능';
+    badge.className = 'file-mode-badge designable';
+    document.querySelector('.sidebar').classList.remove('viewer-only');
+  } else {
+    badge.textContent = '뷰어 전용';
+    badge.className = 'file-mode-badge';
+    document.querySelector('.sidebar').classList.add('viewer-only');
+  }
+  // 프로젝트 모드 버튼 표시
+  document.getElementById('back-to-project').style.display = 'inline-block';
+  // 경로 표시
+  document.getElementById('file-path-input').value = filePath;
+}
+
+function applyProjectModeUI() {
+  document.getElementById('project-file-ui').style.display = '';
+  document.getElementById('file-mode-badge').style.display = 'none';
+  document.getElementById('back-to-project').style.display = 'none';
+  document.querySelector('.sidebar').classList.remove('viewer-only');
+}
+
 function getSelectedFiles() {
   const files = { front: [], chapters: [], back: [] };
   document.querySelectorAll('.file-check:checked').forEach(cb => {
@@ -1091,18 +1260,19 @@ function scheduleDesignRebuild(forceStage1 = false) {
 }
 
 async function buildSvgPreview(forceStage1 = false) {
-  const files = getSelectedFiles();
-  const totalFiles = files.front.length + files.chapters.length + files.back.length;
-  if (totalFiles === 0) {
-    clearSvgViewer();
-    setBuildStatus('');
-    return;
+  if (currentMode === 'project') {
+    const files = getSelectedFiles();
+    const totalFiles = files.front.length + files.chapters.length + files.back.length;
+    if (totalFiles === 0) {
+      clearSvgViewer();
+      setBuildStatus('');
+      return;
+    }
   }
 
   if (_isBuilding) return;
   _isBuilding = true;
 
-  const btn = document.querySelector('.build-btn');
   setBuildStatus('building...');
 
   // Save current page before rebuild
@@ -1116,22 +1286,36 @@ async function buildSvgPreview(forceStage1 = false) {
   });
 
   try {
-    const resp = await fetch('/api/build-svg', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        files,
+    let reqBody;
+    if (currentMode === 'file') {
+      reqBody = {
+        mode: 'file',
+        design_state: state,
+        include_cover: document.getElementById('include-cover').checked,
+        include_toc: document.getElementById('include-toc').checked,
+      };
+    } else {
+      reqBody = {
+        files: getSelectedFiles(),
         design_state: state,
         force_stage1: forceStage1,
         include_cover: document.getElementById('include-cover').checked,
         include_toc: document.getElementById('include-toc').checked,
-      })
+      };
+    }
+
+    const resp = await fetch('/api/build-svg', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(reqBody)
     });
     const data = await resp.json();
 
     if (data.ok) {
       renderSvgPages(data.page_count, data.svg_base, currentPage);
       setBuildStatus(`${data.page_count}p / ${data.duration}s (stage ${data.stage})`);
+      // Stage 1 완료 시 이미지 목록 갱신
+      if (data.stage === 1) fetchImages();
     } else {
       setBuildStatus('error');
       showToast('빌드 실패: ' + (data.error || '').slice(0, 100));
@@ -1354,6 +1538,270 @@ async function combineMd() {
 }
 
 // ══════════════════════════════════════
+// Individual Image Control
+// ══════════════════════════════════════
+
+let _imageList = [];
+
+async function fetchImages() {
+  try {
+    const resp = await fetch('/api/images');
+    const data = await resp.json();
+    _imageList = data.images || [];
+    renderImageList();
+  } catch (e) { /* silent */ }
+}
+
+function renderImageList() {
+  const container = document.getElementById('img-individual-list');
+  const badge = document.getElementById('img-count-badge');
+  if (!_imageList.length) {
+    container.innerHTML = '<div class="img-empty">빌드 후 이미지 목록이 표시됩니다</div>';
+    badge.textContent = '';
+    return;
+  }
+  badge.textContent = `(${_imageList.length})`;
+  container.innerHTML = _imageList.map(img => {
+    const hasOverride = img.override_width !== null || img.override_style !== null;
+    const width = Math.round((img.override_width ?? img.default_width) * 100);
+    const escapedPath = img.path.replace(/'/g, "\\'");
+    return `<div class="img-individual-item${hasOverride ? ' overridden' : ''}">
+      <div class="img-thumb" title="${img.category}">${img.category.charAt(0).toUpperCase()}</div>
+      <div class="img-info">
+        <span class="img-name" title="${img.path}">${img.rel_path.split('/').pop()}</span>
+        <span class="img-cat">${img.category} / ${img.default_style}</span>
+      </div>
+      <input type="range" class="img-width-slider" min="30" max="100" step="5" value="${width}"
+        oninput="this.nextElementSibling.textContent=this.value+'%'"
+        onchange="setImageOverride('${escapedPath}', parseInt(this.value))">
+      <span class="img-width-val">${width}%</span>
+      <button class="img-reset" title="초기화" onclick="resetImageOverride('${escapedPath}')">&times;</button>
+    </div>`;
+  }).join('');
+}
+
+async function setImageOverride(path, widthPercent) {
+  state.imageOverrides[path] = { width: widthPercent };
+  try {
+    await fetch('/api/image-override', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ path, width: widthPercent })
+    });
+    scheduleDesignRebuild();
+  } catch (e) {
+    showToast('이미지 오버라이드 실패');
+  }
+}
+
+async function resetImageOverride(path) {
+  delete state.imageOverrides[path];
+  try {
+    await fetch('/api/image-override', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ path, reset: true })
+    });
+    scheduleDesignRebuild();
+    fetchImages();
+  } catch (e) {
+    showToast('초기화 실패');
+  }
+}
+
+// ══════════════════════════════════════
+// Verified Build + Polling
+// ══════════════════════════════════════
+
+let _verifyPollTimer = null;
+
+async function buildVerified() {
+  const btn = document.getElementById('verify-btn');
+  btn.classList.add('running');
+  btn.textContent = 'Verifying...';
+  hideVerifyBanner();
+
+  const reqBody = currentMode === 'file'
+    ? { mode: 'file', design_state: state }
+    : { files: getSelectedFiles(), design_state: state };
+
+  try {
+    const resp = await fetch('/api/build-verified', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(reqBody)
+    });
+    const data = await resp.json();
+    if (data.ok) {
+      pollVerification();
+    } else {
+      showVerifyBanner('error', data.error || '검증 시작 실패');
+      btn.classList.remove('running');
+      btn.textContent = 'Verified Build';
+    }
+  } catch (e) {
+    showVerifyBanner('error', '서버 연결 오류');
+    btn.classList.remove('running');
+    btn.textContent = 'Verified Build';
+  }
+}
+
+function pollVerification() {
+  if (_verifyPollTimer) clearTimeout(_verifyPollTimer);
+  _verifyPollTimer = setTimeout(async () => {
+    try {
+      const resp = await fetch('/api/verification-status');
+      const data = await resp.json();
+      const btn = document.getElementById('verify-btn');
+
+      if (data.running) {
+        btn.textContent = `Verifying... (round ${data.round || '?'})`;
+        pollVerification();
+        return;
+      }
+
+      btn.classList.remove('running');
+      btn.textContent = 'Verified Build';
+
+      if (data.result) {
+        const r = data.result;
+        const autoCount = (r.auto_fixed || []).length;
+        const manualCount = (r.manual_remaining || []).length;
+
+        if (autoCount === 0 && manualCount === 0) {
+          showVerifyBanner('success', `검증 완료 (${r.rounds}R) - 이슈 없음`);
+        } else {
+          const parts = [];
+          if (autoCount) parts.push(`자동수정 ${autoCount}건`);
+          if (manualCount) parts.push(`수동확인 ${manualCount}건`);
+          showVerifyBanner('warning', `검증 완료 (${r.rounds}R) - ${parts.join(' + ')}`);
+        }
+
+        // SVG 갱신
+        if (r.page_count) {
+          renderSvgPages(r.page_count, r.svg_base || '/api/svg/');
+          setBuildStatus(`${r.page_count}p / ${r.duration || '?'}s (verified)`);
+        }
+
+        // 이미지 목록 갱신
+        fetchImages();
+      }
+    } catch (e) {
+      const btn = document.getElementById('verify-btn');
+      btn.classList.remove('running');
+      btn.textContent = 'Verified Build';
+    }
+  }, 1000);
+}
+
+function showVerifyBanner(type, message) {
+  const banner = document.getElementById('verify-banner');
+  banner.className = 'verify-banner ' + type;
+  banner.innerHTML = `<button class="close-banner" onclick="hideVerifyBanner()">&times;</button>${message}`;
+}
+
+function hideVerifyBanner() {
+  const banner = document.getElementById('verify-banner');
+  banner.className = 'verify-banner';
+  banner.style.display = 'none';
+}
+
+// ══════════════════════════════════════
+// Layout Issues
+// ══════════════════════════════════════
+
+let _layoutData = { issues: [], page_usage: [] };
+
+async function fetchLayoutIssues() {
+  try {
+    const resp = await fetch('/api/layout-issues');
+    _layoutData = await resp.json();
+    renderLayoutIssues();
+  } catch (e) {
+    document.getElementById('layout-issues-panel').innerHTML =
+      '<div class="layout-empty">레이아웃 데이터를 가져올 수 없습니다</div>';
+  }
+}
+
+function renderLayoutIssues() {
+  const panel = document.getElementById('layout-issues-panel');
+  const issues = _layoutData.issues || [];
+  const usage = _layoutData.page_usage || [];
+
+  if (!issues.length && !usage.length) {
+    panel.innerHTML = '<div class="layout-empty">빌드 후 레이아웃 분석 결과가 표시됩니다.<br>Verified Build 버튼으로 검증을 시작하세요.</div>';
+    return;
+  }
+
+  const autoCount = issues.filter(i => i.severity === 'auto_fixable').length;
+  const manualCount = issues.filter(i => i.severity === 'manual').length;
+
+  let html = '';
+
+  // Summary
+  html += `<div class="layout-summary">
+    <div class="layout-stat ${issues.length === 0 ? 'good' : 'warn'}">
+      <div class="stat-num">${issues.length}</div><div class="stat-label">총 이슈</div>
+    </div>
+    <div class="layout-stat ${autoCount === 0 ? 'good' : 'warn'}">
+      <div class="stat-num">${autoCount}</div><div class="stat-label">자동수정</div>
+    </div>
+    <div class="layout-stat ${manualCount === 0 ? 'good' : 'warn'}">
+      <div class="stat-num">${manualCount}</div><div class="stat-label">수동확인</div>
+    </div>
+  </div>`;
+
+  // Page usage chart
+  if (usage.length) {
+    html += '<div class="page-usage-chart">';
+    usage.forEach(p => {
+      const fillClass = p.usage >= 60 ? 'high' : p.usage >= 30 ? 'medium' : 'low';
+      html += `<div class="page-usage-bar" onclick="goToPreviewPage(${p.page})">
+        <span class="bar-label">p${p.page}</span>
+        <div class="bar-track"><div class="bar-fill ${fillClass}" style="width:${p.usage}%"></div></div>
+        <span class="bar-val">${p.usage}%${p.label ? ' ' + p.label : ''}</span>
+      </div>`;
+    });
+    html += '</div>';
+  }
+
+  // Issue list
+  if (issues.length) {
+    html += '<div class="issue-list">';
+    issues.forEach(issue => {
+      const badgeClass = issue.severity === 'auto_fixable' ? 'auto' : 'manual';
+      const badgeText = issue.severity === 'auto_fixable' ? 'AUTO' : 'MANUAL';
+      html += `<div class="issue-item" onclick="goToPreviewPage(${issue.page})">
+        <span class="issue-badge ${badgeClass}">${badgeText}</span>
+        <span class="issue-page">p${issue.page}</span>
+        <div>
+          <div class="issue-msg">${issue.message || issue.issue_type}</div>
+          ${issue.suggestion ? '<div class="issue-suggestion">' + issue.suggestion + '</div>' : ''}
+        </div>
+      </div>`;
+    });
+    html += '</div>';
+  }
+
+  panel.innerHTML = html;
+}
+
+function goToPreviewPage(pageNum) {
+  // 에디터 탭으로 전환 후 해당 페이지로 스크롤
+  switchTab('editor');
+  const viewer = document.getElementById('svg-viewer');
+  const target = viewer.querySelector(`.svg-page[data-page="${pageNum}"]`);
+  if (target) {
+    const img = target.querySelector('img');
+    if (img && img.dataset.src) {
+      img.src = img.dataset.src;
+      img.removeAttribute('data-src');
+    }
+    target.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+// ══════════════════════════════════════
 // Init
 // ══════════════════════════════════════
 
@@ -1361,7 +1809,20 @@ async function combineMd() {
   render();
   await fetchProject();
   await fetchFiles();
+
+  // 서버 모드 확인 (CLI --file로 시작했을 수 있음)
+  try {
+    const modeResp = await fetch('/api/mode');
+    const modeData = await modeResp.json();
+    if (modeData.mode === 'file' && modeData.file_path) {
+      currentMode = 'file';
+      fileDesignable = modeData.designable;
+      applyFileModeUI(modeData.file_path, modeData.designable);
+    }
+  } catch (e) { /* 프로젝트 모드로 fallback */ }
+
   scheduleDesignRebuild(true);
+  // 이미지 목록은 첫 빌드 완료 후 자동 로드
 })();
 </script>
 </body>
