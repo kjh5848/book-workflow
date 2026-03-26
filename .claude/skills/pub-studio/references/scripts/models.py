@@ -162,17 +162,18 @@ class DesignState:
         """UI에서 전송된 dict를 DesignState로 변환."""
         if not d:
             return cls()
+        defaults = cls()
         return cls(
             preset=d.get("preset", "1"),
-            components=d.get("components", cls.components),
-            fonts=d.get("fonts", cls.fonts),
-            typo=d.get("typo", cls.typo),
-            margins=d.get("margins", cls.margins),
-            images=d.get("images", cls.images),
+            components=d.get("components", defaults.components),
+            fonts=d.get("fonts", defaults.fonts),
+            typo=d.get("typo", defaults.typo),
+            margins=d.get("margins", defaults.margins),
+            images=d.get("images", defaults.images),
             image_overrides=d.get("imageOverrides", d.get("image_overrides", {})),
-            colors=d.get("colors", cls.colors),
-            page=d.get("page", cls.page),
-            typo_sizes=d.get("typoSizes", d.get("typo_sizes", cls.typo_sizes)),
+            colors=d.get("colors", defaults.colors),
+            page=d.get("page", defaults.page),
+            typo_sizes=d.get("typoSizes", d.get("typo_sizes", defaults.typo_sizes)),
             toc_depth=d.get("tocDepth", d.get("toc_depth", 2)),
         )
 
