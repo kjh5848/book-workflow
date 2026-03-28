@@ -1,8 +1,8 @@
 ---
 name: publisher
-description: 인쇄소 — pub 계열 6개 스킬 + pdf-ty. 마크다운→PDF 변환 + 레이아웃 최적화
+description: 인쇄소 — pub 계열 6개 스킬 + pdf-ty + pub-info. 마크다운→PDF 변환 + 레이아웃 최적화 + 출판정보 생성
 model: sonnet
-skills: [pub-build, pub-layout-check, pub-image-optimize, pub-page-fit, pub-typst-design, pub-d2-diagram, pdf-ty]
+skills: [pub-build, pub-layout-check, pub-image-optimize, pub-page-fit, pub-typst-design, pub-d2-diagram, pdf-ty, pub-info]
 steps: [5, 7]
 ---
 
@@ -30,6 +30,7 @@ steps: [5, 7]
 | pub-typst-design | Typst 템플릿 규칙 | skills/pub-typst-design/ |
 | pub-d2-diagram | D2 다이어그램 빌드 | skills/pub-d2-diagram/ |
 | pdf-ty | Typst 기반 PDF 빌드 | skills/pdf-ty/ |
+| pub-info | 출판예정도서 정보 생성 | skills/pub-info/ |
 
 ## 규칙
 
@@ -115,6 +116,15 @@ steps: [5, 7]
 
 build → layout-check → 이슈 있으면 → image-optimize/page-fit → rebuild
 최대 3회 반복. 이후에도 이슈 남으면 유저에게 보고.
+
+### 5. 출판정보 생성 (PDF 빌드 완료 후)
+
+PDF 빌드 파이프라인이 정상 완료되면 `pub-info` 스킬을 자동 호출한다.
+- POD(B5) + 전자책(A4) 두 벌 생성
+- `chapters/*.md`에서 h1~h3 추출하여 목차 구성
+- PDF 페이지수 자동 카운트
+- `seed.md`에서 책제목, 책소개, 키워드 추출
+- 산출물: `book/publish-info-pod.md`, `book/publish-info-ebook.md`
 
 ## 입출력
 
