@@ -26,7 +26,7 @@ steps: [1, 4, 5, 6, 7]
 | C1.비유-생성기 | 핵심 개념 비유 생성 | skills/writing/ |
 | C2.요약기 | 답변 정리, 챕터 요약 | skills/writing/ |
 | C3.브릿지-생성기 | 챕터 간 연결 | skills/writing/ |
-| C4.제목-생성기 | 챕터/책 제목 후보 | skills/writing/ |
+| C4.제목-생성기 | 챕터/책 제목 후보 (기술명 위주) | skills/writing/ |
 | C5.용어-정의기 | 비유→정식정의 테이블 | skills/writing/ |
 | humanizer | AI 패턴 교정 | skills/humanizer/ |
 
