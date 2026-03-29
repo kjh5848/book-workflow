@@ -1,4 +1,4 @@
-# 5장. 서버가 다 할 필요는 없잖아요
+# Ch.5 Presigned URL과 S3 + Lambda
 
 ## 디스크 사용량 90%
 

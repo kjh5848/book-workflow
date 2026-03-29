@@ -1,4 +1,4 @@
-# 9장. 그 알림, 꼭 직접 전해야 해?
+# Ch.9 RabbitMQ 메시지 큐
 
 ## 수동 동기화의 한계
 
@@ -71,7 +71,9 @@ rabbitmq-consumer/
 └── application.properties        [실습] RabbitMQ 접속 정보
 ```
 
-## 기술 파트
+---
+
+이제 직접 만들어 보겠습니다.
 
 <img src="../assets/CH09/diagram/09_exercise-flow.png" width="720" alt="RabbitMQ 실습 흐름">
 

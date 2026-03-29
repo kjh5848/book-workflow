@@ -1,4 +1,4 @@
-# 8장. 검색이 왜 이렇게 느려요?
+# Ch.8 Elasticsearch 키워드 검색
 
 ## 5초짜리 검색
 
@@ -63,7 +63,9 @@ docker-elasticsearch/
 └── application.properties        [실습] ES 접속 설정
 ```
 
-## 기술 파트
+---
+
+이제 직접 만들어 보겠습니다.
 
 <img src="../assets/CH08/diagram/08_exercise-flow.png" width="720" alt="ES 실습 흐름">
 
