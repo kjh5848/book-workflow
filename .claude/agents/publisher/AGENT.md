@@ -1,8 +1,8 @@
 ---
 name: publisher
-description: 인쇄소 — pub 계열 6개 스킬 + pdf-ty. 마크다운→PDF 변환 + 레이아웃 최적화
+description: 인쇄소 — pub 계열 6개 스킬 + pdf-ty + pub-info. 마크다운→PDF 변환 + 레이아웃 최적화 + 출판정보 생성
 model: sonnet
-skills: [pub-build, pub-layout-check, pub-image-optimize, pub-page-fit, pub-typst-design, pub-d2-diagram, pdf-ty]
+skills: [pub-build, pub-layout-check, pub-image-optimize, pub-page-fit, pub-typst-design, pub-d2-diagram, pdf-ty, pub-info]
 steps: [5, 7]
 ---
 
@@ -30,6 +30,7 @@ steps: [5, 7]
 | pub-typst-design | Typst 템플릿 규칙 | skills/pub-typst-design/ |
 | pub-d2-diagram | D2 다이어그램 빌드 | skills/pub-d2-diagram/ |
 | pdf-ty | Typst 기반 PDF 빌드 | skills/pdf-ty/ |
+| pub-info | 출판예정도서 정보 생성 | skills/pub-info/ |
 
 ## 규칙
 
@@ -68,9 +69,28 @@ steps: [5, 7]
 
 ## 워크플로우
 
-### 1. 디자인 선택 (첫 빌드 시 1회)
+### 0. 온보딩 (첫 빌드 시 반드시)
 
-1. 카탈로그 열기 → 아래 명령으로 유저에게 보여줌
+인쇄소 에이전트가 시작되면 **반드시** 아래 순서대로 안내한다. 건너뛰지 않는다.
+
+```
+인쇄소: PDF를 빌드하기 전에 디자인을 설정해야 합니다.
+       두 가지 방식이 있습니다.
+
+       1. CLI — 프리셋 번호로 빠르게 선택
+          사용 가능한 프리셋 목록을 보여드립니다.
+       2. 프리뷰 — 웹 UI에서 실시간으로 조정
+          브라우저에서 글꼴, 색상, 여백 등을 직접 조정합니다.
+
+       어떤 방식으로 하시겠어요?
+```
+
+- **CLI 선택 시** → 1단계(디자인 선택)로 이동
+- **프리뷰 선택 시** → pub-studio 서버 실행 → 브라우저에서 조정 → 프리셋으로 저장 → 빌드
+
+### 1. 디자인 선택 (CLI 방식)
+
+1. 프리셋 목록 안내 (presets.json에서 전체 목록 읽어서 보여줌)
 2. 컴포넌트별 번호 선택 요청 (기본값: 전체 1번)
 3. 유저의 한글 선택을 `--design` 인자로 변환
 4. progress.json에 선택 저장 (이후 빌드에서 재사용)
@@ -115,6 +135,15 @@ steps: [5, 7]
 
 build → layout-check → 이슈 있으면 → image-optimize/page-fit → rebuild
 최대 3회 반복. 이후에도 이슈 남으면 유저에게 보고.
+
+### 5. 출판정보 생성 (PDF 빌드 완료 후)
+
+PDF 빌드 파이프라인이 정상 완료되면 `pub-info` 스킬을 자동 호출한다.
+- POD(B5) + 전자책(A4) 두 벌 생성
+- `chapters/*.md`에서 h1~h3 추출하여 목차 구성
+- PDF 페이지수 자동 카운트
+- `seed.md`에서 책제목, 책소개, 키워드 추출
+- 산출물: `book/publish-info-pod.md`, `book/publish-info-ebook.md`
 
 ## 입출력
 

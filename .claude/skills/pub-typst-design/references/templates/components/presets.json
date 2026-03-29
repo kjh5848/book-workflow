@@ -26,5 +26,19 @@
       "table": "d2",
       "toc": "d2"
     }
+  },
+  "3": {
+    "name": "디자인 6",
+    "description": "heading 미니멀 + inline_code 굵게 + table 그레이 헤더",
+    "components": {
+      "body": "d1",
+      "chapter_opening": "d1",
+      "heading": "d2",
+      "code": "d1",
+      "inline_code": "d2",
+      "quote": "d1",
+      "table": "d2",
+      "toc": "d1"
+    }
   }
 }
