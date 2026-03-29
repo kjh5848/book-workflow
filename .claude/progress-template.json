@@ -70,8 +70,8 @@
       "name": "마무리",
       "status": "pending",
       "artifacts": {
-        "epilogue": null,
-        "appendix": null
+        "preface": null,
+        "afterword": null
       },
       "final_title": null,
       "total_pages": null,

@@ -89,9 +89,9 @@ steps: [1, 4, 5, 6, 7]
 2. 시나리오 흐름대로 연결 → 일기체 프롤로그 작성
 3. 산출물: `book/front/prologue.md`
 
-### STEP 7 (마무리) — 에필로그 + 부록
+### STEP 7 (마무리) — 서문 + 맺음말
 
 1. C2.요약기 → 전체 흐름 정리
 2. C4.제목-생성기 → 최종 제목 + 부제목
-3. 에필로그 + 부록 작성
-4. 산출물: `book/back/epilogue.md`, `book/back/appendix.md`
+3. 서문 + 맺음말 작성
+4. 산출물: `book/front/preface.md`, `book/back/afterword.md`

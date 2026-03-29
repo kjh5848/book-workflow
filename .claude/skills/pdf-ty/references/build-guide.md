@@ -112,7 +112,7 @@ CHAPTERS:
   9. chapters/07-실제로-써보니.md
 
 BACK:
-  10. book/back/appendix.md       (부록)
+  10. (부록 없음 — 심화 내용은 각 챕터 기술 파트에 포함)
 ```
 
 챕터를 추가하려면 `build_pdf_typst.py`의 `CHAPTERS` 리스트에 경로를 추가합니다.
