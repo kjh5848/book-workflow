@@ -31,7 +31,7 @@ Phase 4 ── 집필
 
 Phase 5 ── 완성
   STEP 6. 프롤로그 + 로드맵   "숲을 보여준다"
-  STEP 7. 마무리              "서문, 맺음말"
+  STEP 7. 마무리              "머릿말, 맺음말"
 ```
 
 ## 사용 가능한 명령어
@@ -60,7 +60,7 @@ Phase 5 ── 완성
 ├── step4-뼈대.md                # STEP 4: 목차 + 코드 실습 배치
 ├── step5-챕터집필.md             # STEP 5: 이야기 파트 + 기술 파트
 ├── step6-프롤로그.md             # STEP 6: 프롤로그 + 로드맵
-├── step7-마무리.md              # STEP 7: 서문, 맺음말
+├── step7-마무리.md              # STEP 7: 머릿말, 맺음말
 ├── review-guide.md              # 검토 모드 가이드 (인사이트/의도감시/감수)
 └── legacy/                      # v3 이전 워크플로우 파일
 ```
@@ -77,7 +77,7 @@ projects/{책이름}/
 │   └── outline-v1.md
 ├── chapters/                   ← STEP 5 산출물
 ├── book/
-│   ├── front/                  ← 프롤로그, 로드맵, 서문
+│   ├── front/                  ← 프롤로그, 로드맵, 머릿말
 │   ├── body/                   ← 본문 챕터
 │   └── back/                   ← 맺음말
 ├── versions/                   ← 버전별 예제 코드
