@@ -38,20 +38,25 @@ CHAPTER_FILES = [
 ]
 
 CONFIG = {
-    "title": "스프링과 함께하는 레퍼런스 기술모음",
+    "title": "처음 만나는 스프링 주변 기술",
+    "subtitle": "Docker부터 RabbitMQ까지 9가지 실습",
     "base": BASE,
     "assets_dir": ASSETS,
     "template": BOOK / "templates" / "book.typ",
     "font_path": Path.home() / "Library" / "Fonts",
     "front": [
+        FRONT / "preface.md",
         FRONT / "prologue.md",
     ],
     "chapters": CHAPTER_FILES,
-    "back": [],
+    "back": [
+        BACK / "afterword.md",
+    ],
     "output_md": BOOK / "스프링과_함께하는_레퍼런스_기술모음_통합본.md",
     "output_typ": BOOK / "스프링과_함께하는_레퍼런스_기술모음_통합본.typ",
     "output_pdf": BOOK / "스프링과_함께하는_레퍼런스_기술모음_통합본.pdf",
     "output_dir": BOOK / "chapter_pdfs",
+    "mermaid_out": BOOK / "_mermaid_images",
 }
 
 
