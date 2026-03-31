@@ -191,12 +191,27 @@ Style: metaphor-comparison
 
 ---
 
-### 2.2 이번 챕터 파일 구조
+### 2.2 소스 코드 준비
+
+이 책의 실습은 GitHub 레포를 클론해서 진행합니다.
 
 | 레포 | 용도 | 주소 |
 |------|------|------|
 | **rag-start** | 실습용 (빈 파일 — 챕터 따라 코드 작성) | `https://github.com/metacoding-18-ai-applied-v4/rag-start` |
 | **rag-end** | 완성 코드 (막히면 참고) | `https://github.com/metacoding-18-ai-applied-v4/rag-end` |
+
+아직 클론하지 않았다면 터미널에서 실행합니다.
+
+```bash
+git clone https://github.com/metacoding-18-ai-applied-v4/rag-start.git
+cd rag-start/ex01
+```
+
+이미 클론했다면 `ex01` 폴더로 이동합니다.
+
+```bash
+cd rag-start/ex01
+```
 
 ```
 ex01/
@@ -232,7 +247,7 @@ ollama pull nomic-embed-text
 > **팁: LLM 선택**
 > 기본값은 Ollama + `deepseek-r1:8b`입니다(16GB RAM 이상 권장). RAM이 부족하거나 응답이 너무 느리면 `.env`에서 `LLM_PROVIDER=openai`로 바꿔서 GPT-4o-mini를 쓸 수도 있습니다. 단, API 비용이 발생합니다. `.env` 파일에 `OPENAI_API_KEY=sk-xxxxxx` 형태로 키를 등록하세요. 상세 안내는 **교육자료** 를 확인하세요.
 
-이번 챕터에서는 **LangChain** 이라는 프레임워크를 사용합니다. LLM 호출, 벡터 검색, 체인 조립처럼 RAG에 필요한 부품을 제공하는 도구입니다. 여기서는 맛보기로만 쓰고 CH05에서 본격적으로 다룹니다.
+이번 챕터에서는 **LangChain**이라는 프레임워크를 사용합니다. LLM 호출, 벡터 검색, 체인 조립처럼 RAG에 필요한 부품을 제공하는 도구입니다. 여기서는 맛보기로만 쓰고 CH05에서 본격적으로 다룹니다.
 
 | 패키지 | 역할 |
 |--------|------|
@@ -381,10 +396,10 @@ python step3_rag.py
 step3에서 문서 3개를 **각각 따로** 벡터 DB에 저장했습니다. 이번에는 반대로, 모든 문서를 **하나의 덩어리로 합쳐서** 저장하면 어떻게 되는지 비교해 봅니다. `ex01/step3_rag_no_chunking.py`의 TODO를 step3과 같은 방식으로 채웁니다. 다른 점은 두 가지입니다.
 
 ```python
-# 데이터가 docs_bad (하나의 거대한 Document)이므로
+# 데이터가 docs_bad (하나의 거대한 Document)
 vectorstore = Chroma.from_documents(documents=docs_bad, embedding=embeddings)
 
-# 문서가 하나뿐이므로 k=1
+# 문서가 하나 k=1
 retriever = vectorstore.as_retriever(search_kwargs={"k": 1})
 ```
 
