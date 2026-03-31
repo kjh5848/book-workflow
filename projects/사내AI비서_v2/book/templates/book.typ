@@ -8,4 +8,4 @@
 #let book-series-sub = "개념편"
 #let book-badges = ("RAG", "LangChain", "ChromaDB", "FastAPI", "LLM", "임베딩", "리랭킹", "HyDE", "Vision LLM")
 #let book-publisher = "오픈스킬북스"
-#let book-cover-image = "/Users/nomadlab/Desktop/김주혁/workspace/coding-study/집필에이전트 v2/projects/사내AI비서_v2/assets/cover.png"
+#let book-cover-image = "/Users/nomadlab/Desktop/김주혁/workspace/coding-study/집필에이전트 v2/projects/사내AI비서_v2/.pdf-build/cover.png"

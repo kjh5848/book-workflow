@@ -42,6 +42,7 @@ Phase 5 ── 완성
   STEP 7. 마무리              "머릿말, 맺음말"
 Phase 6 ── 출판 (인쇄소)
   출판정보 생성               "서점 등록용 정보 생성"
+  표지 디자인 위자드           "4단계 표지 제작"
   인쇄소                     "MD→PDF 조판 + 레이아웃 최적화"
 ```
 
@@ -62,12 +63,76 @@ Phase 6 ── 출판 (인쇄소)
 | `마무리` | 7 | `book/에필로그.md` 등 | `.claude/workflow/step7-마무리.md` |
 | `이미지 분석` | 5 | `[GEMINI PROMPT]` 플레이스홀더 | illustrator + image-analyzer 스킬 |
 | `출판정보 생성` | 출판 | `book/publish-info-*.md` | publisher + pub-info 스킬 |
-| `인쇄소` | 출판 | `book/output/*.pdf` | publisher 에이전트 (pub-build + 레이아웃 최적화) |
+| `인쇄소` | 출판 | `book/output/*.pdf` | 아래 "인쇄소 실행 흐름" 참조 |
 | `이어하기` | — | — | `prompts/next-session-*.md` 읽기 |
 | `현재 상태` | — | 터미널 출력 | progress.json 기반 |
 | `PM 전략 [서비스]` | — | `docs/pm/[서비스]-전략.md` | pm-strategist 에이전트 |
 | `퍼널 설계 [범위]` | — | `docs/pm/[범위]-퍼널.md` | pm-strategist 에이전트 |
 | `GTM [대상]` | — | `docs/pm/[대상]-GTM.md` | pm-strategist 에이전트 |
+
+### `인쇄소` 실행 흐름
+
+서브에이전트는 이미지를 유저에게 표시할 수 없으므로, 표지 위자드는 메인 세션이 직접 처리한다.
+
+```
+[메인 세션] Phase A: 출판정보 + 표지 디자인 위자드
+  1. publish-info-pod.md 확인 (없으면 pub-info 스킬 실행)
+  2. 표지 디자인 위자드 (4단계, 각 단계 4변형 HTML UI)
+     Step 2-1. 레이아웃    → 단어 배치/크기/정렬
+     Step 2-2. 그림자      → 그림자 스타일
+     Step 2-3. 폰트 색상   → 색상 조합
+     Step 2-4. 최종 확인   → Read 검증 → 확정
+  3. 각 단계: 변형 생성 → Read로 겹침 검증 → HTML UI → 유저 선택
+
+[서브에이전트] Phase B: Publisher 디스패치
+  - 표지는 확정된 assets/cover.jpg 사용
+  - 온보딩 → 디자인 선택 → D2 변환 → PDF 빌드 → 레이아웃 검수
+```
+
+#### Phase A 상세 (메인 세션)
+
+**1. 출판정보 확인**
+```bash
+# publish-info-pod.md가 없으면 pub-info 스킬로 자동 생성
+# seed-v*.md에서 제목/부제목 추출 → 목차/페이지수/판권지 생성
+```
+
+**2. 표지 디자인 위자드** (pub-studio 스킬, `cover_generator.py`)
+
+각 단계에서 `build_pdf_typst.py` CLI로 4가지 변형을 생성하고, HTML UI를 브라우저에서 열어 유저가 선택한다.
+
+```bash
+# Step 1: 레이아웃 — 단어 배치/크기/정렬/줄 구성
+python3 build_pdf_typst.py --cover-preview --ebook
+
+# Step 2: 그림자 — 선택된 레이아웃에서 그림자 스타일 변형
+python3 build_pdf_typst.py --cover-shadow --ebook
+
+# Step 3: 폰트 색상 — 선택된 레이아웃+그림자에서 색상 조합 변형
+python3 build_pdf_typst.py --cover-color --ebook
+
+# Step 4: 최종 확정 — cover.jpg 저장
+python3 build_pdf_typst.py --cover-confirm --ebook
+```
+
+각 단계 사이에 Read로 겹침/침범 검증 필수. HTML UI는 `assets/cover_preview.html`.
+
+**3. 유저 인터랙션 루프**
+- 유저가 번호 선택 → `build_pdf_typst.py --cover-select N`
+- 불만족 시 → `cover_data.main_words` 수정 후 해당 단계 재실행
+- 이전 단계로 돌아가기 가능
+
+#### Phase B 상세 (Publisher 서브에이전트)
+
+표지 확정 후 디스패치. Publisher AGENT.md의 1~5단계를 순서대로 실행.
+
+```
+1. 온보딩      → 디자인 방식 선택 (CLI / 프리뷰)
+2. 디자인 선택  → presets.json에서 본문/제목/코드블록 등 컴포넌트별 선택
+3. D2 변환     → Mermaid → D2 → PNG (모노톤)
+4. PDF 빌드    → MD통합 → autocrop → Pandoc → Typst → PDF
+5. 레이아웃 검수 → 빈 페이지/고아줄/이미지 밀림 감지 → 자동수정 (최대 3회)
+```
 
 ### `새 책 만들기`
 

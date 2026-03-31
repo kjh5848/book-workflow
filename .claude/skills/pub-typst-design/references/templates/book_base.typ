@@ -115,6 +115,8 @@
     radius: 8pt,
     stroke: 1pt + rgb("#d1d5db"),
     breakable: true,
+    above: 8pt,
+    below: 8pt,
     text(fill: rgb("#1a1a1a"))[#it]
   )
 }

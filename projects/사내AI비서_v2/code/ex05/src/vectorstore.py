@@ -12,7 +12,7 @@ load_dotenv()
 def build_retriever():
     """ChromaDB Retriever를 생성한다."""
     chroma_dir = os.getenv("CHROMA_PERSIST_DIR", "./data/chroma_db")
-    collection_name = os.getenv("CHROMA_COLLECTION_NAME", "metacoding_documents")
+    collection_name = os.getenv("CHROMA_COLLECTION_NAME", "connecthr_documents")
     top_k = int(os.getenv("RETRIEVER_TOP_K", "5"))
     embedding_model_name = os.getenv("EMBEDDING_MODEL", "jhgan/ko-sroberta-multitask")
 

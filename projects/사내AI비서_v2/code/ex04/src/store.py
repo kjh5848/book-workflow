@@ -9,7 +9,7 @@ ChromaDB에 청크를 저장하는 모듈.
 
 ChromaDB:
   - 로컬 영속 모드 (PersistentClient)
-  - 컬렉션명: "metacoding_documents"
+  - 컬렉션명: "connecthr_documents"
   - 유사도 측정: cosine 거리 (기본)
 """
 
@@ -22,7 +22,7 @@ from sentence_transformers import SentenceTransformer
 
 # 기본 설정 상수
 DEFAULT_CHROMA_DIR = "./data/chroma_db"
-DEFAULT_COLLECTION_NAME = "metacoding_documents"
+DEFAULT_COLLECTION_NAME = "connecthr_documents"
 DEFAULT_EMBEDDING_MODEL = "jhgan/ko-sroberta-multitask"
 BATCH_SIZE = 64  # 임베딩 배치 크기 (메모리 제약 환경에서 조정)
 
@@ -74,7 +74,7 @@ def get_or_create_collection(
 
     Args:
         client: ChromaDB PersistentClient 인스턴스
-        collection_name: 컬렉션명 (기본값: "metacoding_documents")
+        collection_name: 컬렉션명 (기본값: "connecthr_documents")
 
     Returns:
         ChromaDB Collection 인스턴스

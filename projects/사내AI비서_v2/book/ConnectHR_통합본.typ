@@ -10,128 +10,15 @@
 #let book-publisher = "오픈스킬북스"
 #let book-cover-image = "/Users/nomadlab/Desktop/김주혁/workspace/coding-study/집필에이전트 v2/projects/사내AI비서_v2/assets/cover.png"
 
-// 조판 설정 변수 — 기본값은 Design 1 (클래식 블루)
-// Design 2에서 body_d2.typ 상단에서 재정의. D1 파일은 값을 직접 사용 (기본값과 동일하므로)
-// 소비자: _variant/body_d2.typ(재정의), _variant/heading_d2.typ, _variant/code_d2.typ
-
-// 행간: 줄과 줄 사이 간격
-#let body-leading = 1.0em
-// 자간: 글자와 글자 사이 간격 (0pt = 기본)
-#let body-tracking = 0pt
-// 제목-문단 간격: 제목 아래 본문까지의 여백
-#let heading-gap = 16pt
-// 코드 블록: 구분선과 코드 사이 여백
-#let code-inset-x = 16pt
-#let code-inset-y = 14pt
-// 코드 블록: 구분선 두께
-#let code-rule-stroke = 1pt
-
-// 제목 크기 — 에디터 오버라이드 대상
-#let h1-size = 26pt
-#let h2-size = 16pt
-#let h3-size = 13pt
-#let h4-size = 11pt
-// 코드 블록 크기 — 에디터 오버라이드 대상
-#let code-size = 8pt
-// 인용/표/인라인코드 크기 — 에디터 오버라이드 대상
-#let quote-size = 9pt
-#let table-size = 8.5pt
-#let inline-code-size = 8.5pt
-// 목차 깊이 — 에디터 오버라이드 대상
-#let toc-depth = 2
-// 목차 항목 간격 — 에디터 오버라이드 대상 (문단 간격과 독립)
-#let toc-spacing = 2pt
-
-// 색상 변수 — 에디터 오버라이드 대상
-#let color-primary = rgb("#2563eb")
-#let color-primary-dark = rgb("#1e40af")
-#let color-primary-light = rgb("#93c5fd")
-#let color-text = rgb("#1a1a1a")
-#let color-code-text = rgb("#1e40af")
-#let color-quote-bg = rgb("#f5f8ff")
-#let color-quote-border = rgb("#93b4e8")
-
-// 제목 스타일 변수 — componentStyles 오버라이드 대상 (기본값 = Design 1)
-// 색상 변수 뒤에 위치해야 함 (color-text, color-primary-dark 참조)
-#let h1-top = 10pt
-#let h1-weight = "bold"
-#let h1-fill = color-text
-#let h1-below = 14pt
-#let h2-top = 24pt
-#let h2-below = 14pt
-#let h2-weight = "bold"
-#let h2-fill = color-primary-dark
-#let h2-inset-left = 12pt
-#let h3-top = 16pt
-#let h3-below = 14pt
-#let h3-weight = "semibold"
-#let h3-fill = rgb("#1e3a5f")
-#let h4-top = 12pt
-#let h4-below = 14pt
-#let h4-weight = "semibold"
-#let h4-fill = rgb("#374151")
-
-// 본문 스타일 변수 — componentStyles 오버라이드 대상
-#let strong-fill = rgb("#1e3a5f")
-#let emph-fill = rgb("#6b7280")
-
-// 코드블록 스타일 변수
-#let code-fill = white
-#let code-radius = 8pt
-#let code-stroke-width = 1pt
-#let code-stroke-color = rgb("#d1d5db")
-
-// 인라인코드 스타일 변수
-#let inline-code-fill = rgb("#f3f4f6")
-#let inline-code-radius = 3pt
-#let inline-code-text-color = color-code-text
-
-// 인용 스타일 변수
-#let quote-text-color = rgb("#4b5563")
-#let quote-stroke-width = 3pt
-#let quote-inset-x = 14pt
-#let quote-inset-y = 10pt
-#let quote-radius = 4pt
-#let quote-margin = 10pt
-
-// 표 스타일 변수
-#let table-stroke-width = 0.5pt
-#let table-stroke-color = rgb("#e5e7eb")
-#let table-inset-x = 10pt
-#let table-inset-y = 8pt
-#let table-header-weight = "medium"
-#let table-header-text-color = white
-#let table-odd-fill = rgb("#f8fafc")
-#let table-margin-top = 0pt
-#let table-margin-bottom = 0pt
-
-// 목차 스타일 변수
-#let toc-title-size = 24pt
-#let toc-title-weight = "bold"
-#let toc-title-line-stroke = 3pt
-#let toc-level1-size = 11pt
-#let toc-level3-size = 8.5pt
-#let toc-level3-color = rgb("#6b7280")
-#let toc-indent = 1.5em
-
-// Figure 캡션 변수
-#let figure-margin-top = 8pt
-#let figure-margin-bottom = 4pt
-#let figure-caption-size = 8pt
-#let figure-caption-color = rgb("#6b7280")
-
-// 이미지 설정 변수 — 에디터 오버라이드 대상
-#let img-gemini-width = 0.7
-#let img-gemini-style = "bordered"
-#let img-terminal-width = 0.7
-#let img-terminal-style = "minimal"
-#let img-diagram-width = 0.6
-#let img-diagram-style = "minimal"
-#let img-default-width = 0.6
-#let img-default-style = "plain"
-
-// 필수 외부 변수 (book.typ에서 정의):
-//   book-title, book-subtitle, book-description, book-header-title
+// ── 범용 북 템플릿 (Typst) ──
+// 이 파일은 스킬(pub-typst-design) 소유. 프로젝트에서 심볼릭 링크로 참조.
+// 프로젝트의 book.typ에서 정의한 변수(book-title 등)를 사용합니다.
+//
+// 필수 변수 (book.typ에서 정의):
+//   #let book-title = "책 제목"
+//   #let book-subtitle = "부제"
+//   #let book-description = [설명]
+//   #let book-header-title = "헤더 표시 제목"
 
 // ── 챕터 추적 (헤더용) ──
 #let chapter-title = state("chapter-title", none)
@@ -149,12 +36,9 @@
     if page-num > 2 {
       set text(8pt, fill: rgb("#999999"))
       grid(
-        columns: (auto, 1fr),
-        column-gutter: 12pt,
+        columns: (1fr, 1fr),
         align(left)[#book-header-title],
-        align(right, box(clip: true, width: 100%, inset: (y: 2pt))[
-          #chapter-title.get()
-        ]),
+        align(right)[#chapter-title.get()],
       )
       v(2pt)
       line(length: 100%, stroke: 0.3pt + rgb("#dddddd"))
@@ -168,13 +52,12 @@
   },
 )
 
-// ── 본문 스타일: Design 1 (클래식 블루) ──
-// ──OVERRIDES──
+// ── 폰트 설정 ──
 #set text(
   font: ("RIDIBatang", "Apple SD Gothic Neo"),
   size: 10pt,
   lang: "ko",
-  fill: color-text,
+  fill: rgb("#1a1a1a"),
 )
 
 #set par(
@@ -183,12 +66,11 @@
   justify: true,
 )
 
-// ── 챕터 오프닝: Design 1 (클래식 블루) ──
-// 넓은 상단 여백 + 큰 제목 + 파란 밑줄. 출판 표준의 여유로운 오프닝.
+// ── 제목 스타일 ──
 #show heading.where(level: 1): it => {
   chapter-title.update(it.body)
   pagebreak(weak: true)
-  v(60pt)  // 상단 1/3 여백 (출판 표준)
+  v(60pt)  // 챕터 오프닝: 상단 1/3 여백 (출판 표준)
   block(
     width: 100%,
     below: 16pt,
@@ -202,161 +84,116 @@
   v(14pt)
 }
 
-// ── 제목 스타일: Design 2 (컴팩트 모노) ──
-// D2 변수 재정의
-#let h1-below = heading-gap
-#let h2-top = 18pt
-#let h2-fill = color-text
-#let h3-top = 14pt
-#let h3-fill = rgb("#374151")
-#let h4-top = 10pt
-#let h4-below = heading-gap
-#let h4-weight = "medium"
-#let h4-fill = rgb("#555555")
-// ──OVERRIDES──
-#show heading.where(level: 1): it => {
-  chapter-title.update(it.body)
-  counter(figure).update(0)
-  pagebreak(weak: true)
-  block(above: h1-top, below: 0pt, sticky: true)[
-    #text(h1-size, weight: h1-weight, fill: h1-fill)[#it.body]
-    #v(8pt)
-    #line(length: 100%, stroke: 3pt + color-primary)
-  ]
-  v(h1-below)
-}
-
 #show heading.where(level: 2): it => {
-  block(above: h2-top, below: 0pt, width: 100%, sticky: true)[
-    #text(h2-size, weight: h2-weight, fill: h2-fill)[#it.body]
-  ]
-  v(h2-below)
+  v(24pt)
+  block(
+    width: 100%,
+    below: 8pt,
+    sticky: true,
+    inset: (left: 12pt),
+    stroke: (left: 4pt + rgb("#2563eb")),
+    text(16pt, weight: "bold", fill: rgb("#1e40af"))[#it.body]
+  )
+  v(6pt)
 }
 
 #show heading.where(level: 3): it => {
-  block(above: h3-top, below: 0pt, sticky: true)[
-    #text(h3-size, weight: h3-weight, fill: h3-fill)[#it.body]
-  ]
-  v(h3-below)
+  v(16pt)
+  block(
+    below: 6pt,
+    sticky: true,
+    text(13pt, weight: "semibold", fill: rgb("#1e3a5f"))[#it.body]
+  )
+  v(4pt)
 }
 
 #show heading.where(level: 4): it => {
-  block(above: h4-top, below: 0pt, sticky: true)[
-    #text(h4-size, weight: h4-weight, fill: h4-fill)[#it.body]
-  ]
-  v(h4-below)
+  v(12pt)
+  block(
+    below: 4pt,
+    sticky: true,
+    text(11pt, weight: "semibold", fill: rgb("#374151"))[#it.body]
+  )
+  v(2pt)
 }
 
-// ── 코드 블록: Design 1 (둥근 테두리 박스) ──
-// ──OVERRIDES──
+// ── 코드 블록 (페이지 넘김 허용) ──
 #show raw.where(block: true): it => {
-  set text(size: code-size, weight: "bold", font: ("D2Coding", "RIDIBatang"))
+  set text(size: 8pt, weight: "bold", font: ("D2Coding", "RIDIBatang"))
   block(
     width: 100%,
-    fill: code-fill,
-    inset: (x: code-inset-x, y: code-inset-y),
-    radius: code-radius,
-    stroke: code-stroke-width + code-stroke-color,
+    fill: white,
+    inset: (x: 16pt, y: 14pt),
+    radius: 8pt,
+    stroke: 1pt + rgb("#d1d5db"),
     breakable: true,
-    text(fill: color-text)[#it]
+    above: 8pt,
+    below: 8pt,
+    text(fill: rgb("#1a1a1a"))[#it]
   )
 }
 
-// ── 인라인 코드: Design 2 (볼드 텍스트만) ──
-#let inline-code-fill = none
-#let inline-code-radius = 0pt
-#let inline-code-text-color = rgb("#1e3a5f")
-// ──OVERRIDES──
+// ── 인라인 코드 ──
 #show raw.where(block: false): it => {
-  text(size: inline-code-size, weight: "bold", fill: inline-code-text-color, font: ("D2Coding", "RIDIBatang"))[#it]
+  box(
+    fill: rgb("#f3f4f6"),
+    inset: (x: 4pt, y: 2pt),
+    radius: 3pt,
+    text(size: 8.5pt, fill: rgb("#1e40af"), font: ("D2Coding", "RIDIBatang"))[#it]
+  )
 }
 
-// ── 인용 블록: Design 1 (파란 좌측선) ──
-// ──OVERRIDES──
+// ── 인용 블록 (blockquote) ──
 #show quote.where(block: true): it => {
   block(
     width: 100%,
-    above: quote-margin,
-    below: quote-margin,
-    inset: (left: quote-inset-x, right: quote-inset-x, top: quote-inset-y, bottom: quote-inset-y),
-    stroke: (left: quote-stroke-width + color-quote-border),
-    fill: color-quote-bg,
-    radius: (right: quote-radius),
+    above: 10pt,
+    below: 10pt,
+    inset: (left: 14pt, right: 14pt, top: 10pt, bottom: 10pt),
+    stroke: (left: 3pt + rgb("#93b4e8")),
+    fill: rgb("#f5f8ff"),
+    radius: (right: 4pt),
     {
       set par(justify: true, leading: 0.9em)
-      text(size: quote-size, fill: quote-text-color)[#it.body]
+      text(size: 9pt, fill: rgb("#4b5563"))[#it.body]
     }
   )
 }
 
-// ── callout-box 호환 정의 ──
-#let callout-box(label, body) = {
-  block(
-    width: 100%,
-    above: quote-margin,
-    below: quote-margin,
-    inset: (left: quote-inset-x, right: quote-inset-x, top: quote-inset-y, bottom: quote-inset-y),
-    stroke: (left: quote-stroke-width + color-quote-border),
-    fill: color-quote-bg,
-    radius: (right: quote-radius),
-    {
-      set par(justify: true, leading: 0.9em)
-      if label == [] or label == none {
-        text(size: quote-size, fill: quote-text-color)[#body]
-      } else {
-        text(size: quote-size)[#text(weight: "bold", fill: color-primary)[#label] #text(fill: quote-text-color)[#body]]
-      }
-    }
-  )
-}
-
-// ── 표 스타일: Design 2 (회색 헤더, 검정 글씨, 좌측 정렬) ──
-#let table-stroke-color = rgb("#d1d5db")
-#let table-header-text-color = rgb("#1a1a1a")
-#let table-header-weight = "bold"
-#let table-odd-fill = rgb("#fafafa")
-// ──OVERRIDES──
+// ── 표 스타일 ──
 #set table(
-  stroke: table-stroke-width + table-stroke-color,
-  inset: (x: table-inset-x, y: table-inset-y),
-  align: left,
-  fill: (_, y) => if y == 0 { rgb("#e5e5e5") } else if calc.odd(y) { table-odd-fill } else { white },
+  stroke: (bottom: 0.5pt + rgb("#e5e7eb")),
+  inset: (x: 10pt, y: 8pt),
+  fill: (_, y) => if y == 0 { rgb("#1e40af") } else if calc.odd(y) { rgb("#f8fafc") } else { white },
 )
 
-#show table.cell.where(y: 0): set text(fill: table-header-text-color, weight: table-header-weight)
+#show table.cell.where(y: 0): set text(fill: white, weight: "medium")
 
 #show table: it => {
-  set text(size: table-size)
-  set par(justify: false)
-  v(table-margin-top)
-  align(left, block(breakable: true)[#it])
-  v(table-margin-bottom)
+  set text(size: 8.5pt)
+  block(breakable: true)[#it]
 }
 
 // ── 볼드/이탤릭 ──
-// ──OVERRIDES──
-#show strong: set text(fill: strong-fill)
-#show emph: set text(fill: emph-fill)
+#show strong: set text(fill: rgb("#1e3a5f"))
+#show emph: set text(fill: rgb("#6b7280"))
 
 // ── 수평선은 후처리에서 #v + block으로 변환됨 ──
 
-// ── figure 스타일 (표/이미지 공통) ──
-// above/below를 명시하여 par(spacing)의 영향 차단
+// ── figure 스타일 ──
 #show figure: it => {
-  block(above: figure-margin-top, below: figure-margin-bottom)[
-    #align(center, it.body)
-    #if it.caption != none {
-      v(2pt)
-      let ch = counter(heading.where(level: 1)).get().first()
-      let fig-num = counter(figure).display()
-      align(center, text(figure-caption-size, fill: figure-caption-color)[그림 #ch\-#fig-num: #it.caption.body])
-    }
-  ]
+  v(8pt)
+  align(center, it.body)
+  if it.caption != none {
+    v(2pt)
+    align(center, text(8pt, fill: rgb("#6b7280"))[#it.caption.body])
+  }
+  v(4pt)
 }
 
 // ── 링크 스타일 ──
 #show link: it => {
-  text(fill: color-primary)[#it]
+  text(fill: rgb("#2563eb"))[#it]
 }
 
 // ── 자동 크기 조절 이미지 ──
@@ -392,7 +229,7 @@
   // 스타일별 이미지 래핑
   let styled-img = if style == "bordered" {
     block(
-      stroke: 2pt + color-primary,
+      stroke: 2pt + rgb("#2563eb"),
       radius: 4pt,
       clip: true,
       image(path, width: final-width)
@@ -412,8 +249,8 @@
   } else if style == "bordered-shadow" {
     block(
       stroke: (
-        left: 2pt + color-primary,
-        top: 2pt + color-primary,
+        left: 2pt + rgb("#2563eb"),
+        top: 2pt + rgb("#2563eb"),
         right: 3pt + rgb("#1d4ed8"),
         bottom: 3pt + rgb("#1d4ed8"),
       ),
@@ -454,42 +291,15 @@
   v(8pt)
 }
 
-// ── 2열 이미지 (이미지 2개 나란히) ──
-// 이미지 두 개를 좌우로 나란히 배치합니다.
-// caption1, caption2: 각 이미지의 캡션 (없으면 캡션 없이 배치)
-#let dual-image(path1, path2, caption1: none, caption2: none, gap: 16pt) = {
-  v(8pt)
-  grid(
-    columns: (1fr, 1fr),
-    column-gutter: gap,
-    align: center,
-    if caption1 != none { figure(image(path1, width: 100%), caption: [#caption1]) } else { image(path1, width: 100%) },
-    if caption2 != none { figure(image(path2, width: 100%), caption: [#caption2]) } else { image(path2, width: 100%) },
-  )
-  v(8pt)
-}
-
 // ══════════════════════════════════════
 // 표지 — 이미지 또는 텍스트
 // ══════════════════════════════════════
-// book.typ에서 정의 필요:
-//   필수: book-title, book-subtitle, book-authors, book-header-title
-//   선택: book-cover-image, book-series, book-series-sub, book-badges, book-publisher
 #if book-cover-image != "" [
   #page(numbering: none, header: none, footer: none, margin: (top: 20pt, bottom: 20pt, left: 16pt, right: 16pt))[
     #image(book-cover-image, width: 100%, height: 100%, fit: "contain")
   ]
 ] else [
   #page(numbering: none, header: none, footer: none)[
-    #v(28pt)
-    #if book-series != "" [
-      #pad(left: 28pt)[
-        #text(10pt, fill: rgb("#94a3b8"), weight: "medium", tracking: 1pt)[
-          #book-series
-          #if book-series-sub != "" [ · #book-series-sub]
-        ]
-      ]
-    ]
     #v(1fr)
     #align(center)[
       #line(length: 40%, stroke: 2pt + color-primary)
@@ -499,24 +309,7 @@
       #line(length: 60%, stroke: 0.5pt + color-primary-light)
       #v(16pt)
       #text(15pt, fill: rgb("#374151"), weight: "medium")[#book-subtitle]
-      #v(28pt)
-      #if book-badges.len() > 0 [
-        #block(width: 85%)[
-          #align(center)[
-            #for (i, badge) in book-badges.enumerate() {
-              box(
-                inset: (x: 8pt, y: 4pt),
-                radius: 12pt,
-                fill: rgb("#f1f5f9"),
-                stroke: 0.5pt + rgb("#e2e8f0"),
-                text(9pt, fill: rgb("#475569"), weight: "medium")[#badge]
-              )
-              if i < book-badges.len() - 1 { h(5pt) }
-            }
-          ]
-        ]
-        #v(28pt)
-      ]
+      #v(48pt)
       #block(
         width: 70%,
         inset: (x: 20pt, y: 16pt),
@@ -530,36 +323,341 @@
     #align(center)[
       #text(11pt, fill: rgb("#4b5563"), weight: "medium")[#book-authors 지음]
       #v(14pt)
-      #if book-publisher != "" [
-        #text(9pt, fill: rgb("#9ca3af"), tracking: 1.5pt)[#book-publisher]
-      ] else [
-        #text(9pt, fill: rgb("#94a3b8"))[#book-header-title]
-      ]
+      #text(9pt, fill: rgb("#94a3b8"))[#book-header-title]
     ]
     #v(24pt)
   ]
 ]
 
+= 서문
 
+RAG 관련 자료를 처음 찾아보셨을 때, 혹시 이런 느낌 아니었나요?
 
+"LangChain 공식 문서는 있는데… 이걸 어디서 어떻게 시작하지?"
+
+"예제는 따라 했는데, 막상 내 문서를 넣으면 검색이 왜 이렇게 안 되"기본 RAG는 만들었는데, 정확도를 올리려면 뭘 건드려야 하지?”
+
+이 책은 그 질문들에서 시작했습니다.
+
+== 이 책에서 만드는 것
+
+처음부터 끝까지 하나의 프로젝트를 만듭니다.
+
+사내 AI 비서 #strong[ConnectHR]입니다. 직원 정보를 조회하고, 인사 규정 문서를 검색하고, 두 가지를 한 번에 답해주는 시스템입니다. CH01에서 LLM 환각을 체험하고, CH10에서 성적표를 들고 마무리합니다.
+
+조각난 예제가 아닙니다. 처음부터 끝까지, 하나의 프로젝트입니다.
+
+== 다른 RAG 자료와 다른 점
+
+#strong[첫째, 실패부터 시작합니다.]
+
+각 챕터는 잘 동작하는 코드가 아니라, 에러나 한계 상황에서 출발합니다. "왜 이게 안 되지?"를 먼저 경험하고, 그 이유를 찾고, 해결하는 순서입니다. 그 과정이 이해를 만듭니다.
+
+#strong[둘째, 튜닝까지 다룹니다.]
+
+대부분의 RAG 자료는 검색 결과가 나오는 순간 멈춥니다. 이 책은 "왜 엉뚱한 문서를 가져오나", "왜 같은 뜻인데 못 찾나"까지 파고듭니다. 검색 품질 튜닝(CH08), 질문 해석 개선(CH09), 성능 측정(CH10)까지 포함되어 있습니다.
+
+#strong[셋째, 이야기로 읽힙니다.]
+
+API 명세가 아니라 스토리입니다. 팀장의 지시에서 시작해서, 동료의 불만을 들으면서, ConnectHR이 한 단계씩 성장하는 이야기입니다. 비유와 상황으로 먼저 개념을 잡고, 그 다음에 코드로 들어갑니다.
+
+== 이 책의 구조
+
+챕터마다 두 파트로 나뉩니다.
+
+- #strong[이야기 파트] --- 왜 이게 필요한지, 상황으로 먼저 보여줍니다. 코드가 없습니다. 비유로 개념을 잡습니다.
+- #strong[기술 파트] --- 비유를 정확한 용어로 정리하고, 코드로 구현합니다.
+
+이야기 파트만 읽어도 흐름이 이해됩니다. 코드가 낯설다면 이야기 파트를 먼저 천천히 읽어보세요. 기술 파트는 그 다음에 와도 늦지 않습니다.
+
+== 이 책이 맞는 분
+
+- Python 기초 문법은 알지만, LLM이나 RAG는 처음인 분
+- 예제는 따라 해봤지만, 처음부터 끝까지 하나의 프로젝트를 만들어본 적 없는 분
+- "이론은 알겠는데, 실제로 작동하는 걸 보고 싶다"는 분
+
+== 마지막으로
+
+이 책은 정답을 알려주지 않습니다.
+
+에러를 만나고, 왜 그런지 고민하고, 고치는 과정을 함께 걸어갑니다. ConnectHR이 완성될 때쯤이면, 단순히 코드를 복붙한 게 아니라 "왜 이렇게 만들었는지"를 이해하게 됩니다.
+
+그게 이 책이 하고 싶은 것입니다.
+
+자, 이제 시작해보겠습다.
+
+= 책 소스 / 자료 받기
+
+== 1. Git 레포지토리
+
+이 책에서는 두 개의 Git 레포지토리를 사용합니다.
+
+#figure(
+  align(center)[#table(
+    columns: (1fr, 1fr),
+    align: (auto,auto,),
+    table.header([레포], [용도],),
+    table.hline(),
+    [#strong[ai-qa-lag]], [완성본. 동작하는 전체 코드. 막히면 여기서 정답을 확인합니다],
+    [#strong[ai-qa-lag-ex]], [예제 템플릿. 디렉토리 구조와 빈 파일만 들어 있습니다. 독자가 클론해서 직접 코드를 채워넣습니다],
+  )]
+  , kind: table
+  )
+
+=== 1.1 실습 흐름
+
++ #strong[ai-qa-lag-ex] 레포를 클론합니다.
++ 챕터를 보면서 빈 파일에 코드를 작성합니다.
++ 막히면 #strong[ai-qa-lag] 완성본 레포를 참고합니다.
+
+```bash
+git clone https://github.com/example/ai-qa-lag-ex.git
+cd ai-qa-lag-ex
+```
+
+=== 1.2 폴더 구조
+
+각 챕터는 하나의 예제 폴더에 대응합니다. 챕터를 진행할수록 폴더 번호가 올라가며 시스템이 한 단계씩 성장합니다.
+
+```
+ai-qa-lag-ex/
+├── ex01/    ← CH01: Hallucination과 RAG
+├── ex02/    ← CH02: FastAPI CRUD
+├── ex03/    ← CH03: 문서 표준과 메타데이터
+├── ex04/    ← CH04: 파싱 · 청킹 · 임베딩 · ChromaDB
+├── ex05/    ← CH05: LCEL 파이프라인
+├── ex06/    ← CH06: QueryRouter와 ReAct Agent
+├── ex07/    ← CH07: 캐시와 모니터링
+├── ex08/    ← CH08: 리랭킹과 하이브리드 검색
+├── ex09/    ← CH09: HyDE와 Multi-Query
+└── v1.0/    ← CH10: Vision LLM과 RAG 평가
+```
+
+=== 1.3 코드 분류
+
+각 챕터의 코드 파일에는 세 가지 분류가 붙어 있습니다.
+
+#figure(
+  align(center)[#table(
+    columns: 3,
+    align: (auto,auto,auto,),
+    table.header([분류], [의미], [독자 액션],),
+    table.hline(),
+    [\[실습\]], [챕터 핵심 코드], [직접 작성],
+    [\[설명\]], [중요하지만 핵심은 아닌 코드], [코드를 읽고 이해],
+    [\[참고\]], [이 챕터 주제가 아닌 코드], [파일명과 한 줄 설명만 확인],
+  )]
+  , kind: table
+  )
+
+== 2. 환경 설정
+
+=== 2.1 Python 설치
+
+이 책의 모든 예제는 Python #strong[3.12] 를 기준으로 작성됐습니다. 3.10\~3.12에서 동작하며 3.13 이상에서는 일부 패키지 호환성 문제가 있을 수 있습니다.
+
+==== macOS
+
+```bash
+# Homebrew로 설치
+brew install python@3.12
+```
+
+==== Windows
+
+공식 사이트(https:/\/www.python.org/downloads/)에서 Python 3.12를 다운로드합니다. 설치 시 #strong["Add Python to PATH"] 체크박스를 반드시 선택하세요.
+
+=== 2.2 가상환경 설정
+
+예제마다 패키지 버전이 다를 수 있으므로 #strong[반드시 가상환경을 만들어서 진행하세요.]
+
+```bash
+# 가상환경 생성
+python3 -m venv .venv
+
+# 활성화 (macOS/Linux)
+source .venv/bin/activate
+
+# 활성화 (Windows)
+.venv\Scripts\activate
+
+# 패키지 설치
+pip install -r requirements.txt
+```
+
+가상환경이 활성화되면 터미널 프롬프트 앞에 `(.venv)` 가 표시됩니다.
+
+=== 2.3 LLM 설정
+
+이 책은 두 가지 LLM 백엔드를 지원합니다.
+
+#figure(
+  align(center)[#table(
+    columns: (1fr, 1fr, 1fr),
+    align: (auto,auto,auto,),
+    table.header([옵션], [장점], [환경 변수],),
+    table.hline(),
+    [#strong[Ollama (로컬)]], [무료, 오프라인 가능], [`OLLAMA_BASE_URL`, `OLLAMA_MODEL`],
+    [#strong[OpenAI (클라우드)]], [품질 우수, 설치 불필요], [`OPENAI_API_KEY`, `OPENAI_MODEL`],
+  )]
+  , kind: table
+  )
+
+CH04\~06에서는 `deepseek-r1:8b` 를 사용합니다. CH07부터 에이전트의 툴콜링(Tool Calling)이 필요해서 `llama3.1:8b` 로 전환합니다. DeepSeek-R1은 툴콜링을 지원하지 않기 때문입니다.
+
+```bash
+ollama pull deepseek-r1:8b    # CH04~06
+ollama pull llama3.1:8b       # CH07~
+```
+
+=== 2.4 비전 LLM 설정 (CH10)
+
+CH10에서는 스캔 PDF를 처리하기 위해 OCR(EasyOCR)과 비전 LLM을 사용합니다.
+
+```bash
+# 비전 LLM (실험 1-2)
+ollama pull qwen2.5vl:7b
+```
+
+EasyOCR은 `pip install` 만으로 설치되므로 별도 시스템 패키지가 필요 없습니다. 컴퓨터 사양이 부족하면 `.env` 에서 `VISION_PROVIDER=openai` 로 전환하여 GPT-4o-mini 비전 API를 사용할 수 있습니다.
+
+=== 2.5 .env 파일 예시
+
+각 예제 폴더의 `.env.example` 을 `.env` 로 복사한 뒤 값을 채워넣으세요.
+
+```bash
+# LLM 설정
+LLM_PROVIDER=ollama
+OLLAMA_BASE_URL=http://localhost:11434
+OLLAMA_MODEL=deepseek-r1:8b      # CH04~06
+# OLLAMA_MODEL=llama3.1:8b       # CH07~ (툴콜링 필요)
+
+# OpenAI 사용 시
+# LLM_PROVIDER=openai
+# OPENAI_API_KEY=sk-...
+# OPENAI_MODEL=gpt-4o-mini
+
+# PostgreSQL (ex02 이후)
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_DB=rag_db
+POSTGRES_USER=rag_user
+POSTGRES_PASSWORD=rag_password
+
+# 벡터DB + 임베딩
+CHROMA_PERSIST_DIR=./data/chroma_db
+EMBEDDING_MODEL=jhgan/ko-sroberta-multitask
+
+# 비전 LLM (ex10)
+VISION_MODEL=qwen2.5vl:7b
+VISION_PROVIDER=ollama
+# VISION_PROVIDER=openai  # 로컬 사양 부족 시
+```
+
+=== 2.6 Docker (PostgreSQL)
+
+ex02 이후 예제는 PostgreSQL이 필요합니다. Docker Compose로 실행합니다.
+
+```bash
+docker compose up -d
+```
+
+PostgreSQL 16 Alpine 이미지를 사용하며 `data/schema.sql` 이 자동으로 초기화됩니다.
+
+=== 2.7 핵심 패키지 요약
+
+#figure(
+  align(center)[#table(
+    columns: 3,
+    align: (auto,auto,auto,),
+    table.header([패키지], [버전], [용도],),
+    table.hline(),
+    [`langchain`], [0.3.x], [RAG 파이프라인, 에이전트],
+    [`chromadb`], [1.5.x], [벡터 데이터베이스],
+    [`fastapi`], [0.115.x], [API 서버],
+    [`sentence-transformers`], [3.3.x], [한국어 임베딩 모델],
+    [`psycopg2-binary`], [2.9.x], [PostgreSQL 연결],
+    [`pypdf`], [4.3.x], [PDF 파싱],
+    [`python-docx`], [1.1.x], [DOCX 파싱],
+    [`openpyxl`], [3.1.x], [XLSX 파싱],
+    [`rank-bm25`], [0.2.x], [하이브리드 검색 (CH08)],
+    [`easyocr`], [1.7.x], [OCR (CH10)],
+  )]
+  , kind: table
+  )
+
+각 예제 폴더의 `requirements.txt` 로 한 번에 설치할 수 있습니다.
+
+```bash
+pip install -r requirements.txt
+```
+
+== 3. 자주 만나는 오류
+
+=== 3.1 `python` 명령어가 안 될 때
+
+macOS/Linux에서는 `python` 대신 `python3` 를 사용해야 할 수 있습니다.
+
+```bash
+# python이 안 되면
+python3 --version
+python3 -m venv .venv
+```
+
+=== 3.2 `pip install` 에서 권한 오류
+
+가상환경 없이 시스템 Python에 설치하려고 하면 권한 오류가 발생합니다. 가상환경을 먼저 활성화하세요.
+
+```bash
+# 이렇게 하면 안 됩니다
+pip install langchain  # PermissionError 또는 externally-managed-environment
+
+# 이렇게 하세요
+source .venv/bin/activate  # 먼저 가상환경 활성화
+pip install -r requirements.txt
+```
+
+=== 3.3 `pip` 대신 `pip3`
+
+`pip` 명령이 안 되면 `pip3` 를 사용하세요. 가상환경 안에서는 둘 다 동일합니다.
+
+=== 3.4 psycopg2-binary 설치 실패 (macOS Apple Silicon)
+
+M1/M2/M3 Mac에서 psycopg2-binary 설치가 실패할 수 있습니다.
+
+```bash
+# libpq 먼저 설치
+brew install libpq
+pip install psycopg2-binary
+```
+
+== 4. 더 알고 싶다면
+
+RAG와 LLM 응용에 관심이 생겼다면 아래 주제를 찾아보세요.
+
+- #strong[Graph RAG] -- 단순 청크 검색이 아니라 지식 그래프로 문서 관계를 표현하는 방식입니다.
+- #strong[멀티모달 RAG] -- 텍스트뿐 아니라 이미지, 표, 차트를 함께 다루는 RAG입니다.
+- #strong[Agentic RAG] -- 에이전트가 검색 전략을 스스로 결정하는 방식입니다.
+
+#v(4pt)
+#block(width: 100%, height: 0.5pt, fill: rgb("#e5e7eb"))
+#v(4pt)
 
 // ══════════════════════════════════════
-// 목차: Design 1 (depth: 2)
+// 목차 (자동 생성)
 // ══════════════════════════════════════
 #page(numbering: none, header: none, footer: none)[
-  #set block(spacing: toc-spacing)
-  #set par(spacing: toc-spacing)
   #v(30pt)
   #block(width: 100%, below: 12pt, {
-    text(24pt, weight: "bold", fill: color-text)[목차]
+    text(24pt, weight: "bold", fill: rgb("#1a1a1a"))[목차]
     v(6pt)
-    line(length: 100%, stroke: 3pt + color-primary)
+    line(length: 100%, stroke: 3pt + rgb("#2563eb"))
   })
   #v(12pt)
 
   #show outline.entry.where(level: 1): set text(weight: "bold", size: 11pt)
   #show outline.entry.where(level: 1): it => {
-    v(toc-spacing + 2pt)
+    v(6pt)
     it
   }
   #show outline.entry.where(level: 3): set text(size: 8.5pt, fill: rgb("#6b7280"))
@@ -567,18 +665,189 @@
   #outline(
     title: none,
     indent: 1.5em,
-    depth: toc-depth,
+    depth: 2,
   )
 ]
 
+// ══════════════════════════════════════
+// 본문 시작 — 이 아래에 Pandoc 변환 내용이 들어갑니다
+// ══════════════════════════════════════
+
 // ══ CONTENT ══
+= 들어가며: 사서를 키우다
+
+ConnectHR 대시보드에 질문이 흘러가고 있었습니다. "연차 신청 절차 알려줘"가 들어오고 2초 뒤 출처와 함께 답변이 올라갑니다. 옆자리 동료가 "A 사원 연차 며칠 남았어? 사용 규정도 알려줘"라고 치자 DB에서 숫자를 꺼내고 문서에서 규정을 찾아 한 번에 답합니다. 캐시에 있던 질문은 0.1초 만에 돌아왔습니다.
+
+#strong[오픈이]는 턱을 괴고 모니터를 바라봤습니다. 커서가 깜빡이는 입력창 위로 질문이 하나 더 올라갑니다. 또 답합니다. 아무도 놀라지 않습니다. 당연한 것처럼 질문하고 당연한 것처럼 답변을 받습니다.
+
+#emph[4개월 전에는 환각이 뭔지도 몰랐는데.]
+
+예전에는 저 질문에 AI가 자신 있게 거짓말을 했습니다. 지금은 아무도 그 시절을 기억하지 못합니다. 다만 시작은 또렷하게 남아 있습니다.
+
+#v(4pt)
+#block(width: 100%, height: 0.5pt, fill: rgb("#e5e7eb"))
+#v(4pt)
+
+모니터를 바라보던 시선이 4개월 전으로 되감깁니다.
+
+#strong[팀장]: "AI로 사내 문서 검색 시스템 만들어봐. 직원들이 규정이나 정책 찾는 게 번거롭다고 해서."
+
+#emph[AI로? 사내 문서를? 나 혼자서?]
+
+사수도 없었습니다. 옆자리는 비어 있고 물어볼 사람도 없었습니다. 노트북을 열고 ChatGPT에 그대로 쳐봤습니다.
+
+"우리 회사 연차 규정이 어떻게 되나요?"
+
+AI가 답합니다. 연차는 15일이고 3일 전까지 신청하면 된다고요.
+
+#emph[오, 이거면 되는 거 아니야?]
+
+서랍에서 규정집을 꺼냈습니다. 모니터 왼쪽에 세워놓고 오른쪽 화면의 AI 답변과 한 줄씩 대조하기 시작했습니다. 첫 줄부터 달랐습니다. 연차 일수가 틀렸습니다. 신청 기한도 틀렸습니다. 존재하지 않는 조항까지 지어냈습니다. 열 줄을 비교하는 동안 한 줄도 맞는 게 없었는데 화면 속 AI는 여전히 확신에 찬 어조였습니다. 규정집을 쥔 손가락 끝이 하얘졌습니다.
+
+세상의 모든 공개 자료는 섭렵했지만 우리 회사 내부 문서는 본 적 없는 외부인. 모르면 모른다고 하면 될 텐데 그럴듯한 답을 만들어냅니다.
+
+이게 #strong[환각(Hallucination)] 입니다.
+
+그러면 문서를 직접 넣어주면 되지 않을까. 규정 내용을 통째로 프롬프트에 붙여봤습니다. 연차 규정 한 페이지를 넣었더니 제대로 답합니다. 됐다 싶어서 규정집 200페이지를 한꺼번에 넣었습니다. 토큰 한도를 넘겨서 잘려나갔습니다. 절반도 읽지 못한 AI가 앞부분만 가지고 다시 자신 있게 답하기 시작합니다.
+
+환각이 돌아왔습니다.
+
+#strong[팀장]: "전부 외우게 하지 말고 필요한 것만 찾아서 읽게 해."
+
+그날 밤 샤워하다가 문득 떠오른 게 있었습니다. 대학교 오픈북 시험. 교과서 전체를 외울 필요 없이 문제가 나오면 해당 페이지를 펼쳐서 읽으면 됐습니다. AI한테도 똑같이 하면 됩니다. 질문이 들어올 때마다 200페이지 전체가 아니라 관련된 두세 페이지만 골라서 건네주면 되는 겁니다.
+
+이게 #strong[RAG]입니다. 모든 걸 외우게 하는 대신 필요한 문서만 찾아서 읽게 하는 구조. 문서를 찾으려면 문서가 정리된 곳이 있어야 합니다. 그래서 도서관을 짓기로 했습니다.
+
+#v(4pt)
+#block(width: 100%, height: 0.5pt, fill: rgb("#e5e7eb"))
+#v(4pt)
+
+도서관을 짓는 일은 생각보다 지저분했습니다.
+
+건물부터 세워야 했습니다. "팀원 연차 며칠 남았어?" 같은 질문은 문서 어디에도 답이 없었습니다. 개인별 잔여 연차는 인사 DB에 들어 있었습니다. AI가 DB를 직접 뒤지게 할 수는 없으니 데이터를 꺼내주는 API를 따로 만들었습니다. 주방에 손님이 직접 들어가는 식당은 없으니까요. 주문을 받으면 웨이터가 주방에서 가져다줍니다.
+
+그다음은 장서입니다. 공유 드라이브를 열었습니다. PDF, DOCX, XLSX, 심지어 HWP까지 300개가 넘는 파일이 한 폴더에 쌓여 있었습니다. "인사규정\_최종.docx" 옆에 "인사규정\_최종\_진짜최종.docx"가 있었고 어느 게 현행 문서인지 파일명만 봐서는 알 수 없었습니다. 스크롤을 내릴수록 눈앞이 아득해졌습니다.
+
+#strong[팀장]: "쓰레기를 넣으면 쓰레기가 나와."
+
+폐기 문서를 걸러내야 했습니다. 하나씩 열어보고 날짜를 확인하고 현행 여부를 체크합니다. 살릴 문서만 추려냈습니다. 형식별로 파싱하고 메타데이터를 붙이고 폴더 구조를 잡는 데만 며칠. 사서가 새 책을 받으면 바로 서가에 꽂지 않는 것처럼. 분류표를 확인하고 라벨을 붙이고 청구기호를 매긴 다음에야 서가에 올립니다.
+
+문서를 골랐으면 서가에 꽂을 차례입니다. 마트에서 사온 재료를 봉지째 냉장고에 던지면 나중에 찾을 수 없습니다. 양파가 어디 있는지 고기는 아직 쓸 수 있는지 뒤져봐야 합니다. 제대로 하려면 손질하고 먹기 좋게 다듬고 용기에 나눠 담아야 합니다. 문서도 똑같았습니다. 텍스트를 꺼내고 적당한 크기로 자르고 숫자 배열로 변환해서 벡터DB에 저장합니다.
+
+사람한테는 "연차"와 "유급 휴가"가 같은 말입니다. 기계한테는 아닙니다. 글자가 다르면 다른 단어입니다. 서가에 꽂힌 문서끼리 의미가 가까운지 먼지를 기계가 판단할 수 있도록 만드는 데까지 한 달이 걸렸습니다.
+
+#v(4pt)
+#block(width: 100%, height: 0.5pt, fill: rgb("#e5e7eb"))
+#v(4pt)
+
+한 달 뒤. 서가에 문서가 꽂혀 있고 검색하면 관련 문서가 유사도 점수와 함께 나왔습니다. 동료 자리로 걸어가서 화면을 돌렸습니다.
+
+#strong[동료]: "검색 결과 다섯 개를 던져주지 말고 그냥 답을 알려줘."
+
+걸음을 멈추고 자리로 돌아왔습니다. 서가에서 책을 찾아오는 건 됐는데 그 책을 읽고 정리해서 답해주는 사람이 없었습니다.
+
+도서관은 완성됐는데 사서가 없었습니다.
+
+사서를 앉혔습니다. 질문을 듣고 서가에서 문서를 찾고 읽어서 정리하고 출처까지 알려주는 사서. "어떤 문서에서 이 답을 찾았는지" 반드시 보여주게 만들었습니다. 출처 없는 답변은 근거 없는 주장이니까요. 한 번 물어보고 끝이 아니라 대화를 이어갈 수 있는 기억력도 붙여줬습니다.
+
+그제야 사서가 일을 시작합니다.
+
+#v(4pt)
+#block(width: 100%, height: 0.5pt, fill: rgb("#e5e7eb"))
+#v(4pt)
+
+기뻐할 틈도 없이 새 문제가 터졌습니다.
+
+#strong[동료]: "A 사원 연차 며칠? 그리고 연차 신청 절차 알려줘."
+
+한 문장에 두 종류가 섞여 있었습니다. 잔여 연차는 DB에 있고 신청 절차는 문서에 있습니다. 사서는 서가의 문서밖에 모릅니다. DB 쪽 담당자를 부를 줄도 모릅니다. 이틀 동안 모니터 앞에서 화이트보드에 화살표를 그리고 지우고 다시 그렸습니다.
+
+#strong[팀장]: "1층 안내데스크 가봤어? 거기 직원이 뭘 해?"
+
+가만히 생각해봤습니다. 안내데스크 직원은 모든 업무를 직접 처리하지 않습니다. 이건 인사팀, 이건 총무팀, 이건 시설관리팀. 누구에게 물어봐야 하는지를 아는 게 그 사람의 역할입니다. 질문이 들어오면 유형을 분류하고 맞는 담당자를 호출합니다. DB를 조회하는 담당자, 문서를 검색하는 담당자, 둘 다 호출해서 합치는 담당자.
+
+사서를 안내데스크 직원으로 승진시켰습니다.
+
+이렇게 #strong[ConnectHR]이 태어났습니다.
+
+#v(4pt)
+#block(width: 100%, height: 0.5pt, fill: rgb("#e5e7eb"))
+#v(4pt)
+
+ConnectHR을 동료들에게 풀어줬습니다.
+
+#strong[동료]: "아까도 물어봤는데 또 20초나 기다려?"
+
+같은 질문이 들어올 때마다 매번 처음부터 답을 만들고 있었습니다. 사서가 같은 책을 꺼내서 같은 페이지를 다시 읽고 같은 답을 다시 쓰고 있었던 겁니다. 10번 물어보면 10번 서가를 뒤집니다. 사서에게 메모장을 줬습니다. 한 번 답한 건 적어두고 같은 질문이 오면 메모를 보여줍니다. 20초가 0.1초가 됐습니다. 다만 메모장에는 유통기한을 뒀습니다. 규정이 바뀌었을 수도 있으니까요.
+
+업무 일지도 쥐어줬습니다. 하루에 토큰을 얼마나 쓰는지, 비용은 얼마인지 기록하게 했습니다. 느린 질문이 어떤 건지도 따로 남겼습니다.
+
+운영은 안정됐습니다. 빨라지니까 쓰는 사람이 늘었고 늘어나니까 그동안 보이지 않던 문제가 하나씩 터지기 시작합니다.
+
+#strong[동료]: "병가 규정을 물어봤는데 출장 규정이 나왔어요."
+
+#emph[뭐라고?]
+
+퇴근길 지하철에서 노트북을 꺼냈습니다. 흔들리는 객차 안에서 로그를 열어봤습니다. LLM은 멀쩡했습니다. 받은 문서를 기반으로 성실하게 답했을 뿐입니다. 문제는 그 문서였습니다. 검색 결과를 하나씩 열어보니 사서가 서가에서 엉뚱한 책을 꺼내온 겁니다. 500자마다 기계적으로 잘라놓은 문서 조각에서 병가 규정 뒷부분과 출장 규정 앞부분이 한 덩어리로 섞여 있었습니다.
+
+한 달 전에 꽂았던 서가를 다시 정리해야 했습니다.
+
+가위로 일정하게 자르던 걸 의미 단위로 바꿨습니다. 문서에서 주제가 바뀌는 지점을 감지하고 거기서 끊게 했습니다. 검색 결과도 한 번 더 훑어서 관련 없는 문서를 걸러내게 합니다. 키워드로만 찾던 검색에 의미 검색을 합쳤습니다. 같은 질문을 넣었는데 답이 달라졌습니다. 검색을 바꿨을 뿐인데 사서가 다른 사람이 된 것 같았습니다.
+
+#v(4pt)
+#block(width: 100%, height: 0.5pt, fill: rgb("#e5e7eb"))
+#v(4pt)
+
+검색이 좋아지니까 이번엔 질문이 문제였습니다.
+
+#strong[동료]: "WFH 정책 알려줘."
+
+ConnectHR이 멈칫했습니다. 문서에는 "재택근무"라고 적혀 있었으니까요. "휴가 규정 알려줘"도 마찬가지였습니다. 문서에는 "연차유급휴가"라고 돼 있습니다. 검색 엔진이 아무리 좋아도 질문 자체를 이해 못하면 소용없습니다.
+
+초보 사서는 서가에서 "WFH"라는 글자만 찾습니다. 당연히 없습니다. 경험 많은 사서는 다릅니다.
+
+#emph[WFH라면… 재택근무? Work From Home? 혹시 원격근무?]
+
+떠올릴 수 있는 표현을 전부 떠올려서 각각 찾아봅니다. 사서에게 그 감각을 심어줬습니다. 약어를 풀어쓰고 동의어를 확장하고 한 질문을 여러 각도로 바꿔서 검색하게 했습니다. 그리고 답변에 근거를 붙였습니다. "이 문서의 3페이지에서 찾았습니다"라고 원본 이미지와 함께.
+
+#v(4pt)
+#block(width: 100%, height: 0.5pt, fill: rgb("#e5e7eb"))
+#v(4pt)
+
+마지막 관문은 스캔 PDF였습니다.
+
+총무팀이 보내준 오래된 사규집을 열었습니다. 조직도 PDF. 텍스트를 추출하려고 했는데 아무것도 나오지 않았습니다. 종이 문서를 스캐너에 올려서 찍은 거라 페이지 전체가 이미지입니다. 사람 눈에는 조직도의 박스와 화살표가 또렷하게 보이는데 기계한테는 그냥 점들의 배열일 뿐입니다. 텍스트 추출기를 아무리 돌려도 "대표이사경영지원본부기술개발본부"가 한 줄로 붙어 나왔습니다.
+
+#emph[글자가 보이는데 읽을 수가 없어.]
+
+사서에게 눈을 달아줬습니다. 글만 읽던 사서가 이미지를 보고 거기 적힌 내용을 파악하게 됐습니다.
+
+그리고 성적표를 만들었습니다. "잘 되는 것 같다"는 느낌만으로는 어디를 고쳐야 할지 모릅니다. 찾아온 문서 중 몇 개가 정답이었는지. 정답 문서를 몇 개나 찾았는지. AI가 지어낸 답변은 없었는지. 이 지표들로 ConnectHR의 실력을 숫자로 측정했습니다. 느낌이 아니라 숫자입니다. 튜닝 전과 후를 비교했습니다. 숫자가 올라가는 걸 확인하고 나서야 의자 등받이에 등을 기댔습니다.
+
+#v(4pt)
+#block(width: 100%, height: 0.5pt, fill: rgb("#e5e7eb"))
+#v(4pt)
+
+4개월이 지났습니다.
+
+돌이켜보면 티켓 열 장이었습니다. 매번 모르는 단어 앞에서 멈췄고 검색하고 틀리고 다시 읽었습니다. 대단한 깨달음 같은 건 없었습니다. 하나를 풀면 다음 문제가 터졌고 그걸 또 풀었을 뿐입니다.
+
+다만 한 가지 달라진 게 있습니다.
+
+예전에는 "AI가 엉뚱한 답을 해"라는 말을 들으면 LLM을 의심했습니다. 지금은 검색을 의심합니다. 청킹을 확인하고 리랭킹을 떠올리고 쿼리를 바꿔봅니다. 이름을 외운 게 아니라 문제와 해결을 한 쌍으로 기억하게 된 겁니다.
+
+이 책은 그 열 쌍의 기록입니다. #strong[오픈이]가 부딪혔던 문제가 있고 #strong[팀장]이 던져준 비유로 감을 잡은 뒤 직접 만들어보며 넘어가는 과정이 있습니다.
+
+문제를 보고 어디를 건드려야 하는지 보이는 감각. 이 책이 드리고 싶은 건 그겁니다.
+
+첫 번째 과제부터 시작하겠습니다.
+
 = Ch.1: Hallucination과 RAG (ex01)
 
 #quote(block: true)[
-한 줄 요약: LLM은 우리 회사 문서를 읽은 적이 없다. 문서를 직접 넣어줘야 한다.
-]
-
+한 줄 요약: LLM은 우리 회사 문서를 읽은 적이 없다. 문서를 직접 넣어줘야 한다. \
 핵심 개념: LLM 환각, Context Injection, RAG
+]
 
 === 1.1 입사 3일 차, 첫 번째 임무
 
@@ -590,26 +859,23 @@
 
 #emph[AI 비서. 사내 문서. 대화식 검색. 나 혼자서?]
 
-#strong[오픈이]: "언제까지요?" \
-#strong[팀장]: "급하진 않아. 2주 내로 간단한 프로토타입만."
+#strong[오픈이]: "언제까지요?". #strong[팀장]: "급하진 않아. 2주 내로 간단한 프로토타입만."
 
 노트북을 열고 ChatGPT를 실행했습니다.
 
-#emph[ChatGPT도 뭐든 대답하잖아. LLM에게 직접 물어보면 되는 거 아니야?] 코드부터 짰습니다.
+#emph[ChatGPT도 뭐든 대답하잖아. LLM에게 직접 물어보면 되는 거 아니야?]
+
+코드부터 짰습니다.
 
 === 1.2 LLM의 자신감 넘치는 거짓말
 
 연차 규정을 예시로 물어봤습니다.
 
-#quote(block: true)[
-#strong[오픈이]: 우리 회사(커넥트)의 신입사원 연차 발생 규정이 어떻게 돼?
-]
+#strong[오픈이]: "우리 회사(커넥트)의 신입사원 연차 발생 규정이 어떻게 돼?"
 
 LLM이 답했습니다.
 
-#quote(block: true)[
-#strong[LLM]: 커넥트 사의 신입사원 연차 규정은 근로기준법에 따라, 입사 후 1년 미만 기간에는 1개월 개근 시 1일의 유급휴가가 발생합니다. 1년 이상 근무 시에는 15일의 연차가 발생하며, 3년 이상 근무한 경우 1년마다 1일씩 추가됩니다…
-]
+#strong[LLM]: "커넥트 사의 신입사원 연차 규정은 근로기준법에 따라, 입사 후 1년 미만 기간에는 1개월 개근 시 1일의 유급휴가가 발생합니다. 1년 이상 근무 시에는 15일의 연차가 발생하며, 3년 이상 근무한 경우 1년마다 1일씩 추가됩니다…"
 
 그럴듯했습니다. 공식적인 느낌도 나고요. 입사할 때 받은 규정집을 꺼내 비교해봤습니다. 커넥트의 실제 규정은 이랬습니다.
 

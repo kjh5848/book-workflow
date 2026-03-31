@@ -53,6 +53,8 @@ steps: [1, 4, 5, 6, 7]
 
 ### 프롤로그
 - 일기처럼 작성
+- 소설 작법 필수 적용: `references/storytelling.md`의 "소설 작법" 섹션 참조
+- 체크리스트: Show Don't Tell, 감각 묘사, Try/Fail, 문장 리듬, 장면 전환, 구체적 디테일, AI 선호어 금지
 
 ## STEP별 절차
 

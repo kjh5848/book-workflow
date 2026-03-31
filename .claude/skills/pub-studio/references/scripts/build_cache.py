@@ -86,9 +86,16 @@ class BuildCache:
         return hashlib.md5("|".join(parts).encode()).hexdigest()
 
     @staticmethod
-    def compute_design_hash(design_state: dict | None) -> str:
-        """design_state dict → 해시."""
-        raw = json.dumps(design_state or {}, sort_keys=True, ensure_ascii=False)
+    def compute_design_hash(design_state: dict | None,
+                            include_cover: bool = True,
+                            include_toc: bool = True) -> str:
+        """design_state + cover/toc 옵션 → 해시."""
+        obj = {
+            "state": design_state or {},
+            "cover": include_cover,
+            "toc": include_toc,
+        }
+        raw = json.dumps(obj, sort_keys=True, ensure_ascii=False)
         return hashlib.md5(raw.encode()).hexdigest()
 
     # ── 캐시 유효성 ──

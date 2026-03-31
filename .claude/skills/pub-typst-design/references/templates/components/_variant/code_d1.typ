@@ -9,6 +9,8 @@
     radius: code-radius,
     stroke: code-stroke-width + code-stroke-color,
     breakable: true,
+    above: 8pt,
+    below: 8pt,
     text(fill: color-text)[#it]
   )
 }

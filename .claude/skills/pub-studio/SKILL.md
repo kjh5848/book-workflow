@@ -130,6 +130,22 @@ Round 2: compile_pdf → analyze → 0 auto_fixable + manual 1건
 | `/api/export-pdf` | POST | PDF 내보내기 |
 | `/api/image-override` | POST | 개별 이미지 오버라이드 |
 
+## 표지 디자인 위자드
+
+`scripts/cover_generator.py`가 담당. 4단계 위자드로 표지를 만든다.
+
+```
+Step 1. 레이아웃    → wizard_step1_layout()   --cover-preview
+Step 2. 그림자      → wizard_step2_shadow()   --cover-shadow
+Step 3. 폰트 색상   → wizard_step3_color()    --cover-color
+Step 4. 최종 확정   → wizard_step4_confirm()  --cover-confirm
+```
+
+각 단계에서 4변형 HTML UI(`assets/cover_preview.html`) 생성 → 유저 선택 → 다음 단계.
+`--ebook` 플래그로 전자책 규격(750x1110px, 72ppi, JPG) 적용.
+
+> 서브에이전트에서는 이미지 표시 불가. 메인 세션이 직접 실행한다. CLAUDE.md "인쇄소 실행 흐름" 참조.
+
 ## 의존 스킬
 
 - `pub-build` — typst_builder.py, design_assembler.py

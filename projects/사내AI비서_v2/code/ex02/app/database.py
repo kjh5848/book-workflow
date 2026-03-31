@@ -21,9 +21,9 @@ load_dotenv()
 
 POSTGRES_HOST = os.getenv("POSTGRES_HOST", "localhost")
 POSTGRES_PORT = int(os.getenv("POSTGRES_PORT", "5432"))
-POSTGRES_DB   = os.getenv("POSTGRES_DB",   "metacoding_db")
-POSTGRES_USER = os.getenv("POSTGRES_USER", "metacoding")
-POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD", "metacoding_pass")
+POSTGRES_DB   = os.getenv("POSTGRES_DB",   "connecthr_db")
+POSTGRES_USER = os.getenv("POSTGRES_USER", "connecthr")
+POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD", "connecthr_pass")
 
 
 def get_dsn() -> str:

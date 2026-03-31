@@ -22,7 +22,7 @@ def build_rag_chain(llm):
         embeddings = HuggingFaceEmbeddings(model_name=embedding_model)
 
         # ② ChromaDB 벡터스토어 연결
-        collection_name = os.getenv("CHROMA_COLLECTION_NAME", "metacoding_documents")
+        collection_name = os.getenv("CHROMA_COLLECTION_NAME", "connecthr_documents")
         vectorstore = Chroma(
             persist_directory=chroma_dir,
             embedding_function=embeddings,

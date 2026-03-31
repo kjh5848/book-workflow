@@ -48,11 +48,11 @@ def view_dashboard(request: Request) -> HTMLResponse:
 
     # [OUTPUT] 템플릿 렌더링
     return templates.TemplateResponse(                       # ③
+        request,
         "dashboard.html",
         {
-            "request": request,
             "active_page": "dashboard",
-            "db_path": "PostgreSQL (metacoding_db)",
+            "db_path": "PostgreSQL (connecthr_db)",
             **stats,
             "recent_sales": [
                 {
@@ -121,9 +121,9 @@ def view_employees(
 
     # [OUTPUT] 렌더링
     return templates.TemplateResponse(                               # ②
+        request,
         "employees.html",
         {
-            "request": request,
             "active_page": "employees",
             "employees": emp_dicts,
             "departments": DEPARTMENTS,
@@ -272,9 +272,9 @@ def view_leaves(
     emp_options = [{"emp_no": e.emp_no, "name": e.name} for e in employees]
 
     return templates.TemplateResponse(                              # ③
+        request,
         "leaves.html",
         {
-            "request": request,
             "active_page": "leaves",
             "leaves": leave_dicts,
             "employees": emp_options,
@@ -388,9 +388,9 @@ def view_sales(
         }
 
     return templates.TemplateResponse(                                             # ⑤
+        request,
         "sales.html",
         {
-            "request": request,
             "active_page": "sales",
             "sales": [sale_to_dict(s) for s in all_sales],
             "period_sales": [sale_to_dict(s) for s in period_sales],

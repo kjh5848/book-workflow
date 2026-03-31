@@ -530,8 +530,19 @@ def merge_template_and_content(template_path: Path, content: str,
     template = template_path.read_text(encoding="utf-8")
 
     if design is not None:
-        from design_assembler import parse_design_arg, assemble_book_base
+        from design_assembler import parse_design_arg, load_preset_overrides, assemble_book_base
         selection = parse_design_arg(design)
+        # 프리셋에 overrides가 있으면 design_state에 병합 (프리셋이 기본, 사용자가 우선)
+        preset_overrides = load_preset_overrides(design) if design.strip() in "123456789" else {}
+        if preset_overrides:
+            merged = dict(preset_overrides)
+            if design_state:
+                for k, v in design_state.items():
+                    if isinstance(v, dict) and k in merged and isinstance(merged[k], dict):
+                        merged[k] = {**merged[k], **v}
+                    else:
+                        merged[k] = v
+            design_state = merged
         base = assemble_book_base(selection, design_state=design_state,
                                   skip_cover=skip_cover, skip_toc=skip_toc)
     else:

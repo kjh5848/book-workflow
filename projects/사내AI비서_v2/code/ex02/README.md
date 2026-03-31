@@ -36,7 +36,7 @@ docker-compose ps
 
 ```
 NAME              STATUS
-metacoding_db     running (healthy)
+connecthr_db      running (healthy)
 ```
 
 ## 설치 및 실행

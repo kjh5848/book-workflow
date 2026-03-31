@@ -142,7 +142,7 @@ ChromaDB 저장 경로: ./data/chroma_db
   임베딩 모델 로드 완료 (벡터 차원: 768)
 
 ChromaDB 초기화: ./data/chroma_db
-  새 컬렉션 생성: 'metacoding_documents'
+  새 컬렉션 생성: 'connecthr_documents'
   59개 청크 임베딩 계산 중... (배치 크기: 64)
   임베딩 계산 완료: 59개 벡터 생성
 

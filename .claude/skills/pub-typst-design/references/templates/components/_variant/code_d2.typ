@@ -6,7 +6,7 @@
 // ──OVERRIDES──
 #show raw.where(block: true): it => {
   set text(size: code-size, weight: "bold", font: ("D2Coding", "RIDIBatang"))
-  v(6pt)
+  v(4pt)
   line(length: 100%, stroke: code-rule-stroke + rgb("#999999"))
   block(
     width: 100%,
@@ -15,8 +15,10 @@
     radius: code-radius,
     stroke: none,
     breakable: true,
+    above: 4pt,
+    below: 4pt,
     text(fill: color-text)[#it]
   )
   line(length: 100%, stroke: code-rule-stroke + rgb("#999999"))
-  v(6pt)
+  v(4pt)
 }

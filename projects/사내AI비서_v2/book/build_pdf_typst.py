@@ -21,6 +21,7 @@ import typst_builder
 BASE = Path(__file__).resolve().parent.parent  # projects/사내AI비서_v2
 BOOK = BASE / "book"
 CHAPTERS = BASE / "chapters"
+FRONT = BOOK / "front"
 BACK = BOOK / "back"
 ASSETS = BASE / "assets"
 
@@ -40,11 +41,18 @@ CHAPTER_FILES = [
 
 CONFIG = {
     "title": "환각에서 시작하는 RAG",
+    "subtitle": "사내 AI 비서를 만들며 배우는 검색 증강 생성",
     "base": BASE,
     "assets_dir": ASSETS,
     "template": BOOK / "templates" / "book.typ",
     "font_path": Path.home() / "Library" / "Fonts",
-    "front": [],
+    "pre_toc": [
+        FRONT / "preface.md",
+        FRONT / "github-source.md",
+    ],
+    "front": [
+        FRONT / "prologue.md",
+    ],
     "chapters": CHAPTER_FILES,
     "back": [
         BACK / "epilogue.md",
@@ -66,9 +74,9 @@ CONFIG = {
                       "RAG 파이프라인 처음부터 끝까지",
                       "이야기로 시작하는 실습서가 필요할 때"],
         "main_words": [
-            ("환각에서", 25, True, "L", -2, "dark"),
-            ("시작하는", 25, True, "R", 0, "gray"),
-            ("RAG", 40, True, "L", -2, "dark"),
+            ("환각에서", 38, True, "L", -2, "dark"),
+            ("시작하는", 14, True, "L", -2, "gray"),
+            ("RAG", 55, True, "R", 0, "dark", True),
         ],
     },
 }
@@ -99,19 +107,42 @@ def build_all_chapters():
     print(f"완료: {len(results)}/{len(CHAPTER_FILES)} 챕터 빌드")
 
 
+def _import_cover():
+    _cover_scripts = SKILL_SCRIPTS.parents[2] / "pub-studio" / "references" / "scripts"
+    if str(_cover_scripts) not in sys.path:
+        sys.path.insert(0, str(_cover_scripts))
+    import cover_generator
+    return cover_generator
+
+
 if __name__ == "__main__":
-    # --design 인자 처리 (프리셋 번호 또는 믹스매치 문법)
     if "--design" in sys.argv:
         idx = sys.argv.index("--design")
         if idx + 1 < len(sys.argv):
             CONFIG["design"] = sys.argv[idx + 1]
 
-    if "--chapter" in sys.argv:
+    ebook = "--ebook" in sys.argv
+    cg = _import_cover()
+
+    if "--cover-preview" in sys.argv:
+        cg.wizard_step1_layout(CONFIG, ASSETS, ebook=ebook)
+    elif "--cover-shadow" in sys.argv:
+        mw = CONFIG["cover_data"]["main_words"]
+        cg.wizard_step2_shadow(CONFIG, ASSETS, mw, ebook=ebook)
+    elif "--cover-color" in sys.argv:
+        mw = CONFIG["cover_data"]["main_words"]
+        cg.wizard_step3_color(CONFIG, ASSETS, mw, ebook=ebook)
+    elif "--cover-confirm" in sys.argv:
+        mw = CONFIG["cover_data"]["main_words"]
+        cg.wizard_step4_confirm(CONFIG, ASSETS, mw, ebook=ebook)
+    elif "--cover-select" in sys.argv:
+        idx = sys.argv.index("--cover-select")
+        if idx + 1 < len(sys.argv):
+            cg.select_cover_variation(ASSETS, int(sys.argv[idx + 1]))
+    elif "--chapter" in sys.argv:
         idx = sys.argv.index("--chapter")
         if idx + 1 < len(sys.argv):
             build_single_chapter(sys.argv[idx + 1])
-        else:
-            print("사용법: python3 build_pdf_typst.py --chapter 01")
     elif "--all" in sys.argv:
         build_all_chapters()
     else:

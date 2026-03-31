@@ -186,6 +186,14 @@ def load_preset(preset_id: str) -> dict[str, str]:
     return dict(presets[preset_id]["components"])
 
 
+def load_preset_overrides(preset_id: str) -> dict:
+    """프리셋의 overrides를 design_state 형식으로 반환. 없으면 빈 dict."""
+    presets_path = COMPONENTS_DIR / "presets.json"
+    with open(presets_path, encoding="utf-8") as f:
+        presets = json.load(f)
+    return dict(presets.get(preset_id, {}).get("overrides", {}))
+
+
 def parse_design_arg(arg: str) -> dict[str, str]:
     """디자인 인자를 파싱하여 컴포넌트 선택 딕셔너리로 변환
 

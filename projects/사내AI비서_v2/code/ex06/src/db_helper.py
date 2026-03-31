@@ -45,7 +45,7 @@ def build_vectorstore():
         return None
 
     chroma_path = os.getenv("CHROMA_PERSIST_DIR", "./data/chroma_db")
-    collection_name = os.getenv("CHROMA_COLLECTION_NAME", "metacoding_documents")
+    collection_name = os.getenv("CHROMA_COLLECTION_NAME", "connecthr_documents")
     ef = SentenceTransformerEmbeddingFunction(model_name="jhgan/ko-sroberta-multitask")
 
     client = chromadb.PersistentClient(path=chroma_path)

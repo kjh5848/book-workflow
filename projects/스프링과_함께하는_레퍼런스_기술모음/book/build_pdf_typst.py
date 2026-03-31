@@ -103,6 +103,22 @@ def build_all_chapters():
     print(f"완료: {len(results)}/{len(CHAPTER_FILES)} 챕터 빌드")
 
 
+def cover_preview():
+    """표지 프리뷰 3가지 변형 생성"""
+    _cover_scripts = SKILL_SCRIPTS.parents[2] / "pub-studio" / "references" / "scripts"
+    sys.path.insert(0, str(_cover_scripts))
+    from cover_generator import generate_cover_previews
+    generate_cover_previews(CONFIG, ASSETS)
+
+
+def cover_select(num: int):
+    """프리뷰에서 선택한 변형을 cover.png로 복사"""
+    _cover_scripts = SKILL_SCRIPTS.parents[2] / "pub-studio" / "references" / "scripts"
+    sys.path.insert(0, str(_cover_scripts))
+    from cover_generator import select_cover_variation
+    select_cover_variation(ASSETS, num)
+
+
 if __name__ == "__main__":
     # --design 인자 처리
     if "--design" in sys.argv:
@@ -110,7 +126,15 @@ if __name__ == "__main__":
         if idx + 1 < len(sys.argv):
             CONFIG["design"] = sys.argv[idx + 1]
 
-    if "--chapter" in sys.argv:
+    if "--cover-preview" in sys.argv:
+        cover_preview()
+    elif "--cover-select" in sys.argv:
+        idx = sys.argv.index("--cover-select")
+        if idx + 1 < len(sys.argv):
+            cover_select(int(sys.argv[idx + 1]))
+        else:
+            print("사용법: python3 build_pdf_typst.py --cover-select 1")
+    elif "--chapter" in sys.argv:
         idx = sys.argv.index("--chapter")
         if idx + 1 < len(sys.argv):
             build_single_chapter(sys.argv[idx + 1])

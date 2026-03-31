@@ -625,7 +625,9 @@ class PreviewServer:
     def _build_svg_file_mode(self, data: dict, design_state: DesignState, config: dict) -> int:
         """파일 모드 빌드. Stage 2만 실행."""
         stage_run = 0
-        design_hash = self._cache.compute_design_hash(design_state.to_dict())
+        inc_cover = data.get("include_cover", True)
+        inc_toc = data.get("include_toc", True)
+        design_hash = self._cache.compute_design_hash(design_state.to_dict(), inc_cover, inc_toc)
 
         if self._cache.file_designable:
             if not self._cache.is_stage2_valid(design_hash):
@@ -675,7 +677,9 @@ class PreviewServer:
             stage_run = 1
 
         # Stage 2
-        design_hash = self._cache.compute_design_hash(design_state.to_dict())
+        inc_cover = data.get("include_cover", True)
+        inc_toc = data.get("include_toc", True)
+        design_hash = self._cache.compute_design_hash(design_state.to_dict(), inc_cover, inc_toc)
         if not self._cache.is_stage2_valid(design_hash) or stage_run == 1:
             final_typ = self._pipeline.assemble_final_typ(
                 self._cache.raw_typ,
@@ -729,7 +733,11 @@ class PreviewServer:
                 if result.build_result and result.build_result.page_count > 0:
                     self._cache.update_stage2(
                         svg_dir, result.build_result.page_count,
-                        typ_path, self._cache.compute_design_hash(design_state.to_dict()),
+                        typ_path, self._cache.compute_design_hash(
+                        design_state.to_dict(),
+                        data.get("include_cover", True),
+                        data.get("include_toc", True),
+                    ),
                     )
             except Exception as e:
                 import traceback

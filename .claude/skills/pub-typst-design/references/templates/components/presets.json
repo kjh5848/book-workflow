@@ -28,7 +28,7 @@
     }
   },
   "3": {
-    "name": "집필 에이전트 pod",
+    "name": "집필에이전트 기본",
     "description": "heading 미니멀 + inline_code 굵게 + table 그레이 헤더",
     "components": {
       "body": "d1",
@@ -42,8 +42,8 @@
     }
   },
   "4": {
-    "name": "집필 에이전트 전자책",
-    "description": "",
+    "name": "집필에이전트 전자책(기존)",
+    "description": "클래식 블루 기반 전자책",
     "components": {
       "body": "d1",
       "heading": "d1",
@@ -52,6 +52,72 @@
       "quote": "d1",
       "table": "d1",
       "toc": "d1"
+    }
+  },
+  "5": {
+    "name": "오픈스킬북스 POD",
+    "description": "교보 바로출판 B5(188x257mm), 본문 10pt, 문단간격 축소, heading 여백 최적화",
+    "components": {
+      "body": "d1",
+      "chapter_opening": "d1",
+      "heading": "d2",
+      "code": "d1",
+      "inline_code": "d2",
+      "quote": "d1",
+      "table": "d2",
+      "toc": "d1"
+    },
+    "overrides": {
+      "page": { "format": "B5_4x6배판" },
+      "margins": { "top": 20, "bottom": 20, "left": 20, "right": 18 },
+      "typo": { "size": 10, "leading": 1.65, "paragraphGap": 8 },
+      "typoSizes": {
+        "h1": 22, "h2": 15, "h3": 12, "h4": 10.5,
+        "code": 8, "quote": 9, "table": 8.5, "inlineCode": 10
+      },
+      "tocDepth": 2,
+      "tocSpacing": 2,
+      "componentStyles": {
+        "heading": {
+          "h1_marginTop": "10pt", "h1_marginBottom": "10pt",
+          "h2_marginTop": "10pt", "h2_marginBottom": "10pt",
+          "h3_marginTop": "6pt", "h3_marginBottom": "8pt",
+          "h4_marginTop": "2pt", "h4_marginBottom": "8pt"
+        }
+      }
+    }
+  },
+  "6": {
+    "name": "오픈스킬북스 전자책",
+    "description": "e퍼플 A4(210x297mm), 본문 12pt 행간 200%, 이퍼플 기준",
+    "components": {
+      "body": "d1",
+      "chapter_opening": "d1",
+      "heading": "d2",
+      "code": "d1",
+      "inline_code": "d2",
+      "quote": "d1",
+      "table": "d2",
+      "toc": "d1"
+    },
+    "overrides": {
+      "page": { "format": "A4_국배판" },
+      "margins": { "top": 25, "bottom": 25, "left": 25, "right": 22 },
+      "typo": { "size": 12, "leading": 2.0, "paragraphGap": 10 },
+      "typoSizes": {
+        "h1": 24, "h2": 18, "h3": 15, "h4": 13,
+        "code": 10, "quote": 11, "table": 10, "inlineCode": 12
+      },
+      "tocDepth": 2,
+      "tocSpacing": 3,
+      "componentStyles": {
+        "heading": {
+          "h1_marginTop": "12pt", "h1_marginBottom": "12pt",
+          "h2_marginTop": "12pt", "h2_marginBottom": "12pt",
+          "h3_marginTop": "6pt", "h3_marginBottom": "10pt",
+          "h4_marginTop": "2pt", "h4_marginBottom": "10pt"
+        }
+      }
     }
   }
 }
