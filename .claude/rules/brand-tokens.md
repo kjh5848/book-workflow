@@ -25,7 +25,7 @@
 - **종이 독서 경험**: 전자책은 결국 종이처럼 읽힘 — 컴포넌트가 종이 위 "카드"로 보이게
 
 ### 적용
-- `.terminal-log` (chrome + body), `.rag-pipeline-box` (컨테이너), `.figure-group` 래퍼, `.annotated-compare` 컨테이너, `.librarian-scene` 컨테이너 등 **컴포넌트의 최상위 배경은 `#fff`**
+- `.terminal-log` (chrome + body), `.rag-pipeline-box` (컨테이너), `.figure-group` 래퍼, `.annotated-compare` 컨테이너, `.scene-actors` 컨테이너 등 **컴포넌트의 최상위 배경은 `#fff`**
 - 내부 역할 분리는 **색이 아닌 테두리·그림자·악센트(heading·뱃지)** 로 표현
 - 색을 대량으로 채우지 않는다 — 시각 강조는 테두리 색·뱃지 색으로 충분
 
@@ -43,7 +43,7 @@ HTML 다이어그램은 **이미지와 같은 시각 무게**를 갖도록 공�
 - **단일 진실원**: `tokens.css`의 `--shadow-figure` (현재 `none` — 그림자 비활성화, 테두리만으로 경계 표시)
 - **적용 대상**:
   - 이미지: `.chapter-image img`
-  - 단독 다이어그램: `.arch11`, `.terminal-log`, `.rag-pipeline-box`, `.llm-rag-split`, `.librarian-scene`, `.annotated-compare`
+  - 단독 다이어그램: `.arch11`, `.terminal-log`, `.rag-pipeline-box`, `.dual-path-compare`, `.scene-actors`, `.annotated-compare`
   - 묶음 래퍼: `.figure-group` (여러 다이어그램을 하나의 "그림 N-N" 단위로 묶을 때)
 - **중첩 금지**: `.figure-group > *`는 `box-shadow: none !important`. 래퍼에만 그림자를 남긴다.
 - **신규 다이어그램 추가 시**: 단독 사용 컴포넌트는 `box-shadow: var(--shadow-figure)` 셀렉터 목록에 편입한다.

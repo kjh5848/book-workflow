@@ -70,8 +70,8 @@
 
   /* 단독으로 쓰는 다이어그램은 각자 이미지와 같은 그림자 적용 */
   .rag-pipeline-box,
-  .llm-rag-split,
-  .librarian-scene,
+  .dual-path-compare,
+  .scene-actors,
   .annotated-compare,
   .terminal-log,
   .arch11 {
@@ -80,60 +80,60 @@
 
   /* LLM vs RAG 2갈래 분기 (CH01 §1.3 그림 1-8) — 공통 질문에서 두 경로로
      LLM 단독=warm(점선·근거 없음), RAG=accent(실선·근거 있음) */
-  .llm-rag-split { background: #ffffff; border: 1px solid var(--color-border); border-radius: 12px; padding: 18px 16px; margin: 24px 0; display: grid; grid-template-columns: auto 1fr; gap: 13px; align-items: center; overflow: hidden; }
-  .lrs-common { text-align: center; }
-  .lrs-q { display: inline-block; padding: 12px 22px; background: var(--color-accent-bg); border: 1.5px solid var(--color-accent); border-radius: 30px; color: var(--color-accent-text); font-weight: 700; font-size: 14px; }
-  .lrs-q-sub { display: block; color: var(--color-text-muted); font-size: 11px; margin-top: 8px; font-style: italic; }
-  .lrs-paths { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
-  .lrs-path { display: flex; align-items: center; gap: 8px; min-width: 0; }
-  .lrs-path-head { display: flex; align-items: center; gap: 6px; font-size: 10px; min-width: 130px; flex-shrink: 0; }
-  .lrs-tag { padding: 3px 10px; border-radius: 4px; color: #fff; font-weight: 700; letter-spacing: 0.3px; font-size: 11px; }
-  .lrs-path.bad  .lrs-tag { background: var(--color-accent-warm); }
-  .lrs-path.good .lrs-tag { background: var(--color-accent); }
-  .lrs-dim { font-size: 11px; font-style: italic; }
-  .lrs-path.bad  .lrs-dim { color: var(--color-accent-warm-text); }
-  .lrs-path.good .lrs-dim { color: var(--color-accent-text); }
-  .lrs-flow { display: flex; flex: 1; align-items: center; justify-content: space-between; gap: 10px; }
-  .lrs-node { padding: 5px 10px; background: #fff; border: 1.5px solid var(--color-border); color: var(--color-text-heading); font-size: 11px; font-weight: 500; white-space: nowrap; flex-shrink: 0; border-radius: 6px; }
-  .lrs-node.llm { border-color: var(--color-accent); color: var(--color-accent-text); font-weight: 700; }
-  .lrs-node.db  { border-color: var(--color-accent-border); }
-  .lrs-node.out { border-radius: 22px; font-weight: 700; }
-  .lrs-node.out.bad  { border-color: var(--color-accent-warm); background: var(--color-accent-warm-bg); color: var(--color-accent-warm-text); }
-  .lrs-node.out.good { border-color: var(--color-accent); background: var(--color-accent-bg); color: var(--color-accent-text); }
-  .lrs-arrow { flex: 1 1 auto; min-width: 14px; height: 0; position: relative; }
-  .lrs-arrow.dashed { border-top: 1.5px dashed var(--color-accent-warm); }
-  .lrs-arrow.solid  { border-top: 1.5px solid var(--color-accent); }
-  .lrs-arrow::after { content: ''; position: absolute; right: -1px; top: 50%; transform: translateY(-50%); width: 0; height: 0; border-left: 7px solid; border-top: 5px solid transparent; border-bottom: 5px solid transparent; }
-  .lrs-arrow.dashed::after { border-left-color: var(--color-accent-warm); }
-  .lrs-arrow.solid::after  { border-left-color: var(--color-accent); }
+  .dual-path-compare { background: #ffffff; border: 1px solid var(--color-border); border-radius: 12px; padding: 18px 16px; margin: 24px 0; display: grid; grid-template-columns: auto 1fr; gap: 13px; align-items: center; overflow: hidden; }
+  .dpc-common { text-align: center; }
+  .dpc-q { display: inline-block; padding: 12px 22px; background: var(--color-accent-bg); border: 1.5px solid var(--color-accent); border-radius: 30px; color: var(--color-accent-text); font-weight: 700; font-size: 14px; }
+  .dpc-q-sub { display: block; color: var(--color-text-muted); font-size: 11px; margin-top: 8px; font-style: italic; }
+  .dpc-paths { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+  .dpc-path { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .dpc-path-head { display: flex; align-items: center; gap: 6px; font-size: 10px; min-width: 130px; flex-shrink: 0; }
+  .dpc-tag { padding: 3px 10px; border-radius: 4px; color: #fff; font-weight: 700; letter-spacing: 0.3px; font-size: 11px; }
+  .dpc-path.bad  .dpc-tag { background: var(--color-accent-warm); }
+  .dpc-path.good .dpc-tag { background: var(--color-accent); }
+  .dpc-dim { font-size: 11px; font-style: italic; }
+  .dpc-path.bad  .dpc-dim { color: var(--color-accent-warm-text); }
+  .dpc-path.good .dpc-dim { color: var(--color-accent-text); }
+  .dpc-flow { display: flex; flex: 1; align-items: center; justify-content: space-between; gap: 10px; }
+  .dpc-node { padding: 5px 10px; background: #fff; border: 1.5px solid var(--color-border); color: var(--color-text-heading); font-size: 11px; font-weight: 500; white-space: nowrap; flex-shrink: 0; border-radius: 6px; }
+  .dpc-node.llm { border-color: var(--color-accent); color: var(--color-accent-text); font-weight: 700; }
+  .dpc-node.db  { border-color: var(--color-accent-border); }
+  .dpc-node.out { border-radius: 22px; font-weight: 700; }
+  .dpc-node.out.bad  { border-color: var(--color-accent-warm); background: var(--color-accent-warm-bg); color: var(--color-accent-warm-text); }
+  .dpc-node.out.good { border-color: var(--color-accent); background: var(--color-accent-bg); color: var(--color-accent-text); }
+  .dpc-arrow { flex: 1 1 auto; min-width: 14px; height: 0; position: relative; }
+  .dpc-arrow.dashed { border-top: 1.5px dashed var(--color-accent-warm); }
+  .dpc-arrow.solid  { border-top: 1.5px solid var(--color-accent); }
+  .dpc-arrow::after { content: ''; position: absolute; right: -1px; top: 50%; transform: translateY(-50%); width: 0; height: 0; border-left: 7px solid; border-top: 5px solid transparent; border-bottom: 5px solid transparent; }
+  .dpc-arrow.dashed::after { border-left-color: var(--color-accent-warm); }
+  .dpc-arrow.solid::after  { border-left-color: var(--color-accent); }
 
   /* 사서 비유 장면 (CH01 이야기 파트) — 방문자·사서·서가 3주체 양방향 소통
      사서(RAG)는 Secondary(warm)로 강조, 방문자·서가는 Primary(accent) */
-  .librarian-scene { background: #ffffff; border: 1px solid var(--color-border-dashed); border-radius: 12px; padding: 28px 24px; margin: 24px 0; }
-  .ls-grid { display: grid; grid-template-columns: 1fr auto 1.2fr auto 1fr; align-items: center; gap: 10px; }
-  .ls-actor { text-align: center; padding: 8px; }
-  .ls-icon { width: 72px; height: 72px; margin: 0 auto 12px; position: relative; border-radius: 50%; background: var(--color-accent-bg); border: 2px solid var(--color-accent); }
-  .ls-icon.lib { background: var(--color-accent-warm-bg); border-color: var(--color-accent-warm); }
-  .ls-icon.user::before, .ls-icon.lib::before { content: ''; position: absolute; top: 14px; left: 50%; transform: translateX(-50%); width: 22px; height: 22px; border-radius: 50%; background: var(--color-accent); }
-  .ls-icon.lib::before { background: var(--color-accent-warm); }
-  .ls-icon.user::after, .ls-icon.lib::after { content: ''; position: absolute; bottom: 8px; left: 12px; right: 12px; height: 18px; background: var(--color-accent); border-radius: 16px 16px 4px 4px; }
-  .ls-icon.lib::after { background: var(--color-accent-warm); }
-  /* 벡터 DB 아이콘 — .lrs-node.db 와 시각 언어 통일 (원통 DB 관습)
+  .scene-actors { background: #ffffff; border: 1px solid var(--color-border-dashed); border-radius: 12px; padding: 28px 24px; margin: 24px 0; }
+  .scene-grid { display: grid; grid-template-columns: 1fr auto 1.2fr auto 1fr; align-items: center; gap: 10px; }
+  .scene-actor { text-align: center; padding: 8px; }
+  .scene-icon { width: 72px; height: 72px; margin: 0 auto 12px; position: relative; border-radius: 50%; background: var(--color-accent-bg); border: 2px solid var(--color-accent); }
+  .scene-icon.lib { background: var(--color-accent-warm-bg); border-color: var(--color-accent-warm); }
+  .scene-icon.user::before, .scene-icon.lib::before { content: ''; position: absolute; top: 14px; left: 50%; transform: translateX(-50%); width: 22px; height: 22px; border-radius: 50%; background: var(--color-accent); }
+  .scene-icon.lib::before { background: var(--color-accent-warm); }
+  .scene-icon.user::after, .scene-icon.lib::after { content: ''; position: absolute; bottom: 8px; left: 12px; right: 12px; height: 18px; background: var(--color-accent); border-radius: 16px 16px 4px 4px; }
+  .scene-icon.lib::after { background: var(--color-accent-warm); }
+  /* 벡터 DB 아이콘 — .dpc-node.db 와 시각 언어 통일 (원통 DB 관습)
      상단 타원 + 몸통 사각 + 내부 디스크 밴드 3줄 */
-  .ls-icon.shelf { background: #fff; border: 2px solid var(--color-accent); border-radius: 50% 50% 6px 6px / 22px 22px 6px 6px; padding: 14px 10px 8px; display: flex; flex-direction: column; justify-content: flex-end; gap: 6px; position: relative; }
-  .ls-icon.shelf::before { content: ''; position: absolute; top: 10px; left: 10px; right: 10px; height: 2px; border-radius: 2px; background: var(--color-accent); opacity: 0.5; }
-  .ls-icon.shelf span { display: block; height: 3px; border-radius: 2px; background: var(--color-accent); }
-  .ls-icon.shelf span:nth-child(2) { background: var(--color-accent-warm); }
-  .ls-role { font-size: 14px; font-weight: 700; color: var(--color-text-heading); margin-bottom: 4px; }
-  .ls-actor.center .ls-role { color: var(--color-accent-warm-text); }
-  .ls-actor.center .ls-role em { font-style: normal; font-size: 11px; color: var(--color-accent-warm-text); background: var(--color-accent-warm-bg); padding: 2px 7px; border-radius: 4px; margin-left: 4px; font-weight: 700; letter-spacing: 0.3px; font-family: var(--font-mono, monospace); vertical-align: middle; }
-  .ls-note { color: var(--color-text-secondary); font-size: 11px; line-height: 1.5; }
-  .ls-bridge { display: flex; flex-direction: column; gap: 6px; min-width: 110px; }
-  .ls-line { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--color-text-muted); }
-  .ls-line .ls-ar { font-size: 14px; color: var(--color-accent); font-weight: 300; }
-  .ls-line.reverse .ls-ar { color: var(--color-accent-warm); }
-  .ls-line.reverse { justify-content: flex-end; }
-  .ls-line-label { background: #fff; padding: 2px 8px; border-radius: 10px; border: 1px solid var(--color-border-dashed); white-space: nowrap; font-weight: 600; color: var(--color-text-heading); }
+  .scene-icon.shelf { background: #fff; border: 2px solid var(--color-accent); border-radius: 50% 50% 6px 6px / 22px 22px 6px 6px; padding: 14px 10px 8px; display: flex; flex-direction: column; justify-content: flex-end; gap: 6px; position: relative; }
+  .scene-icon.shelf::before { content: ''; position: absolute; top: 10px; left: 10px; right: 10px; height: 2px; border-radius: 2px; background: var(--color-accent); opacity: 0.5; }
+  .scene-icon.shelf span { display: block; height: 3px; border-radius: 2px; background: var(--color-accent); }
+  .scene-icon.shelf span:nth-child(2) { background: var(--color-accent-warm); }
+  .scene-role { font-size: 14px; font-weight: 700; color: var(--color-text-heading); margin-bottom: 4px; }
+  .scene-actor.center .scene-role { color: var(--color-accent-warm-text); }
+  .scene-actor.center .scene-role em { font-style: normal; font-size: 11px; color: var(--color-accent-warm-text); background: var(--color-accent-warm-bg); padding: 2px 7px; border-radius: 4px; margin-left: 4px; font-weight: 700; letter-spacing: 0.3px; font-family: var(--font-mono, monospace); vertical-align: middle; }
+  .scene-note { color: var(--color-text-secondary); font-size: 11px; line-height: 1.5; }
+  .scene-bridge { display: flex; flex-direction: column; gap: 6px; min-width: 110px; }
+  .scene-line { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--color-text-muted); }
+  .scene-line .scene-ar { font-size: 14px; color: var(--color-accent); font-weight: 300; }
+  .scene-line.reverse .scene-ar { color: var(--color-accent-warm); }
+  .scene-line.reverse { justify-content: flex-end; }
+  .scene-line-label { background: #fff; padding: 2px 8px; border-radius: 10px; border: 1px solid var(--color-border-dashed); white-space: nowrap; font-weight: 600; color: var(--color-text-heading); }
 
   /* RAG 파이프라인 (CH01 §1.3) — RP-V3 비유 상단 강조
      카드 순서: s-meta(비유, warm 큰 글씨) → 2px 구분선 → s-num(인덱스) → s-title → s-desc */

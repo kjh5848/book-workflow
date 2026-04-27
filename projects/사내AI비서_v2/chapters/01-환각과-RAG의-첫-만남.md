@@ -310,10 +310,42 @@ LLM에는 한 번에 처리할 수 있는 텍스트 길이 한도(컨텍스트 �
 
 맞는 말이었습니다. 도서관에선 누군가 와서 질문하면 사서가 그 질문에 맞는 책을 서가에서 골라 건네줍니다. 방문자는 그 책만 읽으면 됩니다. 전부 외울 필요도, 서가를 통째로 옮길 필요도 없습니다.
 
+<div class="scene-actors">
+  <div class="scene-grid">
+    <div class="scene-actor">
+      <div class="scene-icon user"></div>
+      <div class="scene-role">방문자</div>
+      <div class="scene-note">규정이 궁금한<br>사내 직원</div>
+    </div>
+    <div class="scene-bridge">
+      <div class="scene-line"><span class="scene-line-label">질문</span><span class="scene-ar">→</span></div>
+      <div class="scene-line reverse"><span class="scene-ar">←</span><span class="scene-line-label">답변</span></div>
+    </div>
+    <div class="scene-actor center">
+      <div class="scene-icon lib"></div>
+      <div class="scene-role">사서<em>RAG</em></div>
+      <div class="scene-note">질문에 맞는 책을<br>서가에서 골라 건네기</div>
+    </div>
+    <div class="scene-bridge">
+      <div class="scene-line"><span class="scene-line-label">책 요청</span><span class="scene-ar">→</span></div>
+      <div class="scene-line reverse"><span class="scene-ar">←</span><span class="scene-line-label">관련 페이지</span></div>
+    </div>
+    <div class="scene-actor">
+      <div class="scene-icon shelf"><span></span><span></span><span></span></div>
+      <div class="scene-role">서가</div>
+      <div class="scene-note">사내 문서 저장소<br>(벡터 DB)</div>
+    </div>
+  </div>
+</div>
+
+*그림 1-7. 사서가 방문자의 질문을 듣고 서가에서 관련 책을 골라 건네줍니다. RAG는 이 '사서' 역할을 LLM 옆에 앉히는 것입니다*
+
 LLM도 같은 방식이면 됩니다. 사내 문서 전체를 외우게 할 필요가 없습니다. 질문이 들어왔을 때 그 질문에 해당하는 문서 조각만 찾아서 LLM에게 건네주면 됩니다.
 
 이것이 **RAG (Retrieval-Augmented Generation, 검색 증강 생성)** 입니다. 이름은 거창하지만 하는 일은 단순합니다. 사서를 하나 앉히는 겁니다.
 
+<div class="fig-scale-75">
+<div class="figure-group">
 <div class="rag-pipeline-box">
   <div class="rag-pipeline-title">RAG 파이프라인. 사서가 일하는 순서</div>
   <div class="rag-pipeline">
@@ -340,26 +372,47 @@ LLM도 같은 방식이면 됩니다. 사내 문서 전체를 외우게 할 필�
   </div>
 </div>
 
-*그림 1-7. RAG 내부 3단계(저장·검색·생성)의 사서 비유. 사서가 방문자의 질문을 듣고 서가에서 관련 책을 골라 건네줍니다*
-
-같은 질문을 던졌을 때, LLM 단독과 RAG는 결과가 어떻게 갈릴까요. 한쪽은 학습된 지식만으로 답하고, 다른 쪽은 검색 결과를 근거로 답합니다.
-
-<div class="sp-compare">
-  <div class="sp-compare-block bad">
-    <div class="sp-compare-label">LLM 단독</div>
-    <div class="sp-compare-content">
-      질문이 들어오면 모델이 학습한 지식만으로 바로 답변을 만듭니다. 사내 문서를 본 적이 없으니 비슷한 일반 규정을 끌어와 채워 넣습니다. <b>근거 없음 → 환각 답변</b>.
-    </div>
+<div class="dual-path-compare">
+  <div class="dpc-common">
+    <div class="dpc-q">질문</div>
+    <div class="dpc-q-sub">"신입사원 연차 규정은?"</div>
   </div>
-  <div class="sp-compare-block good">
-    <div class="sp-compare-label">RAG</div>
-    <div class="sp-compare-content">
-      질문이 검색기를 거쳐 벡터 DB에서 관련 문서를 먼저 가져옵니다. LLM은 그 문서를 보고 답을 만듭니다. <b>근거 있음 → 출처 포함 답변</b>.
+  <div class="dpc-paths">
+    <div class="dpc-path bad">
+      <div class="dpc-path-head">
+        <span class="dpc-tag">LLM 단독</span>
+        <span class="dpc-dim">근거 없음</span>
+      </div>
+      <div class="dpc-flow">
+        <div class="dpc-arrow dashed"></div>
+        <div class="dpc-node llm">LLM</div>
+        <div class="dpc-arrow dashed"></div>
+        <div class="dpc-node out bad">환각 답변</div>
+      </div>
+    </div>
+    <div class="dpc-path good">
+      <div class="dpc-path-head">
+        <span class="dpc-tag">RAG</span>
+        <span class="dpc-dim">근거 있음</span>
+      </div>
+      <div class="dpc-flow">
+        <div class="dpc-arrow solid"></div>
+        <div class="dpc-node">검색기</div>
+        <div class="dpc-arrow solid"></div>
+        <div class="dpc-node db">벡터 DB</div>
+        <div class="dpc-arrow solid"></div>
+        <div class="dpc-node llm">LLM</div>
+        <div class="dpc-arrow solid"></div>
+        <div class="dpc-node out good">출처 답변</div>
+      </div>
     </div>
   </div>
 </div>
 
-*그림 1-8. 같은 질문에서 LLM 단독과 RAG의 경로 차이입니다*
+</div>
+</div>
+
+*그림 1-8. 위는 RAG 내부 3단계(저장·검색·생성)의 사서 비유, 아래는 같은 질문에서 LLM 단독(점선·근거 없음)과 RAG(실선·출처 포함)의 경로 차이입니다*
 
 ### 1.3.1 서가에 책 꽂기. 임베딩 + ChromaDB 인덱싱
 
@@ -491,6 +544,7 @@ retriever = vectorstore.as_retriever(search_kwargs={"k": 1})
 python step4_no_chunking.py
 ```
 
+<div class="fig-scale-80">
 <div class="terminal-log">
   <div class="tl-chrome">
     <div class="tl-traffic"><span></span><span></span><span></span></div>
@@ -508,6 +562,7 @@ python step4_no_chunking.py
     <div class="tl-kv-row">2. 대신 매월 1회 유급 '리프레시 데이' 휴가를 사용할 수 있습니다.</div>
     <div class="tl-kv-row">3. 리프레시 데이는 유급 휴가로 제공됩니다.</div>
   </div>
+</div>
 </div>
 
 *그림 1-10. 청킹 없이 한 덩어리로 넣으면 관련 없는 규정까지 뭉쳐 딸려옵니다*

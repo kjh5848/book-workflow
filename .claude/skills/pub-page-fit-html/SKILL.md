@@ -55,9 +55,9 @@ description: "HTML+Chromium 파이프라인 전용 자동 페이지 밀도 조�
 - `.figure-group` padding·gap
 - `.rag-pipeline-box` / `.rag-step` padding
 - `.rag-step .s-meta` margin·padding
-- `.llm-rag-split` padding·gap
-- `.lrs-paths` / `.lrs-path` gap
-- `.librarian-scene` padding
+- `.dual-path-compare` padding·gap
+- `.dpc-paths` / `.dpc-path` gap
+- `.scene-actors` padding
 - `.terminal-log .tl-body` padding
 - `.annotated-compare` / `.ac-block` padding·margin
 - 본문 `p` margin-bottom·line-height

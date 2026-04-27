@@ -106,7 +106,7 @@ Chromium headless PDF는 인쇄 절약 모드가 기본이라 **box-shadow·배�
 A4 페이지 경계가 컴포넌트 한가운데를 가르지 않도록 `print.css`에 나열:
 
 ```css
-.figure-group, .librarian-scene, .llm-rag-split, .rag-pipeline-box,
+.figure-group, .scene-actors, .dual-path-compare, .rag-pipeline-box,
 .annotated-compare, .terminal-log, .arch11, .code-block {
   page-break-inside: avoid;
   break-inside: avoid;
@@ -153,13 +153,13 @@ JetBrains Mono 등 monospace를 직접 쓰면 한글 글리프가 없어 시스�
 A4 폭은 좁다(658px). flex row 내 노드가 누적되면 자연 wrap 안 되고 **밖으로 튀어나간다**. 아래 두 규칙이 안전장치.
 
 ```css
-.llm-rag-split {
+.dual-path-compare {
   overflow: hidden;
   display: grid;
   grid-template-columns: auto 1fr;
 }
-.lrs-paths,
-.lrs-path {
+.dpc-paths,
+.dpc-path {
   min-width: 0;  /* flex 자식이 intrinsic size를 무시하도록 */
 }
 ```
