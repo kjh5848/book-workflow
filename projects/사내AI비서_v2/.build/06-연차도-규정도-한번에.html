@@ -151,7 +151,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 </ol>
 </div>
 <h2>6.1 RAG가 답 못 하는 질문</h2>
-<!-- [GEMINI PROMPT: 06_chapter-opening]
+<!-- [IMAGE PROMPT: 06_chapter-opening]
 한 명의 사서를 중앙에 크게 배치. 왼손에 두꺼운 연차 장부(가죽 표지, "LEDGER" 라벨),
 오른손에는 규정집(두꺼운 책, "HR RULES" 라벨)을 들고 있는 모습.
 배경 왼쪽은 장부실 — 회색 메탈 캐비닛 서랍이 줄지어 있음.
@@ -161,7 +161,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 인물은 성별·나이 중립적, 도서관 카디건과 안경 착용.
 기존 "안내데스크/리셉션" 느낌은 완전히 배제 — 창구/카운터 없음.
 -->
-<div class="chapter-image gemini"><img src="../assets/CH06/gemini/06_chapter-opening.png" alt="" /><div class="caption">그림 6-1. 서가뿐 아니라 장부실 열쇠까지 쥔 사서. 질문 하나에 두 자료함을 모두 살피는 통합 에이전트입니다</div></div>
+<div class="chapter-image"><img src="../assets/CH06/image/06_chapter-opening.png" alt="" /><div class="caption">그림 6-1. 서가뿐 아니라 장부실 열쇠까지 쥔 사서. 질문 하나에 두 자료함을 모두 살피는 통합 에이전트입니다</div></div>
 <p>목요일 오후 4시. 창밖이 노랗게 물들고 있었습니다. 키보드 소리가 드문드문 울리는 사무실이었습니다.</p>
 <p>챕터 5에서 채팅 UI를 띄워 두고 동료들이 한 번씩 써 보게 했습니다. 첫 반응은 나쁘지 않았습니다. 얼마 후 다른 동료가 노트북을 들고 책상 앞까지 왔습니다.</p>
 <div class="dialogue"><span class="speaker">동료</span>: "이게 그 AI 비서예요? 한번 써봐도 되죠?"</div>
@@ -214,8 +214,8 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 <div class="dialogue"><span class="speaker">이용자</span>: "A 사원 연차 며칠 남았고, 신청 절차도 알려주세요."</div>
 <div class="dialogue"><span class="speaker">사서</span>: (장부실에서 연차를 확인한 뒤 서가로 가서 규정집까지 찾아온다) "3일 남았고, 규정은 이렇습니다..."</div>
 <p>한 명의 사서가 자료의 성격을 보고 장부실과 서가를 스스로 오갑니다. 바깥에 안내 직원을 따로 두고 &quot;너는 장부실, 너는 서가&quot; 하고 미리 나누지 않습니다. 사서가 질문을 보자마자 필요한 자료함을 직접 엽니다.</p>
-<!-- [GEMINI PROMPT: 06_librarian-two-rooms]
-path: assets/CH06/gemini/06_librarian-two-rooms.png
+<!-- [IMAGE PROMPT: 06_librarian-two-rooms]
+path: assets/CH06/image/06_librarian-two-rooms.png
 A minimalist black and white infographic-style technical diagram with a strict 16:9
 aspect ratio on a solid white background. No shading, no 3D effects, only clean thin
 line art. Use everyday metaphors to visualize abstract concepts.
@@ -237,7 +237,7 @@ Bottom caption (small): "어느 자료함을 열지 사서가 알아서 판단�
 No reception desk, no counter, no service window — strictly prohibited.
 Style: architecture-infographic
 -->
-<div class="chapter-image gemini"><img src="../assets/CH06/gemini/06_librarian-two-rooms.png" alt="" /><div class="caption">그림 6-2. 어느 자료함을 열지는 사서가 알아서 판단합니다</div></div>
+<div class="chapter-image"><img src="../assets/CH06/image/06_librarian-two-rooms.png" alt="" /><div class="caption">그림 6-2. 어느 자료함을 열지는 사서가 알아서 판단합니다</div></div>
 <p>AI 비서도 같은 구조가 됩니다. 한 명의 <strong>에이전트</strong>가 질문을 보고 장부 도구(<code>leave_balance</code> 등)를 열지, 문서 도구(<code>search_documents</code>)를 열지, 둘 다 열지 판단합니다. 판단 주체는 에이전트 속 LLM 자신이지, 바깥의 분류기가 아닙니다.</p>
 <h3>6.3.1 파이프라인에서 에이전트로</h3>
 <p>챕터 5에서 만든 건 고정된 파이프라인입니다. 질문이 들어오면 언제나 같은 순서로 흐릅니다. Retriever로 문서 조각을 가져오고, Prompt로 감싸고, LLM에 보내고, 답을 돌려받죠. 입력 질문이 &quot;휴가 규정&quot;이든 &quot;A 사원 연차&quot;든 똑같은 경로를 탑니다. 그 경로 중간에 PostgreSQL 장부를 들여다보는 단계가 없다는 점이 문제입니다. 체인을 새로 짠다 해도 &quot;이 질문에는 DB를 볼까 문서만 볼까?&quot;를 실시간으로 판단할 자리가 없습니다. 고정 파이프는 분기가 약합니다.</p>
@@ -578,34 +578,30 @@ Style: architecture-infographic
 <li><strong>최종 답변 생성</strong></li>
 </ol>
 <p>이 Reason, Act, Observe 반복이 ReAct 패턴입니다. LangChain의 <code>create_tool_calling_agent</code> + <code>AgentExecutor</code>가 루프를 자동으로 돌려 줍니다.</p>
-<div class="sp-figure">
-  <div class="sp-figure-title">그림 6-7. ReAct 루프. 도구 호출 한 번마다 Reason → Act → Observe 한 바퀴</div>
-  <div class="sp-flow">
-    <div class="sp-step">
-      <span class="sp-step-num">Reason</span>
-      <div class="sp-step-title">추론</div>
-      <div class="sp-step-desc">다음 어떤 도구를 어떤 인자로 호출할까</div>
+<div class="react-loop">
+  <div class="rl-title">ReAct 루프. 도구 호출 한 번마다 Reason → Act → Observe 한 바퀴</div>
+  <div class="rl-ring">
+    <div class="rl-node rl-r">
+      <div class="rl-kind">Reason</div>
+      <div class="rl-label">추론</div>
+      <div class="rl-hint">다음 어떤 도구를<br>어떤 인자로 호출할까</div>
     </div>
-    <div class="sp-flow-arrow">→</div>
-    <div class="sp-step accent">
-      <span class="sp-step-num">Act</span>
-      <div class="sp-step-title">행동</div>
-      <div class="sp-step-desc">도구 실제 실행 (<code>@tool</code> 함수 호출)</div>
+    <div class="rl-arrow rl-arrow-1">→</div>
+    <div class="rl-node rl-a">
+      <div class="rl-kind">Act</div>
+      <div class="rl-label">행동</div>
+      <div class="rl-hint">도구 실제 실행<br>(<code>@tool</code> 함수 호출)</div>
     </div>
-    <div class="sp-flow-arrow">→</div>
-    <div class="sp-step">
-      <span class="sp-step-num">Observe</span>
-      <div class="sp-step-title">관찰</div>
-      <div class="sp-step-desc">결과를 scratchpad에 기록</div>
+    <div class="rl-arrow rl-arrow-2">→</div>
+    <div class="rl-node rl-o">
+      <div class="rl-kind">Observe</div>
+      <div class="rl-label">관찰</div>
+      <div class="rl-hint">도구가 돌려준 결과를<br>scratchpad에 기록</div>
     </div>
-    <div class="sp-flow-arrow">↺</div>
-    <div class="sp-step info">
-      <span class="sp-step-num">EXIT</span>
-      <div class="sp-step-title">충분하면 종료</div>
-      <div class="sp-step-desc">자연어 답변 생성</div>
-    </div>
+    <div class="rl-arrow rl-arrow-back">↺</div>
   </div>
-  <div class="sp-callout">충분한 정보를 모을 때까지 같은 순환을 반복하며, 매 Observe 단계의 결과가 다음 Reason의 입력이 됩니다.</div>
+  <div class="rl-exit">최종 답이 충분하면 루프 종료 → 자연어 답변 생성</div>
+  <div class="rl-caption">그림 6-7. ReAct 루프는 충분한 정보를 모을 때까지 같은 순환을 반복하며, 매 Observe 단계의 결과가 다음 Reason의 입력이 됩니다</div>
 </div>
 <h3>6.5.1 에이전트 조립하기</h3>
 <p><code>src/agent.py</code>에 에이전트 조립 TODO가 있습니다. <code>create_tool_calling_agent</code> + <code>AgentExecutor</code>로 ReAct 루프를 만듭니다.</p>

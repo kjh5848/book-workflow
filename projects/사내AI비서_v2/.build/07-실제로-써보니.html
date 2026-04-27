@@ -150,7 +150,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 </ol>
 </div>
 <h2>7.1 &quot;같은 질문에 또 20초?&quot;</h2>
-<div class="chapter-image gemini"><img src="../assets/CH07/gemini/07_chapter-opening.png" alt="" /><div class="caption">그림 7-1. 운영 안정화. 답변 메모장과 업무 일지, 재시도 매뉴얼까지 손에 쥔 사서</div></div>
+<div class="chapter-image"><img src="../assets/CH07/image/07_chapter-opening.png" alt="" /><div class="caption">그림 7-1. 운영 안정화. 답변 메모장과 업무 일지, 재시도 매뉴얼까지 손에 쥔 사서</div></div>
 <p>챕터 6에서 통합 에이전트를 완성한 뒤 일주일이 흘렀습니다. 동료들 자리에 한 번씩 깔리던 웃음이 이제는 슬랙 채널에 모이고 있었습니다. 월요일 오전 9시 반. 오픈이는 커피잔을 책상에 내려놓고 슬랙을 열었습니다.</p>
 <div class="dialogue"><span class="speaker">동료</span>: "병가 증빙 필요한지 아까도 물어봤는데, 또 20초 기다려야 해요?"</div>
 <p>20초. 커서만 깜빡이는 화면에서 20초는 깁니다. 오픈이가 터미널을 열어 같은 질문을 던져 봤습니다. 로딩 스피너가 또 20초 동안 돌아갔습니다.</p>
@@ -573,42 +573,42 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 </tbody>
 </table>
 <p>도구도 구조가 바뀝니다. 챕터 6에서 <code>mcp_tools.py</code> 하나에 몰아넣었던 도구 4개를 <code>tools/</code> 디렉토리 아래 파일별로 분리했습니다(<code>leave_balance.py</code>, <code>sales_sum.py</code>, <code>list_employees.py</code>, <code>search_documents.py</code>). 도구가 늘어도 파일 하나씩 추가하면 되는 구조라 관리하기 쉽습니다.</p>
-<div class="sp-figure">
-  <div class="sp-figure-title">그림 7-6. ConnectHRAgent 운영 래퍼 구조. 안쪽 코어는 챕터 6 그대로</div>
-  <div class="sp-row warm">
-    <span class="sp-row-label">바깥층 (이번 챕터)</span>
-    <span class="sp-row-value">
-      <span class="sp-chip warm">ResponseCache</span>
-      <span class="sp-chip warm">TokenTracker</span>
-      <span class="sp-chip warm">Retry 루프</span>
-    </span>
+<div class="wrapper-arch">
+  <div class="wa-title">ConnectHRAgent — 운영용 래퍼 구조</div>
+  <div class="wa-outer">
+    <div class="wa-outer-label">
+      <span class="wa-tag">이번 챕터</span>
+      ConnectHRAgent (운영 래퍼)
+    </div>
+    <div class="wa-middle">
+      <div class="wa-feature wa-cache">
+        <div class="wa-feature-title">ResponseCache</div>
+        <div class="wa-feature-sub">TTL 메모장</div>
+      </div>
+      <div class="wa-feature wa-monitor">
+        <div class="wa-feature-title">TokenTracker</div>
+        <div class="wa-feature-sub">업무 일지</div>
+      </div>
+      <div class="wa-feature wa-retry">
+        <div class="wa-feature-title">Retry 루프</div>
+        <div class="wa-feature-sub">3회 재시도</div>
+      </div>
+    </div>
+    <div class="wa-inner">
+      <div class="wa-inner-label">
+        <span class="wa-tag wa-tag-inner">챕터 6 그대로</span>
+        IntegratedAgent
+      </div>
+      <div class="wa-inner-core">
+        <div class="wa-core-item">AgentExecutor<br><span class="wa-core-hint">(ReAct)</span></div>
+        <div class="wa-core-sep">→</div>
+        <div class="wa-core-item">MCP Tools</div>
+        <div class="wa-core-sep">→</div>
+        <div class="wa-core-item">사후 분류</div>
+      </div>
+    </div>
   </div>
-  <div class="sp-flow">
-    <div class="sp-step">
-      <span class="sp-step-num">바깥 1</span>
-      <div class="sp-step-title">ResponseCache</div>
-      <div class="sp-step-desc">TTL 메모장. 같은 질문이면 즉시 반환</div>
-    </div>
-    <div class="sp-flow-arrow">→</div>
-    <div class="sp-step">
-      <span class="sp-step-num">바깥 2</span>
-      <div class="sp-step-title">Retry 루프</div>
-      <div class="sp-step-desc">최대 3회, 간격 2초로 재시도</div>
-    </div>
-    <div class="sp-flow-arrow">→</div>
-    <div class="sp-step accent">
-      <span class="sp-step-num">코어</span>
-      <div class="sp-step-title">IntegratedAgent</div>
-      <div class="sp-step-desc">AgentExecutor + MCP Tools + 사후 분류</div>
-    </div>
-    <div class="sp-flow-arrow">→</div>
-    <div class="sp-step">
-      <span class="sp-step-num">바깥 3</span>
-      <div class="sp-step-title">TokenTracker</div>
-      <div class="sp-step-desc">호출별 토큰·비용·지연 기록</div>
-    </div>
-  </div>
-  <div class="sp-callout">호출이 들어오면 캐시 → 재시도 루프 → 코어 → 토큰 기록 순으로 흐릅니다. 코어(<code>IntegratedAgent</code>)는 챕터 6에서 작성한 코드를 그대로 가져다 씁니다.</div>
+  <div class="wa-caption">그림 7-6. 챕터 6의 에이전트는 그대로 두고, 바깥을 운영 래퍼 3종(캐시·추적·재시도)으로 감쌉니다. 요청은 위에서 들어와 래퍼 3층을 거쳐 코어에 닿고, 응답은 반대 방향으로 나오면서 각 층이 추가 작업(저장·기록)을 수행합니다</div>
 </div>
 <h3>7.4.1 실습 3. agent_config.py</h3>
 <p><code>ex07/src/agent_config.py</code>의 <code>ConnectHRAgent.run()</code> 메서드 TODO의 <code>pass</code>를 지우고 5단계 운영 파이프라인을 구현합니다. 챕터 6의 <code>IntegratedAgent</code> 엔진(AgentExecutor + ReAct 루프)은 그대로 쓰고, 바깥에 캐시·재시도·토큰 기록을 두르는 게 이 챕터의 핵심입니다. Router는 ex06에서 하던 것처럼 질문 유형 라벨을 붙이는 용도로만 호출합니다. 재시도 루프와 AgentExecutor 빌드는 <code>_agent_utils.py</code>의 <code>build_agent_executor()</code>·<code>run_with_retry()</code> 헬퍼가 맡고, 우리는 단계를 조립하는 데만 집중합니다.</p>

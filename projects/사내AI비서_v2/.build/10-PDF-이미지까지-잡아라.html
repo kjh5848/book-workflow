@@ -149,6 +149,42 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 </ol>
 </div>
 <h2>10.1 스캔 PDF: 텍스트가 없다</h2>
+<div class="sp-figure">
+<div class="sp-figure-title">그림 10-1. 스캔 PDF 문제 해결. OCR과 Vision LLM으로 이미지도 읽고, 숫자로 품질을 측정합니다</div>
+<div class="sp-compare">
+<div class="sp-compare-block warm">
+<div class="sp-compare-label">Before</div>
+<div class="sp-compare-content">
+"정보보안서약서 내용?"<br><br>
+<b>텍스트를 찾을 수 없습니다</b><br>
+<span class="sp-row-label">(스캔 PDF — 전체가 이미지)</span>
+</div>
+</div>
+<div class="sp-compare-block accent">
+<div class="sp-compare-label">After</div>
+<div class="sp-compare-content">
+"정보보안서약서 내용?"<br><br>
+<b>서약서 내용은 다음과 같습니다.</b><br>
+1. 기밀 유지 의무...<br>
+<span class="sp-row-label">(Vision LLM이 이미지에서 읽음)</span>
+</div>
+</div>
+</div>
+<div class="sp-flow">
+<div class="sp-step info">
+<span class="sp-step-num">1</span>
+<div class="sp-step-title">OCR (확대경)</div>
+<div class="sp-step-desc">글자를 인식해 텍스트로 변환</div>
+</div>
+<div class="sp-flow-arrow">→</div>
+<div class="sp-step accent">
+<span class="sp-step-num accent">2</span>
+<div class="sp-step-title">Vision LLM (눈)</div>
+<div class="sp-step-desc">이미지를 이해하고 구조까지 설명</div>
+</div>
+</div>
+</div>
+<p class="thought">그림 10-1. 스캔 PDF 한 장이 어떻게 답변까지 살아 돌아오는지 한 화면으로 보여줍니다</p>
 <p>챕터 9 끝에서 팀장이 던진 한마디가 그대로 이어졌습니다. &quot;PDF 속 표랑 이미지는요?&quot; 텍스트 검색을 다듬어 놓은 자리 위로 새 문제가 한 장 더 얹혔습니다.</p>
 <p>금요일 오후, 키보드 소리만 또록또록 울리는 사무실에서 오픈이가 모니터를 정리하고 있을 때 팀장이 다가왔습니다.</p>
 <div class="dialogue"><span class="speaker">팀장</span>: "이것도 넣어 줘요. 정보보안서약서."</div>
@@ -162,29 +198,30 @@ pypdf 결과, 빈 문자열.
 <p>한마디가 머리에 걸렸습니다.</p>
 <h3>기존 파이프라인은 그대로, 앞뒤에 두 층만 얹습니다</h3>
 <p>챕터 4부터 7까지 쌓아 올린 파이프라인은 이번 챕터에서 건드리지 않습니다. 파싱·청킹·임베딩·검색·에이전트·캐시·모니터링까지 모든 층이 원래 자리에 그대로 있습니다. 챕터 8과 9에서 실험한 튜닝(단락 청킹·리랭킹·약어 확장·부모 문서 검색 등)은 아직 이 파이프라인에 얹지 않은 부품 상태로 따로 놓여 있습니다. 이번 장의 할 일은 기존 파이프라인의 앞단과 뒷단에 한 층씩 새로 얹고(PDF 이미지 파서와 RAG 평가 프레임워크), 뒷단에서 그 평가 도구로 챕터 8·9의 부품들을 조합해 어떤 조합이 정말 수치를 끌어올리는지 확인하는 작업입니다. 이 과정을 마치면 커넥트HR 파이프라인은 챕터 7의 기본 형태에서 스캔본까지 읽고 품질을 수치로 검증하는 새 버전으로 올라가 다음 챕터의 조립대 위로 넘어갑니다.</p>
-<div class="sp-figure">
-<div class="sp-figure-title">그림 10-1. 챕터 4~7 파이프라인은 그대로 두고 앞뒤에 두 층을 더합니다</div>
-<div class="sp-flow">
-<div class="sp-step">
-<span class="sp-step-num accent">앞단</span>
-<div class="sp-step-title">PDF 이미지 파서</div>
-<div class="sp-step-desc">스캔본·차트·표가 들어와도 읽어냄. OCR(확대경) · Vision LLM(눈) · 하이브리드(pypdf → Vision 폴백)</div>
+<div class="rag-pipeline-box">
+<div class="sp-figure-title">그림 10-2. 챕터 4~7 파이프라인은 그대로 두고 앞뒤에 두 층을 더합니다. 챕터 8·9 튜닝은 뒷단 평가에서 부품으로 조립합니다</div>
+<div class="rag-step">
+<div class="s-meta">챕터 10 추가 · 앞단</div>
+<div class="s-num">NEW</div>
+<div class="s-title">PDF 이미지 파서</div>
+<div class="s-desc">스캔본·그래프·표가 들어와도 읽어냄. OCR(확대경) · Vision LLM(눈) · 하이브리드(pypdf → Vision 폴백)</div>
 </div>
-<div class="sp-flow-arrow">↓</div>
-<div class="sp-step">
-<span class="sp-step-num">중간</span>
-<div class="sp-step-title">챕터 4~7 기존 파이프라인 (그대로)</div>
-<div class="sp-step-desc">청킹·임베딩·Chroma · LCEL · 에이전트 · 운영 래퍼. 챕터 8·9의 검색 튜닝과 질의 재작성은 아직 얹지 않은 부품 상태로 옆에 놓여 있습니다.</div>
+<div class="rag-arrow">↓</div>
+<div class="rag-step">
+<div class="s-meta">챕터 4~7 기존 파이프라인 (그대로)</div>
+<div class="s-num">유지</div>
+<div class="s-title">청킹 · 임베딩 · 검색 · 에이전트 · 운영 래퍼</div>
+<div class="s-desc">손대지 않습니다. 챕터 8·9의 검색 튜닝과 질의 재작성은 파이프라인에 얹지 않은 부품 상태로 옆에 놓여 있고, 뒷단 평가에서 조합으로 꺼내 씁니다.</div>
 </div>
-<div class="sp-flow-arrow">↓</div>
-<div class="sp-step">
-<span class="sp-step-num accent">뒷단</span>
-<div class="sp-step-title">RAG 평가 프레임워크</div>
-<div class="sp-step-desc">답변 품질을 숫자로 측정. Precision@k · Recall · Hallucination Rate · Latency</div>
+<div class="rag-arrow">↓</div>
+<div class="rag-step">
+<div class="s-meta">챕터 10 추가 · 뒷단</div>
+<div class="s-num">NEW</div>
+<div class="s-title">RAG 평가 프레임워크</div>
+<div class="s-desc">답변 품질을 숫자로 측정. Precision@k · Recall · Hallucination Rate · Latency</div>
 </div>
 </div>
-</div>
-<p>중간(기존 파이프라인)은 손대지 않습니다. 맨 위(파서)와 맨 아래(평가)만 이번 챕터에서 추가합니다.</p>
+<p>중간(기존 파이프라인)은 손대지 않습니다. 맨 위(파서)와 맨 아래(평가)만 이번 챕터에서 추가합니다. 챕터 8과 9에서 만든 부품(단락 청킹·리랭킹·약어 확장·부모 문서 검색)은 뒷단의 평가 프레임워크가 A/B/C/D 조합으로 꺼내 씁니다.</p>
 <h2>10.2 확대경 달기 - OCR</h2>
 <p>팀장의 말에서 첫 번째 도구가 떠올랐습니다. <strong>확대경</strong>, 즉 <strong>광학 문자 인식(OCR)</strong> 입니다. 이미지 위의 글자를 한 자 한 자 인식해 텍스트로 바꿔 줍니다. 스캔본에서 글자를 꺼낼 때 씁니다.</p>
 <p>확대경을 직접 만들어 보겠습니다. <code>tuning/step1_document_parser/ocr.py</code>를 열고 TODO의 <code>pass</code>를 지우고 아래 코드를 작성합니다.</p>
@@ -223,45 +260,64 @@ pypdf 결과, 빈 문자열.
 <p>대상 파일은 <code>data/docs/hr/HR_정보보안서약서.pdf</code>(스캔본 1p)입니다. 이 장의 파싱 실험은 전부 이 한 장으로 진행합니다.</p>
 <div class="code-block highlight" data-lang="bash"><div class="cb-title"><span class="badge bash">터미널</span> 실험 1-1 실행. OCR로 스캔 PDF 읽기</div>python<span class="w"> </span>-m<span class="w"> </span>tuning.step1_document_parser<span class="w"> </span>--step<span class="w"> </span><span class="m">1</span>-1</div>
 <div class="sp-figure">
-<div class="sp-figure-title">그림 10-2. 실험 1-1. OCR 파싱 (EasyOCR) 결과</div>
+<div class="sp-figure-title">그림 10-3. 실험 1-1. OCR 파싱 (EasyOCR) 결과</div>
 <div class="sp-row info">
-<span class="sp-row-label">전략</span>
-<span class="sp-row-value">OCR (EasyOCR)</span>
+<span class="sp-row-label">대상 파일</span>
+<span class="sp-row-value">HR_정보보안서약서.pdf (스캔본 1p)</span>
 </div>
-<div class="sp-row info">
-<span class="sp-row-label">추출 글자 수</span>
-<span class="sp-row-value">755자</span>
+<div class="sp-flow">
+<div class="sp-step info">
+<span class="sp-step-num">전략</span>
+<div class="sp-step-title">OCR (EasyOCR)</div>
+<div class="sp-step-desc">한국어와 영어 동시 인식</div>
 </div>
-<div class="sp-row info">
-<span class="sp-row-label">소요 시간</span>
-<span class="sp-row-value">71.85초</span>
+<div class="sp-step info">
+<span class="sp-step-num">추출 글자 수</span>
+<div class="sp-step-title">755자</div>
+<div class="sp-step-desc">대부분 읽음</div>
+</div>
+<div class="sp-step info">
+<span class="sp-step-num">소요 시간</span>
+<div class="sp-step-title">71.85초</div>
+<div class="sp-step-desc">페이지당 1분 남짓</div>
+</div>
 </div>
 <div class="sp-row">
 <span class="sp-row-label">미리보기</span>
 <span class="sp-row-value">가인 승인 Choi Jang 정보보안 서사서 (스스년) 단서면요 2026-HK SEC 002 공기능하 대외비 (Conhidcntil)...</span>
 </div>
+<div class="sp-callout">글자는 대부분 읽지만 표 구조는 일렬로 늘어섭니다</div>
 </div>
-<p class="thought">그림 10-2. 1분 남짓 걸려 글자 대부분을 읽었지만 한글 오인식이 섞여 있습니다</p>
+<p class="thought">그림 10-3. 1분 남짓 걸려 글자 대부분을 읽었지만 한글 오인식이 섞여 있습니다</p>
 <p>미리보기를 보면 '정보보안 서사서'처럼 한글 오인식이 섞여 있습니다. 표는 더 심각했습니다.</p>
+<div class="sp-figure">
+<div class="sp-figure-title">그림 10-4. OCR의 한계. 글자는 읽지만 표 구조가 사라집니다</div>
 <div class="sp-compare">
-<div class="sp-compare-block">
+<div class="sp-compare-block accent">
 <div class="sp-compare-label">원본 (사람 눈에 보이는 것)</div>
 <div class="sp-compare-content">
-이름 / 직급 / 부서<br>
-김철수 / 대리 / 인사팀<br>
-박영희 / 과장 / 개발팀<br>
-<span class="sp-row-label">행과 열로 구분된 표 구조</span>
+<table>
+<tr><th>이름</th><th>직급</th><th>부서</th></tr>
+<tr><td>김철수</td><td>대리</td><td>인사팀</td></tr>
+<tr><td>박영희</td><td>과장</td><td>개발팀</td></tr>
+</table>
+<span class="sp-row-label">행과 열이 격자로 구분</span>
 </div>
 </div>
 <div class="sp-compare-block warm">
 <div class="sp-compare-label">OCR 결과 (확대경이 읽은 것)</div>
 <div class="sp-compare-content">
-이름 직급 부서 김철수 대리 인사팀 박영희 과장 개발팀<br>
+이름 직급 부서 김철수 대리 인사팀 박영희 과장 개발팀<br><br>
 <span class="sp-row-label">셀 구분 없이 일렬로 늘어섭니다</span>
+<div>
+<span class="sp-chip warm">표 구조 손실</span>
+<span class="sp-chip warm">한글 오인식</span>
 </div>
 </div>
 </div>
-<p class="thought">그림 10-3. OCR의 한계. 글자는 읽지만 표 구조가 사라집니다</p>
+</div>
+</div>
+<p class="thought">그림 10-4. OCR의 한계. 글자는 읽지만 표 구조가 사라집니다</p>
 <p>오픈이는 화면을 잠시 내려다봤습니다. 형광등 빛을 받은 커서가 &quot;정보보안 서사서&quot;라는 일곱 글자 옆에서 조용히 깜빡였습니다. 분명 규정집 첫 페이지에 또박또박 박혀 있던 제목. 기계의 눈을 거치자 '약'이 '사'로, '연'이 '년'으로 얼굴이 바뀌어 돌아와 있었습니다. 표도 마찬가지. 행과 열이 만들던 격자는 사라지고, 이름과 직급과 부서가 한 줄로 쏟아져 내렸습니다.</p>
 <p class="thought">이대로 벡터 DB에 들어가면, 질문을 해도 엉뚱한 답이 돌아오겠지.</p>
 <p>키보드 위에 얹혀 있던 손을 거두고 서랍에서 수첩을 꺼냈습니다. 터미널은 그대로 열어 둔 채, 방금 눈으로 본 두 가지를 적어 둘 참이었습니다. 한 시간만 지나도 &quot;OCR이 좀 아쉬웠지&quot;라는 인상만 남고, 정확히 어디서 어떻게 깨졌는지는 뭉툭해집니다. <strong>어디서 어떻게 깨졌는지</strong>를 손으로 짚어 두지 않으면, 나중에 다른 도구를 고를 때 같은 함정으로 걸어 들어가기 쉽습니다.</p>
@@ -316,25 +372,35 @@ pypdf 결과, 빈 문자열.
 <p>실험 1-1과 같은 <code>data/docs/hr/HR_정보보안서약서.pdf</code>(스캔본 1p)를 대상으로 돌려 OCR과 같은 조건에서 결과를 비교합니다.</p>
 <div class="code-block highlight" data-lang="bash"><div class="cb-title"><span class="badge bash">터미널</span> 실험 1-2 실행. Vision LLM으로 스캔 PDF 읽기</div>python<span class="w"> </span>-m<span class="w"> </span>tuning.step1_document_parser<span class="w"> </span>--step<span class="w"> </span><span class="m">1</span>-2</div>
 <div class="sp-figure">
-<div class="sp-figure-title">그림 10-4. 실험 1-2. Vision LLM 파싱 결과 (qwen2.5vl:7b · DPI 100)</div>
+<div class="sp-figure-title">그림 10-5. 실험 1-2. Vision LLM 파싱 결과 (qwen2.5vl:7b · DPI 100)</div>
 <div class="sp-row accent">
-<span class="sp-row-label">전략</span>
-<span class="sp-row-value">Vision LLM</span>
+<span class="sp-row-label">대상 파일</span>
+<span class="sp-row-value">HR_정보보안서약서.pdf (스캔본 1p, 같은 파일)</span>
 </div>
-<div class="sp-row accent">
-<span class="sp-row-label">추출 글자 수</span>
-<span class="sp-row-value">788자</span>
+<div class="sp-flow">
+<div class="sp-step accent">
+<span class="sp-step-num accent">전략</span>
+<div class="sp-step-title">Vision LLM</div>
+<div class="sp-step-desc">qwen2.5vl:7b 로컬</div>
 </div>
-<div class="sp-row accent">
-<span class="sp-row-label">소요 시간</span>
-<span class="sp-row-value">21.86초</span>
+<div class="sp-step accent">
+<span class="sp-step-num accent">추출 글자 수</span>
+<div class="sp-step-title">788자</div>
+<div class="sp-step-desc">OCR과 비슷한 양</div>
+</div>
+<div class="sp-step accent">
+<span class="sp-step-num accent">소요 시간</span>
+<div class="sp-step-title">21.86초</div>
+<div class="sp-step-desc">OCR 대비 1/3</div>
+</div>
 </div>
 <div class="sp-row">
 <span class="sp-row-label">미리보기</span>
 <span class="sp-row-value"><code># 정보보안 서약서 (스캔본) **문서번호:** 2026-HR-SEC-002 **공개등급:** 대외비 (Confidential) ## 제4조 (생성형 AI 활용 지침)...</code></span>
 </div>
+<div class="sp-callout">제목·문서번호·조항 번호까지 마크다운 구조로 살려 냅니다</div>
 </div>
-<p class="thought">그림 10-4. 제목·문서번호·조항 번호까지 마크다운 구조로 살려 냅니다</p>
+<p class="thought">그림 10-5. 제목·문서번호·조항 번호까지 마크다운 구조로 살려 냅니다</p>
 <p>글자 수는 OCR과 비슷한데도 제목과 조항 번호까지 정확히 돌려주고, 마크다운 표 구조가 살아 있어 훨씬 다루기 좋은 결과입니다. 대신 페이지 하나에 22초 남짓 걸렸습니다. 로컬 Vision LLM은 정확한 값을 주는 만큼 연산을 쓰고 있는 셈입니다 (qwen2.5vl:7b, CPU, DPI 100 기준. 더 큰 모델이나 GPU를 쓰면 품질은 올라가고 시간은 줄어듭니다).</p>
 <p>오픈이는 모니터 앞으로 몸을 당겼습니다. 파이프 기호와 하이픈으로 그려진 마크다운 표. 줄을 맞춰 서 있었습니다. 조금 전까지 &quot;김철수 대리 인사팀 박영희 과장 개발팀&quot;이라고 한 줄로 쏟아지던 이름들이, 이번에는 이름끼리 직급끼리 각자 제자리로 돌아와 앉았습니다. 제목도 마찬가지. &quot;정보보안 서약서&quot; 여섯 글자가, 방금 전 &quot;정보보안 서사서&quot;로 얼굴이 바뀌어 있던 바로 그 자리에 또렷하게 박혀 있었습니다.</p>
 <p class="thought">이건 확실히 다르네.</p>
@@ -350,6 +416,8 @@ pypdf 결과, 빈 문자열.
 </div>
 <p class="thought">좋은 도구긴 한데, 아무 데나 쓸 건 아니구나.</p>
 <p>같은 서약서를 두 도구로 읽은 결과를 나란히 놓으면 차이가 선명합니다.</p>
+<div class="sp-figure">
+<div class="sp-figure-title">그림 10-6. OCR과 Vision LLM. 같은 페이지를 두 도구로 읽은 결과 비교</div>
 <div class="sp-compare">
 <div class="sp-compare-block info">
 <div class="sp-compare-label">OCR (확대경)</div>
@@ -380,7 +448,20 @@ pypdf 결과, 빈 문자열.
 </div>
 </div>
 </div>
-<p class="thought">그림 10-5. OCR은 빠르고 저렴하지만 구조를 모릅니다. Vision LLM은 느리지만 표·차트·조직도까지 정확하게 읽습니다</p>
+<div class="sp-row">
+<span class="sp-row-label">속도</span>
+<span class="sp-row-value">OCR 71.85초 · Vision 21.86초 (qwen2.5vl:7b · DPI 100)</span>
+</div>
+<div class="sp-row">
+<span class="sp-row-label">비용</span>
+<span class="sp-row-value">OCR 로컬 CPU만 · Vision 7B 모델 메모리 6~8GB</span>
+</div>
+<div class="sp-row">
+<span class="sp-row-label">결과 형식</span>
+<span class="sp-row-value">OCR 평문 · Vision 마크다운(제목·표·번호 보존)</span>
+</div>
+</div>
+<p class="thought">그림 10-6. OCR은 빠르고 저렴하지만 구조를 모릅니다. Vision LLM은 느리지만 표·차트·조직도까지 정확하게 읽습니다</p>
 <p>이해는 깊지만 그만큼 토큰과 메모리를 요구합니다. 이미 글자로 잘 꺼낼 수 있는 문서에까지 같은 비용을 치를 이유는 없습니다.</p>
 <div class="dialogue"><span class="speaker">동료</span>: "규정집은 텍스트 PDF잖아요. 그것까지 Vision에 돌리면 토큰도 시간도 아깝지 않아요?"</div>
 <h2>10.4 하이브리드 파서 - pypdf가 충분히 읽어 내면 그대로, 아니면 Vision</h2>
@@ -394,7 +475,7 @@ pypdf 결과, 빈 문자열.
 </blockquote>
 <p>페이지마다 <code>page.get_text()</code>로 텍스트를 꺼낸 뒤, 길이가 50자 이상이면 pypdf 결과를 그대로 쓰고, 그보다 적으면 스캔본이나 차트 페이지로 보고 Vision에 넘깁니다. 판단은 페이지 단위로 독립이라, 10페이지짜리 문서에 스캔 페이지가 1장만 섞여 있어도 그 1장만 Vision으로 가고 나머지는 pypdf가 즉시 끝냅니다.</p>
 <div class="sp-figure">
-<div class="sp-figure-title">그림 10-6. 하이브리드 파서의 판단 흐름. 페이지마다 텍스트 길이로 분기합니다</div>
+<div class="sp-figure-title">그림 10-7. 하이브리드 파서의 판단 흐름. 페이지마다 텍스트 길이로 분기합니다</div>
 <div class="sp-flow">
 <div class="sp-step">
 <span class="sp-step-num">1</span>
@@ -411,21 +492,36 @@ pypdf 결과, 빈 문자열.
 <div class="sp-step accent">
 <span class="sp-step-num accent">3</span>
 <div class="sp-step-title">분기 판단</div>
-<div class="sp-step-desc">len(text) ≥ 50?</div>
+<div class="sp-step-desc">len(text) ≥ 50 ?</div>
 </div>
 </div>
 <div class="sp-compare">
 <div class="sp-compare-block accent">
-<div class="sp-compare-label">YES → text_layer</div>
-<div class="sp-compare-content">pypdf 결과 그대로 사용. 밀리초 단위로 끝납니다</div>
+<div class="sp-compare-label">YES (50자 이상) → text_layer</div>
+<div class="sp-compare-content">
+pypdf 결과 그대로 사용<br>
+<span class="sp-row-label">밀리초 단위로 끝납니다</span>
+<div>
+<span class="sp-chip accent">텍스트 PDF</span>
+<span class="sp-chip">규정집·매뉴얼</span>
+</div>
+</div>
 </div>
 <div class="sp-compare-block warm">
-<div class="sp-compare-label">NO → vision</div>
-<div class="sp-compare-content">Vision LLM 호출. 스캔본·차트 페이지로 간주합니다</div>
+<div class="sp-compare-label">NO (50자 미만) → vision</div>
+<div class="sp-compare-content">
+Vision LLM 호출<br>
+<span class="sp-row-label">스캔본·차트 페이지로 간주합니다</span>
+<div>
+<span class="sp-chip warm">스캔본</span>
+<span class="sp-chip warm">차트 페이지</span>
 </div>
 </div>
 </div>
-<p>일반 텍스트 페이지는 수백에서 수천 자, 스캔본·차트 페이지는 0에서 수십 자. 50자 기준 하나로 자연스럽게 갈라집니다.</p>
+</div>
+<div class="sp-callout">일반 텍스트 페이지는 수백에서 수천 자, 스캔본·차트 페이지는 0에서 수십 자. 50자 기준 하나로 자연스럽게 갈라집니다</div>
+</div>
+<p>판단은 페이지 단위로 독립이라, 10페이지짜리 문서에 스캔 페이지가 1장만 섞여 있어도 그 1장만 Vision으로 가고 나머지는 pypdf가 즉시 끝냅니다.</p>
 <p>간단하게 만들어 보겠습니다. <code>tuning/step2_hybrid_parser/hybrid_parser.py</code>를 열고 TODO의 <code>pass</code>를 지우고 아래 코드를 작성합니다.</p>
 <div class="code-block highlight" data-lang="python"><div class="cb-title"><span class="badge">실습 2</span> tuning/step2_hybrid_parser/hybrid_parser.py. pypdf 결과로 파서 선택</div><span class="kn">import</span><span class="w"> </span><span class="nn">fitz</span>  <span class="c1"># PyMuPDF</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">._hybrid_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">vision_page</span>
@@ -459,25 +555,39 @@ pypdf 결과, 빈 문자열.
 </div>
 <div class="code-block highlight" data-lang="bash"><div class="cb-title"><span class="badge bash">터미널</span> 실험 2 실행. 하이브리드 파서로 페이지별 자동 분기</div>python<span class="w"> </span>-m<span class="w"> </span>tuning.step2_hybrid_parser</div>
 <div class="sp-figure">
-<div class="sp-figure-title">그림 10-7. 실험 2. 하이브리드 파싱 결과 (qwen2.5vl:7b · DPI 100)</div>
+<div class="sp-figure-title">그림 10-8. 실험 2. 하이브리드 파싱 결과 (qwen2.5vl:7b · DPI 100)</div>
+<div class="sp-row info">
+<span class="sp-row-label">대상 파일</span>
+<span class="sp-row-value">HR_정보보안서약서.pdf(스캔본 1p) · HR_취업규칙_v1.0.pdf(텍스트 1p)</span>
+</div>
 <div class="sp-row">
 <span class="sp-row-label">서약서 p.1</span>
-<span class="sp-row-value"><span class="sp-chip warm">vision</span> 788자</span>
+<span class="sp-row-value"><span class="sp-chip warm">vision</span> 788자 · 91.77초</span>
 </div>
 <div class="sp-row">
 <span class="sp-row-label">취업규칙 p.1</span>
-<span class="sp-row-value"><span class="sp-chip accent">text_layer</span> 1,426자</span>
+<span class="sp-row-value"><span class="sp-chip accent">text_layer</span> 1,426자 · 0.17초</span>
 </div>
-<div class="sp-row info">
-<span class="sp-row-label">전략 분포</span>
-<span class="sp-row-value">vision 1/2 · text_layer 1/2</span>
+<div class="sp-flow">
+<div class="sp-step info">
+<span class="sp-step-num">전략 분포</span>
+<div class="sp-step-title">vision 1/2 · text_layer 1/2</div>
+<div class="sp-step-desc">페이지마다 자동 분기</div>
 </div>
-<div class="sp-row info">
-<span class="sp-row-label">총 소요 시간</span>
-<span class="sp-row-value">91.94초</span>
+<div class="sp-step info">
+<span class="sp-step-num">총 소요</span>
+<div class="sp-step-title">91.94초</div>
+<div class="sp-step-desc">99.8%가 Vision 한 번에 쓰임</div>
+</div>
+<div class="sp-step info">
+<span class="sp-step-num">절약</span>
+<div class="sp-step-title">텍스트 페이지 사실상 공짜</div>
+<div class="sp-step-desc">필요할 때만 비싼 도구 호출</div>
 </div>
 </div>
-<p class="thought">그림 10-7. 스캔본은 Vision이, 텍스트 PDF는 pypdf가 맡습니다. 한 파이프라인이 두 경로를 자동 선택합니다</p>
+<div class="sp-callout">스캔본은 Vision이, 텍스트 PDF는 pypdf가 맡습니다. 한 파이프라인이 두 경로를 자동 선택합니다</div>
+</div>
+<p class="thought">그림 10-8. 스캔본은 Vision이, 텍스트 PDF는 pypdf가 맡습니다. 한 파이프라인이 두 경로를 자동 선택합니다</p>
 <p>오픈이가 실행 버튼을 누르고 터미널을 지켜봤습니다. 노트북 팬이 제법 오래 숨을 몰아쉬더니 첫 줄이 올라왔습니다. <code>서약서 p.1 ... vision</code>. 한 페이지를 읽는 데 1분 30초 남짓. 그러다가 다음 줄에서 속도가 뚝 바뀌었습니다. <code>취업규칙 p.1 ... text_layer</code>, 1,426자, 0.17초. 깜빡이 한 번에 끝이었습니다.</p>
 <p>파이프라인이 페이지를 한 장씩 들춰 본 다음 스캔본에는 눈을 대고, 텍스트 PDF는 pypdf로 곧장 꿰어 낸 모양새였습니다. 총 91.94초 가운데 91.77초가 Vision 한 번에 쓰였고, 텍스트 한 페이지는 사실상 공짜로 빠졌습니다. 필요할 때만 비싼 도구를 부르는 구조가 숫자로 그대로 드러났습니다 (Vision 시간은 모델을 처음 메모리에 올리는 콜드 스타트를 포함한 값입니다. 한 번 예열되면 호출당 20초 남짓으로 줄어듭니다).</p>
 <p class="thought">되긴 됐다.</p>
@@ -704,33 +814,35 @@ pypdf 결과, 빈 문자열.
 <p>지표는 준비됐지만 아직 절반입니다. 같은 질문 셋을 돌려 보려면 <strong>튜닝 조합을 갈아끼우는 스위치</strong>가 있어야 합니다. 파싱·청킹·쿼리 변환·검색·리랭크 같은 조각을 이름별로 하나씩 꺼내 써서, 조합마다 파이프라인 하나를 조립하는 구조가 필요합니다.</p>
 <p>오픈이가 <code>step3_eval_framework/pipelines.py</code>에 부품 함수들을 모았습니다. 한 함수가 한 조각을 담당합니다. 그리고 <code>strategies.py</code>에서 이 부품들을 묶어 A/B/C/D 네 조합으로 정의했습니다. D 조합(챕터 8~10 튜닝이 모두 켜진 최종 형태)을 기준으로, 파이프라인의 네 단계에 어떤 튜닝이 어디에 붙는지 한 장에 담았습니다.</p>
 <div class="sp-figure">
-<div class="sp-figure-title">그림 10-8. 튜닝 로드맵 (D 조합 기준). 네 단계에 각 튜닝을 끼웁니다</div>
+<div class="sp-figure-title">그림 10-9. 튜닝 로드맵 (D 조합 기준). 네 단계를 ㄹ자로 잇고 각 단계에 어떤 튜닝이 붙는지 표시합니다</div>
 <div class="sp-flow">
-<div class="sp-step">
+<div class="sp-step accent">
 <span class="sp-step-num accent">1. 질문</span>
 <div class="sp-step-title">사용자 입력 받기</div>
 <div class="sp-step-desc"><b>약어 확장</b><br>WFH → 재택근무(WFH)</div>
 </div>
 <div class="sp-flow-arrow">→</div>
-<div class="sp-step">
+<div class="sp-step accent">
 <span class="sp-step-num accent">2. 검색</span>
 <div class="sp-step-title">관련 문서 끌어오기</div>
 <div class="sp-step-desc"><b>Parent Document Retriever</b><br>자식 청크 검색 → 부모 문맥 반환<br><br><b>Ensemble</b><br>BM25 + 벡터 유사도 결합</div>
 </div>
 </div>
+<div class="sp-flow-arrow">↓</div>
 <div class="sp-flow">
-<div class="sp-step">
-<span class="sp-step-num accent">3. 벡터</span>
-<div class="sp-step-title">벡터 저장소 (오프라인 사전 구축)</div>
-<div class="sp-step-desc"><b>하이브리드 파서</b><br>pypdf · 부족 시 Vision 전환<br><br><b>Semantic 청킹</b><br>단락 단위 분리<br><br><b>ChromaDB 임베딩</b></div>
-</div>
-<div class="sp-flow-arrow">→</div>
-<div class="sp-step">
+<div class="sp-step warm">
 <span class="sp-step-num warm">4. 답변</span>
 <div class="sp-step-title">결과 조립과 근거 제공</div>
 <div class="sp-step-desc"><b>리랭킹 (키워드 오버랩)</b><br><b>LLM 답변 생성</b><br><br>근거 분기 (카테고리별)<br>· 정형 → JSON (DB·계산 결과)<br>· 비정형·복합 → 문서 전체 이미지</div>
 </div>
+<div class="sp-flow-arrow">←</div>
+<div class="sp-step accent">
+<span class="sp-step-num accent">3. 벡터</span>
+<div class="sp-step-title">벡터 저장소 (오프라인 사전 구축)</div>
+<div class="sp-step-desc"><b>하이브리드 파서</b><br>pypdf · 부족 시 Vision 전환<br><br><b>Semantic 청킹</b><br>단락 단위 분리<br><br><b>ChromaDB 임베딩</b></div>
 </div>
+</div>
+<div class="sp-callout">① 사용자 질문 → ② 관련 문서 검색 ↓ ③ 벡터 저장소 참조(오프라인 준비 결과) ← ④ 답변 조립 + 근거 제공</div>
 </div>
 <p>각 조합(A/B/C/D)은 위 네 단계에서 <strong>얼마나 많은 튜닝 스위치를 켜는지</strong>만 다릅니다. A는 한 개도 켜지 않은 baseline, D는 모두 켠 최종 형태입니다.</p>
 <div class="code-block highlight" data-lang="python"><div class="cb-title"><span class="badge reference">참고</span> tuning/step3_eval_framework/strategies.py. 조합 정의</div><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
@@ -775,29 +887,46 @@ pypdf 결과, 빈 문자열.
 <div class="code-block highlight" data-lang="bash"><div class="cb-title"><span class="badge bash">터미널</span> 조합별 평가 실행</div><span class="c1"># 조합 하나만</span>
 python<span class="w"> </span>-m<span class="w"> </span>tuning.step3_eval_framework<span class="w"> </span>--strategy<span class="w"> </span>D<span class="w"> </span>--k<span class="w"> </span><span class="m">3</span>
 
-<span class="c1"># 네 조합을 한 번에 (그림 10-9 비교표 스타일로 출력)</span>
+<span class="c1"># 네 조합을 한 번에 (그림 10-10 비교표 스타일로 출력)</span>
 python<span class="w"> </span>-m<span class="w"> </span>tuning.step3_eval_framework<span class="w"> </span>--strategy<span class="w"> </span>all<span class="w"> </span>--k<span class="w"> </span><span class="m">3</span></div>
 <p><code>--strategy all</code>을 쓰면 A부터 D까지 차례로 벡터DB를 다시 짓고 같은 질문 셋을 돌려 <strong>네 줄짜리 비교표</strong>를 터미널에 찍어 줍니다.</p>
 <div class="sp-figure">
-<div class="sp-figure-title">그림 10-9. RAG 평가 - 조합별 비교 (실측)</div>
-<div class="sp-row">
-<span class="sp-row-label">A (baseline)</span>
-<span class="sp-row-value">페이지 청킹 + 벡터 검색<br>P@3 <b>0.204</b> · R@3 <b>0.452</b> · 환각 <b>0.871</b> · 78 ms</span>
+<div class="sp-figure-title">그림 10-10. RAG 평가 - 조합별 비교 (실측)</div>
+<div class="sp-row info">
+<span class="sp-row-label">환경</span>
+<span class="sp-row-value">data/docs 6건(PDF 3 · DOCX 1 · XLSX 2) · k=3 · qwen2.5vl:7b · ko-sroberta-multitask</span>
 </div>
-<div class="sp-row">
-<span class="sp-row-label">B</span>
-<span class="sp-row-value">단락 청킹 + 키워드 리랭킹<br>P@3 <b>0.333</b> · R@3 <b>0.323</b> · 환각 <b>1.000</b> · 78 ms</span>
+<table>
+<thead>
+<tr><th>조합</th><th>구성</th><th>P@3</th><th>R@3</th><th>환각률</th><th>Latency</th></tr>
+</thead>
+<tbody>
+<tr><td><b>A (baseline)</b></td><td>페이지 청킹 + 벡터 검색</td><td>0.204</td><td>0.452</td><td>0.871</td><td>78 ms</td></tr>
+<tr><td><b>B</b></td><td>단락 청킹 + 키워드 리랭킹</td><td>0.333</td><td>0.323</td><td>1.000</td><td>78 ms</td></tr>
+<tr><td><b>C</b></td><td>B + 약어 확장 + Parent Doc</td><td>0.247</td><td>0.548</td><td>0.903</td><td>85 ms</td></tr>
+<tr><td><b>D (최종)</b></td><td>C + 하이브리드 파서</td><td><b>0.236</b></td><td><b>0.532</b></td><td><b>0.871</b></td><td><b>80 ms</b></td></tr>
+</tbody>
+</table>
+<div class="sp-flow">
+<div class="sp-step accent">
+<span class="sp-step-num accent">최저 환각률</span>
+<div class="sp-step-title">D = 0.871</div>
+<div class="sp-step-desc">B 1.000 · C 0.903 대비 한 단계 낮음</div>
 </div>
-<div class="sp-row">
-<span class="sp-row-label">C</span>
-<span class="sp-row-value">B + 약어 확장 + Parent Doc<br>P@3 <b>0.247</b> · R@3 <b>0.548</b> · 환각 <b>0.903</b> · 85 ms</span>
+<div class="sp-step accent">
+<span class="sp-step-num accent">Recall 향상</span>
+<div class="sp-step-title">+0.08~0.10</div>
+<div class="sp-step-desc">A 0.452 → C·D 0.532~0.548</div>
 </div>
-<div class="sp-row accent">
-<span class="sp-row-label">D (최종)</span>
-<span class="sp-row-value">C + 하이브리드 파서<br>P@3 <b>0.236</b> · R@3 <b>0.532</b> · 환각 <b>0.871</b> · 80 ms</span>
+<div class="sp-step accent">
+<span class="sp-step-num accent">스캔본 편입</span>
+<div class="sp-step-title">D만 가능</div>
+<div class="sp-step-desc">A·B·C는 서약서 페이지 인덱싱 불가</div>
 </div>
 </div>
-<p class="thought">그림 10-9. 환경: data/docs 6건(PDF 3·DOCX 1·XLSX 2) · k=3 · qwen2.5vl:7b · ko-sroberta-multitask. 환각률은 D가 최저(0.871). 스캔본까지 본문으로 편입되는 조합은 D뿐입니다</p>
+<div class="sp-callout">환각률은 D가 최저(0.871). 스캔본까지 본문으로 편입되는 조합은 D뿐입니다</div>
+</div>
+<p class="thought">그림 10-10. 같은 질문 31개로 4가지 튜닝 조합을 비교한 실측 결과표입니다</p>
 <div class="tip">
 <p><strong>실측표를 어떻게 읽을까</strong></p>
 <ul>
@@ -814,99 +943,33 @@ python<span class="w"> </span>-m<span class="w"> </span>tuning.step3_eval_framew
 <div class="dialogue"><span class="speaker">팀장</span>: "스캔본이 한 장뿐인데도 숫자에 반영되네요. 종류가 다른 문서를 한 파이프라인으로 다 받는다는 점에서도 D가 맞는 옷이에요."</div>
 <p>의자 등받이에 몸이 닿는 순간, 머릿속에서 다른 정리가 됐습니다.</p>
 <p class="thought">튜닝은 지표 하나를 위로 올리는 게 아니라, 쌓아 둔 부품이 서로 물려 돌아가는지 확인하는 작업이구나.</p>
-<p>[GEMINI PROMPT: 평가 프레임워크 개념도. 같은 질문 셋이 A/B/C/D 네 조합 파이프라인을 통과한 뒤 Precision·Recall·환각률·Latency 네 축으로 점수를 받아 비교되는 모습. 채점지에 줄지어 매겨진 점수 이미지]</p>
-<p class="thought">그림 10-10. 평가 프레임워크. 질문과 정답 쌍을 반복 돌려 숫자로 품질을 측정합니다</p>
+<p>[IMAGE PROMPT: 평가 프레임워크 개념도. 같은 질문 셋이 A/B/C/D 네 조합 파이프라인을 통과한 뒤 Precision·Recall·환각률·Latency 네 축으로 점수를 받아 비교되는 모습. 채점지에 줄지어 매겨진 점수 이미지]</p>
+<p class="thought">그림 10-11. 평가 프레임워크. 질문과 정답 쌍을 반복 돌려 숫자로 품질을 측정합니다</p>
 <h2>10.6 튜닝 메뉴판 - 무엇을 골라 쓸까</h2>
 <p>평가 결과에서 고른 D 조합을 실제로 어떻게 조립할지, 챕터 8~10에 등장한 튜닝을 한 줄씩 놓고 재점검할 차례였습니다. 오픈이가 화이트보드에 튜닝 이름을 하나씩 적어 내려갔습니다.</p>
 <div class="dialogue"><span class="speaker">오픈이</span>: "전부 다 켜면 좋겠지만, 느려지고 복잡해집니다. 평가에서 숫자로 증명된 것만 남기겠습니다."</div>
 <div class="dialogue"><span class="speaker">팀장</span>: "규정 문서 성격 그대로 가면 돼요. 조항이 짧고, 약어가 많고, 스캔본도 일부 섞여 있고요."</div>
+<div class="sp-figure">
+<div class="sp-figure-title">그림 10-12. 챕터 8~10 튜닝 메뉴판. 체크 표시가 커넥트HR 에이전트에 적용한 일곱 조합입니다</div>
 <table>
 <thead>
-<tr>
-<th>적용</th>
-<th>튜닝</th>
-<th>무엇을 바꾸나</th>
-<th>언제 쓰나</th>
-<th>LLM 호출</th>
-<th>챕터</th>
-</tr>
+<tr><th>적용</th><th>튜닝</th><th>무엇을 바꾸나</th><th>언제 쓰나</th><th>LLM 호출</th><th>챕터</th></tr>
 </thead>
 <tbody>
-<tr>
-<td>O</td>
-<td>청킹 전략</td>
-<td>문서 자르는 방법 교체</td>
-<td>주제 섞일 때</td>
-<td>없음</td>
-<td>8</td>
-</tr>
-<tr>
-<td>O</td>
-<td>리랭킹</td>
-<td>Cross-Encoder 재정렬</td>
-<td>상위 결과 부정확</td>
-<td>없음 (reranker 모델)</td>
-<td>8</td>
-</tr>
-<tr>
-<td>O</td>
-<td>하이브리드 검색</td>
-<td>Vector + BM25 합산</td>
-<td>의미와 키워드 둘 다</td>
-<td>없음</td>
-<td>8</td>
-</tr>
-<tr>
-<td>-</td>
-<td>HyDE</td>
-<td>상상 답변으로 검색</td>
-<td>어휘 차이 클 때</td>
-<td>있음</td>
-<td>9</td>
-</tr>
-<tr>
-<td>-</td>
-<td>Multi-Query</td>
-<td>질문 여러 갈래</td>
-<td>의미가 넓을 때</td>
-<td>있음</td>
-<td>9</td>
-</tr>
-<tr>
-<td>O</td>
-<td>약어와 동의어 확장</td>
-<td>WFH → 재택근무</td>
-<td>약어 많을 때</td>
-<td>없음 (사전 치환)</td>
-<td>9</td>
-</tr>
-<tr>
-<td>O</td>
-<td>Parent Document</td>
-<td>자식 청크 검색 → 부모 반환</td>
-<td>맥락이 짧게 잘릴 때</td>
-<td>없음</td>
-<td>9</td>
-</tr>
-<tr>
-<td>-</td>
-<td>Compression</td>
-<td>핵심 문장만 압축</td>
-<td>토큰 절약</td>
-<td>있음</td>
-<td>9</td>
-</tr>
-<tr>
-<td>O</td>
-<td>Vision LLM 파서</td>
-<td>스캔 PDF·이미지 읽기</td>
-<td>스캔본이 섞여 있을 때</td>
-<td>있음 (Vision)</td>
-<td>10</td>
-</tr>
+<tr><td><span class="sp-chip accent">O</span></td><td><b>청킹 전략</b></td><td>문서 자르는 방법 교체</td><td>주제 섞일 때</td><td>없음</td><td>8</td></tr>
+<tr><td><span class="sp-chip accent">O</span></td><td><b>리랭킹</b></td><td>Cross-Encoder 재정렬</td><td>상위 결과 부정확</td><td>없음 (reranker 모델)</td><td>8</td></tr>
+<tr><td><span class="sp-chip accent">O</span></td><td><b>하이브리드 검색</b></td><td>Vector + BM25 합산</td><td>의미와 키워드 둘 다</td><td>없음</td><td>8</td></tr>
+<tr><td><span class="sp-chip">-</span></td><td>HyDE</td><td>상상 답변으로 검색</td><td>어휘 차이 클 때</td><td>있음</td><td>9</td></tr>
+<tr><td><span class="sp-chip">-</span></td><td>Multi-Query</td><td>질문 여러 갈래</td><td>의미가 넓을 때</td><td>있음</td><td>9</td></tr>
+<tr><td><span class="sp-chip accent">O</span></td><td><b>약어와 동의어 확장</b></td><td>WFH → 재택근무</td><td>약어 많을 때</td><td>없음 (사전 치환)</td><td>9</td></tr>
+<tr><td><span class="sp-chip accent">O</span></td><td><b>Parent Document</b></td><td>자식 청크 검색 → 부모 반환</td><td>맥락이 짧게 잘릴 때</td><td>없음</td><td>9</td></tr>
+<tr><td><span class="sp-chip">-</span></td><td>Compression</td><td>핵심 문장만 압축</td><td>토큰 절약</td><td>있음</td><td>9</td></tr>
+<tr><td><span class="sp-chip accent">O</span></td><td><b>Vision LLM 파서</b></td><td>스캔 PDF·이미지 읽기</td><td>스캔본이 섞여 있을 때</td><td>있음 (Vision)</td><td>10</td></tr>
 </tbody>
 </table>
-<p class="thought">그림 10-11. 챕터 8~10 튜닝 메뉴판. O 표시가 커넥트HR 에이전트에 적용한 일곱 조합입니다</p>
+<div class="sp-callout">체크 표시 일곱 항목이 D 조합. 세 항목(HyDE · Multi-Query · Compression)은 LLM을 추가로 호출하지만 우리 문서에서는 숫자가 거의 그대로였습니다</div>
+</div>
+<p class="thought">그림 10-12. 챕터 8~10 튜닝 메뉴판. O 표시가 커넥트HR 에이전트에 적용한 일곱 조합입니다</p>
 <div class="dialogue"><span class="speaker">오픈이</span>: "Semantic 청킹으로 단락별로 자르고, 리랭커로 순위를 보정하고, 검색은 BM25와 벡터를 섞은 하이브리드로 넓혀 두고, 약어 사전으로 WFH 같은 말을 풀어 주고, Parent Doc으로 짧은 청크에 맥락을 얹습니다. 스캔본은 Vision 파서로 텍스트를 꺼내 같은 벡터DB에 태우고요. 파이프라인 밖에서는 RAG 평가 프레임워크로 주기적으로 질문셋을 돌려 이 일곱 가지가 실제로 효과가 있는지 숫자로 확인합니다."</div>
 <div class="dialogue"><span class="speaker">팀장</span>: "HyDE랑 Multi-Query, Compression은 왜 뺐어요?"</div>
 <div class="dialogue"><span class="speaker">오픈이</span>: "셋 다 질문이 들어올 때마다 LLM을 한 번씩 더 부릅니다. 하지만 규정 문서에서는 질문과 문서 어휘가 거의 같아 가상 답변(HyDE)이나 질문 확장(Multi-Query)의 이득이 작고, 청크도 이미 짧아서 Compression이 얻을 게 별로 없었습니다. 비용은 올라가는데 숫자는 제자리였던 거죠."</div>

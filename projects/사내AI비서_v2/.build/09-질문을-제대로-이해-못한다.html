@@ -101,9 +101,29 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 <li><code>python -m tuning.step1_query_rewrite --step 1-3</code>. 약어·동의어 확장</li>
 <li><code>python -m tuning.step2_advanced_retriever --step 2-1</code>. Parent Document</li>
 <li><code>python -m tuning.step2_advanced_retriever --step 2-2</code>. Contextual Compression</li>
+<li><code>python -m tuning.step2_advanced_retriever --step 2-3</code>. Self-Query Retriever (참고)</li>
 </ol>
 </div>
 <h2>9.1 &quot;휴가&quot;라고 물었는데 &quot;연차유급휴가&quot;를 못 찾는다</h2>
+<div class="scene-actors">
+  <div class="scene-grid">
+    <div class="scene-actor">
+      <div class="scene-icon user"></div>
+      <div class="scene-role">동료<em>회사원</em></div>
+      <div class="scene-note">"휴가" "WFH"<br>"쉬는 날" 같은<br>일상 표현</div>
+    </div>
+    <div class="scene-bridge">
+      <div class="scene-line"><span class="scene-line-label">질문</span><span class="scene-ar">→</span></div>
+      <div class="scene-line reverse"><span class="scene-ar">←</span><span class="scene-line-label">못 찾음</span></div>
+    </div>
+    <div class="scene-actor center">
+      <div class="scene-icon lib"></div>
+      <div class="scene-role">사서<em>검색 엔진</em></div>
+      <div class="scene-note">"연차유급휴가"<br>"재택근무" 같은<br>규정집 정식 명칭</div>
+    </div>
+  </div>
+</div>
+<p class="thought">그림 9-1. 사용자는 일상 표현으로 묻고, 문서는 정식 명칭으로 적혀 있습니다. 검색 엔진이 잘 돌아도 단어가 어긋나면 못 찾습니다.</p>
 <p>청킹을 바꾸고 리랭커를 붙이고 하이브리드까지 적용했습니다. 일주일이 지났습니다. 동료가 &quot;병가 규정&quot;을 물으면 출장 규정이 나오던 시절은 끝났다고 생각했습니다. 모니터에 찍히는 검색 로그는 깔끔했고, 오픈이는 의자에 등을 기대며 커피잔을 들었습니다.</p>
 <p class="thought">검색 엔진은 손댈 데가 없다.</p>
 <p>슬랙 알림이 울렸습니다. 동료가 테스트 결과를 스프레드시트로 정리해 올린 것입니다. &quot;질문 20개 테스트&quot; 제목 아래 빨간 셀이 네 개. 오픈이가 커피잔을 내려놓고 몸을 일으켰습니다.</p>
@@ -133,9 +153,29 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
     </div>
   </div>
 </div>
-<p class="thought">그림 9-1. 사용자가 쓴 단어와 문서에 적힌 단어가 달라 검색이 빈손으로 돌아옵니다.</p>
+<p class="thought">그림 9-2. 빨간 셀 4건의 검색 로그. 사용자가 쓴 단어와 문서에 적힌 단어가 어긋납니다.</p>
 <p class="thought">"관련 문서를 찾지 못했습니다."</p>
 <p>문서에는 &quot;재택근무&quot;라고 적혀 있습니다. WFH가 Work From Home이라는 걸 검색 엔진은 모릅니다. 세 번째 빨간 셀도, 네 번째도 비슷한 패턴이었습니다. 단어가 다르거나, 약어를 쓰거나, 질문이 모호하거나.</p>
+<div class="sp-figure">
+  <div class="sp-figure-title">그림 9-3. 사용자가 말한 단어 vs 문서에 적힌 단어. 정확히 같지 않으면 못 찾습니다</div>
+  <div class="sp-row warm">
+    <span class="sp-row-label">"휴가"</span>
+    <span class="sp-row-value">≠ "연차유급휴가" (취업규칙 제15조)</span>
+  </div>
+  <div class="sp-row warm">
+    <span class="sp-row-label">"WFH"</span>
+    <span class="sp-row-value">≠ "재택근무" (재택근무 운영지침)</span>
+  </div>
+  <div class="sp-row warm">
+    <span class="sp-row-label">"쉬는 날"</span>
+    <span class="sp-row-value">≠ "연차유급휴가" (연차 일수 규정)</span>
+  </div>
+  <div class="sp-row accent">
+    <span class="sp-row-label">"연차유급휴가"</span>
+    <span class="sp-row-value">= "연차유급휴가" (정확히 일치할 때만 검색됨)</span>
+  </div>
+  <div class="sp-callout">정확히 같은 단어를 써야만 찾습니다. 검색 엔진이 아니라 <b>질문이 문제</b>입니다.</div>
+</div>
 <p class="thought">챕터 8에서 검색 엔진 자체를 다 고쳤다고 생각했는데. 엔진이 아무리 좋아도 질문을 이해 못 하면 소용이 없다.</p>
 <p>건너편 자리에서 팀장이 모니터를 보며 한마디를 던졌습니다.</p>
 <div class="dialogue"><span class="speaker">팀장</span>: "사서 귀가 안 열린 거 아닌가요?"</div>
@@ -180,7 +220,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 <div class="dialogue"><span class="speaker">팀장</span>: "전부 다 켜면 느려져요. 어디가 아픈지 보고 약을 골라야죠."</div>
 <p>도구 상자입니다. 다섯 가지를 전부 쓰는 게 아니라, 어떤 질문이 실패하는지 보고 필요한 도구만 꺼내면 됩니다.</p>
 <div class="rag-pipeline-box">
-  <div class="rag-pipeline-title">그림 9-2. 사서의 언어 능력 다섯 가지. 검색 전 3개와 검색 후 2개</div>
+  <div class="rag-pipeline-title">그림 9-4. 사서의 언어 능력 다섯 가지. 검색 전 3개와 검색 후 2개</div>
   <div class="rag-pipeline">
     <div class="rag-step">
       <div class="s-num">1</div>
@@ -219,7 +259,37 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
   </div>
 </div>
 <p>1~3번이 <strong>검색 전 질문 가공</strong>, 4~5번이 <strong>검색 후 결과 가공</strong>입니다. 챕터 8이 검색 엔진 한복판을 손봤다면, 챕터 9는 그 앞과 뒤를 다듬습니다.</p>
-<h2>9.3 사서의 귀를 열어 주자 - 질의 변환</h2>
+<h2>9.3 이번 챕터의 두 묶음</h2>
+<p>다섯 가지 기법이 두 묶음으로 나뉩니다.</p>
+<p><strong>검색 전 질의 변환</strong> (Step 1). HyDE, Multi-Query, 약어 확장. 검색 전에 질문 자체를 가공합니다.</p>
+<p><strong>검색 후 결과 가공</strong> (Step 2). Parent Doc, Compression. 검색된 결과를 넓히거나 줄여서 LLM에 넘기기 좋은 형태로 만듭니다.</p>
+<div class="sp-figure">
+  <div class="sp-figure-title">그림 9-5. RAG 파이프라인에서 챕터 8과 챕터 9의 위치</div>
+  <div class="sp-flow">
+    <div class="sp-step accent">
+      <span class="sp-step-num">Step 1</span>
+      <div class="sp-step-title">질의 변환</div>
+      <div class="sp-step-desc">약어 확장 · HyDE<br>Multi-Query</div>
+      <span class="sp-chip accent">챕터 9</span>
+    </div>
+    <div class="sp-flow-arrow">→</div>
+    <div class="sp-step">
+      <span class="sp-step-num">엔진</span>
+      <div class="sp-step-title">검색 엔진</div>
+      <div class="sp-step-desc">Semantic 청킹<br>Reranker · Hybrid</div>
+      <span class="sp-chip">챕터 8</span>
+    </div>
+    <div class="sp-flow-arrow">→</div>
+    <div class="sp-step accent">
+      <span class="sp-step-num">Step 2</span>
+      <div class="sp-step-title">결과 가공</div>
+      <div class="sp-step-desc">Parent Doc<br>Compression</div>
+      <span class="sp-chip accent">챕터 9</span>
+    </div>
+  </div>
+  <div class="sp-callout">챕터 9는 검색 엔진의 <b>입구(쿼리 변환)</b>와 <b>출구(결과 가공)</b>를 다듬습니다. 같은 엔진인데 체감 품질이 달라집니다.</div>
+</div>
+<h2>9.4 사서의 귀를 열어 주자 - 질의 변환</h2>
 <p>서가는 정리했습니다. 이번에는 <strong>질문 쪽</strong>을 손봅니다. 검색 엔진에 질문을 넘기기 <strong>전</strong>에 질문 자체를 가공하는 도구 세 가지를 하나씩 실험합니다. 실험 결과를 보고 우리 시스템에 필요한 것만 골라 적용할 겁니다.</p>
 <div class="prep-note">
 <p><strong>실습 흐름</strong></p>
@@ -229,12 +299,12 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 <li>쿼리의 약어와 동의어를 확장합니다 (<code>--step 1-3</code>)</li>
 </ol>
 </div>
-<h3>답을 먼저 상상한다 - HyDE</h3>
+<h3>9.4.1 답을 먼저 상상한다 - HyDE</h3>
 <p class="thought">답을 먼저 상상해 보면 어떨까.</p>
 <p>사서가 &quot;쉬는 날 규정&quot;이라는 질문을 받으면, 서가로 달려가기 전에 먼저 &quot;1년 근속 시 15일 유급휴가...&quot;라는 답을 상상합니다. 그 상상한 답과 비슷한 문서를 찾으면, 질문과 문서 사이의 어휘 차이를 건너뛸 수 있습니다.</p>
 <div class="dialogue"><span class="speaker">오픈이</span>: "질문 대신 답변을 LLM에 먼저 만들어 달라고 하는 거예요. 그 가상 답변을 임베딩해서 검색하면, 답변과 답변 사이 거리가 질문-답변 거리보다 가까울 때가 많거든요."</div>
 <div class="sp-figure">
-  <div class="sp-figure-title">그림 9-3. 직접 검색과 HyDE 검색의 차이. 가상 답변이 어휘 차이를 메웁니다</div>
+  <div class="sp-figure-title">그림 9-6. 직접 검색과 HyDE 검색의 차이. 가상 답변이 어휘 차이를 메웁니다</div>
   <div class="sp-compare">
     <div class="sp-compare-block">
       <div class="sp-compare-label">직접 검색 (질문 → 문서)</div>
@@ -331,7 +401,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 </tbody>
 </table>
 <div class="code-block highlight" data-lang="bash"><div class="cb-title"><span class="badge bash">터미널</span> 실험 1-1 실행. HyDE 검색 vs 직접 검색</div>python<span class="w"> </span>-m<span class="w"> </span>tuning.step1_query_rewrite<span class="w"> </span>--step<span class="w"> </span><span class="m">1</span>-1</div>
-<p class="thought">그림 9-4. 실험 1-1. HyDE vs 직접 검색 (쿼리 "연차 신청 절차는 어떻게 됩니까?")</p>
+<p class="thought">그림 9-7. 실험 1-1. HyDE vs 직접 검색 (쿼리 "연차 신청 절차는 어떻게 됩니까?")</p>
 <table>
 <thead>
 <tr>
@@ -398,11 +468,11 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 </div>
 <p><em>됐다.</em> 오픈이가 터미널을 내려다봤습니다. 유사도가 0.59에서 0.67로 올랐습니다. HyDE는 &quot;쉬는 날&quot;처럼 어휘 차이가 큰 질문에 효과적입니다.</p>
 <p>그런데 &quot;복리후생&quot;처럼 의미가 넓은 질문은 어떨까요? 연차도, 재택도, 출장비도 다 걸립니다. 가상 답변 하나로는 한 방향밖에 못 봅니다. 다른 도구를 꺼내 봅니다.</p>
-<h3>질문을 여러 갈래로 - Multi-Query</h3>
+<h3>9.4.2 질문을 여러 갈래로 - Multi-Query</h3>
 <div class="dialogue"><span class="speaker">동료</span>: "하나로만 물으면 한 방향밖에 못 보잖아요?"</div>
 <p>사서가 서가를 한 방향에서만 훑지 않고 세 갈래로 나눠 찾는 것입니다. LLM에게 &quot;이 질문을 다른 표현으로 3가지 만들어 줘&quot;라고 시키고, 원본 포함 4개 질문으로 각각 검색한 뒤 합집합을 만듭니다.</p>
 <div class="sp-figure">
-  <div class="sp-figure-title">그림 9-5. Multi-Query 검색 흐름. 한 질문을 N개 변형으로 펼쳐 합집합</div>
+  <div class="sp-figure-title">그림 9-8. Multi-Query 검색 흐름. 한 질문을 N개 변형으로 펼쳐 합집합</div>
   <div class="sp-flow">
     <div class="sp-step info">
       <span class="sp-step-num">원본</span>
@@ -454,7 +524,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
     <span class="k">return</span> <span class="n">queries</span></div>
 <p>원본 질문 1개에 재작성 3개를 합쳐 총 4개 질문이 반환됩니다. <code>num_queries</code>(기본값 3)가 생성할 재작성 수이고, <code>_call_llm(prompt)</code>은 같은 파일에 정의된 보조 함수로 환경변수 <code>LLM_PROVIDER</code>에 따라 Ollama 또는 OpenAI를 호출합니다.</p>
 <div class="code-block highlight" data-lang="bash"><div class="cb-title"><span class="badge bash">터미널</span> 실험 1-2 실행. Multi-Query 재작성</div>python<span class="w"> </span>-m<span class="w"> </span>tuning.step1_query_rewrite<span class="w"> </span>--step<span class="w"> </span><span class="m">1</span>-2</div>
-<p class="thought">그림 9-6. 실험 1-2. Multi-Query (원본 쿼리 "재택근무 조건과 신청 방법")</p>
+<p class="thought">그림 9-9. 실험 1-2. Multi-Query (원본 쿼리 "재택근무 조건과 신청 방법")</p>
 <table>
 <thead>
 <tr>
@@ -529,7 +599,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 <p>Multi-Query는 넓은 질문에 효과적입니다. 네 갈래로 검색하니 한 방향에서 놓쳤던 문서가 합집합에 올라왔습니다. 오픈이가 팀장에게 화면을 보여주려고 고개를 돌렸습니다.</p>
 <div class="dialogue"><span class="speaker">팀장</span>: "그거 좋은데요. 근데 제가 아까 'WFH 신청'이라고 물어봤거든요? 아무것도 안 나오더라고요."</div>
 <p>이건 다른 종류의 문제입니다. 질문의 넓이가 아니라 <strong>단어 자체</strong> 를 모르는 것입니다. 사서는 &quot;재택근무&quot;라는 단어만 알고 있었습니다.</p>
-<h3>약어를 번역한다 - 약어·동의어 확장</h3>
+<h3>9.4.3 약어를 번역한다 - 약어·동의어 확장</h3>
 <p>사내에서 흔히 쓰는 약어와 줄임말을 사전으로 만들어 두고, 질문에 포함되면 원래 뜻으로 치환합니다.</p>
 <p><code>data.py</code>에 두 종류의 사전이 들어 있습니다.</p>
 <div class="code-block highlight" data-lang="python"><div class="cb-title"><span class="badge reference">참고</span> tuning/step1_query_rewrite/data.py. 약어·동의어 사전</div><span class="n">ABBREVIATION_MAP</span> <span class="o">=</span> <span class="p">{</span>
@@ -572,7 +642,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
     <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;original&quot;</span><span class="p">:</span> <span class="n">query</span><span class="p">,</span> <span class="s2">&quot;expanded&quot;</span><span class="p">:</span> <span class="n">expanded</span><span class="p">,</span> <span class="s2">&quot;applied&quot;</span><span class="p">:</span> <span class="n">applied</span><span class="p">}</span></div>
 <p><code>ABBREVIATION_MAP</code> 과 <code>SYNONYM_MAP</code> 을 순회하며 문자열 치환을 수행합니다. <code>applied</code> 리스트에 어떤 변환이 적용됐는지 기록하므로, &quot;WFH 신청 방법&quot;이 &quot;재택근무(Work From Home) 신청 방법&quot;으로 바뀌는 과정을 터미널에서 확인할 수 있습니다.</p>
 <div class="code-block highlight" data-lang="bash"><div class="cb-title"><span class="badge bash">터미널</span> 실험 1-3 실행. 약어·동의어 확장</div>python<span class="w"> </span>-m<span class="w"> </span>tuning.step1_query_rewrite<span class="w"> </span>--step<span class="w"> </span><span class="m">1</span>-3</div>
-<p class="thought">그림 9-7. 실험 1-3. 약어·동의어 확장 결과</p>
+<p class="thought">그림 9-10. 실험 1-3. 약어·동의어 확장 결과</p>
 <table>
 <thead>
 <tr>
@@ -612,12 +682,12 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 <ul>
 <li><strong>적용된 변환</strong>: applied 목록에 어떤 규칙이 적용됐는지 확인해 보세요. 약어(<code>WFH</code> → <code>재택근무</code>)와 동의어(<code>휴가</code> → <code>연차유급휴가</code>) 두 종류가 있습니다.</li>
 <li><strong>검색 결과 변화</strong>: 확장 전후로 검색 결과가 달라지는지 비교해 보세요. 문서에 &quot;재택근무&quot;라고 적혀 있는데 질문에 &quot;WFH&quot;를 쓰면 벡터 검색에서도 놓칠 수 있습니다.</li>
-<li><strong>사전 관리</strong>: <code>data.py</code> 에 없는 약어를 넣으면 그대로 통과합니다. 사내에서 자주 쓰는 약어를 사전에 추가하면 바로 효과가 나옵니다. 슬랙에서 검색 실패 로그를 모니터링하면 &quot;이 단어가 빠져 있구나&quot;를 알 수 있습니다.</li>
+<li><strong>사전 관리</strong>: <code>data.py</code> 에 없는 약어를 넣으면 그대로 통과합니다. 사내에서 자주 쓰는 약어를 사전에 추가하면 바로 효과가 나옵니다. 슬랙에서 검색 실패 로그를 모니터링하면 &quot;이 단어가 빠져 있구나&quot;를 알 수 있습니다. 사전이 커질수록 검색 실패율이 떨어집니다.</li>
 </ul>
 </div>
 <p>질의 변환 도구 세 가지를 실험했습니다. 질문을 바꾸는 쪽은 여기까지입니다. 그런데 오픈이가 검색 결과 자체를 살펴봤습니다. 가져온 청크 3개를 나란히 놓으니 &quot;연차 신청은 3일 전 서면으로&quot;, &quot;팀장 승인이 필요합니다&quot;, &quot;긴급한 경우 구두 신청 가능&quot;. 각각은 맞는 말인데, 조각조각 끊겨 있습니다.</p>
 <p class="thought">질문을 잘 바꿔서 찾았는데, 찾아온 결과를 다듬는 도구도 필요하겠는데.</p>
-<h2>9.4 쪽지가 아니라 규정집을 펼친다 - 결과 가공</h2>
+<h2>9.5 쪽지가 아니라 규정집을 펼친다 - 결과 가공</h2>
 <div class="dialogue"><span class="speaker">동료</span>: "조각 3개 가져왔는데, 각각 한두 줄이면 LLM이 전체 맥락을 알 수 있어요?"</div>
 <p>청크 여러 개를 가져와도 각 청크가 짧은 조각이면 LLM은 규정의 전체 흐름을 볼 수 없습니다. 질의 변환이 질문을 다듬는 작업이었다면, 결과 가공은 LLM에 넘기는 문서를 다듬는 작업입니다.</p>
 <div class="prep-note">
@@ -625,12 +695,13 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 <ol>
 <li>자식 청크로 검색하고 부모 문서 전체를 반환합니다 (<code>--step 2-1</code>)</li>
 <li>검색 후 관련 문장만 압축해서 반환합니다 (<code>--step 2-2</code>)</li>
+<li>질문에서 메타데이터 조건을 추출해 검색 대상을 좁힙니다 (<code>--step 2-3</code>)</li>
 </ol>
 </div>
-<h3>원본 문서 꺼내기 - Parent Document Retriever</h3>
+<h3>9.5.1 원본 문서 꺼내기 - Parent Document Retriever</h3>
 <p>작은 청크로 검색하되, LLM에게는 그 청크가 속한 <strong>부모 문서 전체</strong> 를 넘깁니다. 정확도(작은 청크)와 맥락(큰 문서)을 동시에 취하는 방식입니다.</p>
 <div class="sp-figure">
-  <div class="sp-figure-title">그림 9-8. Parent Document Retriever. 작은 조각으로 찾고 큰 원본을 반환</div>
+  <div class="sp-figure-title">그림 9-11. Parent Document Retriever. 작은 조각으로 찾고 큰 원본을 반환</div>
   <div class="sp-compare">
     <div class="sp-compare-block">
       <div class="sp-compare-label">검색에 사용 (child chunk)</div>
@@ -705,7 +776,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
         <span class="k">return</span> <span class="n">results</span></div>
 <p>작은 <code>child_chunk</code> 로 유사도를 계산하되, 결과에는 <code>parent_content</code> 전체가 담깁니다. <code>parent_docs</code> 는 <code>data.py</code> 의 원본 문서 리스트(ID, 제목, 전체 내용 포함)이고, <code>child_chunks</code> 는 원본을 잘게 쪼갠 조각 리스트입니다. 각 조각에는 자신이 속한 부모의 ID(<code>parent_id</code>)가 들어 있습니다. <code>self._child_vectors</code> 는 <code>__init__</code> 에서 모든 자식 청크를 미리 임베딩해 둔 벡터입니다. 같은 부모가 중복 반환되지 않도록 이미 꺼낸 부모는 건너뜁니다.</p>
 <div class="code-block highlight" data-lang="bash"><div class="cb-title"><span class="badge bash">터미널</span> 실험 2-1 실행. Parent Document Retriever</div>python<span class="w"> </span>-m<span class="w"> </span>tuning.step2_advanced_retriever<span class="w"> </span>--step<span class="w"> </span><span class="m">2</span>-1</div>
-<p class="thought">그림 9-9. 실험 2-1. ParentDocumentRetriever (쿼리 "연차 신청 절차")</p>
+<p class="thought">그림 9-12. 실험 2-1. ParentDocumentRetriever (쿼리 "연차 신청 절차")</p>
 <table>
 <thead>
 <tr>
@@ -746,10 +817,10 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 </div>
 <p>맥락이 살아났습니다. 359자짜리 규정 전문이 LLM에 들어가니 &quot;3일 전까지 뭘 해야 하는지&quot; 앞뒤가 보입니다. 그런데 오픈이가 토큰 사용량을 확인했습니다. 부모 문서를 통째로 넣으니 프롬프트가 눈에 띄게 길어졌습니다.</p>
 <div class="dialogue"><span class="speaker">동료</span>: "규정 전문이 다 필요해요? 질문이랑 관련 없는 조항도 섞여 있잖아요."</div>
-<h3>핵심 문장만 남기기 - Contextual Compression</h3>
+<h3>9.5.2 핵심 문장만 남기기 - Contextual Compression</h3>
 <p>부모 문서를 통째로 가져오면 맥락은 살지만 쓸데없는 문장이 섞입니다. 사서가 규정집을 펼쳐 보여주되, 형광펜으로 질문과 관련된 문장만 밑줄 긋고 나머지는 접어 버리는 것입니다.</p>
 <div class="sp-figure">
-  <div class="sp-figure-title">그림 9-10. Contextual Compression. 관련 없는 문장은 잘라내고 핵심만 남김</div>
+  <div class="sp-figure-title">그림 9-13. Contextual Compression. 관련 없는 문장은 잘라내고 핵심만 남김</div>
   <div class="sp-compare">
     <div class="sp-compare-block">
       <div class="sp-compare-label">원본 문서 (269자)</div>
@@ -829,7 +900,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
         <span class="k">return</span> <span class="n">results</span></div>
 <p><code>_compress()</code> 함수가 문서를 문장 단위로 쪼갠 뒤 질문 단어와 겹치는 문장만 골라냅니다. <code>compression_ratio</code> 가 0.3이면 원본의 70%를 덜어낸 것이니, 부모 문서를 통째로 가져와도 프롬프트 토큰을 크게 절약할 수 있습니다.</p>
 <div class="code-block highlight" data-lang="bash"><div class="cb-title"><span class="badge bash">터미널</span> 실험 2-2 실행. Contextual Compression</div>python<span class="w"> </span>-m<span class="w"> </span>tuning.step2_advanced_retriever<span class="w"> </span>--step<span class="w"> </span><span class="m">2</span>-2</div>
-<p class="thought">그림 9-11. 실험 2-2. ContextualCompressionRetriever (쿼리 "연차 신청 절차")</p>
+<p class="thought">그림 9-14. 실험 2-2. ContextualCompressionRetriever (쿼리 "연차 신청 절차")</p>
 <table>
 <thead>
 <tr>
@@ -869,9 +940,101 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 <div class="tip">
 <p><strong>Parent Doc + Compression 조합</strong>. 이 둘은 세트로 쓸 때 효과가 큽니다. Parent Doc이 넓은 맥락을 가져오고 Compression이 핵심만 남기는 구조입니다. Parent Doc 단독 사용 시 부모 문서가 길어 토큰 비용이 늘어나는 문제를 Compression이 해결합니다.</p>
 </div>
+<p>Parent Doc과 Compression은 검색 결과의 양과 질을 조절하는 도구입니다. 마지막으로 하나 더. 오픈이가 동료의 질문 하나를 떠올렸습니다. &quot;인사팀 관련 규정만 보고 싶은데.&quot; 이 질문에는 <strong>부서명</strong>이라는 조건이 섞여 있습니다. 벡터 유사도만으로는 &quot;인사팀&quot;이라는 조건을 걸 수 없습니다. 이런 유형의 질문이 들어온다면 쓸 수 있는 도구가 있습니다.</p>
+<h3>9.5.3 조건이 섞인 질문 - Self-Query Retriever</h3>
+<p>&quot;2025년 인사팀 문서만&quot; 같은 조건이 섞인 질문에서 <strong>메타데이터 필터</strong>를 자동으로 추출할 수 있습니다. 질문에 포함된 키워드를 감지해 <code>topic=인사팀</code>, <code>year=2025</code> 같은 조건을 만들고, 전체 문서 중 조건에 맞는 문서만 남긴 뒤 유사도 검색을 수행합니다.</p>
+<p>&quot;인사팀 관련 규정&quot;이라는 질문이 들어오면 <code>{&quot;topic&quot;: &quot;인사&quot;}</code> 필터가 자동으로 만들어지고, 수백 건의 문서 중 인사 관련 문서만 추려서 검색 대상으로 삼습니다. <code>topic_keywords</code> 는 <code>data.py</code> 에 정의된 토픽-키워드 매핑 딕셔너리로, <code>{&quot;인사&quot;: [&quot;인사&quot;, &quot;인사팀&quot;, &quot;hr&quot;], &quot;보안&quot;: [&quot;보안&quot;, &quot;정보보호&quot;]}</code> 같은 구조입니다.</p>
+<div class="sp-figure">
+  <div class="sp-figure-title">그림 9-15. Self-Query Retriever. 질문에서 메타데이터 조건을 자동 추출</div>
+  <div class="sp-flow">
+    <div class="sp-step info">
+      <span class="sp-step-num">입력</span>
+      <div class="sp-step-title">"인사팀 관련 규정"</div>
+      <div class="sp-step-desc">조건이 섞인 질문</div>
+    </div>
+    <div class="sp-flow-arrow">→</div>
+    <div class="sp-step accent">
+      <span class="sp-step-num">감지</span>
+      <div class="sp-step-title">키워드 추출</div>
+      <div class="sp-step-desc">{"topic": "인사"}<br>필터 자동 생성</div>
+    </div>
+    <div class="sp-flow-arrow">→</div>
+    <div class="sp-step">
+      <span class="sp-step-num">필터</span>
+      <div class="sp-step-title">대상 축소</div>
+      <div class="sp-step-desc">전체 20건 →<br>인사 관련 5건</div>
+    </div>
+    <div class="sp-flow-arrow">→</div>
+    <div class="sp-step accent">
+      <span class="sp-step-num">검색</span>
+      <div class="sp-step-title">유사도 비교</div>
+      <div class="sp-step-desc">좁은 범위에서<br>정확히 매칭</div>
+    </div>
+  </div>
+  <div class="sp-callout">핵심: 질문에서 <b>메타데이터 조건을 자동 추출</b>해 검색 범위를 좁힙니다.</div>
+</div>
+<div class="code-block highlight" data-lang="python"><div class="cb-title"><span class="badge explain">설명</span> tuning/step2_advanced_retriever/self_query.py. Self-Query 필터 추출 + 검색</div><span class="k">class</span><span class="w"> </span><span class="nc">SelfQueryRetriever</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">documents</span><span class="p">,</span> <span class="n">topic_keywords</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">embeddings</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">documents</span> <span class="o">=</span> <span class="n">documents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topic_keywords</span> <span class="o">=</span> <span class="n">topic_keywords</span> <span class="ow">or</span> <span class="p">{}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">extract_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+        <span class="c1"># 1. 질문에서 키워드를 감지해 메타데이터 필터 생성</span>
+        <span class="n">filters</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">query_lower</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">topic</span><span class="p">,</span> <span class="n">keywords</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">topic_keywords</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">kw</span> <span class="ow">in</span> <span class="n">query_lower</span> <span class="k">for</span> <span class="n">kw</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">):</span>
+                <span class="n">filters</span><span class="p">[</span><span class="s2">&quot;topic&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">topic</span>
+                <span class="k">break</span>
+        <span class="k">return</span> <span class="n">filters</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">top_k</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+        <span class="n">filters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_filter</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+        <span class="c1"># 2. 필터에 맞는 문서만 남김</span>
+        <span class="n">filtered</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">documents</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">filters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">filtered</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">doc</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">filtered</span>
+                <span class="k">if</span> <span class="n">doc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;metadata&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">==</span> <span class="n">value</span>
+            <span class="p">]</span>
+        <span class="c1"># 3. 남은 문서에서 유사도 검색 (생략)</span>
+        <span class="k">return</span> <span class="p">[{</span><span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">doc</span><span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">],</span> <span class="s2">&quot;applied_filter&quot;</span><span class="p">:</span> <span class="n">filters</span><span class="p">}</span>
+                <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">filtered</span><span class="p">[:</span><span class="n">top_k</span><span class="p">]]</span></div>
+<p><code>extract_filter()</code> 가 질문에서 부서명이나 연도 같은 조건을 뽑아내고, <code>search()</code> 가 그 조건에 맞는 문서만 추려서 유사도 검색을 수행합니다. 전체 코드는 완성본 레포(<code>rag-end/ex09</code>)를 참고하세요.</p>
+<div class="code-block highlight" data-lang="bash"><div class="cb-title"><span class="badge bash">터미널</span> 실험 2-3 실행. Self-Query Retriever</div>python<span class="w"> </span>-m<span class="w"> </span>tuning.step2_advanced_retriever<span class="w"> </span>--step<span class="w"> </span><span class="m">2</span>-3</div>
+<p class="thought">그림 9-16. 실험 2-3. SelfQueryRetriever (쿼리 "재택근무 조건")</p>
+<table>
+<thead>
+<tr>
+<th>순위</th>
+<th>내용</th>
+<th>토픽</th>
+<th>유사도</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1</strong></td>
+<td><strong>제4조 (재택근무 신청 자격) 입사 후 6개월이 경과한 정규직...</strong></td>
+<td>재택근무</td>
+<td><strong>0.7136</strong></td>
+</tr>
+</tbody>
+</table>
+<p>자동 추출된 필터: <code>topic: 재택근무</code>. &quot;재택근무 조건&quot;이라는 질문에서 <code>topic: 재택근무</code> 필터가 자동으로 만들어졌습니다. 전체 문서를 벡터 검색하는 대신 재택근무 관련 문서만 대상으로 좁혀 검색하니 무관한 문서가 섞이지 않습니다.</p>
+<p>부서명이 포함된 질문을 넣어서 필터가 정확히 잡히는지 확인해 보세요.</p>
+<div class="code-block highlight" data-lang="bash"><div class="cb-title"><span class="badge bash">터미널</span> 커스텀 쿼리로 필터 추출 실험</div>python<span class="w"> </span>-m<span class="w"> </span>tuning.step2_advanced_retriever<span class="w"> </span>--step<span class="w"> </span><span class="m">2</span>-3<span class="w"> </span>--query<span class="w"> </span><span class="s2">&quot;인사팀 관련 규정&quot;</span></div>
+<div class="tip">
+<p><strong>Self-Query 실험에서 생각해 볼 것들</strong></p>
+<ul>
+<li><strong>필터 추출</strong>: applied_filter에 어떤 메타데이터 조건이 추출됐는지 확인해 보세요. &quot;인사팀 관련 규정&quot;이라고 물으면 <code>topic: 인사</code> 처럼 부서명이 필터로 잡혀야 합니다.</li>
+<li><strong>검색 범위 축소</strong>: 필터 적용 전후로 검색 대상 문서 수가 줄어드는지 비교해 보세요. 전체 20건에서 5건으로 줄어들면 그만큼 정확도가 올라갑니다.</li>
+<li><strong>필터가 안 잡히는 경우</strong>: 질문에 메타데이터 단서가 없으면 필터 없이 일반 검색으로 넘어갑니다. &quot;연차 신청 방법&quot;처럼 부서나 카테고리 힌트가 없는 질문이 이 경우입니다.</li>
+</ul>
+</div>
 <p>다섯 가지 도구를 실험했습니다. 오픈이가 동료들의 질문 패턴을 다시 펼쳐 봤습니다. 약어를 많이 쓰고, 근거로 규정 전문을 보고 싶어합니다. 약어 사전과 Parent Doc, 이 두 개면 충분합니다.</p>
 <p class="thought">전부 켤 필요 없다. 아픈 데만 약을 바르면 된다.</p>
-<h2>9.5 사서가 달라졌다</h2>
+<h2>9.6 사서가 달라졌다</h2>
 <p>동료에게 다시 써 보라고 했습니다. 동료가 키보드를 두드렸습니다.</p>
 <div class="dialogue"><span class="speaker">동료</span>: "WFH 정책이 뭐야?"</div>
 <p>&quot;재택근무&quot; 문서를 정확히 가져와 답변을 내놓습니다. 약어 사전이 &quot;WFH&quot;를 &quot;재택근무(Work From Home)&quot;로 바꿔 놓은 덕이었습니다.</p>
@@ -888,9 +1051,60 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 <p>오픈이가 노트북을 다시 열었습니다. 사내 PDF 규정집 하나를 클릭해 펼쳤습니다. 본문 사이에 표가 두 개, 흐름도가 한 장. 텍스트 추출 결과를 확인했습니다. 표 안의 셀들이 한 줄로 짜부라져 있었습니다. &quot;구분 일수 비고 정규직 15 입사일 기준&quot; 식으로 나열되어 있어서 검색이 걸려도 의미가 망가집니다. 이미지에 적힌 글씨는 아예 빠져 있었습니다.</p>
 <p class="thought">아.</p>
 <p>다음 챕터에서는 이 영역을 다룹니다. PDF 안의 표·이미지를 Vision LLM과 OCR로 읽어 들여 텍스트와 같은 자리에 색인합니다.</p>
-<h2>9.6 튜닝 메뉴판</h2>
+<h2>9.7 전체 구성도에서 챕터 9의 자리</h2>
+<div class="arch-fullmap">
+  <div class="arch-fullmap-title">그림 9-17. 전체 구성도. 짙은 박스가 챕터 9 튜닝 대상</div>
+  <div class="afm-row afm-user">
+    <div class="afm-box afm-built afm-round"><div class="afm-label">사내 직원 · 관리자</div></div>
+  </div>
+  <div class="afm-zone">
+    <span class="afm-zone-ch">챕터 2</span>
+    <span class="afm-zone-label">대시보드</span>
+    <div class="afm-row">
+      <div class="afm-box afm-built"><div class="afm-label">FastAPI</div><div class="afm-sub">REST API · 관리자 웹</div></div>
+    </div>
+  </div>
+  <div class="afm-zone">
+    <span class="afm-zone-ch">챕터 6 + 챕터 7</span>
+    <span class="afm-zone-label">오케스트레이션 + 운영</span>
+    <div class="afm-row afm-two">
+      <div class="afm-box afm-built"><div class="afm-label">ConnectHRAgent</div><div class="afm-sub">ReAct · 사후 분류 + 캐시</div></div>
+      <div class="afm-box afm-built"><div class="afm-label">MCP Tools</div><div class="afm-sub">DB · 문서</div></div>
+    </div>
+  </div>
+  <div class="afm-zone">
+    <span class="afm-zone-ch">챕터 5</span>
+    <span class="afm-zone-label">검색 (실시간)</span>
+    <div class="afm-row">
+      <div class="afm-box afm-on"><div class="afm-tag">+ 챕터 9 질의 · 결과 튜닝</div><div class="afm-label">LCEL Chain</div><div class="afm-sub">HyDE · Multi-Query · Parent Doc · Compression</div></div>
+    </div>
+  </div>
+  <div class="afm-zone">
+    <span class="afm-zone-ch">챕터 4</span>
+    <span class="afm-zone-label">파싱·벡터화 (오프라인)</span>
+    <div class="afm-row afm-three">
+      <div class="afm-box afm-built afm-dashed"><div class="afm-label">챕터 3 문서 규칙</div><div class="afm-sub">PDF·Word·Excel·HWP</div></div>
+      <div class="afm-box afm-built"><div class="afm-label">Doc Pipeline</div><div class="afm-sub">파싱·청킹·임베딩</div></div>
+      <div class="afm-box afm-built"><div class="afm-label">ChromaDB</div><div class="afm-sub">벡터 저장소</div></div>
+    </div>
+  </div>
+  <div class="afm-zone">
+    <span class="afm-zone-ch">챕터 2</span>
+    <span class="afm-zone-label">데이터</span>
+    <div class="afm-row">
+      <div class="afm-box afm-built"><div class="afm-label">PostgreSQL</div><div class="afm-sub">직원·연차·매출</div></div>
+    </div>
+  </div>
+  <div class="afm-row afm-ext">
+    <div class="afm-box afm-faint afm-dashed"><div class="afm-label">Ollama LLM (외부)</div></div>
+  </div>
+  <div class="afm-note">
+    챕터 9는 LCEL Chain의 <b>입구(쿼리 변환)</b>와 <b>출구(결과 가공)</b>를 다듬은 챕터입니다. 같은 ChromaDB, 같은 문서인데 질문 해석력이 올라가 체감 품질이 크게 개선됩니다. 챕터 10에서는 텍스트로 못 잡는 <b>이미지·표</b> 영역을 Vision LLM과 OCR로 공략합니다.
+  </div>
+</div>
+<h2>9.8 튜닝 메뉴판</h2>
 <p>챕터 8에서 검색 엔진 자체를 손봤고, 이번 챕터에서는 검색의 앞뒤를 다듬었습니다. 지금까지 실험한 튜닝과 앞으로 다룰 튜닝을 한 장으로 정리합니다.</p>
-<p class="thought">그림 9-12. RAG 튜닝 메뉴판. 필요한 것만 골라 씁니다</p>
+<p class="thought">그림 9-18. RAG 튜닝 메뉴판. 필요한 것만 골라 씁니다</p>
 <table>
 <thead>
 <tr>
@@ -965,6 +1179,20 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 <td>PDF 속 표, 차트, 이미지가 검색에 빠질 때</td>
 <td>10</td>
 </tr>
+<tr>
+<td>다음</td>
+<td>하이브리드 파서</td>
+<td>텍스트 + 시각 요소를 함께 파싱하는 파이프라인</td>
+<td>복합 문서(텍스트+표+이미지)를 처리할 때</td>
+<td>10</td>
+</tr>
+<tr>
+<td>다음</td>
+<td>RAG 평가 프레임워크</td>
+<td>검색 정확도, 답변 충실도를 숫자로 측정</td>
+<td>튜닝 전후 품질을 객관적으로 비교할 때</td>
+<td>10</td>
+</tr>
 </tbody>
 </table>
 <h2>용어 정리</h2>
@@ -1001,6 +1229,11 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 <td>&quot;핵심 문장만 추리기&quot;</td>
 <td><strong>Contextual Compression</strong></td>
 <td>검색된 문서에서 질문과 무관한 부분을 제거</td>
+</tr>
+<tr>
+<td>&quot;조건을 필터로 변환&quot;</td>
+<td><strong>Self-Query Retriever</strong></td>
+<td>질문에서 메타데이터 조건을 자동 추출해 검색 대상을 좁힘</td>
 </tr>
 </tbody>
 </table>
