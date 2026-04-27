@@ -87,8 +87,8 @@ OS 구분은 코드블록 타이틀 텍스트로. 예: `— macOS / Linux`, `—
 
 ### 이미지 경로
 
-- 챕터 오프닝: `assets/CHNN/gemini/NN_chapter-opening.png`
-- 개념도: `assets/CHNN/gemini/NN_*.png`
+- 챕터 오프닝: `assets/CHNN/image/NN_chapter-opening.png`
+- 개념도: `assets/CHNN/image/NN_*.png`
 - 터미널 캡처: `assets/CHNN/terminal/NN_*.png`
 - 다이어그램: `assets/CHNN/diagram/NN_*.png`
 

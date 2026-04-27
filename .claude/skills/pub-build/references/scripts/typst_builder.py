@@ -239,8 +239,8 @@ def fix_image_paths(text: str, source_file: Path) -> str:
 
 
 def clean_comments(text: str) -> str:
-    """HTML 주석 제거 (GEMINI PROMPT, CAPTURE NEEDED, 기타)"""
-    text = re.sub(r'<!--\s*\[GEMINI PROMPT.*?-->', '', text, flags=re.DOTALL)
+    """HTML 주석 제거 (IMAGE PROMPT, CAPTURE NEEDED, 기타)"""
+    text = re.sub(r'<!--\s*\[IMAGE PROMPT.*?-->', '', text, flags=re.DOTALL)
     text = re.sub(r'<!--\s*\[CAPTURE NEEDED.*?-->', '', text, flags=re.DOTALL)
     text = re.sub(r'<!--.*?-->', '', text, flags=re.DOTALL)
     return text
@@ -397,7 +397,7 @@ def _detect_image_max_width(path: str) -> str:
 
 def _detect_image_category(path: str) -> str:
     """이미지 경로로 카테고리 분류 (변수 기반 모드용)"""
-    if '/gemini/' in path or 'chapter-opening' in path:
+    if '/image/' in path or 'chapter-opening' in path:
         return 'gemini'
     elif '/terminal/' in path:
         return 'terminal'

@@ -14,7 +14,7 @@ allowed-tools: Read, Edit, Glob, Grep
 
 | 입력 | 출력 |
 |------|------|
-| 챕터 MD 파일 경로 | `[GEMINI PROMPT]` 플레이스홀더가 삽입된 챕터 MD |
+| 챕터 MD 파일 경로 | `[IMAGE PROMPT]` 플레이스홀더가 삽입된 챕터 MD |
 | (또는) 특정 이미지 경로 | 해당 이미지에 대한 Gemini 프롬프트 |
 
 ## 실행 절차
@@ -28,7 +28,7 @@ allowed-tools: Read, Edit, Glob, Grep
 ```
 
 다음 조건의 이미지를 분석 대상으로 식별한다.
-- `[GEMINI PROMPT]` HTML 주석이 **없는** 이미지 (이미 프롬프트가 있으면 건너뜀)
+- `[IMAGE PROMPT]` HTML 주석이 **없는** 이미지 (이미 프롬프트가 있으면 건너뜀)
 - `gemini/` 서브폴더에 있거나, 실제 이미지 파일이 존재하는 이미지
 
 ### 2. 이미지 분석
@@ -83,14 +83,14 @@ allowed-tools: Read, Edit, Glob, Grep
 방식 C 형식으로 챕터에 삽입한다.
 
 ```markdown
-<!-- [GEMINI PROMPT: {NN}_{identifier}]
-path: assets/CH{N}/gemini/{NN}_{identifier}.png
-reference: assets/CH{N}/gemini/{원본파일명}
+<!-- [IMAGE PROMPT: {NN}_{identifier}]
+path: assets/CH{N}/image/{NN}_{identifier}.png
+reference: assets/CH{N}/image/{원본파일명}
 context: {문맥 요약 1줄}
 {생성된 Gemini 프롬프트}
 Style: {style-tag}
 -->
-![{캡션}](../assets/CH{N}/gemini/{NN}_{identifier}.png)
+![{캡션}](../assets/CH{N}/image/{NN}_{identifier}.png)
 *그림 {N}-{순번}: {캡션}*
 ```
 

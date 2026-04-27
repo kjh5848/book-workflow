@@ -855,7 +855,7 @@ python -m tuning.step3_eval_framework --strategy all --k 3
 
 *튜닝은 지표 하나를 위로 올리는 게 아니라, 쌓아 둔 부품이 서로 물려 돌아가는지 확인하는 작업이구나.*
 
-[GEMINI PROMPT: 평가 프레임워크 개념도. 같은 질문 셋이 A/B/C/D 네 조합 파이프라인을 통과한 뒤 Precision·Recall·환각률·Latency 네 축으로 점수를 받아 비교되는 모습. 채점지에 줄지어 매겨진 점수 이미지]
+[IMAGE PROMPT: 평가 프레임워크 개념도. 같은 질문 셋이 A/B/C/D 네 조합 파이프라인을 통과한 뒤 Precision·Recall·환각률·Latency 네 축으로 점수를 받아 비교되는 모습. 채점지에 줄지어 매겨진 점수 이미지]
 
 *그림 10-10. 평가 프레임워크. 질문과 정답 쌍을 반복 돌려 숫자로 품질을 측정합니다*
 

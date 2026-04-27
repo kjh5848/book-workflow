@@ -116,10 +116,10 @@ paths:
 |------|-------------|------|
 | Mermaid/D2 다이어그램 | MD 안에 mermaid 코드블록 | writer |
 | 플로우 카드 (시퀀스·단계 흐름) | `[FLOW CARD: id]` + desc 서술 | writer 삽입 → 유저가 visual 스킬 호출 |
-| 개념도 | `[GEMINI PROMPT: 설명]` | writer 삽입 → 유저가 Gemini에 입력 |
+| 개념도 | `[IMAGE PROMPT: 설명]` | writer 삽입 → 유저가 Gemini에 입력 |
 | 실행 결과 캡처 | `[CAPTURE NEEDED: 설명]` | writer 삽입 → 유저가 screenshot 스킬 호출 |
 
-**경로 규칙**: `assets/CH{N}/{gemini|terminal|diagram}/{NN}_{id}.png`
+**경로 규칙**: `assets/CH{N}/{image|terminal|diagram}/{NN}_{id}.png`
 
 ### 플로우 카드 플레이스홀더 형식
 

@@ -113,7 +113,7 @@ LangChain, 임베딩, 벡터 DB 같은 용어가 한꺼번에 나와서 부담�
 
 ## 1.1 그럴듯한 거짓말. LLM 환각(Hallucination)
 
-![](../assets/CH01/gemini/01_chapter-opening.png)
+![](../assets/CH01/image/01_chapter-opening.png)
 *그림 1-1. 입사 3일 차, 첫 번째 미션*
 
 입사 3일 차.
@@ -215,7 +215,7 @@ LLM을 이렇게 가정해보겠습니다. 입사 면접을 보러 온 외부인
 
 문제는 이 외부인이 "모른다"고 솔직히 말하지 못한다는 점입니다. 질문을 받으면 자기가 아는 것 중에서 가장 비슷해 보이는 걸 자신감 있게 말합니다. 마치 확실히 아는 것처럼 들립니다. 이게 **LLM 환각(Hallucination)** 입니다.
 
-![](../assets/CH01/gemini/01_hallucination-outsider.png)
+![](../assets/CH01/image/01_hallucination-outsider.png)
 *그림 1-4. LLM은 세상의 공개 데이터는 학습했지만, 우리 회사 내부 문서는 읽은 적이 없습니다*
 
 ## 1.2 교재를 펼쳐놓으면. 컨텍스트 주입(Context Injection)
@@ -297,7 +297,7 @@ python step2_context.py
 
 LLM에는 한 번에 처리할 수 있는 텍스트 길이 한도(컨텍스트 윈도우)가 있습니다. 문서가 쌓일수록 한도를 넘깁니다. 무엇보다 연차 하나 물어보는데 보안 지침과 복지 정책까지 같이 보내면, LLM이 엉뚱한 조항을 들고 와서 답할 가능성이 커집니다.
 
-![](../assets/CH01/gemini/01_context-overflow.png)
+![](../assets/CH01/image/01_context-overflow.png)
 *그림 1-6. 문서를 통째로 넣는 방식의 한계. 문서가 늘어나면 프롬프트 창이 넘칩니다*
 
 ## 1.3 사서가 필요합니다. RAG(Retrieval-Augmented Generation)
@@ -599,7 +599,7 @@ python step5_rag.py
   <p class="jf-sub">챕터 1에서 맛본 RAG 원리를 기반으로, 챕터 2부터 <b>커넥트HR 에이전트</b>를 한 단계씩 쌓아갑니다. 4개 파트가 본문의 전체 구조입니다.</p>
 
   <div class="chapter-image journey-map">
-    <img src="../assets/CH01/gemini/01_journey-roadmap.png" alt="">
+    <img src="../assets/CH01/image/01_journey-roadmap.png" alt="">
     <div class="caption">앞으로의 여정. 10개 챕터를 4파트로 묶은 전체 로드맵</div>
   </div>
 

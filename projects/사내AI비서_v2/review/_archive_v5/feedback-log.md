@@ -65,8 +65,8 @@ step2_reranker.py, step3_hybrid_search.py를 step1_chunk_experiment/과 동일�
 ### 자체 검증 (D1~D4)
 - **D1 용어-탐지기**: CONDITIONAL_PASS — 주요 용어(Fixed-size/Semantic Chunking, ReRanking, Hybrid Search, BM25, Cross-Encoder, k값, Threshold) 모두 비유 선행 + 기술 파트 정식 정의. 단, Recursive Character Chunking이 155행에서 등장하나 비유 없음, 용어 정리 테이블에도 없음.
 - **D2 톤-검사기**: CONDITIONAL_PASS — 대화체 유지. 단, 기술 파트 끝 "이것만은 기억하세요"(1081행)가 다른 챕터의 "이것만은 기억하자"와 톤 불일치.
-- **D3 파트-분리-검증기**: PASS — 이야기 파트(9~107행)에 Python 코드 블록 0개 (테이블/GEMINI PROMPT만)
-- **D4 포맷-검증기**: CONDITIONAL_PASS — 이야기→기술 구조 준수, 용어 정리 테이블, 파일 계층, GEMINI PROMPT(2), CAPTURE NEEDED(4) 준수. 단, "이것만은 기억하자"가 이야기 파트 끝(103행)과 기술 파트 끝(1081행) 두 곳에 존재. 이야기 파트 것 제거 필요.
+- **D3 파트-분리-검증기**: PASS — 이야기 파트(9~107행)에 Python 코드 블록 0개 (테이블/IMAGE PROMPT만)
+- **D4 포맷-검증기**: CONDITIONAL_PASS — 이야기→기술 구조 준수, 용어 정리 테이블, 파일 계층, IMAGE PROMPT(2), CAPTURE NEEDED(4) 준수. 단, "이것만은 기억하자"가 이야기 파트 끝(103행)과 기술 파트 끝(1081행) 두 곳에 존재. 이야기 파트 것 제거 필요.
 
 ### 인사이트 검토
 - **판정**: CONDITIONAL_PASS
@@ -152,7 +152,7 @@ step2_reranker.py, step3_hybrid_search.py를 step1_chunk_experiment/과 동일�
 - **D1 용어-탐지기**: PASS — 에이전트(안내데스크), QueryRouter(안내데스크 분류), @tool(담당자), ReAct(생각→행동→관찰), AgentExecutor(반복 실행기) 모두 비유 선행 + 기술 파트 정식 정의
 - **D2 톤-검사기**: PASS — "아...", "이제 진짜 비서 같은데요", "(드디어.)" 대화체+속마음 괄호 준수
 - **D3 파트-분리-검증기**: PASS — 이야기 파트에 Python 코드 0개 (AI 응답 시뮬레이션, Mermaid 다이어그램, 도구 테이블만)
-- **D4 포맷-검증기**: PASS — 이야기→기술 구조, 용어 정리, 파일 계층, GEMINI PROMPT(1), CAPTURE NEEDED(2), "이것만은 기억하자" 준수
+- **D4 포맷-검증기**: PASS — 이야기→기술 구조, 용어 정리, 파일 계층, IMAGE PROMPT(1), CAPTURE NEEDED(2), "이것만은 기억하자" 준수
 
 ### 인사이트 검토
 - **판정**: PASS
@@ -202,7 +202,7 @@ step2_reranker.py, step3_hybrid_search.py를 step1_chunk_experiment/과 동일�
 - **D1 용어-탐지기**: PASS — 파싱/청킹/임베딩/벡터DB/코사인유사도/업서트 모두 요리 비유 + 기술 파트 정식 정의
 - **D2 톤-검사기**: PASS — "여기가 마법이 일어나는 곳이다", "이유는 간단하다" 대화체 유지
 - **D3 파트-분리-검증기**: PASS — 이야기 파트에 코드 블록 0개 (Mermaid/폴더트리/실행결과 시뮬레이션만)
-- **D4 포맷-검증기**: PASS — 이야기→기술 구조, 용어 정리, GEMINI PROMPT(1), CAPTURE NEEDED(2), 실습 환경 구축 준수
+- **D4 포맷-검증기**: PASS — 이야기→기술 구조, 용어 정리, IMAGE PROMPT(1), CAPTURE NEEDED(2), 실습 환경 구축 준수
 
 ### 인사이트 검토
 - **판정**: PASS
@@ -227,7 +227,7 @@ step2_reranker.py, step3_hybrid_search.py를 step1_chunk_experiment/과 동일�
 - **D1 용어-탐지기**: PASS — 메타데이터/청킹/오버랩/GIGO 모두 비유 선행 + 기술 파트 정식 정의
 - **D2 톤-검사기**: PASS — "한숨이 나왔다", "그런데 조각의 크기를 어떻게 정할까?" 대화체 유지
 - **D3 파트-분리-검증기**: PASS — 이야기 파트에 코드 블록 0개 (Mermaid/트리 구조만)
-- **D4 포맷-검증기**: PASS — 이야기→기술 구조, 용어 정리 테이블, GEMINI PROMPT 플레이스홀더, "이것만은 기억하자" 모두 준수
+- **D4 포맷-검증기**: PASS — 이야기→기술 구조, 용어 정리 테이블, IMAGE PROMPT 플레이스홀더, "이것만은 기억하자" 모두 준수
 
 ### 인사이트 검토
 - **판정**: PASS

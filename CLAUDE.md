@@ -61,7 +61,7 @@ Phase 6 ── 출판 (인쇄소)
 | `검토 [챕터]`      | —    | `review/feedback-log.md`             | `.claude/workflow/review-guide.md`                 |
 | `프롤로그 생성`    | 6    | `book/프롤로그.md`                   | `.claude/workflow/step6-프롤로그.md`               |
 | `마무리`           | 7    | `book/에필로그.md` 등                | `.claude/workflow/step7-마무리.md`                 |
-| `이미지 분석`      | 5    | `[GEMINI PROMPT]` 플레이스홀더       | illustrator + image-analyzer 스킬                  |
+| `이미지 분석`      | 5    | `[IMAGE PROMPT]` 플레이스홀더       | illustrator + image-analyzer 스킬                  |
 | `출판정보 생성`    | 출판 | `book/publish-info-*.md`             | publisher + pub-info 스킬                          |
 | `인쇄소`           | 출판 | `book/output/*.pdf`                  | Typst 파이프라인. 아래 "인쇄소 실행 흐름" 참조     |
 | `HTML 빌드`        | 집필 | `.build/*.html`                      | `pub-html-build` 스킬. 아래 "HTML 파이프라인" 참조. PDF가 필요하면 별도 스킬 `pub-html-to-pdf` |

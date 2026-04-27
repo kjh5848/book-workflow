@@ -6,7 +6,7 @@
 
 기존 `build_pdf.py`와 동일한 전처리 로직을 사용합니다.
 
-- **HTML 주석 제거**: `<!-- [GEMINI PROMPT ...] -->`, `<!-- [CAPTURE NEEDED ...] -->`, 기타 주석
+- **HTML 주석 제거**: `<!-- [IMAGE PROMPT ...] -->`, `<!-- [CAPTURE NEEDED ...] -->`, 기타 주석
 - **이미지 경로 변환**: 마크다운 상대경로 → 절대경로 (Typst가 file:// 없이 절대경로로 이미지를 찾음)
 - **Mermaid 렌더링**: `npx @mermaid-js/mermaid-cli`로 코드블록 → PNG 변환, `_mermaid_images/` 폴더에 저장
 

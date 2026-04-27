@@ -195,7 +195,7 @@ PDF 변환 옵션(`--no-pagedjs` 등)은 별도 스킬 `pub-html-to-pdf`의 `bui
 | `챕터 작성 [번호]` | 이야기 파트 + 기술 파트 집필 (writer → editor) |
 | `검토 [챕터]` | 3인 편집위원회 재검토 |
 
-- writer가 `[CAPTURE NEEDED]`, `[GEMINI PROMPT]` 플레이스홀더를 삽입해둔다
+- writer가 `[CAPTURE NEEDED]`, `[IMAGE PROMPT]` 플레이스홀더를 삽입해둔다
 - 이미지 생성은 자동이 아니라 유저가 별도 요청한다 (아래 참조)
 
 ### 코드가 완성되어 스크린샷/이미지를 만들 때
@@ -206,7 +206,7 @@ PDF 변환 옵션(`--no-pagedjs` 등)은 별도 스킬 `pub-html-to-pdf`의 `bui
 |------|------|
 | 터미널 캡처 | screenshot 스킬 → `scripts/terminal_screenshot.py` |
 | 브라우저 캡처 | screenshot 스킬 → Playwright MCP |
-| 개념도 | `[GEMINI PROMPT]`의 프롬프트를 유저가 Gemini에 직접 입력 |
+| 개념도 | `[IMAGE PROMPT]`의 프롬프트를 유저가 Gemini에 직접 입력 |
 | 다이어그램 | publisher(인쇄소)가 D2/Mermaid → 이미지 렌더링 |
 
 이미지 생성 후 해당 이미지의 파일명을 교체한다.

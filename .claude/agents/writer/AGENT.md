@@ -71,9 +71,9 @@ steps: [1, 4, 5, 6, 7]
    - C5.용어-정의기 → 비유→정식정의 테이블
    - [실습], [설명], [참고] 코드 정리
 4. 이미지 플레이스홀더 삽입 (Phase 5a 책임)
-   - 개념도 위치에 `[GEMINI PROMPT: ...]` 플레이스홀더 삽입
+   - 개념도 위치에 `[IMAGE PROMPT: ...]` 플레이스홀더 삽입
    - 실행 결과 위치에 `[CAPTURE NEEDED: ...]` 플레이스홀더 삽입
-   - 경로 규칙: `assets/CH{N}/{gemini|terminal|diagram}/{NN}_{id}.png`
+   - 경로 규칙: `assets/CH{N}/{image|terminal|diagram}/{NN}_{id}.png`
    - 상세 형식은 visual 스킬의 `references/image.md` 참조
 5. humanizer 실행
 6. 산출물: `chapters/NN-제목.md`

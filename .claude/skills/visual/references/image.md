@@ -39,13 +39,13 @@ projects/{책이름}/
 
 | 용도 | 경로 기준 | 형식 | 예시 |
 |------|----------|------|------|
-| `path:` (스크립트용) | 프로젝트 루트 | `assets/CH{N}/{subfolder}/{id}.png` | `assets/CH01/gemini/01_auth-flow.png` |
-| `![alt](src)` (마크다운) | 챕터 파일 위치 | `../assets/CH{N}/{subfolder}/{id}.png` | `../assets/CH01/gemini/01_auth-flow.png` |
+| `path:` (스크립트용) | 프로젝트 루트 | `assets/CH{N}/{subfolder}/{id}.png` | `assets/CH01/image/01_auth-flow.png` |
+| `![alt](src)` (마크다운) | 챕터 파일 위치 | `../assets/CH{N}/{subfolder}/{id}.png` | `../assets/CH01/image/01_auth-flow.png` |
 
 **서브폴더 매핑:**
 | 플레이스홀더 | 서브폴더 |
 |-------------|---------|
-| `[GEMINI PROMPT]` | `gemini/` |
+| `[IMAGE PROMPT]` | `gemini/` |
 | `[CAPTURE NEEDED]` (터미널) | `terminal/` |
 | Mermaid/D2 렌더링 | `diagram/` |
 
@@ -78,25 +78,25 @@ rsvg-convert -o 파일.png -w 1600 파일.svg
 개념 이미지를 삽입할 때 사용. 아이콘 사전(§2)을 참고하여 프롬프트까지 확정한다.
 
 ```markdown
-<!-- [GEMINI PROMPT: {NN}_{identifier}]
-path: assets/CH{N}/gemini/{NN}_{identifier}.png
+<!-- [IMAGE PROMPT: {NN}_{identifier}]
+path: assets/CH{N}/image/{NN}_{identifier}.png
 {§3 베이스 스타일 + 프로젝트 아이콘 사전 조합 프롬프트}
 Style: {style-tag}
 -->
-![{캡션}](../assets/CH{N}/gemini/{NN}_{identifier}.png)
+![{캡션}](../assets/CH{N}/image/{NN}_{identifier}.png)
 *그림 {N}-{순번}: {캡션}*
 ```
 
 **예시:**
 ```markdown
-<!-- [GEMINI PROMPT: 03_rag-flow]
-path: assets/CH03/gemini/03_rag-flow.png
+<!-- [IMAGE PROMPT: 03_rag-flow]
+path: assets/CH03/image/03_rag-flow.png
 Minimalist flat-design infographic illustrating RAG pipeline. Three stages:
 Document → Embedding → Vector DB → Query → LLM Response.
 White background, Korean labels, 16:9 aspect ratio.
 Style: architecture-infographic
 -->
-![RAG 파이프라인](../assets/CH03/gemini/03_rag-flow.png)
+![RAG 파이프라인](../assets/CH03/image/03_rag-flow.png)
 *그림 3-2: RAG 파이프라인의 전체 흐름*
 ```
 
@@ -162,14 +162,14 @@ desc: 전체 에이전트 흐름 중 ResponseCache(메모장) 부분만 강조.
 저자가 인터넷/외부 출처에서 가져온 참고 이미지를 챕터에 삽입해두면, `이미지 분석` 명령으로 해당 이미지를 분석하여 교육용 재생성 Gemini 프롬프트를 자동 생성한다. 상세: `skills/image-analyzer/SKILL.md`
 
 ```markdown
-<!-- [GEMINI PROMPT: {NN}_{identifier}]
-path: assets/CH{N}/gemini/{NN}_{identifier}.png
-reference: assets/CH{N}/gemini/{원본파일명}
+<!-- [IMAGE PROMPT: {NN}_{identifier}]
+path: assets/CH{N}/image/{NN}_{identifier}.png
+reference: assets/CH{N}/image/{원본파일명}
 context: {챕터 내 삽입 위치의 문맥 요약 1줄}
 {§3 베이스 스타일 + 참고 이미지 재해석 프롬프트}
 Style: {style-tag}
 -->
-![{캡션}](../assets/CH{N}/gemini/{NN}_{identifier}.png)
+![{캡션}](../assets/CH{N}/image/{NN}_{identifier}.png)
 *그림 {N}-{순번}: {캡션}*
 ```
 
@@ -257,17 +257,17 @@ HTML 주석 블록은 제거한다.
 
 **Before (플레이스홀더):**
 ```markdown
-<!-- [GEMINI PROMPT: 03_rag-flow]
-path: assets/CH03/gemini/03_rag-flow.png
+<!-- [IMAGE PROMPT: 03_rag-flow]
+path: assets/CH03/image/03_rag-flow.png
 ...prompt...
 -->
-![RAG 파이프라인](../assets/CH03/gemini/03_rag-flow.png)
+![RAG 파이프라인](../assets/CH03/image/03_rag-flow.png)
 *그림 3-2: RAG 파이프라인의 전체 흐름*
 ```
 
 **After (이미지 준비 완료):**
 ```markdown
-<img src="../assets/CH03/gemini/03_rag-flow.png" width="720" alt="RAG 파이프라인">
+<img src="../assets/CH03/image/03_rag-flow.png" width="720" alt="RAG 파이프라인">
 
 *그림 3-2: RAG 파이프라인의 전체 흐름*
 ```

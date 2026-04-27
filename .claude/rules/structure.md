@@ -87,7 +87,7 @@
 
 ### 이미지 플레이스홀더
 
-- `[GEMINI PROMPT]` — 개념도 (유저가 Gemini에 입력)
+- `[IMAGE PROMPT]` — 개념도 (유저가 Gemini에 입력)
 - `[CAPTURE NEEDED]` — 실행 결과 캡처 (유저가 screenshot 스킬 호출)
 - `[FLOW CARD]` — 시퀀스·단계 흐름 (유저가 visual 스킬 호출)
 - 상세 형식 → `writing-chapters.md`

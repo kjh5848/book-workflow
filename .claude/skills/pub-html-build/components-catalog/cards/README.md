@@ -78,7 +78,7 @@
     </div>
   </div>
   <div class="eer-image">
-    <img src="../assets/CH04/gemini/04_embedding-concept.png" alt="">
+    <img src="../assets/CH04/image/04_embedding-concept.png" alt="">
   </div>
 </div>
 <div class="eer-caption">그림 4-5. 왼쪽(문장 임베딩 벡터 예시. 앞 몇 자리만 봐도 비슷/다름이 드러남), 오른쪽(임베딩 공간에 찍힌 좌표. 의미가 가까운 문서가 한 곳에 모임)</div>

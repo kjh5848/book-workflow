@@ -35,7 +35,7 @@
 
 **Markdown 사용 예**:
 ```markdown
-![](../assets/CH04/gemini/04_chapter-opening.png)
+![](../assets/CH04/image/04_chapter-opening.png)
 *그림 4-1. 문서를 지식으로 바꾸는 주방. 손질, 다지기, 양념, 냉장고*
 ```
 
@@ -61,7 +61,7 @@
 **HTML 사용 예**:
 ```html
 <figure class="chapter-image">
-  <img src="../assets/CH04/gemini/04_chapter-opening.png" alt="">
+  <img src="../assets/CH04/image/04_chapter-opening.png" alt="">
   <div class="caption">그림 4-1. 문서를 지식으로 바꾸는 주방</div>
 </figure>
 ```

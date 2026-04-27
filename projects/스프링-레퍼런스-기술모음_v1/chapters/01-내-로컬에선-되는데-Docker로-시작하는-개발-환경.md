@@ -95,7 +95,7 @@ Docker의 정식 용어(이미지·컨테이너·레이어·볼륨)가 한꺼번
 
 ## 1.1 "내 로컬에선 되는데"의 진실
 
-![](../assets/CH01/gemini/01_chapter-opening.png)
+![](../assets/CH01/image/01_chapter-opening.png)
 *그림 1-1. 첫 출근 날 아침, 서비스 저장소 URL 하나*
 
 첫 출근 날 아침.
@@ -314,7 +314,7 @@ services:
 
 구성 파일 세 개가 머릿속에 들어왔으니, 이제 실행해 볼 차례입니다. 먼저 Docker Desktop이 켜져 있는지 확인합니다.
 
-![](../assets/CH01/gemini/01_docker-desktop-running.png)
+![](../assets/CH01/image/01_docker-desktop-running.png)
 *그림 1-3. Docker Desktop이 실행 중이면 상단에 고래 아이콘이 초록색으로 떠 있습니다*
 
 그다음 `spring-docker` 폴더에서 터미널을 열고 한 줄을 입력합니다.
@@ -355,7 +355,7 @@ docker compose up
 
 Docker Desktop 창으로 가 보면 **Containers** 탭에 `spring-docker` 한 줄이 초록색 Running으로 떠 있습니다.
 
-![](../assets/CH01/gemini/01_docker-desktop-containers.png)
+![](../assets/CH01/image/01_docker-desktop-containers.png)
 *그림 1-6. Docker Desktop Containers 탭. `spring-docker` 컨테이너가 Running 상태로 보입니다*
 
 *컨테이너가 돌고 있다.*

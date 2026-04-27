@@ -82,8 +82,8 @@ assets/Ch{NN}/{유형}/{NN}_{id}.png
 > 한 줄 요약: ...
 > 핵심 개념: ..., ..., ...
 
-<!-- 오프닝 GEMINI PROMPT -->
-![](../assets/Ch{NN}/gemini/{NN}_chapter-opening.png)
+<!-- 오프닝 IMAGE PROMPT -->
+![](../assets/Ch{NN}/image/{NN}_chapter-opening.png)
 *오프닝 캡션*
 
 ## N. 이야기 H2 (자연스러운 제목)
@@ -127,13 +127,13 @@ assets/Ch{NN}/{유형}/{NN}_{id}.png
 
 | 플레이스홀더 | 용도 | 처리 주체 |
 |--------------|------|-----------|
-| `[GEMINI PROMPT]` | 개념/비유 도식 (정적 일러스트) | 유저가 Gemini에 프롬프트 입력 |
+| `[IMAGE PROMPT]` | 개념/비유 도식 (정적 일러스트) | 유저가 Gemini에 프롬프트 입력 |
 | `[FLOW CARD]` | 단계별 흐름/파이프라인 | visual 스킬이 D2로 렌더 |
 | `[CAPTURE NEEDED]` | 터미널/브라우저 실행 결과 | screenshot 스킬 |
 | ```` ```mermaid ```` | 간단한 시퀀스 (인라인) | Pandoc 자동 렌더 |
 
 **구분 기준**:
-- 비유/추상 개념을 그림으로 → GEMINI PROMPT
+- 비유/추상 개념을 그림으로 → IMAGE PROMPT
 - 단계가 순서대로 흘러가는 파이프라인 → FLOW CARD
 - 실제 실행 스크린샷 → CAPTURE NEEDED
 - 간단한 시퀀스(캐릭터 간 호출 등) → Mermaid 코드블록
@@ -203,7 +203,7 @@ assets/Ch{NN}/{유형}/{NN}_{id}.png
 - `![](경로)`의 alt 텍스트는 비움
 
 ```markdown
-![](../assets/Ch07/gemini/07_cache-concept.png)
+![](../assets/Ch07/image/07_cache-concept.png)
 *같은 질문이 또 오면 서가에 가지 않고 메모장을 읽어줍니다*
 ```
 

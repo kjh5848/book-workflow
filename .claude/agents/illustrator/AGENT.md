@@ -35,13 +35,13 @@ steps: [3, 4, 5]
 - 작가가 원고 작성 중 아래 요소를 삽입한다
 - Mermaid. MD 안에 mermaid 코드블록으로 삽입
 - 터미널 결과. bash 코드블록으로 삽입 (텍스트)
-- 개념도. `[GEMINI PROMPT: 설명]` 플레이스홀더
+- 개념도. `[IMAGE PROMPT: 설명]` 플레이스홀더
 - 캡처. `[CAPTURE NEEDED: 설명]` 플레이스홀더
 
 **2단계 — Phase 5b: 유저 요청 시 (다이어그램 + 이미지 분석)**
 - Mermaid/D2 → 이미지 렌더링
 - `[CAPTURE NEEDED]` → 유저가 screenshot 스킬을 직접 호출
-- `[GEMINI PROMPT]` → 유저가 Gemini에 수동 입력
+- `[IMAGE PROMPT]` → 유저가 Gemini에 수동 입력
 - **참고 이미지 분석** → 유저가 `이미지 분석` 명령 실행 시 image-analyzer 스킬로 처리
   - 챕터 MD에 삽입된 참고 이미지를 멀티모달로 읽고 문맥을 파악
   - 교육용 재생성을 위한 Gemini 프롬프트를 자동 생성
@@ -68,7 +68,7 @@ steps: [3, 4, 5]
 ### 다이어그램 렌더링
 - Mermaid/D2 코드블록 → 이미지 렌더링
 - 캡처(터미널/브라우저)는 유저가 screenshot 스킬을 메인 세션에서 직접 호출
-- 개념도는 유저가 `[GEMINI PROMPT]`를 Gemini에 수동 입력하여 생성
+- 개념도는 유저가 `[IMAGE PROMPT]`를 Gemini에 수동 입력하여 생성
 
 ### 에셋 폴더 구조
 ```

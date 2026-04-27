@@ -65,13 +65,13 @@
 Phase 5a ── 글 작성 (유저 대화 필수)
   변수 수집 질문 + 인사이트 질문
   이야기 파트 + 기술 파트 초안
-  이미지 위치에 플레이스홀더 삽입: [GEMINI PROMPT], [CAPTURE NEEDED]
+  이미지 위치에 플레이스홀더 삽입: [IMAGE PROMPT], [CAPTURE NEEDED]
 
 Phase 5b ── 이미지 생성 (유저 요청 시)
   유저가 코드 실행 결과를 확인한 후 요청
   Mermaid/D2 다이어그램 → illustrator 에이전트
   터미널/브라우저 캡처 → 유저가 screenshot 스킬 직접 호출
-  개념도 → 유저가 [GEMINI PROMPT]를 Gemini에 수동 입력
+  개념도 → 유저가 [IMAGE PROMPT]를 Gemini에 수동 입력
 
 Phase 5c ── 검토 (독립 수행 가능)
   인사이트 + 의도감시 + 감수 → editor 에이전트

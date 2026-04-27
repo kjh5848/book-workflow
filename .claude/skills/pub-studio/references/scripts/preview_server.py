@@ -282,8 +282,8 @@ def parse_md_to_blocks(text: str) -> list[dict]:
                     comment_lines.append(lines[i])
             content = "\n".join(comment_lines)
             meta = {}
-            if "GEMINI PROMPT" in content:
-                meta["prompt_type"] = "GEMINI PROMPT"
+            if "IMAGE PROMPT" in content:
+                meta["prompt_type"] = "IMAGE PROMPT"
             elif "CAPTURE NEEDED" in content:
                 meta["prompt_type"] = "CAPTURE NEEDED"
             blocks.append(make_block("comment", content, meta, start, i))
