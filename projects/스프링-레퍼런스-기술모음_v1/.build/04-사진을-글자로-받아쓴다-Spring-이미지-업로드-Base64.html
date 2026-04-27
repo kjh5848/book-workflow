@@ -165,7 +165,7 @@
 <h2>4.2 엽서로 사진을 적어 보낸다</h2>
 <p>Base64는 64개의 글자(A-Z, a-z, 0-9, <code>+</code>, <code>/</code>)만 써서 모든 바이트를 다시 쓰는 방식이었습니다. 규칙은 단순했습니다. 8비트짜리 바이트 세 개(총 24비트)를 가져와서, 6비트씩 네 조각으로 잘라 64개 글자 중 하나로 바꿉니다. 사진의 모든 바이트가 이 방식으로 글자들로 쭉 늘어섭니다.</p>
 <p class="thought">그럼 JSON에 그대로 태울 수 있겠구나.</p>
-<p>[GEMINI PROMPT: 왼쪽에 고양이 사진 한 장(PNG)이 놓여 있고, 그 옆에 큰 화살표가 엽서 모양 상자로 이어진다. 엽서 상자 안에는 &quot;iVBORw0KGgoAAAANSUhEUgAA...&quot;처럼 Base64 문자열이 여러 줄에 걸쳐 빽빽이 적혀 있다. 엽서 아래에는 작은 손글씨로 &quot;사진을 글자로 받아썼습니다&quot;가 적혀 있다. 깔끔한 일러스트, 흰 배경, 인디고·오렌지 악센트.]</p>
+<p>[IMAGE PROMPT: 왼쪽에 고양이 사진 한 장(PNG)이 놓여 있고, 그 옆에 큰 화살표가 엽서 모양 상자로 이어진다. 엽서 상자 안에는 &quot;iVBORw0KGgoAAAANSUhEUgAA...&quot;처럼 Base64 문자열이 여러 줄에 걸쳐 빽빽이 적혀 있다. 엽서 아래에는 작은 손글씨로 &quot;사진을 글자로 받아썼습니다&quot;가 적혀 있다. 깔끔한 일러스트, 흰 배경, 인디고·오렌지 악센트.]</p>
 <p class="thought">그림 4-1. 사진을 엽서 한 장에 글자로 받아쓰는 방식이 Base64입니다</p>
 <p>이 방식의 약점은 따로 있었습니다. 3바이트가 4글자로 늘어나니까, <strong>크기가 약 33퍼센트 불어난다</strong>는 점이었습니다. 1MB짜리 사진은 Base64로 바꾸는 순간 약 1.33MB가 되었습니다. 엽서로 사진을 받아쓰면 사진 원본보다 엽서 더미가 더 두꺼워진다는 얘기였습니다. 오픈이는 그 비용이 얼마나 커질지 아직 감이 없었지만, 일단은 JSON 하나로 사진을 보낼 수 있다는 것이 더 크게 보였습니다.</p>
 <div class="sp-figure">
@@ -319,6 +319,8 @@
 <div class="code-block highlight" data-lang="java"><div class="cb-title"><span class="badge">실습 4</span> src/main/java/com/metacoding/spring_base64/image/ImageResponse.java. 업로드·조회 응답</div><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ImageResponse</span><span class="w"> </span><span class="p">{</span>
 
 <span class="w">    </span><span class="c1">// TODO: 업로드·조회 공용 응답 record를 만듭니다</span>
+<span class="w">    </span><span class="c1">// 1. id·uuid·fileName·url·createdAt 다섯 필드를 record로 선언</span>
+<span class="w">    </span><span class="c1">// 2. fromEntity 정적 팩토리에서 엔티티의 다섯 게터를 그대로 호출</span>
 <span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">record</span> <span class="nc">DTO</span><span class="p">(</span>
 <span class="w">            </span><span class="n">Long</span><span class="w"> </span><span class="n">id</span><span class="p">,</span>
 <span class="w">            </span><span class="n">String</span><span class="w"> </span><span class="n">uuid</span><span class="p">,</span>
@@ -326,7 +328,6 @@
 <span class="w">            </span><span class="n">String</span><span class="w"> </span><span class="n">url</span><span class="p">,</span>
 <span class="w">            </span><span class="n">LocalDateTime</span><span class="w"> </span><span class="n">createdAt</span>
 <span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="c1">// 1. 엔티티를 응답 DTO로 변환하는 정적 팩토리</span>
 <span class="w">        </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">DTO</span><span class="w"> </span><span class="nf">fromEntity</span><span class="p">(</span><span class="n">ImageEntity</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">DTO</span><span class="p">(</span>
 <span class="w">                    </span><span class="n">e</span><span class="p">.</span><span class="na">getId</span><span class="p">(),</span>
@@ -374,12 +375,13 @@
 <p><code>src/main/java/com/metacoding/spring_base64/image/ImageService.java</code>를 열고 TODO의 <code>pass</code>를 지우고 아래 코드를 작성합니다.</p>
 <div class="code-block highlight" data-lang="java"><div class="cb-title"><span class="badge">실습 5</span> src/main/java/com/metacoding/spring_base64/image/ImageService.java. Base64 디코딩</div><span class="nd">@Transactional</span>
 <span class="kd">public</span><span class="w"> </span><span class="n">ImageResponse</span><span class="p">.</span><span class="na">DTO</span><span class="w"> </span><span class="nf">upload</span><span class="p">(</span><span class="n">ImageRequest</span><span class="p">.</span><span class="na">UploadDTO</span><span class="w"> </span><span class="n">uploadDTO</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="c1">// TODO: 1. Base64 문자열을 원본 바이트로 복원한다</span>
+<span class="w">    </span><span class="c1">// TODO: 업로드 요청을 받아 파일·DB에 기록합니다</span>
+<span class="w">    </span><span class="c1">// 1. Base64.getDecoder().decode(...)로 문자열을 원본 바이트로 복원</span>
 <span class="w">    </span><span class="kt">byte</span><span class="o">[]</span><span class="w"> </span><span class="n">fileBytes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Base64</span><span class="p">.</span><span class="na">getDecoder</span><span class="p">().</span><span class="na">decode</span><span class="p">(</span><span class="n">uploadDTO</span><span class="p">.</span><span class="na">fileData</span><span class="p">());</span>
 
-<span class="w">    </span><span class="c1">// 2. ... (다음 절에서 파일명 만들기)</span>
-<span class="w">    </span><span class="c1">// 3. ... (다음 절에서 디스크 저장)</span>
-<span class="w">    </span><span class="c1">// 4. ... (다음 절에서 DB 기록)</span>
+<span class="w">    </span><span class="c1">// 2. ... (다음 절에서 UUID로 새 파일명 생성)</span>
+<span class="w">    </span><span class="c1">// 3. ... (다음 절에서 Files.write로 uploads/ 폴더에 디스크 저장)</span>
+<span class="w">    </span><span class="c1">// 4. ... (다음 절에서 imageRepository.save로 DB에 한 행 기록)</span>
 <span class="p">}</span></div>
 <p><code>Base64</code>는 <code>java.util.Base64</code>입니다. 별도 라이브러리가 필요하지 않습니다. <code>getDecoder().decode(...)</code> 한 줄이 긴 문자열을 원본 바이트로 되돌립니다. 이 <code>fileBytes</code>가 곧 디스크에 떨어질 실제 사진입니다.</p>
 <div class="tip">
@@ -462,7 +464,9 @@
 
 <span class="w">    </span><span class="nd">@Override</span>
 <span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">addResourceHandlers</span><span class="p">(</span><span class="n">ResourceHandlerRegistry</span><span class="w"> </span><span class="n">registry</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="c1">// TODO: /uploads/** 요청을 로컬 uploads 폴더로 연결한다</span>
+<span class="w">        </span><span class="c1">// TODO: /uploads/** 요청을 로컬 uploads 폴더로 연결합니다</span>
+<span class="w">        </span><span class="c1">// 1. addResourceHandler(&quot;/uploads/**&quot;)로 매칭할 URL 패턴을 등록</span>
+<span class="w">        </span><span class="c1">// 2. addResourceLocations(&quot;file:uploads/&quot;)로 디스크의 실제 폴더를 가리킴</span>
 <span class="w">        </span><span class="n">registry</span><span class="p">.</span><span class="na">addResourceHandler</span><span class="p">(</span><span class="s">&quot;/uploads/**&quot;</span><span class="p">)</span>
 <span class="w">                </span><span class="p">.</span><span class="na">addResourceLocations</span><span class="p">(</span><span class="s">&quot;file:uploads/&quot;</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
@@ -497,6 +501,70 @@
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span></div>
 <p><code>findById</code>와 <code>listAll</code>은 <code>ImageService</code> 안에서 <code>imageRepository.findById(id)</code>와 <code>imageRepository.findAll()</code>을 감싸서 <code>ImageResponse.DTO.fromEntity(...)</code> 변환만 추가한 단순 메서드입니다. 리포지토리를 컨트롤러에서 직접 건드리지 않고 서비스 한 겹을 거치는 것이 이 레포의 규칙입니다.</p>
+<p>세 엔드포인트가 코드 진입점부터 응답까지 어떻게 흐르는지 한 화면에 그려 두겠습니다.</p>
+<div class="sp-figure">
+  <div class="sp-figure-title">그림 4-5. POST /upload — 컨트롤러 진입점부터 응답까지</div>
+  <div class="sp-flow">
+    <div class="sp-step">
+      <span class="sp-step-num">STEP 01</span>
+      <div class="sp-step-title">Postman</div>
+      <div class="sp-step-desc"><code>POST /upload</code> JSON 본문에 <code>fileName</code>·<code>fileData</code></div>
+    </div>
+    <div class="sp-flow-arrow">→</div>
+    <div class="sp-step">
+      <span class="sp-step-num">STEP 02</span>
+      <div class="sp-step-title">Controller</div>
+      <div class="sp-step-desc"><code>@RequestBody UploadDTO</code>로 역직렬화 후 서비스 호출</div>
+    </div>
+    <div class="sp-flow-arrow">→</div>
+    <div class="sp-step">
+      <span class="sp-step-num">STEP 03</span>
+      <div class="sp-step-title">Service</div>
+      <div class="sp-step-desc">디코딩 → UUID → <code>uploads/</code> 저장 → 엔티티 빌드</div>
+    </div>
+    <div class="sp-flow-arrow">→</div>
+    <div class="sp-step">
+      <span class="sp-step-num">STEP 04</span>
+      <div class="sp-step-title">DB (H2)</div>
+      <div class="sp-step-desc"><code>imageRepository.save</code>로 <code>image_tb</code>에 한 행 기록</div>
+    </div>
+    <div class="sp-flow-arrow">→</div>
+    <div class="sp-step">
+      <span class="sp-step-num">STEP 05</span>
+      <div class="sp-step-title">Response</div>
+      <div class="sp-step-desc"><code>fromEntity</code>로 변환해 <code>ImageResponse.DTO</code> JSON 반환</div>
+    </div>
+  </div>
+</div>
+<p>조회는 같은 컨트롤러의 다른 매핑입니다. 디코딩·저장 단계가 빠지고, DB 한 행을 읽어 같은 응답 DTO로 내려보냅니다.</p>
+<div class="sp-figure">
+  <div class="sp-figure-title">그림 4-6. GET /{id} — 단건 조회의 짧은 흐름</div>
+  <div class="sp-flow">
+    <div class="sp-step">
+      <span class="sp-step-num">STEP 01</span>
+      <div class="sp-step-title">Postman</div>
+      <div class="sp-step-desc"><code>GET /1</code> 경로 변수로 ID 전달</div>
+    </div>
+    <div class="sp-flow-arrow">→</div>
+    <div class="sp-step">
+      <span class="sp-step-num">STEP 02</span>
+      <div class="sp-step-title">Controller</div>
+      <div class="sp-step-desc"><code>@PathVariable Long id</code>로 받아 서비스 호출</div>
+    </div>
+    <div class="sp-flow-arrow">→</div>
+    <div class="sp-step">
+      <span class="sp-step-num">STEP 03</span>
+      <div class="sp-step-title">Service · DB</div>
+      <div class="sp-step-desc"><code>imageRepository.findById</code>로 <code>image_tb</code> 한 행 조회</div>
+    </div>
+    <div class="sp-flow-arrow">→</div>
+    <div class="sp-step">
+      <span class="sp-step-num">STEP 04</span>
+      <div class="sp-step-title">Response</div>
+      <div class="sp-step-desc"><code>fromEntity</code>로 변환해 같은 DTO 모양으로 반환</div>
+    </div>
+  </div>
+</div>
 <p>이제 세 조각(저장 경로·매핑·컨트롤러)이 맞물렸으니, Postman으로 실제로 돌려 보겠습니다.</p>
 <h2>4.7 Postman으로 전체 흐름 확인</h2>
 <p>서버를 띄웁니다.</p>
@@ -549,6 +617,22 @@
 <p>[CAPTURE NEEDED: Postman에서 GET /list 응답. 배열 안에 방금 올린 한 건이 들어간 JSON]</p>
 <p>[CAPTURE NEEDED: Postman에서 GET /1 응답. id=1 한 건이 단일 객체로 내려오는 JSON]</p>
 <p>세 엔드포인트가 모두 같은 <code>ImageResponse.DTO</code> 모양을 응답합니다. 프런트엔드는 업로드·목록·상세를 같은 파싱 함수로 처리하면 됩니다.</p>
+<div class="sp-figure">
+  <div class="sp-figure-title">그림 4-7. 세 엔드포인트의 요청·응답 한눈 비교</div>
+  <div class="sp-row accent">
+    <div class="sp-row-label"><span class="sp-chip accent">POST /upload</span></div>
+    <div class="sp-row-value">요청: <code>{fileName, fileData}</code> · 응답: <code>DTO</code> 한 건</div>
+  </div>
+  <div class="sp-row info">
+    <div class="sp-row-label"><span class="sp-chip info">GET /1</span></div>
+    <div class="sp-row-value">요청: 경로 변수 <code>id</code> · 응답: <code>DTO</code> 한 건</div>
+  </div>
+  <div class="sp-row info">
+    <div class="sp-row-label"><span class="sp-chip info">GET /list</span></div>
+    <div class="sp-row-value">요청: 본문 없음 · 응답: <code>DTO[]</code> 배열</div>
+  </div>
+  <div class="sp-callout info">응답 모양이 한 가지인 덕분에 프런트의 파싱 코드가 한 줄로 통일됩니다</div>
+</div>
 <h2>4.8 10MB 사진으로 한계를 부딪쳐 본다</h2>
 <p>동작 확인을 끝냈으니, 이제 이 방식의 <strong>바닥</strong>을 두드릴 차례였습니다. 프로필 사진은 보통 1MB 이하지만, 사용자가 최신 스마트폰으로 찍은 원본을 그대로 올리는 경우가 흔했습니다. 요즘 폰 카메라는 한 장에 8~12MB 정도가 나왔습니다. 그것을 그대로 올려 보면 어떻게 되는지 확인해 보기로 했습니다.</p>
 <p>동료가 마침 그 쪽으로 말을 걸었습니다.</p>
@@ -687,15 +771,16 @@
 </tr>
 </tbody>
 </table>
-<h2>이것만은 기억하자</h2>
+<div class="remember">
 <ul>
-<li><strong>JSON은 글자만 담는다.</strong> 바이너리 파일을 JSON에 태우려면 글자로 변환해야 하고, Base64가 이 변환의 표준이다</li>
-<li><strong>Base64는 간단한 대신 약 33퍼센트 더 커진다.</strong> 원본 3바이트가 글자 4개로 바뀌면서 크기·네트워크·메모리 비용이 한 번씩 더 붙는다</li>
-<li><strong>사진은 파일시스템, 메타데이터는 DB.</strong> 바이너리를 DB에 직접 박지 않고 경로·UUID·생성 시각만 기록한다. 조회는 URL 한 줄로 끝난다</li>
-<li><strong><code>/uploads/**</code> 정적 리소스 매핑 한 줄로 서버가 그 폴더를 그대로 공개 URL로 만든다.</strong> 파일을 내려주는 별도 API를 짜지 않아도 된다</li>
-<li><strong>10MB를 넘는 순간 이 방식은 무너진다.</strong> 요청 바디 비대·힙 점유·DB 비대·업로드 한도가 한꺼번에 당겨 온다</li>
+<li><strong>JSON은 글자만 담습니다.</strong> 바이너리 파일을 JSON에 태우려면 글자로 변환해야 하고, Base64가 이 변환의 표준입니다</li>
+<li><strong>Base64는 간단한 대신 약 33퍼센트 더 커집니다.</strong> 원본 3바이트가 글자 4개로 바뀌면서 크기·네트워크·메모리 비용이 한 번씩 더 붙습니다</li>
+<li><strong>사진은 파일시스템, 메타데이터는 DB.</strong> 바이너리를 DB에 직접 박지 않고 경로·UUID·생성 시각만 기록합니다. 조회는 URL 한 줄로 끝납니다</li>
+<li><strong><code>/uploads/**</code> 정적 리소스 매핑 한 줄로 서버가 그 폴더를 그대로 공개 URL로 만듭니다.</strong> 파일을 내려주는 별도 API를 짜지 않아도 됩니다</li>
+<li><strong>10MB를 넘는 순간 이 방식은 무너집니다.</strong> 요청 바디 비대·힙 점유·DB 비대·업로드 한도가 한꺼번에 당겨 옵니다</li>
 <li><strong>다음 챕터에서는</strong> 서버가 직접 받지 않고 사용자가 S3에 바로 올리도록 <strong>Presigned URL</strong>을 만듭니다. 업로드 완료 시점에는 <strong>Lambda</strong>가 썸네일을 만들고, Spring은 그 결과만 메타로 받아 적습니다 (Presigned URL + S3 + Lambda)</li>
 </ul>
+</div>
 
 </div>
 </body>
