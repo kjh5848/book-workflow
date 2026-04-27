@@ -5,7 +5,7 @@
   "status": "in_progress",
   "current_step": "step_5_chapters",
   "created_at": "2026-04-24",
-  "updated_at": "2026-04-24",
+  "updated_at": "2026-04-27",
   "steps": {
     "step_1_seed": {
       "name": "씨앗",
@@ -55,61 +55,61 @@
     },
     "step_5_chapters": {
       "name": "챕터 집필",
-      "status": "done",
+      "status": "done_v8_all",
       "chapters": [
         {
           "number": 1,
-          "title": "내 로컬에선 되는데 (Docker)",
-          "file": "chapters/01-내-로컬에선-되는데.md",
-          "status": "draft"
+          "title": "내 로컬에선 되는데 — Docker로 시작하는 개발 환경",
+          "file": "chapters/01-내-로컬에선-되는데-Docker로-시작하는-개발-환경.md",
+          "status": "draft-v8"
         },
         {
           "number": 2,
-          "title": "비밀번호를 맡기지 않는 로그인 (OAuth2/OIDC)",
-          "file": "chapters/02-비밀번호를-맡기지-않는-로그인.md",
-          "status": "draft"
+          "title": "비밀번호를 맡기지 않는 로그인 (OAuth/OIDC)",
+          "file": "chapters/02-비밀번호를-맡기지-않는-로그인-OAuth-2.0-OIDC.md",
+          "status": "draft-v8"
         },
         {
           "number": 3,
-          "title": "세션을 바깥에 둬라 (Redis)",
-          "file": "chapters/03-세션을-바깥에-둬라.md",
-          "status": "draft"
+          "title": "새로고침 한 번에 로그아웃되는 서버 (Redis 세션 공유)",
+          "file": "chapters/03-새로고침-한-번에-로그아웃되는-서버-Redis-세션-공유.md",
+          "status": "draft-v8"
         },
         {
           "number": 4,
-          "title": "사진을 글자로 바꿔서 보낸다 (Base64)",
-          "file": "chapters/04-사진을-글자로-바꿔서-보낸다.md",
-          "status": "draft"
+          "title": "사진을 글자로 받아쓴다 (Base64 이미지 업로드)",
+          "file": "chapters/04-사진을-글자로-받아쓴다-Spring-이미지-업로드-Base64.md",
+          "status": "draft-v8"
         },
         {
           "number": 5,
           "title": "주소만 내주는 업로드 (Presigned URL + S3 + Lambda)",
-          "file": "chapters/05-주소만-내주는-업로드.md",
-          "status": "draft"
+          "file": "chapters/05-주소만-내주는-업로드-Presigned-URL-S3-Lambda.md",
+          "status": "draft-v8"
         },
         {
           "number": 6,
           "title": "전화·알림·인터폰 (Polling·SSE·WebSocket)",
-          "file": "chapters/06-전화_알림_인터폰.md",
-          "status": "draft"
+          "file": "chapters/06-전화-알림-인터폰-Polling-SSE-WebSocket.md",
+          "status": "draft-v8"
         },
         {
           "number": 7,
-          "title": "릴 필름처럼 나눠 틀기 (HLS 스트리밍)",
-          "file": "chapters/07-릴-필름처럼-나눠-틀기.md",
-          "status": "draft"
+          "title": "한 통의 필름을 여러 조각으로 (HLS·FFmpeg)",
+          "file": "chapters/07-한-통의-필름을-여러-조각으로-HLS-FFmpeg.md",
+          "status": "draft-v8"
         },
         {
           "number": 8,
-          "title": "책 뒤에 색인을 붙였다 (Elasticsearch)",
-          "file": "chapters/08-책-뒤에-색인을-붙였다.md",
-          "status": "draft"
+          "title": "책 뒤에 색인 카드를 붙였다 (Elasticsearch)",
+          "file": "chapters/08-책-뒤에-색인-카드를-붙였다-Elasticsearch.md",
+          "status": "draft-v8"
         },
         {
           "number": 9,
           "title": "컨베이어 벨트 위에 올려 둔다 (RabbitMQ)",
-          "file": "chapters/09-컨베이어-벨트-위에-올려-둔다.md",
-          "status": "draft"
+          "file": "chapters/09-컨베이어-벨트-위에-올려-둔다-RabbitMQ.md",
+          "status": "draft-v8"
         }
       ]
     },

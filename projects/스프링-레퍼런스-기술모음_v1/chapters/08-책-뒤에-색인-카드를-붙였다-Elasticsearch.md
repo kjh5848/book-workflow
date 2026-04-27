@@ -1,4 +1,4 @@
-# 챕터 8. 책 뒤에 색인을 붙였다. Elasticsearch + Spring Data
+# 챕터 8. 책 뒤에 색인 카드를 붙였다. Elasticsearch + Spring Data
 
 :::goal
 **이번 챕터가 끝나면**
@@ -104,7 +104,7 @@ Elasticsearch 는 JVM 기반 서버라 설치 과정에 JDK · 설정 · 데몬 
 8. `8.8`. Kibana 와 Postman 으로 전체 검증
 9. `8.9`. 두 저장소를 쓰는 이상 피할 수 없는 문제
 
-1에서 문제를 듣고, 2에서 `LIKE` 의 한계를 직접 재현합니다. 3에서 도서관 비유로 역색인을 잡고, 4~6에서 ES 를 붙여 저장·검색을 한 조각씩 조립합니다. 7에서 Fuzzy 로 오타까지 잡고, 8에서 Kibana · Postman 으로 확인합니다. 9에서 "두 저장소를 쓴다"는 구조가 부를 새 문제를 살짝 엿보고, 다음 챕터의 문을 엽니다.
+1에서 문제를 듣고, 2에서 `LIKE` 의 한계를 직접 재현합니다. 3에서 도서관 비유로 역색인을 잡고, 4~6에서 ES 를 붙여 저장·검색을 한 조각씩 조립합니다. 7에서 Fuzzy 로 오타까지 잡고, 8에서 Kibana · Postman 으로 확인합니다. 9에서 "두 저장소를 쓴다" 는 구조가 부를 새 문제를 살짝 엿보고, 다음 챕터의 문을 엽니다.
 ::::
 
 ## 8.1 "검색이 5초 걸려요"
@@ -167,11 +167,13 @@ IntelliJ 를 열고 H2 콘솔에 붙어서 `EXPLAIN` 을 찍어 봤습니다.
 
 *한 번 맞춰 보자.*
 
-[GEMINI PROMPT: 왼쪽에 DB 아이콘(원통형 실린더)과 오른쪽에 검색창 아이콘을 배치. 가운데에 10만 장의 책 종이가 쌓여 있고, 사서 한 명이 한 장 한 장 펼쳐 보는 장면. 사서의 얼굴에는 땀방울이 떨어지고 있음. 책 더미 위에 "LIKE '%강의%'" 라는 SQL 문이 떠 있음. 배경은 도서관, 갈색 톤. 상단에 큰 시계가 5초에서 멈춰 있음]
+[GEMINI PROMPT: 왼쪽에 DB 아이콘(원통형 실린더)과 오른쪽에 검색창 아이콘을 배치. 가운데에 10만 장의 책 종이가 쌓여 있고, 사서 한 명이 한 장 한 장 펼쳐 보는 장면. 사서의 얼굴에는 땀방울이 떨어지고 있음. 책 더미 위에 "LIKE '%강의%'" 라는 SQL 문이 떠 있음. 배경은 도서관, 갈색 톤. 상단에 큰 시계가 5초에서 멈춰 있음 | path: assets/CH08/gemini/08_like-fullscan.png]
+
+![](../assets/CH08/gemini/08_like-fullscan.png)
 
 *그림 8-1. `LIKE '%강의%'` 는 DB 에게 "10만 권을 다 열어 보라"고 시키는 명령입니다*
 
-쿼리는 이렇게 생겼습니다. 구현은 이야기 파트 범위 밖이고, 흐름만 보겠습니다. `device_entity` 테이블에서 `content` 컬럼에 `%강의%` 가 들어 있는 행을 모두 찾으라는 요청입니다. DB 는 `content` 컬럼에 B-Tree 인덱스가 걸려 있어도, **앞에 `%` 가 붙은 순간 인덱스의 시작 지점을 잡지 못합니다.** 인덱스는 "ㄱ 으로 시작하는 것", "ㄱㅏ 로 시작하는 것" 같은 **앞에서부터 정렬된 사전** 이기 때문입니다. "어디엔가 강의가 들어 있는 것"은 사전의 어느 페이지를 펴야 할지 알 수 없습니다. 결국 10만 행 전부를 한 번씩 읽습니다.
+쿼리는 이렇게 생겼습니다. 구현은 이야기 파트 범위 밖이고, 흐름만 보겠습니다. `device_entity` 테이블에서 `content` 컬럼에 `%강의%` 가 들어 있는 행을 모두 찾으라는 요청입니다. DB 는 `content` 컬럼에 B-Tree 인덱스가 걸려 있어도, **앞에 `%` 가 붙은 순간 인덱스의 시작 지점을 잡지 못합니다.** 인덱스는 "ㄱ 으로 시작하는 것", "ㄱㅏ 로 시작하는 것" 같은 **앞에서부터 정렬된 사전** 이기 때문입니다. "어디엔가 강의가 들어 있는 것" 은 사전의 어느 페이지를 펴야 할지 알 수 없습니다. 결국 10만 행 전부를 한 번씩 읽습니다.
 
 5초는 이 "전부 읽기" 의 결과였습니다.
 
@@ -205,7 +207,9 @@ IntelliJ 를 열고 H2 콘솔에 붙어서 `EXPLAIN` 을 찍어 봤습니다.
 
 대신 도서관이 책을 들여올 때마다 **책 뒤 세 페이지에 단어 색인을 뽑아 붙여 둔다**고 해 봅니다. "갤럭시 워치" 라는 제목의 책이 들어오면 "갤럭시" 와 "워치" 를 카드에 적고, 색인 서랍의 `ㄱ` 칸과 `ㅇ` 칸에 각각 "책 번호 1" 을 기록합니다. 다음에 "갤럭시 S24" 가 들어오면 `ㄱ` 칸의 갤럭시 카드에 "책 번호 2" 를 추가로 적고, `ㅅ` 칸에 "S24: 2" 를 새로 만듭니다. "아이폰 워치" 가 들어오면 `ㅇ` 칸의 워치 카드에 "3" 을 붙이고, 새로 `ㅇ` 칸에 "아이폰: 3" 도 만듭니다.
 
-[GEMINI PROMPT: 도서관 장면. 왼쪽에 책 3권이 꽂혀 있고 각 책 제목이 "갤럭시 워치", "갤럭시 S24", "아이폰 워치" 로 보임. 책 뒤표지에 색인 카드가 붙어 있는 장면. 오른쪽에는 목재 색인 서랍장이 있고, 각 서랍에 한글 자음(ㄱ, ㅇ, ㅅ) 라벨이 붙어 있음. ㄱ 서랍에서 "갤럭시 → 책1, 책2" 카드가 튀어 나와 있음. ㅇ 서랍에서 "워치 → 책1, 책3" 카드가 튀어 나와 있음. 사서는 손에 카드 한 장만 들고 서가 번호를 가리키는 모습. 갈색 · 베이지 톤, 따뜻한 조명]
+[GEMINI PROMPT: 도서관 장면. 왼쪽에 책 3권이 꽂혀 있고 각 책 제목이 "갤럭시 워치", "갤럭시 S24", "아이폰 워치" 로 보임. 책 뒤표지에 색인 카드가 붙어 있는 장면. 오른쪽에는 목재 색인 서랍장이 있고, 각 서랍에 한글 자음(ㄱ, ㅇ, ㅅ) 라벨이 붙어 있음. ㄱ 서랍에서 "갤럭시 → 책1, 책2" 카드가 튀어 나와 있음. ㅇ 서랍에서 "워치 → 책1, 책3" 카드가 튀어 나와 있음. 사서는 손에 카드 한 장만 들고 서가 번호를 가리키는 모습. 갈색 · 베이지 톤, 따뜻한 조명 | path: assets/CH08/gemini/08_inverted-index-cards.png]
+
+![](../assets/CH08/gemini/08_inverted-index-cards.png)
 
 *그림 8-2. 책 뒤 색인을 미리 붙여 두면, 사서는 카드 한 장만 보고 서가 번호로 바로 점프합니다*
 
@@ -269,8 +273,9 @@ Elasticsearch 는 Spring 내부 라이브러리가 아니라 **별도의 서버*
     <div class="sp-row-label">Spring 앱</div>
     <div class="sp-row-value">실습 API · 포트 8080 · 같은 es-network 에서 <code>elasticsearch:9200</code> 으로 접속</div>
   </div>
-  <div style="text-align:center;font-size:var(--fs-xs);color:var(--color-text-muted);margin-top:12px;">세 컨테이너는 <code>es-network</code> 하나로 묶여 있습니다</div>
 </div>
+
+*세 컨테이너는 `es-network` 하나로 묶여 있습니다*
 
 `elasticsearch/docker-compose.yml` 을 엽니다. 이 파일은 레포에 이미 작성돼 있고, 수정할 필요는 없습니다. 구조만 읽어 보겠습니다.
 
@@ -328,22 +333,23 @@ Spring 앱이 같은 Compose 안에 있을 때 접속 주소와 로컬에서 개
   <div class="sp-figure-title">그림 8-4. 같은 9200 포트를 두 이름으로 부르는 이유</div>
   <div class="sp-compare">
     <div class="sp-compare-block good">
-      <span class="sp-compare-label">로컬 호스트 실행</span>
+      <div class="sp-compare-label">로컬 호스트 실행</div>
       <div class="sp-compare-content">
         접속 주소: <code>http://localhost:9200</code><br>
         Docker 가 호스트의 9200 포트로 ES 컨테이너를 노출해 두기 때문
       </div>
     </div>
     <div class="sp-compare-block good">
-      <span class="sp-compare-label">Docker 컨테이너 실행</span>
+      <div class="sp-compare-label">Docker 컨테이너 실행</div>
       <div class="sp-compare-content">
         접속 주소: <code>http://elasticsearch:9200</code><br>
         같은 <code>es-network</code> 안에서 서비스 이름으로 찾기 때문
       </div>
     </div>
   </div>
-  <div style="text-align:center;font-size:var(--fs-xs);color:var(--color-text-muted);margin-top:12px;">한 포트, 두 이름. 실행 위치에 따라 갈립니다</div>
 </div>
+
+*한 포트, 두 이름. 실행 위치에 따라 갈립니다*
 
 `spring-elasticsearch/src/main/resources/application.properties` 를 열면 Spring 이 어느 쪽으로 접속할지 한 줄로 정해져 있습니다.
 
@@ -368,7 +374,7 @@ dependencies {
 }
 ```
 
-이 스타터가 들어오면 Spring 이 `spring.elasticsearch.uris` 값을 읽어 `ElasticsearchClient` · `ElasticsearchOperations` 빈을 자동으로 등록합니다. 우리는 이 빈을 서비스에서 주입받아 쓰기만 하면 됩니다.
+이 스타터가 들어오면 Spring 이 `spring.elasticsearch.uris` 값을 읽어 `ElasticsearchClient` · `ElasticsearchOperations` 빈을 자동으로 등록합니다. 이 빈을 서비스에서 주입받아 쓰기만 하면 됩니다.
 
 레포 루트에서 한 줄을 실행합니다.
 
@@ -385,7 +391,9 @@ curl http://localhost:9200
 open http://localhost:5601
 ```
 
-[CAPTURE NEEDED: assets/CH08/terminal/08_es-health.png | 터미널에서 curl http://localhost:9200 실행 결과. JSON 응답에 name, cluster_name, cluster_uuid, version.number: "8.19.8", tagline: "You Know, for Search" 가 찍혀 있음]
+[CAPTURE NEEDED: 터미널에서 curl http://localhost:9200 실행 결과. JSON 응답에 name, cluster_name, cluster_uuid, version.number: "8.19.8", tagline: "You Know, for Search" 가 찍혀 있음 | path: assets/CH08/terminal/08_es-health.png]
+
+![](../assets/CH08/terminal/08_es-health.png)
 
 *그림 8-5. ES 가 `You Know, for Search` 한 줄을 돌려주면 서버는 정상입니다*
 
@@ -414,8 +422,9 @@ ES 가 올라왔으니 이제 Spring 쪽 모델을 만듭니다. 원본은 RDB, 
     <div class="sp-row-label">DeviceDocument</div>
     <div class="sp-row-value">Spring Data ES · <code>@Document(indexName="devices")</code> · 인덱스 <code>devices</code> · 검색 전용</div>
   </div>
-  <div style="text-align:center;font-size:var(--fs-xs);color:var(--color-text-muted);margin-top:12px;">같은 <code>id</code> 로 두 저장소를 연결합니다</div>
 </div>
+
+*같은 `id` 로 두 저장소를 연결합니다*
 
 `spring-elasticsearch/src/main/java/com/metacoding/spring_elasticsearch/device/DeviceEntity.java` 를 열고 TODO 의 `pass` 를 지우고 아래 코드를 작성합니다.
 
@@ -513,6 +522,7 @@ desc: 저장 요청 한 번이 RDB 와 ES 두 저장소에 순서대로 들어�
   ES 는 Kafka/RabbitMQ 로 분리할 수도 있다는 점은 챕터 9 복선이므로 점선 박스 한 줄로만 힌트.
 -->
 ![](../assets/CH08/diagram/08_sequence-save.png)
+
 *그림 8-7. 저장 시퀀스입니다. RDB 가 먼저 PK 를 정하고, 같은 PK 로 ES 문서를 씁니다*
 
 <!-- [FLOW CARD: 08_sequence-search]
@@ -522,6 +532,7 @@ desc: 검색 요청 한 번이 ES → RDB 순서로 두 번 붙는 시퀀스.
   ES 가 "찾기" 만 하고, 실제 응답 데이터는 RDB 에서 가져오는 것이 포인트.
 -->
 ![](../assets/CH08/diagram/08_sequence-search.png)
+
 *그림 8-8. 검색 시퀀스입니다. ES 는 번호만 돌려주고, 본문은 RDB 가 돌려줍니다*
 
 이제 서비스 한 개에 두 흐름을 모두 씁니다. `spring-elasticsearch/src/main/java/com/metacoding/spring_elasticsearch/ElasticSearch/ElasticSearchService.java` 를 열고 TODO 의 `pass` 를 지우고 아래 코드를 작성합니다.
@@ -665,8 +676,9 @@ docker compose -f elasticsearch/docker-compose.yml up -d --build app
     <div class="sp-row-label">삭제 (Delete)</div>
     <div class="sp-row-value">갤럭시S → 갤럭시 (S 제거) · 편집 거리 1</div>
   </div>
-  <div style="text-align:center;font-size:var(--fs-xs);color:var(--color-text-muted);margin-top:12px;">거리가 작을수록 더 비슷한 단어로 판정됩니다</div>
 </div>
+
+*거리가 작을수록 더 비슷한 단어로 판정됩니다*
 
 `AUTO` 는 검색어 길이에 따라 허용 거리를 자동으로 정합니다. 짧은 단어는 한 글자만 달라져도 의미가 크게 바뀌기 때문에 보수적으로 동작합니다.
 
@@ -706,7 +718,9 @@ curl -X POST http://localhost:8080/devices \
   -d @sample-devices.json
 ```
 
-[CAPTURE NEEDED: assets/CH08/terminal/08_sample-post.png | Postman POST http://localhost:8080/devices 요청. Body 에 10개 디바이스 JSON 배열. 응답은 200 OK 에 id 1~10 이 채워진 DeviceDocument 배열. 응답 시간은 수백 ms 대]
+[CAPTURE NEEDED: Postman POST http://localhost:8080/devices 요청. Body 에 10개 디바이스 JSON 배열. 응답은 200 OK 에 id 1~10 이 채워진 DeviceDocument 배열. 응답 시간은 수백 ms 대 | path: assets/CH08/terminal/08_sample-post.png]
+
+![](../assets/CH08/terminal/08_sample-post.png)
 
 *그림 8-10. 10건이 한 번에 RDB + ES 양쪽에 저장됩니다. 응답 배열의 `id` 는 자동 채번된 값입니다*
 
@@ -719,7 +733,9 @@ GET /devices/_search
 }
 ```
 
-[CAPTURE NEEDED: assets/CH08/terminal/08_kibana-matchall.png | Kibana Dev Tools 우측 응답 창. hits.total.value: 10. hits.hits 배열에 id 1~10 의 DeviceDocument 가 _source 필드로 담겨 있음. _index: "devices", _score: 1.0]
+[CAPTURE NEEDED: Kibana Dev Tools 우측 응답 창. hits.total.value: 10. hits.hits 배열에 id 1~10 의 DeviceDocument 가 _source 필드로 담겨 있음. _index: "devices", _score: 1.0 | path: assets/CH08/terminal/08_kibana-matchall.png]
+
+![](../assets/CH08/terminal/08_kibana-matchall.png)
 
 *그림 8-11. `match_all` 은 색인의 모든 문서를 돌려줍니다. `hits.total.value: 10` 이 나오면 양쪽 저장이 성공한 것입니다*
 
@@ -739,7 +755,9 @@ GET /devices/_search
 }
 ```
 
-[CAPTURE NEEDED: assets/CH08/terminal/08_kibana-match.png | Kibana Dev Tools. 응답에 hits.total.value: 3 정도. 상위 hit 의 _score 가 10점대. _source.title 에 "갤럭시 S24" 등 갤럭시가 들어간 문서. 아래쪽에 content 에만 갤럭시가 언급된 문서는 점수가 낮게 잡힘]
+[CAPTURE NEEDED: Kibana Dev Tools. 응답에 hits.total.value: 3 정도. 상위 hit 의 _score 가 10점대. _source.title 에 "갤럭시 S24" 등 갤럭시가 들어간 문서. 아래쪽에 content 에만 갤럭시가 언급된 문서는 점수가 낮게 잡힘 | path: assets/CH08/terminal/08_kibana-match.png]
+
+![](../assets/CH08/terminal/08_kibana-match.png)
 
 *그림 8-12. `title^3` 덕분에 제목에 갤럭시가 들어간 문서가 본문에만 들어간 문서보다 위에 옵니다*
 
@@ -751,7 +769,9 @@ GET /devices/_search
 curl "http://localhost:8080/search?keyword=갤럭시"
 ```
 
-[CAPTURE NEEDED: assets/CH08/terminal/08_spring-search.png | 터미널 curl 응답. JSON 배열에 DeviceEntity 3개. id 와 title 에 갤럭시가 포함된 엔티티들. 응답 시간은 수십 ms]
+[CAPTURE NEEDED: 터미널 curl 응답. JSON 배열에 DeviceEntity 3개. id 와 title 에 갤럭시가 포함된 엔티티들. 응답 시간은 수십 ms | path: assets/CH08/terminal/08_spring-search.png]
+
+![](../assets/CH08/terminal/08_spring-search.png)
 
 *그림 8-13. Spring 이 ES 에서 `id` 를 받아 RDB 로 재조회한 결과입니다. 5초였던 검색이 수십 ms 로 떨어졌습니다*
 
@@ -772,7 +792,9 @@ GET /devices/_search
 }
 ```
 
-[CAPTURE NEEDED: assets/CH08/terminal/08_kibana-fuzzy.png | Kibana Dev Tools. 검색어 "갈럭시" 인데 응답 hits 에 title "갤럭시 S24", "갤럭시 워치" 등이 포함돼 있음. _score 는 정상 검색보다 낮게 나옴]
+[CAPTURE NEEDED: Kibana Dev Tools. 검색어 "갈럭시" 인데 응답 hits 에 title "갤럭시 S24", "갤럭시 워치" 등이 포함돼 있음. _score 는 정상 검색보다 낮게 나옴 | path: assets/CH08/terminal/08_kibana-fuzzy.png]
+
+![](../assets/CH08/terminal/08_kibana-fuzzy.png)
 
 *그림 8-14. `갈럭시` 를 치면 `갤럭시` 문서가 매칭됩니다. 편집 거리 1 안쪽이므로 `AUTO` 가 허용합니다*
 
@@ -783,7 +805,9 @@ curl "http://localhost:8080/search?keyword=갈럭시"
 curl "http://localhost:8080/search?keyword=스마크폰"
 ```
 
-[CAPTURE NEEDED: assets/CH08/terminal/08_spring-fuzzy.png | 터미널 두 번의 curl 실행. 첫 번째 "갈럭시" 응답에 갤럭시 3건. 두 번째 "스마크폰" 응답에 스마트폰 관련 문서 2건. 정상 키워드로 친 8-13 과 거의 같은 결과가 오타에도 나오는 것이 포인트]
+[CAPTURE NEEDED: 터미널 두 번의 curl 실행. 첫 번째 "갈럭시" 응답에 갤럭시 3건. 두 번째 "스마크폰" 응답에 스마트폰 관련 문서 2건. 정상 키워드로 친 8-13 과 거의 같은 결과가 오타에도 나오는 것이 포인트 | path: assets/CH08/terminal/08_spring-fuzzy.png]
+
+![](../assets/CH08/terminal/08_spring-fuzzy.png)
 
 *그림 8-15. 오타가 정상 검색과 비슷한 결과를 돌려줍니다. 사용자는 검색창에서 한 글자쯤 실수해도 결과를 만납니다*
 
@@ -874,4 +898,4 @@ curl "http://localhost:8080/search?keyword=스마크폰"
 - **저장도 검색도 같은 분석기를 거친다.** `@Field(type = FieldType.Text)` 는 "이 필드를 토큰으로 쪼개 역색인에 넣겠다" 는 선언입니다. 검색어도 같은 분석기로 쪼개지기 때문에 "자바 기초" 와 "기초 자바" 가 같은 두 토큰으로 매칭됩니다. 정확 매칭이 필요한 필드는 `Keyword` 로 따로 둡니다
 - **원본은 RDB, 색인은 ES.** 저장은 `@Transactional` 안에서 RDB 먼저, 같은 id 로 ES 를 이어 씁니다. 검색은 ES 에서 `id` 만 받고, 응답 본문은 RDB 에서 `findAllById` 로 가져옵니다. 두 저장소의 역할이 섞이지 않게 합니다
 - **`multi_match` + `fuzziness("AUTO")` 한 줄이 검색 품질을 바꾼다.** `title^3` 로 제목 가중, `fuzziness("AUTO")` 로 오타 허용, `bool should + minimumShouldMatch("1")` 로 느슨한 매칭. 세 옵션이 키보드 실수·띄어쓰기·영문을 흡수합니다
-- **두 저장소를 쓰는 순간 불일치 가능성이 생긴다.** RDB 는 커밋됐는데 ES 저장이 실패하거나, RDB 만 UPDATE 하고 ES 를 깜빡하면 원본과 색인이 어긋납니다. 다음 챕터에서 RabbitMQ 로 변경 이벤트를 발행·구독하는 구조를 얹어 이 문제를 분리해 풉니다
+- **다음 문제는 두 저장소의 일관성이다.** Dual Write 는 트랜잭션이 둘을 묶지 못합니다. RDB 는 커밋됐는데 ES 가 떨어지면 영구 불일치, UPDATE 가 ES 를 깜빡하면 검색 결과와 상세가 어긋납니다. 다음 챕터에서 RabbitMQ 로 발행·구독을 얹어, ES 동기화를 비동기 구독자에게 넘겨 응답을 떼어 냅니다

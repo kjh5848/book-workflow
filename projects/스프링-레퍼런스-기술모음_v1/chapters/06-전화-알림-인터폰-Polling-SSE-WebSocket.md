@@ -3,17 +3,11 @@
 :::goal
 **이번 챕터가 끝나면**
 
-- 실시간 통신 세 가지 방식(**Polling · SSE · WebSocket**)을 같은 시나리오(채팅)에 붙여 보겠습니다
+- 실시간 통신 세 가지(**Polling · SSE · WebSocket**)를 같은 채팅 시나리오에 차례로 붙여 보겠습니다
 - 2초마다 전화 거는 **Polling**을 `setInterval`로 만들어 보고, 빈 응답이 쌓이는 모습을 DevTools로 확인합니다
-- 서버가 알아서 밀어 주는 **SSE**를 `SseEmitter`로 구현하고, 연결 한 줄로 여러 브라우저가 동시에 갱신되는 장면을 확인합니다
-- 양방향 실시간이 필요한 **WebSocket(STOMP)**을 `@EnableWebSocketMessageBroker` + `/topic`·`/app`으로 얹어 pub/sub 흐름을 이해합니다
-- 세 방식의 **통신 방향·서버 부하·지연·구현 난이도**를 비교표로 정리해 "어떤 상황에 어떤 걸 쓸지" 체크리스트를 얻습니다
-:::
-
-:::preview
-**이번 챕터는 "전화, 알림, 인터폰" 세 가지 도구를 같은 문제에 번갈아 써 보는 이야기입니다**
-
-챕터 5 마지막에서 동료가 남긴 한마디는 "사용자가 올린 다음에, 리사이즈 끝났는지 프런트는 어떻게 알아요?"였습니다. 3~5초 동안 화면이 비어 있을 수 없고, 그렇다고 사용자에게 수동 새로고침을 시킬 수도 없습니다. 팀장은 세 가지 방식을 이야기했습니다. 주기적으로 물어보거나, 서버가 밀어 주거나, 아예 양방향으로 열어 두거나. 이번 챕터는 그 세 가지를 한 챕터 안에서 다 만들어 보겠습니다. 같은 채팅 화면을 세 번 다시 구현하면서, 각 방식이 **어떤 장면에서 빛나고 어디서 무너지는지** 몸으로 체감합니다.
+- 서버가 알아서 밀어 주는 **SSE**를 `SseEmitter`로 구현하고, 한 줄 연결로 여러 브라우저가 동시에 갱신되는 장면을 확인합니다
+- 양방향 실시간이 필요한 **WebSocket(STOMP)** 을 `@EnableWebSocketMessageBroker` + `/topic`·`/app`으로 얹어 pub/sub 흐름을 이해합니다
+- 세 방식의 **통신 방향·서버 부하·지연·구현 난이도**를 비교표로 정리해 "어떤 자리에 어느 도구가 맞는지" 체크리스트를 얻습니다
 :::
 
 ::::prep
@@ -21,7 +15,7 @@
 
 ### 1. 소스 코드 준비
 
-이번 챕터는 한 레포가 아니라 **세 개의 레포**를 차례로 다룹니다. 각 방식이 서로 다른 빌드 설정·컨트롤러 시그니처·프론트 코드를 쓰기 때문에, 한 프로젝트 안에 섞어 두면 비교 포인트가 흐려집니다. 세 개를 따로 열어 두고, 브라우저 탭도 셋으로 나눠 실행합니다.
+이번 챕터는 한 레포가 아니라 **세 개의 레포**를 차례로 다룹니다. 각 방식이 서로 다른 빌드 설정·컨트롤러 시그니처·프런트 코드를 쓰기 때문에, 한 프로젝트 안에 섞으면 비교 포인트가 흐려집니다. 셋을 따로 열어 두고, 브라우저 탭도 셋으로 나눠 실행합니다.
 
 | 레포 | 방식 | 주소 |
 |-----|------|------|
@@ -110,10 +104,10 @@ java --version
 이번 챕터는 이 순서로 흘러갑니다.
 
 1. `6.1`. 업로드는 됐는데 끝난 걸 어떻게 알리나
-2. `6.2`. 전화 걸기 방식 - Polling (`setInterval` + GET)
+2. `6.2`. 전화 걸기 - Polling (`setInterval` + GET)
 3. `6.3`. 전화기가 뜨거워지는 시간 - Polling의 비용
 4. `6.4`. 서버가 알림을 밀어 준다 - SSE (`SseEmitter`)
-5. `6.5`. 단방향의 한계 - 양방향이 필요한 순간
+5. `6.5`. 단방향의 한계 - 양방향이 필요한 자리
 6. `6.6`. 인터폰 열기 - WebSocket (STOMP)
 7. `6.7`. 세 방식 한 줄 비교와 선택 가이드
 
@@ -130,7 +124,7 @@ java --version
 
 오픈이는 동료의 모니터를 들여다봤습니다. 업로드 버튼을 누르면 스피너 하나가 돌다가, 어느 순간 멈추고, 그 다음에야 썸네일이 떴습니다. 그 사이의 **어느 순간**은 매번 달랐습니다. 빠르면 2초, 느리면 5초.
 
-**동료**: "사용자는 끝났는지 아닌지를 몰라요. 새로고침 한 번 누르면 뜨기는 하는데, 그걸 누가 해요."
+**동료**: "사용자는 끝났는지 아닌지를 몰라요. 새로고침 한 번 누르면 뜨는데, 그걸 누가 해요."
 
 *"끝났다"를 서버가 말해 줘야 해.*
 
@@ -140,7 +134,7 @@ java --version
 
 팀장이 뒤에서 커피를 들고 지나가다 멈췄습니다.
 
-**팀장**: "택배 조회를 생각해 봐요. 손님이 10초마다 택배사 홈페이지에 들어가서 F5를 누르면 그게 하나죠. 아니면 택배사 앱이 '지금 출발했습니다' 알림을 밀어 주는 것도 있고요. 아예 기사님이 인터폰으로 '지금 문 앞입니다' 이러는 것도 있잖아요."
+**팀장**: "택배 조회를 생각해 봐요. 손님이 10초마다 택배사 홈페이지에 들어가서 F5를 누르면 그게 하나죠. 아니면 택배사 앱이 '지금 출발했습니다' 알림을 밀어 주는 것도 있어요. 아예 기사님이 인터폰으로 '지금 문 앞입니다' 이러는 것도 있잖아요."
 
 **오픈이**: "세 가지가 다 다르네요."
 
@@ -167,17 +161,17 @@ java --version
 
 키보드 소리만 또록또록 울리는 오후였습니다. 프로젝트 폴더를 세 개 나란히 만들고, 이름을 하나씩 붙였습니다. `spring-polling`, `spring-sse`, `spring-websoket`. 같은 채팅 기능을 세 번 다시 만드는, 조금 이상한 오후가 시작됐습니다.
 
-## 6.2 전화 걸기 방식 - Polling
+## 6.2 전화 걸기 - Polling
 
 가장 먼저 열어 본 건 Polling입니다. 이유는 단순했습니다. 새로운 기술 한 줄을 배우지 않아도 구현이 끝나기 때문입니다. 기존 HTTP 위에서 `setInterval` 하나만 걸면 되는 구조입니다.
 
 :::term-box
-**Polling**. 클라이언트가 일정 주기마다 서버에 "바뀐 거 있어요?"라고 반복 요청하는 방식. 서버가 상태 변화를 직접 알리는 수단이 없을 때 가장 단순하게 쓸 수 있다. 주기가 짧을수록 실시간성은 올라가지만 요청 수와 서버 부하가 비례해서 늘어난다.
+**Polling**. 클라이언트가 일정 주기마다 서버에 "바뀐 거 있어요?"라고 반복 요청하는 통신 방식. 서버가 상태 변화를 직접 알리는 수단이 없을 때 가장 단순하게 쓸 수 있다. 주기가 짧을수록 실시간성은 올라가지만 요청 수와 서버 부하가 비례해서 늘어난다.
 :::
 
 ### 6.2.1 Polling 전체 흐름
 
-흐름을 먼저 머릿속에 넣고 코드를 봐야 합니다. 채팅 화면이 열리자마자 일어나는 일은 이렇습니다. 브라우저가 2초마다 서버에 "채팅 목록 주세요"라고 GET을 쏘고, 서버는 매번 DB에서 최신순으로 전체 목록을 뽑아 JSON으로 돌려줍니다. 다른 사람이 메시지를 보낸다 한들, **최대 2초 뒤**에야 내 화면에 뜹니다.
+흐름을 먼저 머릿속에 넣고 코드를 봐야 합니다. 채팅 화면이 열리자마자 일어나는 일은 이렇습니다. 브라우저가 2초마다 서버에 "채팅 목록 주세요"라고 GET을 쏘고, 서버는 매번 DB에서 최신순 전체 목록을 뽑아 JSON으로 돌려줍니다. 다른 사람이 메시지를 보낸다 한들, **최대 2초 뒤**에야 내 화면에 뜹니다.
 
 <div class="sp-figure">
   <div class="sp-figure-title">그림 6-1. 브라우저가 2초마다 서버에 "바뀐 거 있어요?"를 묻습니다</div>
@@ -199,9 +193,9 @@ java --version
   </div>
   <div class="sp-row warm">
     <div class="sp-row-label">⑤ 최대 지연</div>
-    <div class="sp-row-value">상대 메시지는 최악의 경우 **2초 뒤**에 내 화면에 도착</div>
+    <div class="sp-row-value">상대 메시지는 최악의 경우 <strong>2초 뒤</strong>에 내 화면에 도착</div>
   </div>
-  <div style="text-align:center;font-size:var(--fs-xs);color:var(--color-text-muted);margin-top:12px;">서버는 상태 변화를 모릅니다. 오직 "물어볼 때만" 답합니다</div>
+  <div class="sp-figure-note">서버는 상태 변화를 모릅니다. 오직 "물어볼 때만" 답합니다</div>
 </div>
 
 이 구조를 코드로 구현해 보겠습니다.
@@ -354,25 +348,30 @@ cd spring-polling
 
 서버 로그도 같은 모양이었습니다.
 
-<div class="terminal-log" style="background:#fff;border:1px solid var(--color-border);border-radius:8px;margin:20px 0;">
-  <div class="terminal-chrome" style="background:#fff;border-bottom:1px solid var(--color-border);padding:8px 14px;font-size:var(--fs-xs);color:var(--color-text-muted);">terminal - spring-polling 서버 로그</div>
-  <div class="terminal-body" style="background:#fff;padding:14px 18px;font-family:var(--font-mono);font-size:var(--fs-xs);line-height:1.6;">
-    <div>2026-04-24 14:02:10.112 <span style="color:var(--color-info-text);">INFO</span>  GET /chats 200 (2ms)</div>
-    <div>2026-04-24 14:02:12.115 <span style="color:var(--color-info-text);">INFO</span>  GET /chats 200 (2ms)</div>
-    <div>2026-04-24 14:02:14.118 <span style="color:var(--color-info-text);">INFO</span>  GET /chats 200 (2ms)</div>
-    <div>2026-04-24 14:02:16.121 <span style="color:var(--color-info-text);">INFO</span>  GET /chats 200 (2ms)</div>
-    <div>2026-04-24 14:02:18.124 <span style="color:var(--color-info-text);">INFO</span>  GET /chats 200 (2ms)</div>
-    <div style="color:var(--color-text-muted);">... (한 시간에 1800건) ...</div>
-    <div>2026-04-24 15:02:04.811 <span style="color:var(--color-info-text);">INFO</span>  GET /chats 200 (2ms)</div>
+<div class="terminal-log">
+  <div class="tl-chrome">
+    <div class="tl-traffic"></div>
+    <div class="tl-title">terminal — spring-polling 서버 로그</div>
+    <div class="tl-spacer"></div>
   </div>
-  <div style="text-align:center;font-size:var(--fs-xs);color:var(--color-success-text);padding:10px 14px;border-top:1px solid var(--color-border);">같은 응답이 2초마다. 유저가 아무것도 안 해도 서버는 계속 일합니다</div>
+  <div class="tl-body">
+    <div class="tl-kv-row"><span class="tl-dim">2026-04-24 14:02:10.112</span> <span class="tl-key">INFO</span>  GET /chats <span class="tl-num">200</span> (2ms)</div>
+    <div class="tl-kv-row"><span class="tl-dim">2026-04-24 14:02:12.115</span> <span class="tl-key">INFO</span>  GET /chats <span class="tl-num">200</span> (2ms)</div>
+    <div class="tl-kv-row"><span class="tl-dim">2026-04-24 14:02:14.118</span> <span class="tl-key">INFO</span>  GET /chats <span class="tl-num">200</span> (2ms)</div>
+    <div class="tl-kv-row"><span class="tl-dim">2026-04-24 14:02:16.121</span> <span class="tl-key">INFO</span>  GET /chats <span class="tl-num">200</span> (2ms)</div>
+    <div class="tl-kv-row"><span class="tl-dim">2026-04-24 14:02:18.124</span> <span class="tl-key">INFO</span>  GET /chats <span class="tl-num">200</span> (2ms)</div>
+    <div class="tl-kv-row"><span class="tl-dim">... (한 시간에 1800건) ...</span></div>
+    <div class="tl-kv-row"><span class="tl-dim">2026-04-24 15:02:04.811</span> <span class="tl-key">INFO</span>  GET /chats <span class="tl-num">200</span> (2ms)</div>
+  </div>
 </div>
+
+*그림 6-2. 같은 응답이 2초마다. 사용자가 가만히 있어도 서버는 계속 일합니다*
 
 동료가 모니터 너머로 화면을 들여다봤습니다.
 
 **동료**: "저 2초짜리 반복, 사용자 1000명 붙으면 초당 500건이에요."
 
-**오픈이**: "그중 거의 전부가 '변한 거 없음'이고요."
+**오픈이**: "그중 거의 전부가 '변한 거 없음'이에요."
 
 **팀장**: "서버가 물어 봐서 답하는 구조면 그래요. 묻는 사람이 많아지면 답하는 사람이 바빠지죠."
 
@@ -397,7 +396,7 @@ SSE의 모양이 정확히 그렇습니다. 브라우저는 `new EventSource("/c
 ### 6.4.1 SSE 전체 흐름
 
 <div class="sp-figure">
-  <div class="sp-figure-title">그림 6-2. 한 번 연결을 열어 두면 서버가 알아서 밀어 줍니다</div>
+  <div class="sp-figure-title">그림 6-3. 한 번 연결을 열어 두면 서버가 알아서 밀어 줍니다</div>
   <div class="sp-row accent">
     <div class="sp-row-label">① 페이지 진입</div>
     <div class="sp-row-value"><code>new EventSource("/chats/connect")</code> 스트림 연결 요청</div>
@@ -422,7 +421,7 @@ SSE의 모양이 정확히 그렇습니다. 브라우저는 `new EventSource("/c
     <div class="sp-row-label">⑥ 화면 반영</div>
     <div class="sp-row-value">각 브라우저 <code>addEventListener("chat", ...)</code>가 수신 → 즉시 렌더</div>
   </div>
-  <div style="text-align:center;font-size:var(--fs-xs);color:var(--color-text-muted);margin-top:12px;">2초 폴링 없음. 이벤트가 있을 때만 전송합니다</div>
+  <div class="sp-figure-note">2초 폴링 없음. 이벤트가 있을 때만 전송합니다</div>
 </div>
 
 ### 6.4.2 SseEmitters - 연결 레지스트리
@@ -554,7 +553,7 @@ public class ChatController {
 
 핵심은 두 지점입니다. `@GetMapping`의 `produces = MediaType.TEXT_EVENT_STREAM_VALUE`가 응답 헤더를 `text/event-stream`으로 설정해 스프링이 연결을 **끊지 않고** 유지하게 만듭니다. 그리고 `save()` 안의 `sseEmitters.sendAll(saved)` 한 줄이 이 챕터의 심장입니다. 저장 직후, 현재 연결된 모든 브라우저에 같은 Chat 객체를 즉시 밀어 줍니다.
 
-`connect()` 메서드 안에서 dummy 이벤트를 한 번 보내는 이유는 별도 설명이 필요합니다. 브라우저 `EventSource`는 일정 시간 동안 서버로부터 **아무 데이터도 받지 않으면 재연결을 시도**합니다. 재연결 시 세션/CSRF 검증을 다시 받게 되고, 이 과정에서 403이 떨어지는 경우가 생깁니다. 연결 직후 dummy 이벤트를 한 번 쏴 두면, "방금 뭔가 받았으니 재연결 안 해도 된다"는 신호가 되어 안정적으로 연결이 유지됩니다.
+`connect()` 메서드 안에서 dummy 이벤트를 한 번 보내는 이유는 별도 설명이 필요합니다. 브라우저 `EventSource`는 일정 시간 동안 서버로부터 **아무 데이터도 받지 않으면 재연결을 시도**합니다. 재연결 시 세션·CSRF 검증을 다시 받게 되고, 이 과정에서 403이 떨어지는 경우가 생깁니다. 연결 직후 dummy 이벤트를 한 번 쏴 두면, "방금 뭔가 받았으니 재연결 안 해도 된다"는 신호가 되어 안정적으로 연결이 유지됩니다.
 
 ### 6.4.4 프런트 - EventSource로 듣기
 
@@ -603,7 +602,7 @@ function appendChat(message) {
 
 이 파일에는 `setInterval`이 없습니다. **한 줄도 없습니다.** `new EventSource("/chats/connect")` 한 줄이 연결을 열면, 그 뒤로 브라우저는 그저 듣기만 합니다. `sse.addEventListener("chat", ...)`가 서버가 `emitter.send(...name("chat")...)`로 보낸 이벤트를 받아 `appendChat`에 넘깁니다.
 
-한 가지 짚어 둘 점은 **전송은 여전히 HTTP POST**라는 것입니다. SSE는 서버 → 클라이언트 한 방향만 열어 두는 프로토콜입니다. 클라이언트가 서버로 뭔가 보내야 하면 기존 HTTP 요청을 그대로 씁니다. 이 구조가 SSE의 깔끔함이자 제약입니다. "알림"만 필요한 곳에는 완벽하게 맞지만, "대화"가 필요한 곳에는 절반만 맞습니다.
+한 가지 짚어 둘 점은 **전송은 여전히 HTTP POST**라는 것입니다. SSE는 서버 → 클라이언트 한 방향만 열어 두는 프로토콜입니다. 클라이언트가 서버로 뭔가 보내야 하면 기존 HTTP 요청을 그대로 씁니다. 이 구조가 SSE의 깔끔함이자 제약입니다. "알림"만 필요한 곳에는 깔끔하게 맞지만, "대화"가 필요한 곳에는 절반만 맞습니다.
 
 ### 6.4.5 실행과 확인
 
@@ -623,28 +622,28 @@ DevTools의 Network 탭에서 `chats/connect` 요청을 선택하면, EventStrea
 Polling과 가장 큰 차이가 여기서 보입니다. `/chats` 같은 GET 요청이 **2초마다** 찍히지 않습니다. `/chats/connect` 단 한 건만이 "Pending" 상태로 연결을 유지하고, 그 연결 안에서 이벤트만 오갑니다.
 
 <div class="sp-figure">
-  <div class="sp-figure-title">그림 6-3. 같은 화면, Polling vs SSE의 네트워크 풍경</div>
+  <div class="sp-figure-title">그림 6-4. 같은 화면, Polling과 SSE의 네트워크 풍경</div>
   <div class="sp-compare">
     <div class="sp-compare-block bad">
       <span class="sp-compare-label">POLLING</span>
       <div class="sp-compare-content">
         <div><strong>연결 개수</strong> 2초마다 새 HTTP</div>
-        <div style="margin-top:6px;"><strong>빈 호출</strong> 변화 없어도 계속 호출</div>
-        <div style="margin-top:6px;"><strong>최대 지연</strong> 폴링 주기 (2초)</div>
-        <div style="margin-top:6px;"><strong>통신 방향</strong> 양쪽 다 요청/응답</div>
+        <div><strong>빈 호출</strong> 변화 없어도 계속 호출</div>
+        <div><strong>최대 지연</strong> 폴링 주기 (2초)</div>
+        <div><strong>통신 방향</strong> 양쪽 다 요청·응답</div>
       </div>
     </div>
     <div class="sp-compare-block good">
       <span class="sp-compare-label">SSE</span>
       <div class="sp-compare-content">
         <div><strong>연결 개수</strong> 1회 연결을 계속 유지</div>
-        <div style="margin-top:6px;"><strong>빈 호출</strong> 변화 있을 때만 이벤트</div>
-        <div style="margin-top:6px;"><strong>최대 지연</strong> 거의 실시간 (수십 ms)</div>
-        <div style="margin-top:6px;"><strong>통신 방향</strong> 서버 → 클라 한 방향만</div>
+        <div><strong>빈 호출</strong> 변화 있을 때만 이벤트</div>
+        <div><strong>최대 지연</strong> 거의 실시간 (수십 ms)</div>
+        <div><strong>통신 방향</strong> 서버 → 클라 한 방향만</div>
       </div>
     </div>
   </div>
-  <div style="text-align:center;font-size:var(--fs-xs);color:var(--color-text-muted);margin-top:12px;">SSE는 "알림"에 최적. 양방향 대화가 필요하면 이야기가 달라집니다</div>
+  <div class="sp-figure-note">SSE는 "알림"에 최적. 양방향 대화가 필요하면 이야기가 달라집니다</div>
 </div>
 
 :::tip
@@ -684,23 +683,23 @@ SSE를 붙이고 나서 동료가 모니터 너머로 다시 왔습니다.
 **STOMP (Simple Text Oriented Messaging Protocol)**. WebSocket 위에 **목적지(destination) 기반 pub/sub** 의미를 얹는 메시징 규약. `SUBSCRIBE /topic/chats`로 구독하고 `SEND /app/chats`로 발행한다. 스프링은 `@EnableWebSocketMessageBroker`와 `@MessageMapping`으로 이 규약을 편하게 구현하도록 지원한다.
 :::
 
-### 6.6.1 두 가지 흐름 - 브로커 직행 vs 컨트롤러 경유
+### 6.6.1 두 가지 흐름 - 브로커 직행과 컨트롤러 경유
 
 WebSocket+STOMP에는 메시지가 서버를 거치는 방식이 두 가지 있습니다. 먼저 두 가지를 머릿속에 넣고 코드를 봐야 실습 구조가 읽힙니다.
 
 <div class="sp-figure">
-  <div class="sp-figure-title">그림 6-4. 흐름 A) 브로커 직행과 흐름 B) 컨트롤러 경유</div>
+  <div class="sp-figure-title">그림 6-5. 흐름 A) 브로커 직행과 흐름 B) 컨트롤러 경유</div>
   <div class="sp-compare">
     <div class="sp-compare-block">
-      <span class="sp-compare-label" style="background:var(--color-info);">흐름 A · 브로커 직행</span>
-      <div class="sp-compare-content"><strong>/topic/**</strong> 클라이언트 → <code>/topic/chats</code>로 직접 SEND → 브로커가 구독자 전원에게 즉시 브로드캐스트. 서버 컨트롤러 경유 없음. 저장·검증이 필요 없는 단순 신호(타이핑 표시, 커서 위치)에 적합.</div>
+      <span class="sp-compare-label">흐름 A · 브로커 직행</span>
+      <div class="sp-compare-content"><strong>/topic/**</strong> 클라이언트가 <code>/topic/chats</code>로 직접 SEND → 브로커가 구독자 전원에게 즉시 브로드캐스트. 서버 컨트롤러 경유 없음. 저장·검증이 필요 없는 단순 신호(타이핑 표시, 커서 위치)에 적합.</div>
     </div>
     <div class="sp-compare-block good">
       <span class="sp-compare-label">흐름 B · 컨트롤러 경유</span>
-      <div class="sp-compare-content"><strong>/app/** → /topic/**</strong> 클라이언트 → <code>/app/chats</code>로 SEND → <code>@MessageMapping</code> 메서드가 받아 DB 저장·검증·가공 → <code>SimpMessagingTemplate.convertAndSend("/topic/chats", ...)</code>로 발행 → 브로커가 구독자 전원에게 브로드캐스트. 저장·검증이 필요한 일반 채팅에 적합.</div>
+      <div class="sp-compare-content"><strong>/app/** → /topic/**</strong> 클라이언트가 <code>/app/chats</code>로 SEND → <code>@MessageMapping</code> 메서드가 받아 DB 저장·검증·가공 → <code>SimpMessagingTemplate.convertAndSend("/topic/chats", ...)</code>로 발행 → 브로커가 구독자 전원에게 브로드캐스트. 저장·검증이 필요한 일반 채팅에 적합.</div>
     </div>
   </div>
-  <div style="text-align:center;font-size:var(--fs-xs);color:var(--color-text-muted);margin-top:12px;">이번 실습은 B(컨트롤러 경유)를 사용합니다. 저장이 필요하기 때문입니다</div>
+  <div class="sp-figure-note">이번 실습은 B(컨트롤러 경유)를 사용합니다. 저장이 필요하기 때문입니다</div>
 </div>
 
 ### 6.6.2 의존성과 WebSocket 설정
@@ -834,7 +833,7 @@ cd spring-websoket
 
 [CAPTURE NEEDED: spring-websoket 브라우저 두 탭. 왼쪽에서 "안녕"을 치자마자 오른쪽 chat-box 상단에 "안녕"이 뜨고, 오른쪽에서 "반갑습니다"를 치자 왼쪽에도 즉시 반영된 화면]
 
-DevTools의 Network 탭에서 WS 필터를 걸면 `ws` 요청 한 줄이 보입니다. 그걸 선택하면 Frames 탭이 뜹니다. 거기에 STOMP 프레임이 방향(보냄/받음)별로 시간순 나열됩니다.
+DevTools의 Network 탭에서 WS 필터를 걸면 `ws` 요청 한 줄이 보입니다. 그걸 선택하면 Frames 탭이 뜹니다. 거기에 STOMP 프레임이 방향(보냄·받음)별로 시간순 나열됩니다.
 
 [CAPTURE NEEDED: Chrome DevTools에서 /ws WS 연결의 Messages(또는 Frames) 탭. CONNECT · CONNECTED · SUBSCRIBE /topic/chats · SEND /app/chats · MESSAGE /topic/chats 프레임이 시간순으로 나열된 화면]
 
@@ -846,8 +845,8 @@ DevTools의 Network 탭에서 WS 필터를 걸면 `ws` 요청 한 줄이 보입�
 - **연결 상태 관리**: 연결이 끊겼을 때의 재연결 로직, 재연결 이후 구독 복구, 메시지 유실 처리가 운영의 절반입니다. `stompClient.connected`만 믿으면 안 됩니다
 - **인증·권한**: WebSocket은 한 번 연결되면 그 연결 안에서 인증 정보가 유지됩니다. 토큰 만료·권한 변경을 중간에 반영하려면 별도 이벤트로 재인증을 강제하거나 연결을 끊어야 합니다
 - **scale-out (스티키 세션)**: 서버를 여러 대로 늘리면 한 사용자의 WebSocket 연결이 A 서버에 묶입니다. 로드밸런서의 스티키 세션 설정이 필요하고, 서버 간 메시지 전파에는 외부 브로커(Redis·RabbitMQ·Kafka) 연동이 뒤따릅니다
-- **브로커 선택**: 이번 실습의 `enableSimpleBroker`는 Spring 내장 인메모리 브로커입니다. 서버 한 대에서만 의미가 있습니다. 여러 서버로 확장하거나 메시지 영속성이 필요하면 `enableStompBrokerRelay`로 RabbitMQ/ActiveMQ 같은 외부 브로커를 붙입니다
-- **흐름 A vs B 선택**: 저장·검증·가공이 필요하면 컨트롤러 경유(B)가 맞습니다. "타이핑 중" 같은 저장 없는 신호는 브로커 직행(A)이 낫습니다
+- **브로커 선택**: 이번 실습의 `enableSimpleBroker`는 Spring 내장 인메모리 브로커입니다. 서버 한 대에서만 의미가 있습니다. 여러 서버로 확장하거나 메시지 영속성이 필요하면 `enableStompBrokerRelay`로 RabbitMQ·ActiveMQ 같은 외부 브로커를 붙입니다
+- **흐름 A 와 B 선택**: 저장·검증·가공이 필요하면 컨트롤러 경유(B)가 맞습니다. "타이핑 중" 같은 저장 없는 신호는 브로커 직행(A)이 낫습니다
 :::
 
 ## 6.7 세 방식 한 줄 비교와 선택 가이드
@@ -857,14 +856,14 @@ DevTools의 Network 탭에서 WS 필터를 걸면 `ws` 요청 한 줄이 보입�
 *같은 채팅을 세 번 다시 만들고 나니, 각각이 어디에 맞는지 감이 잡힌다.*
 
 <div class="sp-figure">
-  <div class="sp-figure-title">그림 6-5. Polling · SSE · WebSocket 한눈 비교</div>
+  <div class="sp-figure-title">그림 6-6. Polling · SSE · WebSocket 한눈 비교</div>
   <div class="sp-row">
     <div class="sp-row-label">방식</div>
     <div class="sp-row-value"><span class="sp-chip warm">Polling</span> · <span class="sp-chip info">SSE</span> · <span class="sp-chip accent">WebSocket</span></div>
   </div>
   <div class="sp-row">
     <div class="sp-row-label">통신 방향</div>
-    <div class="sp-row-value">Polling: 요청/응답 반복 · SSE: 서버 → 클라(단방향) · WebSocket: 양방향</div>
+    <div class="sp-row-value">Polling: 요청·응답 반복 · SSE: 서버 → 클라(단방향) · WebSocket: 양방향</div>
   </div>
   <div class="sp-row">
     <div class="sp-row-label">연결</div>
@@ -894,7 +893,7 @@ DevTools의 Network 탭에서 WS 필터를 걸면 `ws` 요청 한 줄이 보입�
     <div class="sp-row-label">적합한 자리</div>
     <div class="sp-row-value">Polling: 완료 확인·단발성 상태 · SSE: 알림·진행률·스트림 이벤트 · WebSocket: 채팅·협업·양방향 제어</div>
   </div>
-  <div style="text-align:center;font-size:var(--fs-xs);color:var(--color-text-muted);margin-top:12px;">같은 채팅을 세 번 구현하고 나서야 보이는 차이입니다</div>
+  <div class="sp-figure-note">같은 채팅을 세 번 구현하고 나서야 보이는 차이입니다</div>
 </div>
 
 이 표를 수첩에 옮기고 나서, 오픈이는 챕터 5에서 남아 있던 문제로 돌아왔습니다. **업로드 완료 통지**에는 세 가지 중 어느 게 맞을까요.
@@ -907,29 +906,19 @@ DevTools의 Network 탭에서 WS 필터를 걸면 `ws` 요청 한 줄이 보입�
 
 반면 **채팅**처럼 사용자가 말을 보내고 상대가 답하는 자리, **협업 편집**처럼 한 사람이 셀을 편집하면 모두가 실시간으로 그 변화를 봐야 하는 자리, **실시간 게임**처럼 지연이 밀리초 단위로 문제가 되는 자리는 WebSocket 아니면 답이 없습니다. 양방향 채널을 한 번 열어 두고, 그 위에서 프레임을 주고받습니다.
 
-Polling은 이번 챕터에서는 "문제 제기"의 역할이었지만, 실무에서 여전히 현역입니다. **단순한 상태 조회**(주문 상태, 결제 완료 여부), **10분에 한 번 정도면 충분한 새로 고침**(관리자 대시보드), **브라우저 호환성이 중요한 구식 환경** 같은 자리에는 Polling이 가장 간결한 선택입니다. 서버에 별도 인프라가 필요 없고, 코드가 `setInterval` 한 줄이면 됩니다.
-
-:::remember
-**이것만은 기억하자**
-
-- **Polling은 "묻는 쪽이 주도"**. 구현이 가장 단순하지만 변화가 없어도 계속 요청이 발생한다. 폴링 주기 = 최대 지연 = 서버 부하 계수
-- **SSE는 "서버가 밀어 주는 단방향"**. `SseEmitter` + `text/event-stream`으로 한 연결에서 이벤트만 스트리밍. 알림·진행률·배포 로그처럼 **서버 → 클라 방향만** 필요한 자리에 맞다
-- **WebSocket(STOMP)은 "열어 두고 양쪽이 대화"**. `@EnableWebSocketMessageBroker` + `/app` · `/topic` 프리픽스로 pub/sub 구조. 채팅·협업·실시간 제어처럼 **양방향**이 필수인 자리에만 쓴다
-- **선택의 축은 두 개**. 방향(단방향/양방향)과 빈도(가끔/지속). 가끔·단방향이면 Polling, 자주·단방향이면 SSE, 자주·양방향이면 WebSocket
-- **업로드 완료 통지의 답**. SSE. 사건이 가끔 발생하고, 서버가 알리기만 하면 되는 자리
-:::
+Polling은 이번 챕터에서는 "문제 제기"의 역할이었지만, 실무에서 여전히 현역입니다. **단순한 상태 조회**(주문 상태, 결제 완료 여부), **10분에 한 번이면 충분한 새로 고침**(관리자 대시보드), **브라우저 호환성이 중요한 구식 환경** 같은 자리에는 Polling이 가장 간결한 선택입니다. 서버에 별도 인프라가 필요 없고, 코드가 `setInterval` 한 줄이면 됩니다.
 
 동료가 뒤에서 모니터를 들여다봤습니다.
 
-**동료**: "그럼 업로드 완료는 SSE로 가는 걸로요. 근데요, 진짜 사용자가 수천 명이 동시에 접속하는 서비스는요? 저 SseEmitter Map이 수천 개가 되면 괜찮을까요."
+**동료**: "그럼 업로드 완료는 SSE로 가는 걸로요. 근데 이거 하나 더 궁금해요. 우리가 만든 SSE는 채팅 한 번 보내면 모두에게 텍스트가 가잖아요. 만약에 텍스트가 아니라 **영상**이면 어떻게 해요? 라이브 방송 같은 거요. 그것도 한 명이 만들어서 수만 명이 보는 거잖아요."
 
-**오픈이**: "그건 서버 한 대일 때 이야기예요. 여러 대면 Map이 나뉘어 있잖아요. A 서버에 붙은 사용자한테 B 서버에서 일어난 이벤트는 어떻게 가요."
+**오픈이**: "영상은 한 줄짜리 이벤트가 아니죠. 초당 수 메가바이트가 끊김 없이 흘러가야 하잖아요."
 
-**팀장**: "그래서 라이브 스트리밍 서비스들은 브로커를 중간에 두죠. Redis Pub/Sub이든, RabbitMQ든, Kafka든."
+**팀장**: "그래서 라이브 스트리밍은 HTTP 위에서 파일을 잘게 자르는 방식을 써요. HLS라고. 다음에 그걸 한번 들여다보시죠."
 
-*연결 하나 여는 건 쉬웠다. 그 연결을 **수천 개** 유지하는 건 다른 문제다.*
+*텍스트는 끝났다. 다음은 영상이다.*
 
-오픈이는 수첩을 덮었습니다. 한 서버 위에서는 세 방식 다 배웠고 선택 기준도 정리됐습니다. 남은 질문은 **스케일**입니다. 사용자 수가 열 명에서 천 명으로, 만 명으로 늘어나면 같은 코드가 그대로 굴러갈까요. 그 질문의 답을 찾는 것이 다음 챕터의 시작입니다.
+오픈이는 수첩을 덮었습니다. 같은 HTTP 위에서 텍스트 알림(SSE)과 영상 스트림(HLS)이 어떻게 갈라지는지, 다음 챕터의 시작점이 거기에 있었습니다.
 
 ## 용어 정리
 
@@ -941,7 +930,7 @@ Polling은 이번 챕터에서는 "문제 제기"의 역할이었지만, 실무�
 | 스트림 연결 객체 | `SseEmitter` | 스프링 제공 객체. 서버 측 SSE 연결을 나타내며 `send()`·`complete()`·`onCompletion()` 등으로 수명 주기 제어 |
 | 브라우저의 수신 API | `EventSource` | 브라우저 표준 API. `new EventSource(url)`로 SSE 연결을 열고 `addEventListener(name, handler)`로 이벤트별 핸들러 등록 |
 | 연결 목록을 안전하게 들고 있는 자료구조 | `ConcurrentHashMap` | 자바의 스레드 안전 해시맵. 여러 스레드가 동시에 put·get·iterate를 호출해도 내부 무결성이 유지됨 |
-| 인터폰 (양방향 실시간 채널) | WebSocket | HTTP로 최초 핸드셰이크 후 같은 TCP 연결을 양방향 프레임 교환 채널로 업그레이드하는 프로토콜. `ws://`/`wss://` 스킴 사용 |
+| 인터폰 (양방향 실시간 채널) | WebSocket | HTTP로 최초 핸드셰이크 후 같은 TCP 연결을 양방향 프레임 교환 채널로 업그레이드하는 프로토콜. `ws://`·`wss://` 스킴 사용 |
 | 목적지 기반 대화 규약 | STOMP (Simple Text Oriented Messaging Protocol) | WebSocket 위에서 pub/sub 의미를 표현하는 메시징 규약. `SUBSCRIBE /topic/...`으로 구독, `SEND /app/...`으로 발행 |
 | STOMP 브로커 켜는 스위치 | `@EnableWebSocketMessageBroker` | Spring의 STOMP 메시지 브로커 기능을 활성화하는 설정 어노테이션. 엔드포인트·프리픽스 등록 시 `WebSocketMessageBrokerConfigurer`를 구현 |
 | 컨트롤러로 들어오는 프리픽스 | `setApplicationDestinationPrefixes("/app")` | 클라이언트가 `/app/...`로 보낸 메시지를 서버 `@MessageMapping` 메서드로 라우팅하도록 하는 설정 |
@@ -953,7 +942,9 @@ Polling은 이번 챕터에서는 "문제 제기"의 역할이었지만, 실무�
 ## 이것만은 기억하자
 
 - **세 방식의 핵심은 "방향"과 "빈도"다.** 단방향인지 양방향인지, 사건이 가끔인지 지속인지. 이 두 축으로 Polling·SSE·WebSocket이 자연히 나뉜다
-- **Polling의 비용은 "변화가 없어도 발생한다"는 데 있다.** 초당 요청 수는 **사용자 수 × 1/폴링주기**로 선형 증가한다. 유효 응답 비율은 대개 1% 미만
-- **SSE는 "한 번 열어 두고 밀어 주는" 단방향 스트림이다.** `produces = MediaType.TEXT_EVENT_STREAM_VALUE`가 연결을 끊지 않게 하고, `SseEmitter.send(...)`가 이벤트를 밀어 준다. `ConcurrentHashMap` 레지스트리와 `onCompletion`/`onTimeout` 정리는 필수
+- **Polling의 비용은 "변화가 없어도 발생한다"는 데 있다.** 초당 요청 수는 **사용자 수 × 1·폴링주기**로 선형 증가한다. 유효 응답 비율은 대개 1% 미만
+- **SSE는 "한 번 열어 두고 밀어 주는" 단방향 스트림이다.** `produces = MediaType.TEXT_EVENT_STREAM_VALUE`가 연결을 끊지 않게 하고, `SseEmitter.send(...)`가 이벤트를 밀어 준다. `ConcurrentHashMap` 레지스트리와 `onCompletion`·`onTimeout` 정리는 필수
 - **WebSocket(STOMP)은 "목적지"로 말한다.** `/app/**`으로 SEND하면 서버 `@MessageMapping`이 받고, `/topic/**`으로 발행하면 구독자 전원에게 브로드캐스트된다. 프리픽스 설정이 라우팅 지도 전체를 만든다
-- **scale-out이 다음 문제다.** 한 서버일 때는 세 방식 다 `SseEmitter`나 Simple Broker의 인메모리 맵으로 충분하다. 사용자가 늘고 서버가 여러 대가 되면, 연결이 나뉘면서 "이 이벤트를 다른 서버의 구독자에게 어떻게 전달하나"가 새 문제로 떠오른다
+- **다음 챕터에서는** 같은 HTTP 위에서 **영상**을 흘려 보내는 방식을 다룹니다. 텍스트 한 줄짜리 SSE 이벤트가 아니라, 초당 수 메가바이트의 영상이 끊김 없이 수만 명에게 분배되는 라이브 스트리밍 구조(HLS)를 들여다보겠습니다 (대규모 스트리밍 · HLS)
+</content>
+</invoke>

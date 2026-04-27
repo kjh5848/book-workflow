@@ -302,7 +302,7 @@ services:
 
 | 항목 | 값 | 역할 |
 |-----|----|----|
-| `services.app` | — | 컴포즈가 관리할 컨테이너 한 개의 이름 |
+| `services.app` |  | 컴포즈가 관리할 컨테이너 한 개의 이름 |
 | `build.context` | `.` | 이미지를 구울 때 참조할 디렉토리 |
 | `build.dockerfile` | `Dockerfile` | 레시피 파일 이름 |
 | `container_name` | `spring-docker` | 실행 후 확인할 때 쓸 컨테이너 별명 |
@@ -325,25 +325,38 @@ docker compose up
 
 처음 돌리면 시간이 꽤 걸립니다. 순서대로 이런 일이 일어납니다.
 
-1. `eclipse-temurin:21-jdk` 이미지를 Docker Hub에서 내려받는다 (약 400MB)
-2. 그 이미지 위에 git을 설치한다
-3. `entrypoint.sh`를 복사하고 권한을 준다
-4. 여기까지가 **이미지 굽기**. 이 단계가 끝나면 `spring-docker-app` 이라는 이름의 이미지가 생긴다
-5. 이미지로 컨테이너를 하나 띄운다 (`spring-docker`)
-6. 컨테이너 안에서 `entrypoint.sh`가 돌기 시작한다. `spring-app` 저장소 클론 → Gradle 빌드 → jar 실행
-7. 마지막 줄에 `Started SpringDokerApplication in 3.1 seconds` 같은 로그가 찍힌다
+<div class="sp-figure">
+  <div class="sp-figure-title">그림 1-4. <code>docker compose up</code>이 진행하는 단계</div>
+  <div class="sp-row accent">
+    <div class="sp-row-label">이미지 굽기</div>
+    <div class="sp-row-value"><code>eclipse-temurin:21-jdk</code> pull → git 설치 → <code>entrypoint.sh</code> 복사·권한 (약 400MB)</div>
+  </div>
+  <div class="sp-row accent">
+    <div class="sp-row-label">컨테이너 기동</div>
+    <div class="sp-row-value">완성 이미지를 <code>spring-docker</code>라는 컨테이너로 띄움</div>
+  </div>
+  <div class="sp-row warm">
+    <div class="sp-row-label">스크립트 실행</div>
+    <div class="sp-row-value"><code>entrypoint.sh</code>가 <code>spring-app</code> 클론 → Gradle 빌드 → jar 실행</div>
+  </div>
+  <div class="sp-row warm">
+    <div class="sp-row-label">기동 로그</div>
+    <div class="sp-row-value"><code>Started SpringDokerApplication in 3.1 seconds</code> 줄이 마지막에 찍힘</div>
+  </div>
+  <div class="sp-callout info">처음 굽는 시간만 길고, 두 번째부터는 이미지 캐시로 몇 초만에 컨테이너가 다시 떠오릅니다</div>
+</div>
 
 [CAPTURE NEEDED: spring-docker 폴더에서 docker compose up 실행. 이미지 pull → build → 컨테이너 기동 → Spring Boot 배너 + "Tomcat started on port(s): 8080" 로그까지 보이는 터미널]
 
 ![](../assets/CH01/terminal/01_docker-compose-up.png)
-*그림 1-4. `docker compose up` 실행 직후. 이미지 빌드와 Gradle 빌드 로그가 연달아 흐릅니다*
+*그림 1-5. `docker compose up` 실행 직후. 이미지 빌드와 Gradle 빌드 로그가 연달아 흐릅니다*
 
 첫 실행은 5~10분쯤 걸릴 수 있습니다. 두 번째부터는 이미지가 캐시되어 몇 초면 끝납니다. 마지막에 `Tomcat started on port(s): 8080`이 찍혔다면 성공입니다.
 
 Docker Desktop 창으로 가 보면 **Containers** 탭에 `spring-docker` 한 줄이 초록색 Running으로 떠 있습니다.
 
 ![](../assets/CH01/gemini/01_docker-desktop-containers.png)
-*그림 1-5. Docker Desktop Containers 탭. `spring-docker` 컨테이너가 Running 상태로 보입니다*
+*그림 1-6. Docker Desktop Containers 탭. `spring-docker` 컨테이너가 Running 상태로 보입니다*
 
 *컨테이너가 돌고 있다.*
 
@@ -354,9 +367,11 @@ Docker Desktop 창으로 가 보면 **Containers** 탭에 `spring-docker` 한 �
 서버가 떴다면 브라우저 주소창에 `localhost:8080`을 입력합니다.
 
 ![](../assets/CH01/terminal/01_browser-hello-world.png)
-*그림 1-6. 브라우저에 `hello world!.`가 찍혔습니다. health check 성공*
+*그림 1-7. 브라우저에 `hello world!.`가 찍혔습니다. health check 성공*
 
-`hello world!.` 한 줄. `spring-app` 저장소의 `SpringDokerController`에 있던 `@GetMapping("/")` 핸들러가 돌아왔다는 뜻입니다. 이제 컨테이너를 내려 보겠습니다. 새 터미널을 열고(서버 로그가 돌고 있는 터미널은 그대로 두고) 같은 폴더에서 입력합니다.
+`hello world!.` 한 줄. `spring-app` 저장소의 `SpringDokerController`에 있던 `@GetMapping("/")` 핸들러가 돌아왔다는 뜻입니다. 이 한 줄을 띄우기 위해 호스트에서는 JDK 설치도, 환경 변수도, 포트 정리도 하지 않았습니다. 모든 일은 컨테이너 안에서만 일어났습니다.
+
+이제 컨테이너를 내려 보겠습니다. 새 터미널을 열고(서버 로그가 돌고 있는 터미널은 그대로 두고) 같은 폴더에서 입력합니다.
 
 ```bash [터미널] 실험 1-2 실행. 컨테이너 정리
 docker compose down
@@ -365,7 +380,7 @@ docker compose down
 이 한 줄이 여러 가지를 정리합니다.
 
 <div class="sp-figure">
-  <div class="sp-figure-title">그림 1-7. <code>docker compose down</code>이 정리하는 것</div>
+  <div class="sp-figure-title">그림 1-8. <code>docker compose down</code>이 정리하는 것</div>
   <div class="sp-row warm">
     <div class="sp-row-label">컨테이너</div>
     <div class="sp-row-value">실행 중이던 <code>spring-docker</code>를 정지하고 삭제</div>
@@ -386,7 +401,7 @@ docker compose down
 </div>
 
 ![](../assets/CH01/terminal/01_docker-compose-down.png)
-*그림 1-8. `docker compose down` 실행 결과. 컨테이너와 네트워크가 Removed로 표시됩니다*
+*그림 1-9. `docker compose down` 실행 결과. 컨테이너와 네트워크가 Removed로 표시됩니다*
 
 Docker Desktop Containers 탭을 다시 열면 `spring-docker` 항목이 사라진 걸 확인할 수 있습니다. 이미지 탭으로 가면 `spring-docker-app`과 `eclipse-temurin` 이미지는 그대로 남아 있습니다. 다음에 `docker compose up`을 다시 돌리면 이 이미지들을 재사용해서 몇 초 만에 서버가 뜹니다.
 
@@ -429,4 +444,4 @@ Docker Desktop Containers 탭을 다시 열면 `spring-docker` 항목이 사라�
 - **환경 차이는 컨테이너 안에 가둔다.** Java 버전·환경 변수·운영체제가 달라도 도시락통 안만 똑같으면 결과가 같다
 - **구성 파일 세 장이면 서비스 한 개가 뜬다.** `Dockerfile`(레시피) → 이미지 → 컨테이너, 그리고 배치도 한 장(`docker-compose.yml`)
 - **`docker compose up` / `docker compose down`으로 켜고 끈다.** 한 줄 명령어 두 개가 오늘 모든 실습의 입구와 출구다
-- **다음 챕터에서는** 이 서비스에 **카카오 로그인**을 붙입니다. 외부 인증 서버와 대화할 때, 매번 비밀번호를 주고받지 않고 **통행증 하나**로 끝내는 방법 (OAuth2.0 & OIDC)을 만나 보겠습니다
+- **다음 챕터에서는** 이 서비스에 **카카오 로그인**을 붙입니다. 외부 인증 서버와 대화할 때, 매번 비밀번호를 주고받지 않고 **통행증 하나**로 끝내는 방법(OAuth 2.0 & OIDC)을 만나 보겠습니다

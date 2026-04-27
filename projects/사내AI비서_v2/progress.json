@@ -6,10 +6,9 @@
   "current_step": "step_5_chapters",
   "book_version": "v6",
   "created_at": "2026-03-04",
-  "updated_at": "2026-04-21",
+  "updated_at": "2026-04-25",
   "milestone": "ch11_split",
   "_milestone_note": "CH10 §10.7~§10.10을 CH11(커넥트HR 에이전트의 완성)로 분리. ex11 레포 신설 + PDF 캡처 근거 + 카테고리 분기 추가",
-
   "steps": {
     "step_1_seed": {
       "name": "씨앗",
@@ -60,21 +59,73 @@
     },
     "step_5_chapters": {
       "name": "챕터 집필",
-      "status": "in_progress",
+      "status": "done_v8_사내비서",
       "chapters": [
         {
-          "id": "CH10",
-          "title": "PDF 이미지까지 잡아라",
-          "artifact": "chapters/10-PDF-이미지까지-잡아라.md",
-          "status": "in_progress",
-          "_note": "§10.7~§10.10을 CH11로 분리. §10.1~§10.6 + 닫기 블록만 남음"
+          "number": 1,
+          "title": "환각과 RAG의 첫 만남",
+          "file": "chapters/01-환각과-RAG의-첫-만남.md",
+          "status": "draft-v8"
         },
         {
-          "id": "CH11",
-          "title": "커넥트HR 에이전트의 완성",
-          "artifact": "chapters/11-커넥트HR-에이전트의-완성.md",
-          "status": "in_progress",
-          "_note": "§11.1 파이프라인 조립 + §11.2 웹 UI + §11.3 PDF 캡처 근거 + §11.4 카테고리 분기 + §11.5 마지막 여정 + §11.6 전체 구성도. 코드 레포: code/rag-end/ex11/"
+          "number": 2,
+          "title": "일단 사내 시스템부터",
+          "file": "chapters/02-일단-사내-시스템부터.md",
+          "status": "draft-v8"
+        },
+        {
+          "number": 3,
+          "title": "어떤 문서를 넣을까",
+          "file": "chapters/03-어떤-문서를-넣을까.md",
+          "status": "draft-v8"
+        },
+        {
+          "number": 4,
+          "title": "문서를 지식으로 바꾸다",
+          "file": "chapters/04-문서를-지식으로-바꾸다.md",
+          "status": "draft-v8"
+        },
+        {
+          "number": 5,
+          "title": "답이 돌아온다 (LCEL 파이프라인)",
+          "file": "chapters/05-답이-돌아온다.md",
+          "status": "draft-v8"
+        },
+        {
+          "number": 6,
+          "title": "연차도 규정도 한번에",
+          "file": "chapters/06-연차도-규정도-한번에.md",
+          "status": "draft-v8"
+        },
+        {
+          "number": 7,
+          "title": "실제로 써보니 (UI·캐싱·로깅)",
+          "file": "chapters/07-실제로-써보니.md",
+          "status": "draft-v8"
+        },
+        {
+          "number": 8,
+          "title": "엉뚱한 문서를 가져온다 (청킹·하이브리드·리랭킹)",
+          "file": "chapters/08-엉뚱한-문서를-가져온다.md",
+          "status": "draft-v8"
+        },
+        {
+          "number": 9,
+          "title": "질문을 제대로 이해 못한다 (Query Rewrite·HyDE)",
+          "file": "chapters/09-질문을-제대로-이해-못한다.md",
+          "status": "draft-v8"
+        },
+        {
+          "number": 10,
+          "title": "PDF 이미지까지 잡아라 (Vision LLM·OCR)",
+          "file": "chapters/10-PDF-이미지까지-잡아라.md",
+          "status": "draft-v8"
+        },
+        {
+          "number": 11,
+          "title": "커넥트HR 에이전트의 완성 (레이어드 아키텍처)",
+          "file": "chapters/11-커넥트HR-에이전트의-완성.md",
+          "status": "draft-v8"
         }
       ],
       "_note": "CH01~CH11 총 11장으로 재편(원래 10장 계획에서 CH11 분리). Ch.1~11 차례로 폴리싱 진행"
@@ -108,7 +159,6 @@
       "_note": "HTML 프리뷰는 pub-html-build, 선택적 PDF는 pub-html-to-pdf (정식 전자책 PDF는 pub-build Typst 경로)"
     }
   },
-
   "_chapter_template": {
     "id": "CH01",
     "title": "",
@@ -122,7 +172,16 @@
     },
     "questions_pending": 0
   },
-
-  "_status_values": ["pending", "in_progress", "done", "review"],
-  "_review_values": [null, "pass", "conditional_pass", "fail"]
+  "_status_values": [
+    "pending",
+    "in_progress",
+    "done",
+    "review"
+  ],
+  "_review_values": [
+    null,
+    "pass",
+    "conditional_pass",
+    "fail"
+  ]
 }

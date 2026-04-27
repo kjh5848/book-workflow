@@ -20,6 +20,16 @@ steps: [1, 2, 3, 4, 5, 6, 7]
 @.claude/rules/code.md
 @.claude/rules/storytelling.md
 @.claude/rules/writing-chapters.md
+@.claude/rules/brand-tokens.md
+
+## 다이어그램·시각 요소 검토 — 카탈로그 우선
+
+검토 시 시각 요소(다이어그램·박스·플로우·비교)를 만나면 다음을 점검:
+
+- `.claude/skills/pub-html-build/components-catalog/inventory.md` — 등록된 컴포넌트 목록과 대조
+- 인라인 `style="..."`로 박스를 직접 그렸는지 점검 (있으면 컴포넌트 클래스로 전환 권고)
+- 색상이 hex(`#666` 등)나 무채색만(`var(--color-border)`)으로 박힌 다이어그램은 **회귀**로 판정. 브랜드 색(`var(--color-accent*)`·`var(--color-accent-warm*)`·`var(--color-info*)`) 적용 권고
+- Utility 토큰(`success/warning/danger`) 신규 사용은 **FAIL**. Primary·Secondary·Info로 의미 표현 권고
 
 ## 소유 스킬
 

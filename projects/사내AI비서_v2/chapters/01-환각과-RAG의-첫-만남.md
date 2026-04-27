@@ -5,13 +5,13 @@
 
 - LLM이 모르는 것을 자신 있게 지어낸다는 걸 직접 확인합니다 *(환각)*
 - 문서를 직접 건네주면 거짓말을 멈춘다는 걸 배웁니다 *(Context Injection)*
-- 이걸 자동화한 RAG 파이프라인을 직접 만들어봅니다 *(RAG)*
+- 이걸 자동화한 RAG 파이프라인을 직접 만들어 보겠습니다 *(RAG)*
 :::
 
 :::preview
 **챕터 1은 맛보기 챕터입니다**
 
-이 챕터는 **본격 여정에 들어가기 전** RAG의 원리만 빠르게 체험하는 시간입니다. 더미 데이터 3건으로 "환각 → 문서 주입 → RAG"가 어떤 흐름인지 몸으로 느끼는 것이 목적입니다. 실제 사내 AI 비서 **커넥트HR 에이전트**를 만드는 본격 여정은 **챕터 2부터** 시작됩니다. 지금은 가볍게 훑는다는 기분으로 따라오세요.
+이 챕터는 본격 여정에 들어가기 전 RAG의 원리만 빠르게 체험하는 시간입니다. 더미 데이터 3건으로 "환각 → 문서 주입 → RAG"가 어떤 흐름인지 몸으로 느끼는 것이 목적입니다. 실제 사내 AI 비서 **커넥트HR 에이전트**를 만드는 본격 여정은 챕터 2부터 시작됩니다. 지금은 가볍게 훑는다는 기분으로 따라오세요.
 :::
 
 ::::prep
@@ -45,7 +45,7 @@ ex01/
 ```
 
 :::note
-**컨텍스트, 청킹, Chain-of-Thought 같은 단어가 낯설어도 괜찮습니다.** 파일 이름에 미리 등장한 것이고, 각 실습에서 하나씩 풀어 설명합니다.
+컨텍스트, 청킹, Chain-of-Thought 같은 단어가 낯설어도 괜찮습니다. 파일 이름에 미리 등장한 것이고, 각 실습에서 하나씩 풀어 설명합니다.
 :::
 
 `[실습]` 파일에는 import와 데이터가 미리 준비되어 있습니다. 챕터를 따라 하며 TODO 부분을 채워넣으세요. 막히면 rag-end의 완성 코드를 참고하세요.
@@ -66,7 +66,7 @@ py -3.12 -m venv .venv
 pip install -r requirements.txt
 ```
 
-Windows는 PowerShell이 아니라 **명령 프롬프트(cmd)** 를 권장합니다. PowerShell 사용 시 `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser` 로 스크립트 실행을 허용한 뒤 `.venv\Scripts\Activate.ps1`을 실행하세요.
+Windows는 PowerShell이 아니라 명령 프롬프트(cmd)를 권장합니다. PowerShell 사용 시 `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser` 로 스크립트 실행을 허용한 뒤 `.venv\Scripts\Activate.ps1`을 실행하세요.
 
 Ollama 모델이 아직 없다면 다운로드합니다.
 
@@ -95,7 +95,7 @@ ollama pull nomic-embed-text
 :::tip
 **지금은 개념만 잡으세요**
 
-LangChain, 임베딩, 벡터 DB 같은 용어가 한꺼번에 나와서 부담스러울 수 있습니다. 지금은 "문서를 넣어주면 LLM이 정확하게 답한다"는 **RAG의 개념**만 잡으면 충분합니다. 각 기술의 동작 원리는 챕터 4~챕터 5에서 차근차근 다룹니다.
+LangChain, 임베딩, 벡터 DB 같은 용어가 한꺼번에 나와서 부담스러울 수 있습니다. 지금은 "문서를 넣어주면 LLM이 정확하게 답한다"는 RAG의 개념만 잡으면 충분합니다. 각 기술의 동작 원리는 챕터 4~챕터 5에서 차근차근 다룹니다.
 :::
 
 ### 4. 실습 순서
@@ -108,10 +108,10 @@ LangChain, 임베딩, 벡터 DB 같은 용어가 한꺼번에 나와서 부담�
 4. `ex01/step4_no_chunking.py`. 청킹 없이 비교
 5. `ex01/step5_rag.py`. 추론 심화
 
-환각을 직접 체험하고(step1), 문서를 넣으면 달라지는 걸 확인한 뒤(step2), RAG로 조립합니다(step3). 그다음 청킹 없이 돌려서 차이를 체감하고(step4), 추론이 필요한 질문까지 던져봅니다(step5). **step1부터 순서대로 실행하세요.**
+환각을 직접 체험하고(step1), 문서를 넣으면 달라지는 걸 확인한 뒤(step2), RAG로 조립합니다(step3). 그다음 청킹 없이 돌려서 차이를 체감하고(step4), 추론이 필요한 질문까지 던져보겠습니다(step5). step1부터 순서대로 실행하세요.
 ::::
 
-## 1.1 그럴듯한 거짓말: LLM 환각(Hallucination)
+## 1.1 그럴듯한 거짓말. LLM 환각(Hallucination)
 
 ![](../assets/CH01/gemini/01_chapter-opening.png)
 *그림 1-1. 입사 3일 차, 첫 번째 미션*
@@ -170,12 +170,12 @@ python step1_fail.py
     <div class="tl-section"><span class="tl-label">답변</span></div>
     <div>우리 회사(커넥트)의 신입사원 연차 발생 규정은 <strong>회사의 정책 문서</strong>에 명시되어 있습니다. 일반적으로 신입사원의 연차는 근속 기간과 직무, 회사 정책에 따라 결정되며, 다음과 같은 일반적인 패턴을 따릅니다:</div>
     <div class="tl-kv-row">1. <strong>초기 근속 기간</strong>: 신입사원(예: 입사 1년 이내)은 연차가 적게 부여되거나, 월별로 일정 비율로 발생합니다.</div>
-    <div class="tl-kv-row">2. <strong>연차 발생 방식</strong>: 1일당 ~0.1~0.2일 발생하거나, 연차가 매년 1일씩 증가하는 방식으로 시작됩니다.</div>
+    <div class="tl-kv-row">2. <strong>연차 발생 방식</strong>: 1일당 0.1~0.2일 발생하거나, 연차가 매년 1일씩 증가하는 방식으로 시작됩니다.</div>
     <div class="tl-kv-row"><span class="tl-dim">예시:</span> 입사 1년차 연차 1일 · 입사 2년차 연차 2일 · 입사 3년차 연차 3일 ...</div>
   </div>
 </div>
 
-<div class="caption">그림 1-2. <code>step1_fail.py</code> 실행 결과. 자신감 있게 답하지만 실제 커넥트 규정과 다릅니다</div>
+*그림 1-2. `step1_fail.py` 실행 결과. 자신감 있게 답하지만 실제 커넥트 규정과 다릅니다*
 
 답변을 보면 "근로기준법에 따라 1년 미만은 매월 1일..." 같은 내용이 나옵니다. 공식적인 느낌도 나고 그럴듯합니다. 입사할 때 받은 규정집을 꺼내 비교해봤습니다. 커넥트의 실제 규정은 이랬습니다.
 
@@ -207,7 +207,7 @@ python step1_fail.py
   </div>
 </div>
 
-<div class="caption">그림 1-3. LLM 응답과 사내 규정을 나란히 비교한 모습입니다</div>
+*그림 1-3. LLM 응답과 사내 규정을 나란히 비교한 모습입니다*
 
 여기서 의문이 생깁니다. LLM은 왜 자신 있게 틀린 대답을 했을까요?
 
@@ -218,7 +218,7 @@ LLM을 이렇게 가정해보겠습니다. 입사 면접을 보러 온 외부인
 ![](../assets/CH01/gemini/01_hallucination-outsider.png)
 *그림 1-4. LLM은 세상의 공개 데이터는 학습했지만, 우리 회사 내부 문서는 읽은 적이 없습니다*
 
-## 1.2 교재를 펼쳐놓으면: 컨텍스트 주입(Context Injection)
+## 1.2 교재를 펼쳐놓으면. 컨텍스트 주입(Context Injection)
 
 규정집을 덮고 잠시 생각했습니다. 모니터 옆 자리에서 팀장이 다시 지나가며 한 마디 던졌습니다.
 
@@ -281,7 +281,7 @@ python step2_context.py
   </div>
 </div>
 
-<div class="caption">그림 1-5. <code>step2_context.py</code> 실행 결과. 문서를 직접 넣으니 정확하게 답합니다</div>
+*그림 1-5. `step2_context.py` 실행 결과. 문서를 직접 넣으니 정확하게 답합니다*
 
 답변이 규정집과 한 글자도 다르지 않았습니다. 방금 전 거짓말하던 그 LLM이 맞나 싶을 정도였습니다. 코드가 바뀐 것도 아니고, 달라진 건 `context_data`를 프롬프트에 붙인 것 하나뿐. LLM에게 "정답지"를 건네준 셈입니다.
 
@@ -295,12 +295,12 @@ python step2_context.py
 
 *이걸 매번 전부 복사해서 프롬프트에 붙인다고?*
 
-LLM에는 한 번에 처리할 수 있는 텍스트 길이 한도(**컨텍스트 윈도우**)가 있습니다. 문서가 쌓일수록 한도를 넘깁니다. 무엇보다 연차 하나 물어보는데 보안 지침과 복지 정책까지 같이 보내면, LLM이 엉뚱한 조항을 들고 와서 답할 가능성이 커집니다.
+LLM에는 한 번에 처리할 수 있는 텍스트 길이 한도(컨텍스트 윈도우)가 있습니다. 문서가 쌓일수록 한도를 넘깁니다. 무엇보다 연차 하나 물어보는데 보안 지침과 복지 정책까지 같이 보내면, LLM이 엉뚱한 조항을 들고 와서 답할 가능성이 커집니다.
 
 ![](../assets/CH01/gemini/01_context-overflow.png)
 *그림 1-6. 문서를 통째로 넣는 방식의 한계. 문서가 늘어나면 프롬프트 창이 넘칩니다*
 
-## 1.3 사서가 필요합니다: RAG(Retrieval-Augmented Generation)
+## 1.3 사서가 필요합니다. RAG(Retrieval-Augmented Generation)
 
 파일철을 다시 내려놓고 한숨을 쉬었습니다. 옆자리 동료가 노트북을 덮으며 말했습니다.
 
@@ -310,42 +310,10 @@ LLM에는 한 번에 처리할 수 있는 텍스트 길이 한도(**컨텍스트
 
 맞는 말이었습니다. 도서관에선 누군가 와서 질문하면 사서가 그 질문에 맞는 책을 서가에서 골라 건네줍니다. 방문자는 그 책만 읽으면 됩니다. 전부 외울 필요도, 서가를 통째로 옮길 필요도 없습니다.
 
-<div class="librarian-scene">
-  <div class="ls-grid">
-    <div class="ls-actor">
-      <div class="ls-icon user"></div>
-      <div class="ls-role">방문자</div>
-      <div class="ls-note">규정이 궁금한<br>사내 직원</div>
-    </div>
-    <div class="ls-bridge">
-      <div class="ls-line"><span class="ls-line-label">질문</span><span class="ls-ar">→</span></div>
-      <div class="ls-line reverse"><span class="ls-ar">←</span><span class="ls-line-label">답변</span></div>
-    </div>
-    <div class="ls-actor center">
-      <div class="ls-icon lib"></div>
-      <div class="ls-role">사서<em>RAG</em></div>
-      <div class="ls-note">질문에 맞는 책을<br>서가에서 골라 건네기</div>
-    </div>
-    <div class="ls-bridge">
-      <div class="ls-line"><span class="ls-line-label">책 요청</span><span class="ls-ar">→</span></div>
-      <div class="ls-line reverse"><span class="ls-ar">←</span><span class="ls-line-label">관련 페이지</span></div>
-    </div>
-    <div class="ls-actor">
-      <div class="ls-icon shelf"><span></span><span></span><span></span></div>
-      <div class="ls-role">서가</div>
-      <div class="ls-note">사내 문서 저장소<br>(벡터 DB)</div>
-    </div>
-  </div>
-</div>
-
-<div class="caption">그림 1-7. 사서가 방문자의 질문을 듣고 서가에서 관련 책을 골라 건네줍니다. RAG는 이 '사서'의 역할을 LLM 옆에 앉히는 것입니다</div>
-
-LLM도 같은 방식이면 됩니다. 사내 문서 전체를 외우게 할 필요가 없습니다. 질문이 들어왔을 때 **그 질문에 해당하는 문서 조각만 찾아서 LLM에게 건네주면 됩니다.**
+LLM도 같은 방식이면 됩니다. 사내 문서 전체를 외우게 할 필요가 없습니다. 질문이 들어왔을 때 그 질문에 해당하는 문서 조각만 찾아서 LLM에게 건네주면 됩니다.
 
 이것이 **RAG (Retrieval-Augmented Generation, 검색 증강 생성)** 입니다. 이름은 거창하지만 하는 일은 단순합니다. 사서를 하나 앉히는 겁니다.
 
-<div class="fig-scale-75">
-<div class="figure-group">
 <div class="rag-pipeline-box">
   <div class="rag-pipeline-title">RAG 파이프라인. 사서가 일하는 순서</div>
   <div class="rag-pipeline">
@@ -353,68 +321,47 @@ LLM도 같은 방식이면 됩니다. 사내 문서 전체를 외우게 할 필�
       <div class="s-meta">서가에 책 꽂기</div>
       <div class="s-num">STEP 01</div>
       <div class="s-title">문서 저장</div>
-      <div class="s-desc">문서를 벡터로 변환해 ChromaDB에 저장</div>
+      <div class="s-desc">문서를 벡터로 변환해<br>ChromaDB에 저장</div>
     </div>
     <div class="rag-arrow">→</div>
     <div class="rag-step">
       <div class="s-meta">사서가 책 찾기</div>
       <div class="s-num">STEP 02</div>
       <div class="s-title">문서 검색</div>
-      <div class="s-desc">질문과 가장 비슷한 문서를 자동으로 찾기</div>
+      <div class="s-desc">질문과 가장 비슷한<br>문서를 자동으로 찾기</div>
     </div>
     <div class="rag-arrow">→</div>
     <div class="rag-step">
       <div class="s-meta">AI가 읽고 답하기</div>
       <div class="s-num">STEP 03</div>
       <div class="s-title">답변 생성</div>
-      <div class="s-desc">찾은 문서를 LLM에 넘겨서 답변 생성</div>
+      <div class="s-desc">찾은 문서를 LLM에<br>넘겨서 답변 생성</div>
     </div>
   </div>
 </div>
 
-<div class="llm-rag-split">
-  <div class="lrs-common">
-    <div class="lrs-q">질문</div>
-    <div class="lrs-q-sub">"신입사원 연차 규정은?"</div>
-  </div>
-  <div class="lrs-paths">
-    <div class="lrs-path bad">
-      <div class="lrs-path-head">
-        <span class="lrs-tag">LLM 단독</span>
-        <span class="lrs-dim">근거 없음</span>
-      </div>
-      <div class="lrs-flow">
-        <div class="lrs-arrow dashed"></div>
-        <div class="lrs-node llm">LLM</div>
-        <div class="lrs-arrow dashed"></div>
-        <div class="lrs-node out bad">환각 답변</div>
-      </div>
+*그림 1-7. RAG 내부 3단계(저장·검색·생성)의 사서 비유. 사서가 방문자의 질문을 듣고 서가에서 관련 책을 골라 건네줍니다*
+
+같은 질문을 던졌을 때, LLM 단독과 RAG는 결과가 어떻게 갈릴까요. 한쪽은 학습된 지식만으로 답하고, 다른 쪽은 검색 결과를 근거로 답합니다.
+
+<div class="sp-compare">
+  <div class="sp-compare-block bad">
+    <div class="sp-compare-label">LLM 단독</div>
+    <div class="sp-compare-content">
+      질문이 들어오면 모델이 학습한 지식만으로 바로 답변을 만듭니다. 사내 문서를 본 적이 없으니 비슷한 일반 규정을 끌어와 채워 넣습니다. <b>근거 없음 → 환각 답변</b>.
     </div>
-    <div class="lrs-path good">
-      <div class="lrs-path-head">
-        <span class="lrs-tag">RAG</span>
-        <span class="lrs-dim">근거 있음</span>
-      </div>
-      <div class="lrs-flow">
-        <div class="lrs-arrow solid"></div>
-        <div class="lrs-node">검색기</div>
-        <div class="lrs-arrow solid"></div>
-        <div class="lrs-node db">벡터 DB</div>
-        <div class="lrs-arrow solid"></div>
-        <div class="lrs-node llm">LLM</div>
-        <div class="lrs-arrow solid"></div>
-        <div class="lrs-node out good">출처 답변</div>
-      </div>
+  </div>
+  <div class="sp-compare-block good">
+    <div class="sp-compare-label">RAG</div>
+    <div class="sp-compare-content">
+      질문이 검색기를 거쳐 벡터 DB에서 관련 문서를 먼저 가져옵니다. LLM은 그 문서를 보고 답을 만듭니다. <b>근거 있음 → 출처 포함 답변</b>.
     </div>
   </div>
 </div>
 
-</div>
-</div>
+*그림 1-8. 같은 질문에서 LLM 단독과 RAG의 경로 차이입니다*
 
-<div class="caption">그림 1-8. 위는 RAG 내부 3단계(저장·검색·생성)의 사서 비유,<br>아래는 같은 질문에서 LLM 단독(점선·근거 없음)과 RAG(실선·출처 포함)의 경로 차이입니다</div>
-
-### 1.3.1 서가에 책 꽂기: 임베딩 + ChromaDB 인덱싱
+### 1.3.1 서가에 책 꽂기. 임베딩 + ChromaDB 인덱싱
 
 `ex01/step3_rag.py`에는 사내 규정 3개가 더미 데이터로 미리 준비되어 있습니다. 이 파일을 열고 TODO의 `pass`를 지우고 아래 코드를 작성합니다.
 
@@ -441,7 +388,7 @@ retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
 ```
 
 :::term-box
-**OllamaEmbeddings, ChromaDB란?** `OllamaEmbeddings`는 Ollama에 올려둔 임베딩 모델을 불러와 텍스트 → 벡터 변환을 해주는 래퍼입니다. `ChromaDB`는 이 벡터를 저장하고 유사도 검색을 해주는 오픈소스 벡터 데이터베이스입니다.
+**OllamaEmbeddings, ChromaDB란?** `OllamaEmbeddings`는 Ollama에 올려둔 임베딩 모델을 불러와 텍스트를 벡터로 변환해주는 래퍼입니다. `ChromaDB`는 이 벡터를 저장하고 유사도 검색을 해주는 오픈소스 벡터 데이터베이스입니다.
 :::
 
 `OllamaEmbeddings`는 각 문서를 수백 차원의 숫자 배열(벡터)로 변환합니다. 의미가 비슷한 문서일수록 벡터 공간에서 가까이 위치하게 됩니다. `Chroma.from_documents()`가 이 벡터를 ChromaDB에 저장합니다. `k=3`은 "질문과 가장 비슷한 문서 3개를 가져오라"는 설정입니다. `as_retriever()`는 벡터스토어에서 검색 기능만 떼어낸 **Retriever(검색기)** 를 만듭니다. 다음 코드에서 RetrievalQA가 이 검색기를 받아 문서 검색부터 답변 생성까지 한 번에 처리합니다.
@@ -452,12 +399,12 @@ retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
 `nomic-embed-text`를 사용합니다. 챕터 4에서 한국어에 최적화된 `ko-sroberta-multitask`로 교체합니다.
 :::
 
-### 1.3.2 사서에게 질문하기: RetrievalQA 체인 조립
+### 1.3.2 사서에게 질문하기. RetrievalQA 체인 조립
 
 이어서 같은 `ex01/step3_rag.py` 파일의 다음 TODO를 찾아 `pass`를 지우고 아래 코드를 작성합니다.
 
 ```python [실습 3] ex01/step3_rag.py. RAG 파이프라인 (2/2: 체인 연결)
-# 5. 프롬프트 템플릿 — LLM에게 "참고 정보에서만 답해"라고 제약을 걺
+# 5. 프롬프트 템플릿 (LLM에게 "참고 정보에서만 답해"라고 제약을 걺)
 template = """당신은 회사의 규정에 대해 설명해주는 AI 비서입니다.
 아래의 참고 정보를 바탕으로 질문에 답하세요. 반드시 한국어로 답변해야 합니다.
 
@@ -480,20 +427,20 @@ qa_chain = RetrievalQA.from_chain_type(
 )
 
 # TODO: qa_chain.invoke로 질문 실행 → 검색된 문서(근거) 출력 → AI 답변 출력
-# 8. 질문 실행 — 검색 + LLM 답변이 한 번에 동작
+# 8. 질문 실행 (검색 + LLM 답변이 한 번에 동작)
 result = qa_chain.invoke({"query": "신입사원 휴가 규정에 대해 알려줘."})
 ```
 
 "참고 정보를 바탕으로 질문에 답하세요"라는 한 줄이 핵심입니다. LLM에게 제공된 문서 안에서만 답하도록 제약을 거는 것입니다.
 
 :::term-box
-**그라운딩(Grounding)**. LLM이 답변을 **제공된 문서에만** 근거하도록 강제하는 기법. 프롬프트에 "참고 정보에서만 답하라"를 심는 가장 단순한 형태부터, "찾을 수 없으면 모른다고 답하라", "답변 끝에 출처 파일명 명시" 같은 규칙을 추가하는 강한 형태까지 스펙트럼이 있습니다. 챕터 5에서 **출처 강제(Source Grounding)** 라는 강한 버전을 규칙 4개짜리 프롬프트로 구현합니다.
+**그라운딩(Grounding)**. LLM이 답변을 제공된 문서에만 근거하도록 강제하는 기법입니다. 프롬프트에 "참고 정보에서만 답하라"를 심는 가장 단순한 형태부터 "찾을 수 없으면 모른다고 답하라", "답변 끝에 출처 파일명 명시" 같은 규칙을 추가하는 강한 형태까지 스펙트럼이 있습니다. 챕터 5에서 **출처 강제(Source Grounding)** 라는 강한 버전을 규칙 4개짜리 프롬프트로 구현합니다.
 :::
 
-`chain_type_kwargs={"prompt": PROMPT}`는 위에서 만든 프롬프트 템플릿을 체인에 주입하는 옵션입니다. 이걸 넣지 않으면 LangChain 기본 프롬프트가 쓰이는데, 우리가 원하는 한국어 답변 규칙을 적용하려면 직접 넘겨줘야 합니다. `return_source_documents=True`는 LLM의 답변뿐 아니라 **검색에 사용된 원본 문서도 결과에 포함**시키는 옵션입니다. 이 옵션이 꺼져 있으면 `result["result"]`(답변)만 돌아오고, 켜면 `result["source_documents"]`에 어떤 문서를 참고했는지까지 함께 돌아옵니다.
+`chain_type_kwargs={"prompt": PROMPT}`는 위에서 만든 프롬프트 템플릿을 체인에 주입하는 옵션입니다. 이걸 넣지 않으면 LangChain 기본 프롬프트가 쓰이는데, 우리가 원하는 한국어 답변 규칙을 적용하려면 직접 넘겨줘야 합니다. `return_source_documents=True`는 LLM의 답변뿐 아니라 검색에 사용된 원본 문서도 결과에 포함시키는 옵션입니다. 이 옵션이 꺼져 있으면 `result["result"]`(답변)만 돌아오고, 켜면 `result["source_documents"]`에 어떤 문서를 참고했는지까지 함께 돌아옵니다.
 
 :::term-box
-**RetrievalQA란?** LangChain이 제공하는 RAG 전용 체인 클래스. "질문 받기 → Retriever로 문서 검색 → LLM에 문서와 질문 함께 전달 → 답변 반환" 이 전 과정을 한 줄 호출로 돌려줍니다. 수동으로 이어붙여야 할 코드를 내장 추상화로 대체한 셈입니다.
+**RetrievalQA란?** LangChain이 제공하는 RAG 전용 체인 클래스입니다. "질문 받기 → Retriever로 문서 검색 → LLM에 문서와 질문 함께 전달 → 답변 반환" 이 전 과정을 한 줄 호출로 돌려줍니다. 수동으로 이어붙여야 할 코드를 내장 추상화로 대체한 셈입니다.
 :::
 
 ```bash [터미널] 실행
@@ -518,11 +465,11 @@ python step3_rag.py
   </div>
 </div>
 
-<div class="caption">그림 1-9. <code>step3_rag.py</code> 실행 결과. [인사규정] 문서를 찾아서 답변하고 출처까지 보여줍니다</div>
+*그림 1-9. `step3_rag.py` 실행 결과. [인사규정] 문서를 찾아서 답변하고 출처까지 보여줍니다*
 
-이제 답변과 함께 어느 문서를 참고했는지가 나옵니다. step2에서는 문서를 수동으로 넣어줬지만 이번에는 **질문에 맞는 문서를 자동으로 찾아왔습니다.** 환각이 사라지고 출처가 생겼습니다.
+이제 답변과 함께 어느 문서를 참고했는지가 나옵니다. step2에서는 문서를 수동으로 넣어줬지만 이번에는 질문에 맞는 문서를 자동으로 찾아왔습니다. 환각이 사라지고 출처가 생겼습니다.
 
-## 1.4 청킹, 있을 때와 없을 때: 청킹(Chunking)
+## 1.4 청킹, 있을 때와 없을 때. 청킹(Chunking)
 
 옆자리 동료가 화면을 힐끗 보고 물었습니다.
 
@@ -534,7 +481,7 @@ python step3_rag.py
 # 1. docs_bad를 벡터DB에 저장 (세 규정을 하나로 이어붙인 거대한 Document)
 vectorstore = Chroma.from_documents(documents=docs_bad, embedding=embeddings)
 
-# 2. 검색기 생성 — 통째로 하나뿐이므로 k=1로 검색해도 전체가 다 나옴
+# 2. 검색기 생성 (통째로 하나뿐이므로 k=1로 검색해도 전체가 다 나옴)
 retriever = vectorstore.as_retriever(search_kwargs={"k": 1})
 ```
 
@@ -544,7 +491,6 @@ retriever = vectorstore.as_retriever(search_kwargs={"k": 1})
 python step4_no_chunking.py
 ```
 
-<div class="fig-scale-80">
 <div class="terminal-log">
   <div class="tl-chrome">
     <div class="tl-traffic"><span></span><span></span><span></span></div>
@@ -563,23 +509,22 @@ python step4_no_chunking.py
     <div class="tl-kv-row">3. 리프레시 데이는 유급 휴가로 제공됩니다.</div>
   </div>
 </div>
-</div>
 
-<div class="caption">그림 1-10. 청킹 없이 한 덩어리로 넣으면 관련 없는 규정까지 뭉쳐 딸려옵니다</div>
+*그림 1-10. 청킹 없이 한 덩어리로 넣으면 관련 없는 규정까지 뭉쳐 딸려옵니다*
 
 보시는 것처럼, 합쳐서 넣으니 "신입사원 휴가 규정"을 물어봐도 인사규정, 보안규정, 복지규정이 한 덩어리로 딸려옵니다. 관련 없는 내용이 섞이면 LLM이 정작 필요한 부분을 놓치기 쉽습니다.
 
 **동료**: "아, 그래서 따로따로 잘라서 넣는 거였네요."
 
-문서를 의미 단위로 쪼개는 것을 **청킹(Chunking)** 이라고 합니다. 사서가 책 한 권을 통째로 건네지 않고, 필요한 페이지만 뜯어서 건네는 것과 같습니다. 지금은 "규정별로 하나씩" 정도로만 나눠 봤지만, 실제 사내 문서에서는 더 정교한 전략이 필요합니다. 청킹 전략 상세 비교는 **챕터 8 (검색 품질 튜닝)** 에서 다룹니다.
+문서를 의미 단위로 쪼개는 것을 **청킹(Chunking)** 이라고 합니다. 사서가 책 한 권을 통째로 건네지 않고, 필요한 페이지만 뜯어서 건네는 것과 같습니다. 지금은 "규정별로 하나씩" 정도로만 나눠 봤지만, 실제 사내 문서에서는 더 정교한 전략이 필요합니다. 청킹 전략 상세 비교는 챕터 8 (검색 품질 튜닝)에서 다룹니다.
 
-## 1.5 복잡한 질문 던져보기: 사슬 추론(Chain-of-Thought)
+## 1.5 복잡한 질문 던져보기. 사슬 추론(Chain-of-Thought)
 
 동료가 커피를 가지러 가며 물었습니다.
 
 **동료**: "이제 진짜 질문 한번 던져볼까요. 사람들이 실제로 할 만한 거."
 
-좋은 도전입니다. step3까지는 "규정이 뭐야?" 수준의 단순 검색이었습니다. 이번엔 **규정을 찾아서 읽고 계산까지 해야 하는 질문**을 던져봅니다. `ex01/step5_rag.py`의 코드 구조는 step3과 동일하고, 달라진 건 파일에 준비된 **질문**뿐입니다. 이 파일을 열고 TODO의 `pass`를 지우고 아래 코드를 작성합니다.
+좋은 도전입니다. step3까지는 "규정이 뭐야?" 수준의 단순 검색이었습니다. 이번엔 규정을 찾아서 읽고 계산까지 해야 하는 질문을 던져보겠습니다. `ex01/step5_rag.py`의 코드 구조는 step3과 동일하고, 달라진 건 파일에 준비된 질문뿐입니다. 이 파일을 열고 TODO의 `pass`를 지우고 아래 코드를 작성합니다.
 
 ```python [실습 5] ex01/step5_rag.py. 추론 심화
 question = "입사 6개월차 신입인데 리프레시 데이 2번 썼어. 몇 번 남았는지 규정 기반으로 계산해줘."
@@ -610,7 +555,7 @@ python step5_rag.py
   </div>
 </div>
 
-<div class="caption">그림 1-11. <code>step5_rag.py</code> 실행 결과. 규정을 바탕으로 연차를 스스로 계산하고 추론한 모습</div>
+*그림 1-11. `step5_rag.py` 실행 결과. 규정을 바탕으로 연차를 스스로 계산하고 추론한 모습*
 
 :::term-box
 **사슬 추론(Chain-of-Thought)** 이란? LLM이 최종 답을 곧바로 내놓지 않고, 먼저 문제를 작게 쪼개어 하나씩 따져본 뒤 답을 내놓게 하는 방식입니다. 생각의 고리가 사슬처럼 이어진다고 해서 "사슬 추론"이라 부릅니다. 연차 계산처럼 여러 단계가 필요한 질문에서 답의 정확도가 크게 올라갑니다.
@@ -627,8 +572,6 @@ python step5_rag.py
 *…아니, 여기부터가 시작이지.*
 
 더미 데이터 3개로 원리만 보여준 상태입니다. 사내 문서는 PDF, DOCX, 엑셀로 존재하고, 파일 수도 수십 개, 분량도 천 페이지가 넘어갑니다. 이걸 수집하고, 파싱하고, 적절한 크기로 쪼개서 벡터 DB에 저장하는 과정이 필요합니다. 그리고 운영에 올리려면 캐시, 모니터링, 튜닝까지.
-
-<div class="pb-always"></div>
 
 ## 용어 정리
 
@@ -707,7 +650,7 @@ python step5_rag.py
 
   <div class="jf-group">
     <div class="jf-group-label">PART 4 · 튜닝과 평가</div>
-    <p class="jf-part-desc">기본 RAG는 출발점일 뿐. 엉뚱한 문서를 가져오거나 질문 의도를 놓치는 문제를 하나씩 고쳐 품질을 끌어올리고, 마지막엔 정량 평가로 마무리합니다.</p>
+    <p class="jf-part-desc">기본 RAG는 출발점일 뿐입니다. 엉뚱한 문서를 가져오거나 질문 의도를 놓치는 문제를 하나씩 고쳐 품질을 끌어올리고, 마지막엔 정량 평가로 마무리합니다.</p>
     <div class="jf-items">
       <div class="jf-item">
         <div class="jf-ch">챕터 8</div>
@@ -724,7 +667,5 @@ python step5_rag.py
     </div>
   </div>
 
-  <p style="margin-top:24px; padding-top:16px; border-top:1px solid #edf0f5; color:#718096; font-size:14px;">
-    <b>PART 1의 첫 챕터인 챕터 2</b>에서는 AI 비서가 조회할 실제 사내 시스템(직원, 연차, 매출 DB)을 FastAPI로 만들어봅니다.
-  </p>
+  <p class="jf-closing">PART 1의 첫 챕터인 챕터 2에서는 AI 비서가 조회할 실제 사내 시스템(직원, 연차, 매출 DB)을 FastAPI로 만들어 보겠습니다.</p>
 </div>

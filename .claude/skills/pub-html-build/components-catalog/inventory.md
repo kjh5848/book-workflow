@@ -127,3 +127,50 @@
 - `s-*` 접두어는 `rag-pipeline` 내부 step 전용.
 - `qr-*` 접두어는 `.qr-flow` (CH06 QueryRouter) 전용. 다른 컴포넌트에서 재사용 금지.
 - `pc-*` 접두어는 `.proc-compare` (CH06 @tool vs MCP) 전용.
+- `sp-*` 접두어는 **스프링 레퍼런스 책 시리즈 공용 컴포넌트** 전용 (아래 섹션 참조).
+
+## 스프링 시리즈 공용 컴포넌트 (sp-*)
+
+`projects/스프링-레퍼런스-기술모음_v1/` 책에서 반복 사용하는 다이어그램 컴포넌트 8종. CSS 정의는 `styles/diagrams.css` 끝부분 "스프링 시리즈 공통 컴포넌트" 섹션에 있음. 인라인 스타일 회귀를 막기 위한 단일 진실원.
+
+**원칙**: 새 다이어그램 작성 시 **반드시 이 카탈로그를 먼저 확인**. 카탈로그에 있는 컴포넌트가 있으면 클래스로 호출. 인라인 스타일로 박스 새로 만들지 마라.
+
+| 컴포넌트 | 역할 | 핵심 클래스 | 변형 |
+|----------|------|-------------|------|
+| `.sp-figure` | 다이어그램 외곽 wrapper (제목 + 본문) | `.sp-figure-title` | — |
+| `.sp-row` | 라벨 + 값 한 줄 (비교표·실험 결과 행) | `.sp-row-label` `.sp-row-value` | `.accent` `.warm` `.info` |
+| `.sp-step` | 번호+제목+설명 단계 카드 | `.sp-step-num` `.sp-step-title` `.sp-step-desc` | — |
+| `.sp-flow` | step 가로 흐름 (1→2→3) | `.sp-flow-arrow` | — |
+| `.sp-compare` | A vs B 좌우 비교 | `.sp-compare-block` `.sp-compare-label` `.sp-compare-content` | `.bad` `.good` |
+| `.sp-chip` | 작은 태그·노드 (Spring·Lambda·S3 등) | — | `.accent` `.warm` `.info` |
+| `.sp-list` | 번호 동그라미 리스트 (Primary 강조) | (`<ol>` + `<li>`) | — |
+| `.sp-callout` | 강조 인용 박스 | — | `.warm` `.info` |
+
+**색 토큰 매핑** (brand-tokens.md 정책):
+- `.accent` → Primary 인디고. 핵심 노드·OK 결과·중요 박스
+- `.warm` → Secondary 오렌지. BEFORE·문제·실패·주의
+- `.info` → Info 블루. 정보·보조 노드
+- 변형 없음 → 무채색(`--color-border`/`--color-text-muted`)
+- **Utility 토큰(`success/warning/danger`) 신규 사용 금지**. success → `.accent` / warning·danger → `.warm`
+
+**사용 예** (자세한 마크다운 예시는 `comparisons/README.md` · `pipelines/README.md` 참조):
+```html
+<div class="sp-figure">
+  <div class="sp-figure-title">그림 N-N. 제목</div>
+  <div class="sp-flow">
+    <div class="sp-step">
+      <span class="sp-step-num">STEP 01</span>
+      <div class="sp-step-title">단계명</div>
+      <div class="sp-step-desc">설명</div>
+    </div>
+    <div class="sp-flow-arrow">→</div>
+    <div class="sp-step">...</div>
+  </div>
+</div>
+```
+
+**검증 체크리스트** (editor 검토 시):
+- [ ] 인라인 `style="..."`로 다이어그램 박스를 새로 만들지 않았나
+- [ ] 색이 `var(--color-*)` 토큰으로만 박혔나 (hex 직접 박힘 0)
+- [ ] Primary·Secondary·Info 셋 중 하나로 강조 노드가 식별 가능한가
+- [ ] Utility 토큰 신규 사용 0건

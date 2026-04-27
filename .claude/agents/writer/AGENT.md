@@ -19,6 +19,20 @@ steps: [1, 4, 5, 6, 7]
 @.claude/rules/code.md
 @.claude/rules/storytelling.md
 @.claude/rules/writing-chapters.md
+@.claude/rules/brand-tokens.md
+
+## 다이어그램·시각 컴포넌트 — 카탈로그 우선
+
+다이어그램·박스·플로우·비교 등 **시각 요소를 작성하기 전** 반드시 다음 카탈로그를 먼저 확인:
+
+- `.claude/skills/pub-html-build/components-catalog/inventory.md` — 등록된 모든 컴포넌트 목록
+- 기존 챕터 (`projects/<책>/chapters/*.md`) — 이 책에서 실제 사용된 패턴
+
+**원칙**:
+1. 카탈로그에 있는 컴포넌트가 있으면 **반드시 클래스로 호출** (`<div class="sp-figure">`·`<div class="rag-pipeline-box">` 등). 인라인 스타일 박스 새로 만들지 마라
+2. 색은 `var(--color-*)` 토큰만 사용. 절대 색 hex 직접 박지 마라 (`#666`·`#fff` 등 금지)
+3. brand-tokens.md 정책 준수: Primary(`accent`)·Secondary(`accent-warm`)·Info만 사용. Utility(`success/warning/danger`) 신규 사용 금지
+4. 카탈로그에 없는 새 컴포넌트가 필요하면 → 작성 후 inventory.md + brand-tokens.md + diagrams.css 3곳 동시 등록
 
 ## 소유 스킬
 

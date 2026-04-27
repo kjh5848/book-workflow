@@ -1,18 +1,18 @@
-# 챕터 4. 사진을 글자로 바꿔서 보낸다. Postman ↔ Spring 이미지 업로드 (Base64)
+# 챕터 4. 사진을 글자로 받아쓴다. Spring 이미지 업로드 (Base64)
 
 :::goal
 **이번 챕터가 끝나면**
 
-- 왜 사진을 곧바로 JSON에 담을 수 없는지 이해합니다 *(바이너리 ↔ 텍스트의 경계)*
-- 사진을 긴 문자열로 바꿔서 서버에 올리고 다시 파일로 되돌리는 흐름을 손으로 만들어 봅니다 *(Base64 인코딩·디코딩)*
+- 왜 사진을 곧바로 JSON에 담을 수 없는지 이해합니다 *(바이너리와 텍스트의 경계)*
+- 사진을 긴 문자열로 바꿔 서버에 올리고 다시 파일로 되돌리는 흐름을 손으로 만들어 봅니다 *(Base64 인코딩·디코딩)*
 - 저장된 파일을 URL 한 줄로 브라우저에 띄웁니다 *(정적 리소스 매핑)*
-- 이 방식의 한계를 숫자로 체감합니다 *(용량 33퍼센트 증가·DB 비대·메모리 이슈)*
+- 이 방식의 한계를 숫자로 체감합니다 *(용량 33퍼센트 증가·힙 점유·업로드 한도)*
 :::
 
 :::preview
 **이번 챕터는 "사진 한 장을 JSON 안에 욱여넣는 이야기"입니다**
 
-챕터 3에서 로그인·세션 문제를 끝냈습니다. 동료가 말미에 던진 한마디는 "프로필 사진 바꾸고 싶은데"였습니다. 사용자가 실제로 무엇인가를 **남기는** 첫 기능이 시작됩니다. 그런데 막상 Postman을 열고 보면 문제가 하나 있습니다. REST API는 JSON으로 말하는데, 사진은 JSON이 아닙니다. 이 챕터에서는 사진을 **글자로 바꿔서** JSON 안에 태워 보내는 가장 단순한 방법을 손으로 만들어 보고, 그 단순함이 주는 편안함과 동시에 왜 이 방식이 10MB 앞에서 무너지는지 직접 눈으로 확인합니다.
+챕터 3에서 로그인·세션 문제를 끝냈습니다. 동료가 말미에 던진 한마디는 "프로필 사진 바꾸고 싶어요"였습니다. 사용자가 처음으로 무엇인가를 **남기는** 기능이 시작됩니다. 그런데 막상 Postman을 열고 보면 문제가 있습니다. REST API는 JSON으로 말하는데, 사진은 JSON이 아닙니다. 이 챕터에서는 사진을 **글자로 바꿔서** JSON 안에 태우는 가장 단순한 방법을 손으로 만들고, 왜 이 방식이 10MB 앞에서 무너지는지 직접 눈으로 확인합니다.
 :::
 
 ::::prep
@@ -56,12 +56,12 @@ spring-base64/
 ```
 
 :::note
-**이 레포는 챕터 3의 레포와 별개입니다.** 두 Spring 서버 + Nginx + Redis 네 컨테이너는 이미 `docker compose down`으로 정리하고 내려 두셨다고 가정합니다. 이번 챕터는 **단일 Spring Boot**에만 집중합니다. 인프라를 다시 얹는 일은 챕터 5부터 이어집니다.
+**이 레포는 챕터 3의 레포와 별개입니다.** 두 Spring 서버 + Nginx + Redis 네 컨테이너는 이미 `docker compose down`으로 정리해 두었다고 가정합니다. 이번 챕터는 **단일 Spring Boot**에만 집중합니다. 인프라를 다시 얹는 일은 챕터 5부터 이어집니다.
 :::
 
 ### 2. 실습 환경 구축
 
-이번 챕터에 새로 깔 것은 없습니다. 챕터 1에서 설치해 둔 JDK 21과 Gradle이면 충분합니다. Postman은 아직 설치하지 않았다면 [postman.com](https://www.postman.com)에서 받아 둡니다. 호출 결과 JSON을 예쁘게 보여 주는 도구가 하나쯤은 필요합니다.
+이번 챕터에 새로 깔 것은 없습니다. 챕터 1에서 설치해 둔 JDK 21과 Gradle이면 충분합니다. Postman은 아직 설치하지 않았다면 [postman.com](https://www.postman.com)에서 받아 둡니다. 호출 결과 JSON을 보기 좋게 보여 주는 도구가 하나쯤은 필요합니다.
 
 ```bash [터미널] 실습 환경 확인
 java --version
@@ -82,7 +82,7 @@ java --version
 :::tip
 **왜 Base64부터 손으로 해 보는가**
 
-원본 바이너리를 `multipart/form-data`로 받는 방법이 더 효율적이라는 걸 이 챕터 끝에서 숫자로 확인하게 됩니다. 그런데도 Base64를 먼저 손으로 다루는 이유는 두 가지입니다. 첫째, JSON API만 쓰는 환경(모바일 SDK·서드파티 훅·프록시로 막힌 사내망 등)에서는 **업로드도 JSON 한 줄로 끝내고 싶은 요구**가 실제로 자주 나옵니다. 둘째, Base64라는 방식의 동작과 한계를 숫자로 체감해야 챕터 5의 **Presigned URL + S3** 가 왜 필요한 기술인지가 선명해집니다. 방법을 알고 버리는 것과, 모르고 다른 걸 배우는 것은 다릅니다.
+원본 바이너리를 `multipart/form-data`로 받는 방법이 더 효율적이라는 것을 이 챕터 끝에서 숫자로 확인하게 됩니다. 그런데도 Base64를 먼저 손으로 다루는 이유는 두 가지입니다. 첫째, JSON API만 쓰는 환경(모바일 SDK·서드파티 훅·프록시로 막힌 사내망 등)에서는 **업로드도 JSON 한 줄로 끝내고 싶은 요구**가 실제로 자주 나옵니다. 둘째, Base64라는 방식의 동작과 한계를 숫자로 체감해야 챕터 5의 **Presigned URL + S3** 가 왜 필요한 기술인지가 선명해집니다. 방법을 알고 버리는 것과 모르고 다른 것을 배우는 것은 다릅니다.
 :::
 
 ### 4. 실습 순서
@@ -126,7 +126,7 @@ java --version
 
 *???*
 
-여기서 손이 멈췄습니다. `name`은 문자열이니까 괄호 안에 적어 넣으면 끝이었는데, `image`는 어디서 적어야 할지를 몰랐습니다. 사진은 제 책상에 PNG 파일로 들어 있었습니다. 파일 경로를 적어야 하나 싶어 `"C:/Users/.../profile.png"`라고 써 봤지만, 그 문자열은 **내 컴퓨터의 경로**였지 사진 자체가 아니었습니다.
+여기서 손이 멈췄습니다. `name`은 문자열이니 괄호 안에 적어 넣으면 끝이었는데, `image`는 어디에 적어야 할지 몰랐습니다. 사진은 책상 위 PNG 파일로 들어 있었습니다. 파일 경로를 적어야 하나 싶어 `"C:/Users/.../profile.png"`라고 써 봤지만, 그 문자열은 **내 컴퓨터의 경로**였지 사진 자체가 아니었습니다.
 
 *JSON은 글자밖에 못 담는다.*
 
@@ -136,7 +136,7 @@ Postman의 Body 탭을 다시 들여다봤습니다. `form-data`라는 탭이 �
 
 *이걸로 하면 되겠네.*
 
-Spring 쪽에서 `@RequestParam MultipartFile file`로 받으면 된다는 건 어렴풋이 알고 있었습니다. 컨트롤러에 코드를 한 줄 쓰려다가, 손이 또 멈췄습니다.
+Spring 쪽에서 `@RequestParam MultipartFile file`로 받으면 된다는 것은 어렴풋이 알고 있었습니다. 컨트롤러에 코드를 한 줄 쓰려다가, 손이 또 멈췄습니다.
 
 *근데 왜 지금까지 우리는 다 JSON으로만 주고받았지.*
 
@@ -160,7 +160,7 @@ Spring 쪽에서 `@RequestParam MultipartFile file`로 받으면 된다는 건 �
 
 *사진을 글자로 받아쓴다.*
 
-오픈이는 수첩을 폈습니다. 아까 네 번째 시도에서 `form-data`로 넘어갔던 걸 지우고, 원래 자리인 JSON으로 돌아왔습니다. JSON이 담을 수 있는 건 글자뿐이니, **사진을 글자로 만들기만 하면** 여기에 태울 수 있다는 이야기였습니다.
+오픈이는 수첩을 폈습니다. 아까 `form-data`로 넘어가려던 시도를 지우고, 원래 자리인 JSON으로 돌아왔습니다. JSON이 담을 수 있는 것은 글자뿐이니, **사진을 글자로 만들기만 하면** 여기에 태울 수 있다는 이야기였습니다.
 
 문제는 방법이었습니다. 바이트는 0부터 255까지의 값을 가지는데, JSON 문자열에 그대로 집어넣으면 제어 문자·따옴표·백슬래시가 섞여 들어가서 파싱이 깨집니다. 그러니까 **JSON이 안전하게 담을 수 있는 글자**로만 바이트를 옮겨 적어야 했습니다.
 
@@ -170,7 +170,7 @@ Spring 쪽에서 `@RequestParam MultipartFile file`로 받으면 된다는 건 �
 
 ## 4.2 엽서로 사진을 적어 보낸다
 
-Base64는 64개의 글자(A-Z, a-z, 0-9, `+`, `/`) 만 써서 모든 바이트를 다시 쓰는 방식이었습니다. 규칙은 단순했습니다. 8비트짜리 바이트 세 개(총 24비트)를 가져와서, 6비트씩 네 조각으로 잘라 64개 글자 중 하나로 바꿉니다. 사진의 모든 바이트가 이 방식으로 글자들로 쭉 늘어섭니다.
+Base64는 64개의 글자(A-Z, a-z, 0-9, `+`, `/`)만 써서 모든 바이트를 다시 쓰는 방식이었습니다. 규칙은 단순했습니다. 8비트짜리 바이트 세 개(총 24비트)를 가져와서, 6비트씩 네 조각으로 잘라 64개 글자 중 하나로 바꿉니다. 사진의 모든 바이트가 이 방식으로 글자들로 쭉 늘어섭니다.
 
 *그럼 JSON에 그대로 태울 수 있겠구나.*
 
@@ -202,7 +202,7 @@ Base64는 64개의 글자(A-Z, a-z, 0-9, `+`, `/`) 만 써서 모든 바이트�
     <div class="sp-row-label"><span class="sp-chip warm">Browser</span></div>
     <div class="sp-row-value">응답의 URL을 주소창에 붙이면 사진이 그대로 뜬다</div>
   </div>
-  <div style="text-align:center;font-size:var(--fs-xs);color:var(--color-text-muted);margin-top:12px;">요청은 글자로 오고, 응답은 URL로 나갑니다. 사진은 서버의 <code>uploads</code>에만 한 번 존재합니다</div>
+  <div class="sp-callout info">요청은 글자로 오고 응답은 URL로 나갑니다. 사진은 서버의 <code>uploads</code>에만 한 번 존재합니다</div>
 </div>
 
 오픈이는 수첩에 결정할 것들을 정리했습니다.
@@ -249,7 +249,7 @@ spring.web.resources.static-locations=file:uploads/
 
 ### 4.3.2 엔티티 설계
 
-DB에 찍히는 한 행이 어떻게 생겼는지부터 잡습니다. 엔티티는 DB 테이블과 1:1로 짝지어지는 자바 클래스입니다. 우리가 저장할 정보는 네 가지 + ID였습니다.
+DB에 찍히는 한 행이 어떻게 생겼는지부터 잡습니다. 엔티티는 DB 테이블과 1:1로 짝지어지는 자바 클래스입니다. 저장할 정보는 네 가지에 ID 하나가 더 붙습니다.
 
 `src/main/java/com/metacoding/spring_base64/image/ImageEntity.java`를 열고 TODO의 `pass`를 지우고 아래 코드를 작성합니다.
 
@@ -278,12 +278,12 @@ public class ImageEntity {
 }
 ```
 
-한 줄씩 풀어 보겠습니다. `id`는 DB가 알아서 1, 2, 3으로 올려 줍니다. `uuid`는 같은 이름의 사진이 여러 번 올라와도 덮어쓰지 않기 위해 필요합니다. 사람이 `cat.png`라는 이름으로 두 번 올려도 실제 파일은 서로 다른 UUID로 저장됩니다. `fileName`은 디스크에 남은 이름(`{uuid}.png`)이고, `url`은 `/uploads/{fileName}` 형태로 외부에 노출될 경로입니다. URL을 미리 만들어 DB에 저장해 두면 응답에서 한 번 더 가공할 필요가 없습니다.
+한 줄씩 풀어 보겠습니다. `id`는 DB가 알아서 1, 2, 3으로 올려 줍니다. `uuid`는 같은 이름의 사진이 여러 번 올라와도 덮어쓰지 않으려고 필요합니다. 사람이 `cat.png`라는 이름으로 두 번 올려도 실제 파일은 서로 다른 UUID로 저장됩니다. `fileName`은 디스크에 남은 이름(`{uuid}.png`)이고, `url`은 `/uploads/{fileName}` 형태로 외부에 노출될 경로입니다. URL을 미리 만들어 DB에 저장해 두면 응답에서 한 번 더 가공할 필요가 없습니다.
 
 | 필드 | 값의 형태 | 저장 이유 |
 |-----|---------|---------|
 | `id` | `1`, `2`, `3`… | 상세·수정·삭제 API의 기준 |
-| `uuid` | `c5b8f37c-e767-46b1-97fd-e2d67bd79dff` | 파일명 충돌 방지 + 외부에 ID를 감추고 싶을 때의 대안 키 |
+| `uuid` | `c5b8f37c-e767-46b1-97fd-e2d67bd79dff` | 파일명 충돌 방지. 외부에 ID를 감추고 싶을 때의 대안 키 |
 | `fileName` | `{uuid}.png` | 디스크에 실제로 저장된 이름 |
 | `url` | `/uploads/{uuid}.png` | 응답에 그대로 찍히는 공개 경로 |
 | `createdAt` | `2025-12-25T20:57:32.436972` | 목록 정렬·감사 로그 |
@@ -318,7 +318,7 @@ public class ImageRequest {
 }
 ```
 
-`fileData`는 그냥 긴 문자열입니다. 끝에 `=` 패딩이 한두 개 붙는 경우도 있지만, Spring은 그걸 그대로 문자열로 받아 내려 줍니다.
+`fileData`는 그냥 긴 문자열입니다. 끝에 `=` 패딩이 한두 개 붙는 경우도 있지만, Spring은 그것을 그대로 문자열로 받아 내려 줍니다.
 
 ### 4.4.2 응답 DTO
 
@@ -349,15 +349,44 @@ public class ImageResponse {
 }
 ```
 
-`fromEntity` 하나가 있으면 서비스 쪽 코드가 확 가벼워집니다. `return ImageResponse.DTO.fromEntity(saved);` 한 줄로 "DB에 저장한 엔티티를 응답 모양으로 바꿔서 돌려준다"가 끝납니다. 업로드·단건 조회·목록 조회가 모두 같은 DTO 하나로 응답합니다.
+`fromEntity` 하나가 있으면 서비스 쪽 코드가 가벼워집니다. `return ImageResponse.DTO.fromEntity(saved);` 한 줄로 "DB에 저장한 엔티티를 응답 모양으로 바꿔서 돌려준다"가 끝납니다. 업로드·단건 조회·목록 조회가 모두 같은 DTO 하나로 응답합니다.
 
 ## 4.5 업로드 API 구현
 
 이 절은 네 조각으로 나누어 씁니다. Base64 문자열을 바이트로 되돌리고 → UUID로 새 파일명을 만들고 → 디스크에 쓴 뒤 → DB에 한 행을 심는 순서입니다. 네 조각이 모두 `ImageService.java` 한 파일 안에서 일어납니다.
 
+<div class="sp-figure">
+  <div class="sp-figure-title">그림 4-3. 업로드 처리의 네 단계</div>
+  <div class="sp-flow">
+    <div class="sp-step">
+      <span class="sp-step-num">STEP 01</span>
+      <div class="sp-step-title">디코딩</div>
+      <div class="sp-step-desc">Base64 문자열을 원본 바이트로</div>
+    </div>
+    <div class="sp-flow-arrow">→</div>
+    <div class="sp-step">
+      <span class="sp-step-num">STEP 02</span>
+      <div class="sp-step-title">파일명</div>
+      <div class="sp-step-desc">UUID + 확장자로 충돌 회피</div>
+    </div>
+    <div class="sp-flow-arrow">→</div>
+    <div class="sp-step">
+      <span class="sp-step-num">STEP 03</span>
+      <div class="sp-step-title">디스크 저장</div>
+      <div class="sp-step-desc"><code>uploads/</code>에 바이트 기록</div>
+    </div>
+    <div class="sp-flow-arrow">→</div>
+    <div class="sp-step">
+      <span class="sp-step-num">STEP 04</span>
+      <div class="sp-step-title">DB 기록</div>
+      <div class="sp-step-desc">메타와 공개 URL을 한 행으로</div>
+    </div>
+  </div>
+</div>
+
 ### 4.5.1 Base64 디코딩
 
-사진 원본은 글자로 변환돼서 들어왔습니다. 이 글자를 다시 바이트 배열로 되돌리는 것이 첫 단계입니다. 이 자리가 4.2절에서 엽서에 적힌 글자를 다시 사진으로 복원하는 지점입니다.
+사진 원본은 글자로 변환돼 들어왔습니다. 이 글자를 다시 바이트 배열로 되돌리는 것이 첫 단계입니다. 이 자리가 4.2절에서 엽서에 적힌 글자를 다시 사진으로 복원하는 지점입니다.
 
 `src/main/java/com/metacoding/spring_base64/image/ImageService.java`를 열고 TODO의 `pass`를 지우고 아래 코드를 작성합니다.
 
@@ -378,7 +407,7 @@ public ImageResponse.DTO upload(ImageRequest.UploadDTO uploadDTO) {
 :::tip
 **Data URI 스키마를 섞어 보내도 될까**
 
-프런트엔드에서 `FileReader.readAsDataURL()`로 읽으면 `data:image/png;base64,iVBOR...` 같은 접두어가 붙은 문자열이 나옵니다. 여기서 `data:image/png;base64,` 부분은 **Base64 본체가 아니라 MIME 헤더**입니다. Spring 쪽은 순수 Base64 본체만 기대하기 때문에, 프런트에서 콤마(`,`) 뒤의 본체만 잘라 보내거나, 서버에서 `split(",")` 후 뒤쪽만 디코딩하도록 방어 코드를 두는 방식이 있습니다. 이 챕터의 예제는 Postman으로 본체만 붙여 넣는 것을 전제로 합니다.
+프런트엔드에서 `FileReader.readAsDataURL()`로 읽으면 `data:image/png;base64,iVBOR...` 같은 접두어가 붙은 문자열이 나옵니다. 여기서 `data:image/png;base64,` 부분은 **Base64 본체가 아니라 MIME 헤더**입니다. Spring 쪽은 순수 Base64 본체만 기대하므로, 프런트에서 콤마(`,`) 뒤의 본체만 잘라 보내거나, 서버에서 `split(",")` 후 뒤쪽만 디코딩하도록 방어 코드를 두는 방식이 있습니다. 이 챕터의 예제는 Postman으로 본체만 붙여 넣는 것을 전제로 합니다.
 :::
 
 ### 4.5.2 파일명과 확장자 만들기
@@ -451,7 +480,7 @@ Files.write(filePath, fileBytes);
 
 ### 4.6.1 /uploads/** 경로 매핑
 
-4.3.1에서 `file:uploads/`를 한 번 지정했지만, `WebConfig`에서 한 번 더 선언해서 "`/uploads/**`로 들어오는 요청은 이 폴더에서 찾아 응답하라"를 분명하게 써 둡니다.
+4.3.1에서 `file:uploads/`를 한 번 지정했지만, `WebConfig`에서 한 번 더 선언해 "`/uploads/**`로 들어오는 요청은 이 폴더에서 찾아 응답하라"를 분명하게 써 둡니다.
 
 `src/main/java/com/metacoding/spring_base64/_core/config/WebConfig.java`를 열고 TODO의 `pass`를 지우고 아래 코드를 작성합니다.
 
@@ -528,10 +557,10 @@ public class ImageController {
 2. 파일 드래그 영역에 준비한 PNG를 놓고 `ENCODE` 버튼을 누릅니다
 3. 아래쪽 텍스트 영역에 긴 문자열이 찍힙니다. 이 전체를 복사합니다
 
-[CAPTURE NEEDED: base64decode.org에서 PNG 업로드 후 ENCODE 버튼을 눌러, 하단 텍스트 영역에 "iVBORw0KGgoAAAANSUhEUgAA..."로 시작하는 Base64 문자열이 한 가득 찍힌 화면]
+[CAPTURE NEEDED: base64decode.org에서 PNG 업로드 후 ENCODE 버튼을 눌러 하단 텍스트 영역에 "iVBORw0KGgoAAAANSUhEUgAA..."로 시작하는 Base64 문자열이 한 가득 찍힌 화면]
 
 :::tip
-**명령줄로도 같은 걸 할 수 있습니다**
+**명령줄로도 같은 것을 할 수 있습니다**
 
 GUI 도구 없이 터미널에서만 돌리고 싶다면 macOS·Linux에서는 `base64 -i cat.png > cat.b64`, Windows PowerShell에서는 `[Convert]::ToBase64String([IO.File]::ReadAllBytes("cat.png"))`로 같은 문자열을 얻을 수 있습니다. 결과는 동일합니다. 이 챕터는 복사·붙여넣기의 편의를 위해 웹 도구를 쓸 뿐입니다.
 :::
@@ -579,7 +608,7 @@ http://localhost:8080/h2-console
 
 로그인 화면의 JDBC URL은 `application.properties`에 설정된 값(기본 `jdbc:h2:mem:testdb`)을 그대로 씁니다.
 
-[CAPTURE NEEDED: http://localhost:8080/h2-console에서 `SELECT * FROM image_tb` 쿼리를 실행한 결과. 한 행에 id=1, uuid, file_name, url, created_at이 찍힌 화면]
+[CAPTURE NEEDED: http://localhost:8080/h2-console에서 SELECT * FROM image_tb 쿼리를 실행한 결과. 한 행에 id=1, uuid, file_name, url, created_at이 찍힌 화면]
 
 Postman으로 돌아와 목록과 단건을 확인합니다.
 
@@ -594,7 +623,7 @@ Postman으로 돌아와 목록과 단건을 확인합니다.
 
 ## 4.8 10MB 사진으로 한계를 부딪쳐 본다
 
-동작 확인을 끝냈으니, 이제 이 방식의 **바닥**을 두드릴 차례였습니다. 프로필 사진은 보통 1MB 이하지만, 사용자가 최신 스마트폰으로 찍은 원본을 그대로 올리는 경우가 흔했습니다. 요즘 폰 카메라는 한 장에 8~12MB 정도가 나왔습니다. 그걸 그대로 올려 보면 어떻게 되는지 확인해 보기로 했습니다.
+동작 확인을 끝냈으니, 이제 이 방식의 **바닥**을 두드릴 차례였습니다. 프로필 사진은 보통 1MB 이하지만, 사용자가 최신 스마트폰으로 찍은 원본을 그대로 올리는 경우가 흔했습니다. 요즘 폰 카메라는 한 장에 8~12MB 정도가 나왔습니다. 그것을 그대로 올려 보면 어떻게 되는지 확인해 보기로 했습니다.
 
 동료가 마침 그 쪽으로 말을 걸었습니다.
 
@@ -607,20 +636,20 @@ Postman으로 돌아와 목록과 단건을 확인합니다.
 오픈이도 똑같이 해 봤습니다. 10MB 원본 사진을 Base64로 바꾸니 텍스트 파일 크기가 **약 13.3MB**로 불어 있었습니다. 33퍼센트 증가라는 말이 그제야 숫자로 잡혔습니다.
 
 <div class="sp-figure">
-  <div class="sp-figure-title">그림 4-3. 원본 vs Base64 크기 비교</div>
+  <div class="sp-figure-title">그림 4-4. 원본 vs Base64 크기 비교</div>
   <div class="sp-row info">
-    <div class="sp-row-label">프로필(100KB)</div>
-    <div class="sp-row-value">Base64 ≈ 133KB · 요청 크기 무시할 만함 · 응답 거의 즉시</div>
+    <div class="sp-row-label">프로필 (100KB)</div>
+    <div class="sp-row-value">Base64 약 133KB · 요청 크기 무시할 만함 · 응답 거의 즉시</div>
   </div>
   <div class="sp-row warm">
-    <div class="sp-row-label">고화질(1MB)</div>
-    <div class="sp-row-value">Base64 ≈ 1.33MB · 요청이 JSON이라 파싱 비용 발생 · 체감 가능한 지연</div>
+    <div class="sp-row-label">고화질 (1MB)</div>
+    <div class="sp-row-value">Base64 약 1.33MB · JSON 파싱 비용 발생 · 체감 가능한 지연</div>
   </div>
   <div class="sp-row warm">
-    <div class="sp-row-label">폰 원본(10MB)</div>
-    <div class="sp-row-value">Base64 ≈ 13.3MB · 요청 바디 비대 · 힙에 큰 String 상주 · 3~5초 지연</div>
+    <div class="sp-row-label">폰 원본 (10MB)</div>
+    <div class="sp-row-value">Base64 약 13.3MB · 요청 바디 비대 · 힙에 큰 String 상주 · 3~5초 지연</div>
   </div>
-  <div style="text-align:center;font-size:var(--fs-xs);color:var(--color-text-muted);margin-top:12px;">동일 사진을 올리는 것만으로 JSON 요청은 33퍼센트 더 무거워집니다</div>
+  <div class="sp-callout warm">동일 사진을 올리는 것만으로 JSON 요청은 33퍼센트 더 무거워집니다</div>
 </div>
 
 한계가 한두 가지가 아니었습니다.
@@ -629,11 +658,11 @@ Postman으로 돌아와 목록과 단건을 확인합니다.
 
 둘째, **디코딩 후에도 원본 바이트 배열이 또 힙에 올라갑니다.** Base64 문자열(13MB 클래스 `char[]`·`byte[]`) + 디코딩 결과(10MB `byte[]`)가 한 요청에 동시에 잡혀 있습니다. 서버 입장에서는 요청 하나당 25MB 안팎의 메모리를 요구받는 셈입니다.
 
-셋째, **Spring Boot의 기본 `max-http-form-post-size`나 `max-request-size`에 걸립니다.** 기본값은 보통 1MB~10MB 수준이라, 13MB 요청은 한도 설정을 올리지 않으면 그대로 튕겨 나옵니다. 한도를 키우는 건 임시 처방이고, 그 한도가 곧 **서비스 전체가 감당해야 할 업로드 상한**이 됩니다.
+셋째, **Spring Boot의 기본 `max-http-form-post-size`나 `max-request-size`에 걸립니다.** 기본값은 보통 1MB~10MB 수준이라, 13MB 요청은 한도 설정을 올리지 않으면 그대로 튕겨 나옵니다. 한도를 키우는 것은 임시 처방이고, 그 한도가 곧 **서비스 전체가 감당해야 할 업로드 상한**이 됩니다.
 
 넷째, **DB까지 바이너리를 태울 생각을 하면 악몽이 됩니다.** 이 챕터는 이미지를 파일시스템에 넣고 경로만 DB에 기록하는 구조를 택했습니다. 만약 대신 **DB의 TEXT/BLOB 컬럼**에 Base64 문자열이나 바이너리를 통째로 박아 넣는 설계를 택한다면, 테이블 하나가 수 기가로 금세 불어나고 풀 스캔 한 번에 DB가 비명을 지릅니다. `LIKE` 검색·인덱스는 사실상 무의미해집니다.
 
-다섯째, **네트워크 비용이 그대로 늘어납니다.** 업로드뿐 아니라, 이미지를 Base64로 응답에 다시 실어 내려주는 순간 같은 33퍼센트가 다시 한 번 붙습니다. 트래픽이 원본 대비 1.33배 × 2회(업·다운) 수준으로 늘어날 수 있습니다.
+다섯째, **네트워크 비용이 그대로 늘어납니다.** 업로드뿐 아니라 이미지를 Base64로 응답에 다시 실어 내려주는 순간 같은 33퍼센트가 한 번 더 붙습니다. 트래픽이 원본 대비 1.33배 × 2회(업·다운) 수준으로 늘어날 수 있습니다.
 
 *이 방식으로 10만 명의 프로필 사진을 받을 수 있을까.*
 
@@ -672,7 +701,7 @@ Postman으로 돌아와 목록과 단건을 확인합니다.
 
 *주소만 내준다.*
 
-오픈이의 머릿속에 금방 그림이 그려지지 않았습니다. 내 서버가 사진을 받지 않는다면, 사진은 어디에 떨어지고, 그 떨어진 사진은 어떻게 썸네일·리사이즈를 거치며, 서버는 언제 그 사실을 알게 될까요. 파이프라인이 한 덩어리에서 여러 덩어리로 쪼개지는 순간이 다가오고 있었습니다.
+오픈이의 머릿속에 그림이 금방 그려지지 않았습니다. 내 서버가 사진을 받지 않는다면, 사진은 어디에 떨어지고, 그 떨어진 사진은 어떻게 썸네일·리사이즈를 거치며, 서버는 언제 그 사실을 알게 될까요. 파이프라인이 한 덩어리에서 여러 덩어리로 쪼개지는 순간이 다가오고 있었습니다.
 
 *주소만 내주는 업로드. Lambda로 변환. 서버는 완료 알림.*
 

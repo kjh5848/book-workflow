@@ -4,7 +4,7 @@
 **이번 챕터가 끝나면**
 
 - 왜 사진을 서버가 직접 받아 쥐지 않고 **주소만** 내주는지 이해합니다 *(Presigned URL의 의도)*
-- Spring이 발급한 임시 주소로 **클라이언트가 S3에 곧바로 PUT 업로드**하는 흐름을 손으로 만들어 봅니다
+- Spring이 발급한 임시 주소로 **클라이언트가 S3에 곧바로 PUT 업로드**하는 흐름을 손으로 만듭니다
 - S3 업로드가 끝나면 **Lambda가 자동으로 리사이즈**해서 `resized/` 폴더에 결과를 떨어뜨리는 파이프라인을 구성합니다
 - 서버는 원본 업로드를 한 번도 받지 않고도, **key 규칙만 믿고** DB에 메타데이터를 심습니다
 :::
@@ -86,7 +86,7 @@ aws --version    # 선택. AWS CLI가 있으면 S3 확인이 편합니다
 :::tip
 **Presigned URL을 먼저 만드는 이유**
 
-서버가 10MB짜리 사진을 자기 손으로 받아 쥐지 않는다는 선택은, 단순한 성능 최적화가 아니라 **책임의 분리**입니다. 파일을 받는 일은 S3가 훨씬 잘합니다. 그 위에서 "이미지가 바뀌면 썸네일도 바꿔라" 같은 부수 작업을 Lambda가 이벤트로 자동 처리합니다. 서버는 오직 **언제, 누구 것을, 어떤 규칙으로 부르는지** 만 책임집니다. 이 분리가 뒤 챕터(SSE·RabbitMQ)에서 "서버가 상태를 들고 있지 않아도 흐르는 파이프라인"의 토대가 됩니다.
+서버가 10MB짜리 사진을 자기 손으로 받아 쥐지 않는 선택은 단순한 성능 최적화가 아니라 **책임의 분리**입니다. 파일을 받는 일은 S3가 훨씬 잘합니다. 그 위에서 "이미지가 바뀌면 썸네일도 바꿔라" 같은 부수 작업을 Lambda가 이벤트로 자동 처리합니다. 서버는 오직 **언제, 누구 것을, 어떤 규칙으로 부르는지** 만 책임집니다. 이 분리가 뒤 챕터(SSE·RabbitMQ)에서 "서버가 상태를 들고 있지 않아도 흐르는 파이프라인"의 토대가 됩니다.
 :::
 
 ### 4. 실습 순서
@@ -169,40 +169,40 @@ Presigned URL은 **서명이 찍힌 한 번짜리 주소**입니다. 그 주소�
 <div class="sp-figure">
   <div class="sp-figure-title">그림 5-2. 한 장의 사진이 S3를 거쳐 DB에 한 행으로 맺히기까지</div>
   <div class="sp-row accent">
-    <div class="sp-row-label">① Client → Spring</div>
+    <div class="sp-row-label"><span class="sp-chip accent">① Client → Spring</span></div>
     <div class="sp-row-value"><code>POST /presigned</code> 파일명·콘텐츠 타입 전달</div>
   </div>
   <div class="sp-row accent">
-    <div class="sp-row-label">② Spring → Client</div>
+    <div class="sp-row-label"><span class="sp-chip accent">② Spring → Client</span></div>
     <div class="sp-row-value">서명된 PUT URL + <code>key = original/{uuid}.ext</code> 응답</div>
   </div>
   <div class="sp-row warm">
-    <div class="sp-row-label">③ Client → S3</div>
+    <div class="sp-row-label"><span class="sp-chip warm">③ Client → S3</span></div>
     <div class="sp-row-value">Presigned URL로 원본을 직접 PUT (서버 우회)</div>
   </div>
   <div class="sp-row info">
-    <div class="sp-row-label">④ S3 → Lambda</div>
+    <div class="sp-row-label"><span class="sp-chip info">④ S3 → Lambda</span></div>
     <div class="sp-row-value">ObjectCreated 이벤트가 Lambda 트리거로 전달</div>
   </div>
   <div class="sp-row info">
-    <div class="sp-row-label">⑤ Lambda → S3</div>
-    <div class="sp-row-value">원본을 받아 Pillow로 800px 리사이즈 → <code>resized/{uuid}.jpg</code> 저장</div>
+    <div class="sp-row-label"><span class="sp-chip info">⑤ Lambda → S3</span></div>
+    <div class="sp-row-value">원본을 받아 Pillow로 800px 리사이즈 후 <code>resized/{uuid}.jpg</code> 저장</div>
   </div>
   <div class="sp-row accent">
-    <div class="sp-row-label">⑥ Client → Spring</div>
-    <div class="sp-row-value"><code>POST /complete</code> 업로드 완료를 알림 + key 전달</div>
+    <div class="sp-row-label"><span class="sp-chip accent">⑥ Client → Spring</span></div>
+    <div class="sp-row-value"><code>POST /complete</code> 업로드 완료 알림 + key 전달</div>
   </div>
   <div class="sp-row accent">
-    <div class="sp-row-label">⑦ Spring → DB</div>
+    <div class="sp-row-label"><span class="sp-chip accent">⑦ Spring → DB</span></div>
     <div class="sp-row-value">key에서 UUID 뽑아 originalUrl·resizedUrl 조합 후 <code>image_tb</code> 저장</div>
   </div>
-  <div style="text-align:center;font-size:var(--fs-xs);color:var(--color-text-muted);margin-top:12px;">사진의 바이너리는 서버 힙에 단 한 번도 올라오지 않습니다</div>
+  <div class="sp-callout info">사진의 바이너리는 서버 힙에 단 한 번도 올라오지 않습니다</div>
 </div>
 
 오픈이는 수첩에 설계를 정리했습니다.
 
 :::memo
-**— 설계 정리 —**
+**설계 정리**
 
 1. **발급 API** (`POST /presigned`)
    - 요청: `fileName` · `contentType`
@@ -579,23 +579,23 @@ AWS 콘솔의 버킷 화면으로 가서 `original/` 폴더를 열면, 방금 �
     <div class="sp-compare-block bad">
       <span class="sp-compare-label">BASE64 (CH04)</span>
       <div class="sp-compare-content">
-        <div><strong>서버 힙 점유</strong> 요청당 ≈ 25MB (문자열 + 바이트 배열)</div>
-        <div style="margin-top:6px;"><strong>서버 왕복</strong> 업로드 바이트가 서버를 거쳐 감</div>
-        <div style="margin-top:6px;"><strong>10MB 업로드</strong> 3~5초 지연 + OOM 위험</div>
-        <div style="margin-top:6px;"><strong>max-request-size</strong> 키워야 함</div>
+        <div><strong>서버 힙 점유</strong> 요청당 약 25MB (문자열 + 바이트 배열)</div>
+        <div><strong>서버 왕복</strong> 업로드 바이트가 서버를 거쳐 감</div>
+        <div><strong>10MB 업로드</strong> 3~5초 지연 + OOM 위험</div>
+        <div><strong>max-request-size</strong> 키워야 함</div>
       </div>
     </div>
     <div class="sp-compare-block good">
       <span class="sp-compare-label">PRESIGNED (CH05)</span>
       <div class="sp-compare-content">
-        <div><strong>서버 힙 점유</strong> ≈ 0 (URL 한 줄만)</div>
-        <div style="margin-top:6px;"><strong>서버 왕복</strong> 클라이언트 ↔ S3 직접</div>
-        <div style="margin-top:6px;"><strong>10MB 업로드</strong> 네트워크 대역폭이 실질적 상한</div>
-        <div style="margin-top:6px;"><strong>max-request-size</strong> 관계 없음 (S3 기본 5GB)</div>
+        <div><strong>서버 힙 점유</strong> 약 0 (URL 한 줄만)</div>
+        <div><strong>서버 왕복</strong> 클라이언트 ↔ S3 직접</div>
+        <div><strong>10MB 업로드</strong> 네트워크 대역폭이 실질적 상한</div>
+        <div><strong>max-request-size</strong> 관계 없음 (S3 기본 5GB)</div>
       </div>
     </div>
   </div>
-  <div style="text-align:center;font-size:var(--fs-xs);color:var(--color-text-muted);margin-top:12px;">서버가 줄어든 책임만큼, 보안(서명·만료)과 파이프라인(이벤트·Lambda)이 그 자리를 대신합니다</div>
+  <div class="sp-callout info">서버가 줄어든 책임만큼, 보안(서명·만료)과 파이프라인(이벤트·Lambda)이 그 자리를 대신합니다</div>
 </div>
 
 동료가 모니터를 힐끗 봤습니다.
@@ -641,9 +641,6 @@ def lambda_handler(event, context):
     file_name = key.replace("original/", "")
     uuid = file_name.rsplit(".", 1)[0]
 
-    print(f"[INFO] original key: {key}")
-    print(f"[INFO] uuid: {uuid}")
-
     # 5. 원본을 내려받아 Pillow로 연다
     original_obj = s3.get_object(Bucket=bucket, Key=key)
     original_bytes = original_obj["Body"].read()
@@ -666,8 +663,6 @@ def lambda_handler(event, context):
         ContentType="image/jpeg",
     )
 
-    print(f"[SUCCESS] 리사이즈 업로드 완료: {resized_key}")
-
     return {
         "status": "success",
         "originalKey": key,
@@ -683,7 +678,7 @@ def lambda_handler(event, context):
 
 Deploy를 눌러도 함수는 아직 동작하지 않습니다. Lambda Python 3.11 런타임에는 **Pillow가 기본 포함되어 있지 않기** 때문입니다. `from PIL import Image`에서 `ModuleNotFoundError`가 납니다.
 
-해결책은 **Layer**입니다. Layer는 Lambda 함수에 얹는 공용 라이브러리 꾸러미입니다. 내가 직접 빌드할 수도 있지만, 공개된 Klayers 프로젝트가 리전별 ARN을 이미 만들어 두었기 때문에 그 주소를 붙이기만 하면 됩니다.
+해결책은 **Layer**입니다. Layer는 Lambda 함수에 얹는 공용 라이브러리 꾸러미입니다. 직접 빌드할 수도 있지만, 공개된 Klayers 프로젝트가 리전별 ARN을 이미 만들어 두었기 때문에 그 주소를 붙이기만 하면 됩니다.
 
 Lambda 함수 화면의 하단 **계층 (Layers)** 항목에서 "계층 추가 → ARN 지정"을 클릭하고 아래 ARN을 붙입니다.
 
@@ -758,14 +753,14 @@ Lambda 함수 화면 → 모니터링 탭 → "CloudWatch에서 로그 보기"�
     </div>
   </div>
   <div class="sp-row info">
-    <div class="sp-row-label">신뢰의 축</div>
+    <div class="sp-row-label"><span class="sp-chip info">신뢰의 축</span></div>
     <div class="sp-row-value">Lambda의 응답이 아니라 <code>resized/{uuid}.jpg</code> 규칙을 서버가 신뢰</div>
   </div>
   <div class="sp-row">
-    <div class="sp-row-label">타이밍</div>
+    <div class="sp-row-label"><span class="sp-chip">타이밍</span></div>
     <div class="sp-row-value">클라이언트가 PUT 성공 후 3~5초 대기 → <code>/complete</code> 호출</div>
   </div>
-  <div style="text-align:center;font-size:var(--fs-xs);color:var(--color-text-muted);margin-top:12px;">규칙이 서 있으면 서버는 이벤트를 듣지 않고도 "결과가 어디에 있는지" 안다</div>
+  <div class="sp-callout">규칙이 서 있으면 서버는 이벤트를 듣지 않고도 "결과가 어디에 있는지" 안다</div>
 </div>
 
 이 설계를 코드로 내립니다.
@@ -1005,13 +1000,13 @@ public ImageResponse.Detail getImageDetail(@PathVariable Long id) {
 }
 ```
 
-Postman에서 `GET http://localhost:8080/list`와 `GET http://localhost:8080/1`을 차례로 쏴 봅니다.
+Postman에서 `GET http://localhost:8080/list`와 `GET http://localhost:8080/1`을 차례로 쏴 보세요.
 
 [CAPTURE NEEDED: Postman에서 GET /list 응답. items 배열 안에 id·originalUrl·resizedUrl만 담긴 가벼운 Item 객체가 들어 있는 JSON]
 
 [CAPTURE NEEDED: Postman에서 GET /1 응답. id=1 한 건의 Detail이 단일 객체로 내려오는 JSON (fileName·createdAt 포함)]
 
-목록과 상세가 다른 DTO를 쓰는 이유는 **전송 비용** 입니다. 썸네일 리스트 화면은 한 번에 수십~수백 건을 받아야 합니다. 이때 `fileName`·`createdAt`·`uuid`까지 매 건에 실어 보내면 페이로드가 필요 이상으로 커집니다. `Item`은 썸네일 리스트 화면에 꼭 필요한 세 필드(`id`·`originalUrl`·`resizedUrl`)만 담습니다.
+목록과 상세가 다른 DTO를 쓰는 이유는 **전송 비용**입니다. 썸네일 리스트 화면은 한 번에 수십~수백 건을 받아야 합니다. 이때 `fileName`·`createdAt`·`uuid`까지 매 건에 실어 보내면 페이로드가 필요 이상으로 커집니다. `Item`은 썸네일 리스트 화면에 꼭 필요한 세 필드(`id`·`originalUrl`·`resizedUrl`)만 담습니다.
 
 :::tip
 **실서비스로 가기 전 점검할 것들**
