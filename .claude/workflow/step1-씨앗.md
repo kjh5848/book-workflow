@@ -165,6 +165,35 @@ writer 에이전트 → 답변 정리 → 저자 확인
 
 ## 핵심 메시지
 (AI가 위 답변을 종합하여 자동 생성 — 독자가 동료에게 한 마디로 설명할 문장)
+
+## 형식 표준 (책별 인스턴스 — 반드시 작성)
+
+### 언어·코드 컨벤션
+- 주 언어: Python | Java | Kotlin | TypeScript | ...
+- TODO 주석: `# TODO:` (Python) / `// TODO:` (Java 계열) — `code.md` 다언어 표준 참조
+- 종결어미: `~합니다` 통일 (단계 주석 명사구 예외)
+- 단계 번호: `# N.` 또는 `// N.` 의무
+
+### "이것만은 기억하자"
+- 반드시 `:::remember` directive 사용 (마크다운 H2 평문 금지)
+- 항목 3~5개 + "다음 챕터에서는" 한 줄 예고
+
+### 다이어그램 빈도·종류
+- 실습 1개당 흐름 다이어그램 최소 1개 (서버 진입점 → 처리 → 응답)
+- 사용 가능 컴포넌트: `inventory.md` 카탈로그 (예: `.terminal-log`·`.pipeline-box`·`.sp-figure`·`.sp-flow`·`.sp-compare`·`.sp-chip`)
+- 인라인 `style="..."` 0건. hex 색 직접 박힘 0건
+- 색 토큰: Primary(`accent`) · Secondary(`accent-warm`) · Info만. Utility(`success/warning/danger`) 신규 사용 금지
+
+### 캐릭터 삼각 구도
+- 주인공: **오픈이** (실행자)
+- **팀장** (힌트 제공자) — 소크라테스식 질문
+- **동료** (문제 제기자) — 실사용 피드백
+- 모든 대화 존댓말 통일 (`storytelling.md` 대화체 톤)
+
+### 챕터 닫는 형식
+- `:::remember` (3~5 항목)
+- 다음 챕터 예고 1줄
+- 마지막 챕터(책 끝)는 N챕터 회수 + "책을 덮으며" 한 단락
 ```
 
 ## answers.md 저장 형식
