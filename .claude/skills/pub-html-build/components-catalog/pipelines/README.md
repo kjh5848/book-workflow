@@ -4,13 +4,13 @@
 
 ## 속함
 
-- `.rag-pipeline-box` + `.rag-*` / `.s-*` 계열 (CH01 RAG 3단계)
-- `.rc-timeline` (CH07 비용·시간 타임라인) — `rc-*` 접두어를 CH03 reindex-compare와 공유하지만 별개
-- `.ec-cabinet` (CH07 임베딩 캐시 캐비닛)
+- `.pipeline-box` + `.rag-*` / `.s-*` 계열 (CH01 RAG 3단계)
+- `.timeline-spans` (CH07 비용·시간 타임라인) — `rc-*` 접두어를 CH03 reindex-compare와 공유하지만 별개
+- `.cabinet-spans` (CH07 임베딩 캐시 캐비닛)
 - `.wrapper-arch` (CH07 래퍼 아키텍처)
 - `.journey-forward` + `.jf-*` (CH01 여정 맵)
 - `.journey-roadmap` + `.roadmap-*`, `.node-*` (CH01 노드 기반 로드맵)
-- `.qr-flow` + `.qr-*` (CH06 QueryRouter 3단계 분기 플로우차트)
+- `.rt-flow` + `.qr-*` (CH06 QueryRouter 3단계 분기 플로우차트)
 
 ## 속하지 않음
 
@@ -19,141 +19,141 @@
 
 ## 주의
 
-`rc-*` 접두어는 CH03 `reindex-compare`와 CH07 `rc-timeline` **두 곳에서 사용** 중. 같은 접두어가 두 컴포넌트에 걸쳐 있으므로:
+`rc-*` 접두어는 CH03 `reindex-compare`와 CH07 `timeline-spans` **두 곳에서 사용** 중. 같은 접두어가 두 컴포넌트에 걸쳐 있으므로:
 
 - 신규 컴포넌트에 `rc-*` 추가 금지 (충돌 위험)
-- `.rc-timeline` 내부 자식은 반드시 `.rc-tl-*` 접두어 사용 (`rc-tl-head`, `rc-tl-event`, `rc-tl-tag`). `.rc-card` / `.rc-doc` / `.rc-stage` 등 짧은 `rc-*`는 CH03 `reindex-compare` 소유
-- 한 페이지 안에서 `.reindex-compare`와 `.rc-timeline`을 동시에 쓸 때 클래스 이름만 보고 헷갈리지 말 것. 항상 부모(`.reindex-compare` vs `.rc-timeline`)로 컨텍스트를 확인
+- `.timeline-spans` 내부 자식은 반드시 `.rc-tl-*` 접두어 사용 (`ts-head`, `ts-event`, `ts-tag`). `.rc-card` / `.rc-doc` / `.rc-stage` 등 짧은 `rc-*`는 CH03 `reindex-compare` 소유
+- 한 페이지 안에서 `.reindex-compare`와 `.timeline-spans`을 동시에 쓸 때 클래스 이름만 보고 헷갈리지 말 것. 항상 부모(`.reindex-compare` vs `.timeline-spans`)로 컨텍스트를 확인
 
 ## 컴포넌트 목록
 
-### .rag-pipeline-box
+### .pipeline-box
 
-**언제 쓰는가**: 3~5단계 순차 파이프라인을 박스 + 화살표로 도식화. 각 단계는 `.rag-step` 카드(번호·제목·기술 설명·비유 메타 4요소)이고, 단계 사이는 `.rag-arrow`(`→`)로 연결. 챕터 서두에서 "이 책에서 만들 파이프라인"을 한 장면으로 선언할 때 유효.
+**언제 쓰는가**: 3~5단계 순차 파이프라인을 박스 + 화살표로 도식화. 각 단계는 `.step-card` 카드(번호·제목·기술 설명·비유 메타 4요소)이고, 단계 사이는 `.flow-arrow`(`→`)로 연결. 챕터 서두에서 "이 책에서 만들 파이프라인"을 한 장면으로 선언할 때 유효.
 
 **사용 챕터**: CH01
 
 **HTML 사용 예**:
 ```html
-<div class="rag-pipeline-box">
-  <div class="rag-pipeline-title">RAG 파이프라인. 사서가 일하는 순서</div>
-  <div class="rag-pipeline">
-    <div class="rag-step">
-      <div class="s-num">1</div>
-      <div class="s-title">문서 저장</div>
-      <div class="s-desc">문서를 벡터로 변환<br>ChromaDB에 저장</div>
-      <div class="s-meta">서가에 책 꽂기</div>
+<div class="pipeline-box">
+  <div class="pipeline-title">RAG 파이프라인. 사서가 일하는 순서</div>
+  <div class="pipeline">
+    <div class="step-card">
+      <div class="sc-num">1</div>
+      <div class="sc-title">문서 저장</div>
+      <div class="sc-desc">문서를 벡터로 변환<br>ChromaDB에 저장</div>
+      <div class="sc-meta">서가에 책 꽂기</div>
     </div>
-    <div class="rag-arrow">→</div>
-    <div class="rag-step">
-      <div class="s-num">2</div>
-      <div class="s-title">문서 검색</div>
-      <div class="s-desc">질문과 가장 비슷한<br>문서를 자동으로 찾기</div>
-      <div class="s-meta">사서가 책 찾기</div>
+    <div class="flow-arrow">→</div>
+    <div class="step-card">
+      <div class="sc-num">2</div>
+      <div class="sc-title">문서 검색</div>
+      <div class="sc-desc">질문과 가장 비슷한<br>문서를 자동으로 찾기</div>
+      <div class="sc-meta">사서가 책 찾기</div>
     </div>
-    <div class="rag-arrow">→</div>
-    <div class="rag-step">
-      <div class="s-num">3</div>
-      <div class="s-title">답변 생성</div>
-      <div class="s-desc">찾은 문서를 LLM에<br>넘겨서 답변 생성</div>
-      <div class="s-meta">AI가 읽고 답하기</div>
+    <div class="flow-arrow">→</div>
+    <div class="step-card">
+      <div class="sc-num">3</div>
+      <div class="sc-title">답변 생성</div>
+      <div class="sc-desc">찾은 문서를 LLM에<br>넘겨서 답변 생성</div>
+      <div class="sc-meta">AI가 읽고 답하기</div>
     </div>
   </div>
 </div>
 ```
 
-**렌더 CSS**: `styles/diagrams.css:20-28` (`.rag-pipeline-box`, `.rag-pipeline-title`, `.rag-pipeline`, `.rag-step`, `.rag-step .s-num`, `.s-title`, `.s-desc`, `.s-meta`, `.rag-arrow`)
+**렌더 CSS**: `styles/diagrams.css:20-28` (`.pipeline-box`, `.pipeline-title`, `.pipeline`, `.step-card`, `.step-card .sc-num`, `.sc-title`, `.sc-desc`, `.sc-meta`, `.flow-arrow`)
 
-**변형**: 단계 수 3~5 권장. `.s-meta`는 비유 한 줄 전용(예: "서가에 책 꽂기"), `.s-desc`는 기술 설명 전용. 두 줄 이상은 `<br>`로 끊는다. `.rag-arrow`는 단계 사이마다 필수.
+**변형**: 단계 수 3~5 권장. `.sc-meta`는 비유 한 줄 전용(예: "서가에 책 꽂기"), `.sc-desc`는 기술 설명 전용. 두 줄 이상은 `<br>`로 끊는다. `.flow-arrow`는 단계 사이마다 필수.
 
 **피해야 할 것**
 - 단계 2개: 비교 의도라면 `.annotated-compare`(LLM vs 진실) 또는 `.reindex-compare`로 대체. 파이프라인은 "흐름"이 보여야 함
 - 단계 6개 이상: 한 화면에 담기 어려움. 표(table) 또는 섹션 분할 권장
-- `.s-meta`에 기술 용어 직접 기재(`embedding_model_name` 등) 금지 → `.s-meta`는 비유 회수 자리. 기술은 `.s-desc`로
-- `.rag-arrow` 생략하고 박스만 나열 금지 → 순차성이 사라짐
+- `.sc-meta`에 기술 용어 직접 기재(`embedding_model_name` 등) 금지 → `.sc-meta`는 비유 회수 자리. 기술은 `.sc-desc`로
+- `.flow-arrow` 생략하고 박스만 나열 금지 → 순차성이 사라짐
 
-### .rc-timeline
+### .timeline-spans
 
-**언제 쓰는가**: 같은 입력이 시간 순서로 다른 결과(MISS/HIT/EXPIRED)를 내는 동작을 시간축 + 이벤트 카드로 도식화. 응답 캐시처럼 "TTL 안에 다시 오면 즉시 반환, 만료되면 다시 계산" 같은 시간 의존 동작을 한 장면에 담을 때 유효. 이벤트 카드(`.rc-tl-event`)는 modifier(`.rc-tl-miss` / `.rc-tl-hit` / `.rc-tl-expired`)로 색·점 색이 갈린다.
+**언제 쓰는가**: 같은 입력이 시간 순서로 다른 결과(MISS/HIT/EXPIRED)를 내는 동작을 시간축 + 이벤트 카드로 도식화. 응답 캐시처럼 "TTL 안에 다시 오면 즉시 반환, 만료되면 다시 계산" 같은 시간 의존 동작을 한 장면에 담을 때 유효. 이벤트 카드(`.ts-event`)는 modifier(`.ts-miss` / `.ts-hit` / `.ts-expired`)로 색·점 색이 갈린다.
 
 **사용 챕터**: CH07
 
 **HTML 사용 예**:
 ```html
-<div class="rc-timeline">
-  <div class="rc-tl-head">
-    <span class="rc-tl-kind">ResponseCache</span>
-    <span class="rc-tl-sub">같은 질문을 시간 순서로 추적</span>
+<div class="timeline-spans">
+  <div class="ts-head">
+    <span class="ts-kind">ResponseCache</span>
+    <span class="ts-sub">같은 질문을 시간 순서로 추적</span>
   </div>
-  <div class="rc-tl-axis">
-    <div class="rc-tl-time">09:00</div>
-    <div class="rc-tl-time">09:30</div>
-    <div class="rc-tl-time">10:01</div>
-    <div class="rc-tl-bar"></div>
+  <div class="ts-axis">
+    <div class="ts-time">09:00</div>
+    <div class="ts-time">09:30</div>
+    <div class="ts-time">10:01</div>
+    <div class="ts-bar"></div>
   </div>
-  <div class="rc-tl-events">
-    <div class="rc-tl-event rc-tl-miss">
-      <div class="rc-tl-q">"병가 증빙?"</div>
-      <div class="rc-tl-tag">MISS</div>
-      <div class="rc-tl-action">서가 가서 찾음<br>→ 메모장 기록<br><span class="rc-tl-latency">20초</span></div>
-      <div class="rc-tl-ttl">⏱ TTL 시작</div>
+  <div class="ts-events">
+    <div class="ts-event ts-miss">
+      <div class="ts-q">"병가 증빙?"</div>
+      <div class="ts-tag">MISS</div>
+      <div class="ts-action">서가 가서 찾음<br>→ 메모장 기록<br><span class="ts-latency">20초</span></div>
+      <div class="ts-ttl">⏱ TTL 시작</div>
     </div>
-    <div class="rc-tl-event rc-tl-hit">
-      <div class="rc-tl-q">"병가 증빙?"</div>
-      <div class="rc-tl-tag">HIT</div>
-      <div class="rc-tl-action">메모장 확인<br>→ 즉시 반환<br><span class="rc-tl-latency">0.1초</span></div>
-      <div class="rc-tl-ttl">⏱ 잔여 30분</div>
+    <div class="ts-event ts-hit">
+      <div class="ts-q">"병가 증빙?"</div>
+      <div class="ts-tag">HIT</div>
+      <div class="ts-action">메모장 확인<br>→ 즉시 반환<br><span class="ts-latency">0.1초</span></div>
+      <div class="ts-ttl">⏱ 잔여 30분</div>
     </div>
-    <div class="rc-tl-event rc-tl-expired">
-      <div class="rc-tl-q">"병가 증빙?"</div>
-      <div class="rc-tl-tag">EXPIRED</div>
-      <div class="rc-tl-action">메모장 만료<br>→ 다시 서가로<br><span class="rc-tl-latency">20초</span></div>
-      <div class="rc-tl-ttl">⏱ 새 TTL 시작</div>
+    <div class="ts-event ts-expired">
+      <div class="ts-q">"병가 증빙?"</div>
+      <div class="ts-tag">EXPIRED</div>
+      <div class="ts-action">메모장 만료<br>→ 다시 서가로<br><span class="ts-latency">20초</span></div>
+      <div class="ts-ttl">⏱ 새 TTL 시작</div>
     </div>
   </div>
-  <div class="rc-tl-store">
+  <div class="ts-store">
     <code>self._store = {hash: (answer, expires_at)}</code>
   </div>
   <div class="cf-caption">그림 7-4. ResponseCache는 <b>유통기한이 있는 메모장</b>. 같은 질문이 TTL 안에 다시 오면 서가(LLM)를 건너뜁니다</div>
 </div>
 ```
 
-**렌더 CSS**: `styles/diagrams.css:930-1073` (`.rc-timeline`, `.rc-tl-head`, `.rc-tl-kind`, `.rc-tl-sub`, `.rc-tl-axis`, `.rc-tl-time`, `.rc-tl-bar`, `.rc-tl-events`, `.rc-tl-event`, `.rc-tl-event::before`, `.rc-tl-miss/.hit/.expired`, `.rc-tl-q`, `.rc-tl-tag`, `.rc-tl-action`, `.rc-tl-latency`, `.rc-tl-ttl`, `.rc-tl-store`)
+**렌더 CSS**: `styles/diagrams.css:930-1073` (`.timeline-spans`, `.ts-head`, `.ts-kind`, `.ts-sub`, `.ts-axis`, `.ts-time`, `.ts-bar`, `.ts-events`, `.ts-event`, `.ts-event::before`, `.ts-miss/.hit/.expired`, `.ts-q`, `.ts-tag`, `.ts-action`, `.ts-latency`, `.ts-ttl`, `.ts-store`)
 
-**변형**: 시간 슬롯 3개(`.rc-tl-time` × 3)와 이벤트 카드 3개(`.rc-tl-event` × 3) 1:1 대응이 기본. 이벤트 modifier는 `.rc-tl-miss` / `.rc-tl-hit` / `.rc-tl-expired` 세 가지. `.rc-tl-store`는 선택(자료구조 한 줄 코드 표시). 캡션은 `.cf-caption`(공용 캐시 캡션)을 그대로 사용한다.
+**변형**: 시간 슬롯 3개(`.ts-time` × 3)와 이벤트 카드 3개(`.ts-event` × 3) 1:1 대응이 기본. 이벤트 modifier는 `.ts-miss` / `.ts-hit` / `.ts-expired` 세 가지. `.ts-store`는 선택(자료구조 한 줄 코드 표시). 캡션은 `.cf-caption`(공용 캐시 캡션)을 그대로 사용한다.
 
 **피해야 할 것**
-- **`rc-*` 네임스페이스 충돌**: `.rc-card` / `.rc-doc` / `.rc-stage` 등 CH03 `reindex-compare` 클래스를 `.rc-timeline` 자식으로 끌어와 쓰지 말 것. `.rc-timeline` 내부는 항상 `.rc-tl-*` 접두어
-- 시간 슬롯 4개 이상: 한 줄 그리드(3 컬럼)가 전제. 늘리면 그리드 깨짐 → `.rc-tl-axis` / `.rc-tl-events` `grid-template-columns` 동시 수정 필요
-- modifier 누락(`.rc-tl-event`만 있고 `.rc-tl-miss/.hit/.expired` 없음): 점 색이 기본 accent로만 찍혀 사건 종류가 구분 안 됨
+- **`rc-*` 네임스페이스 충돌**: `.rc-card` / `.rc-doc` / `.rc-stage` 등 CH03 `reindex-compare` 클래스를 `.timeline-spans` 자식으로 끌어와 쓰지 말 것. `.timeline-spans` 내부는 항상 `.rc-tl-*` 접두어
+- 시간 슬롯 4개 이상: 한 줄 그리드(3 컬럼)가 전제. 늘리면 그리드 깨짐 → `.ts-axis` / `.ts-events` `grid-template-columns` 동시 수정 필요
+- modifier 누락(`.ts-event`만 있고 `.ts-miss/.hit/.expired` 없음): 점 색이 기본 accent로만 찍혀 사건 종류가 구분 안 됨
 - 시간 진행이 없는 정적 비교에 사용 금지 → `.cache-compare` 또는 `.annotated-compare` 사용
 
-### .ec-cabinet
+### .cabinet-spans
 
-**언제 쓰는가**: 키-파일 매핑이 미리 저장돼 있고, 새 입력이 들어오면 HIT/MISS로 갈리는 **상태 시각화**. 임베딩 캐시처럼 "텍스트 → 파일" 서랍이 이미 채워져 있고 새 텍스트 도착 시 서랍을 뒤지는 구조를 한 장에 담을 때 유효. 위쪽 `.ec-cab-shelf`(저장된 서랍), 아래쪽 `.ec-cab-lookup`(신규 조회 결과) 2층 구조.
+**언제 쓰는가**: 키-파일 매핑이 미리 저장돼 있고, 새 입력이 들어오면 HIT/MISS로 갈리는 **상태 시각화**. 임베딩 캐시처럼 "텍스트 → 파일" 서랍이 이미 채워져 있고 새 텍스트 도착 시 서랍을 뒤지는 구조를 한 장에 담을 때 유효. 위쪽 `.cs-shelf`(저장된 서랍), 아래쪽 `.cs-lookup`(신규 조회 결과) 2층 구조.
 
 **사용 챕터**: CH07
 
 **HTML 사용 예**:
 ```html
-<div class="ec-cabinet">
-  <div class="ec-cab-head">
-    <span class="ec-cab-kind">EmbeddingCache</span>
-    <span class="ec-cab-sub">outputs/embedding_cache/</span>
+<div class="cabinet-spans">
+  <div class="cs-head">
+    <span class="cs-kind">EmbeddingCache</span>
+    <span class="cs-sub">outputs/embedding_cache/</span>
   </div>
-  <div class="ec-cab-shelf">
-    <div class="ec-cab-file ec-exists">
+  <div class="cs-shelf">
+    <div class="cs-file ec-exists">
       <div class="ec-file-text">"연차 규정"</div>
       <div class="ec-file-arrow">→</div>
       <div class="ec-file-name">a1f3c7.pkl</div>
     </div>
-    <div class="ec-cab-file ec-exists">
+    <div class="cs-file ec-exists">
       <div class="ec-file-text">"휴가 절차"</div>
       <div class="ec-file-arrow">→</div>
       <div class="ec-file-name">d9e2b5.pkl</div>
     </div>
   </div>
-  <div class="ec-cab-lookup">
+  <div class="cs-lookup">
     <div class="ec-lookup-title">새 텍스트가 들어오면</div>
     <div class="ec-lookup-rows">
       <div class="ec-lookup-row ec-hit-row">
@@ -172,13 +172,13 @@
 </div>
 ```
 
-**렌더 CSS**: `styles/diagrams.css:1076-1204` (`.ec-cabinet`, `.ec-cab-head`, `.ec-cab-kind`, `.ec-cab-sub`, `.ec-cab-shelf`, `.ec-cab-file`, `.ec-file-text`, `.ec-file-arrow`, `.ec-file-name`, `.ec-cab-lookup`, `.ec-lookup-title`, `.ec-lookup-rows`, `.ec-lookup-row`, `.ec-hit-row`, `.ec-miss-row`, `.ec-lookup-text`, `.ec-lookup-tag`, `.ec-lookup-action`, `.ec-latency`)
+**렌더 CSS**: `styles/diagrams.css:1076-1204` (`.cabinet-spans`, `.cs-head`, `.cs-kind`, `.cs-sub`, `.cs-shelf`, `.cs-file`, `.ec-file-text`, `.ec-file-arrow`, `.ec-file-name`, `.cs-lookup`, `.ec-lookup-title`, `.ec-lookup-rows`, `.ec-lookup-row`, `.ec-hit-row`, `.ec-miss-row`, `.ec-lookup-text`, `.ec-lookup-tag`, `.ec-lookup-action`, `.ec-latency`)
 
-**변형**: `.ec-cab-shelf` 안 `.ec-cab-file`은 2~3개 권장. `.ec-cab-lookup` 안 `.ec-lookup-row`는 HIT/MISS 한 쌍이 기본. `.ec-lookup-row`는 `.ec-hit-row` 또는 `.ec-miss-row` modifier로 색이 갈리고, 이에 맞춰 `.ec-lookup-tag` / `.ec-latency` 색도 자동 분기.
+**변형**: `.cs-shelf` 안 `.cs-file`은 2~3개 권장. `.cs-lookup` 안 `.ec-lookup-row`는 HIT/MISS 한 쌍이 기본. `.ec-lookup-row`는 `.ec-hit-row` 또는 `.ec-miss-row` modifier로 색이 갈리고, 이에 맞춰 `.ec-lookup-tag` / `.ec-latency` 색도 자동 분기.
 
 **피해야 할 것**
-- `.rc-*` 네임스페이스에 끌려가 `.ec-tl-*` 같이 변형 짓지 말 것. 캐시 시간축이 필요하면 `.rc-timeline`을 따로 사용
-- `.ec-cab-shelf`에 5개 이상 파일 나열 금지 → 서가 비유 강조점이 흐려짐. 대표 2~3개로 압축
+- `.rc-*` 네임스페이스에 끌려가 `.ec-tl-*` 같이 변형 짓지 말 것. 캐시 시간축이 필요하면 `.timeline-spans`을 따로 사용
+- `.cs-shelf`에 5개 이상 파일 나열 금지 → 서가 비유 강조점이 흐려짐. 대표 2~3개로 압축
 - HIT 행만 또는 MISS 행만 단독 배치 금지 → "둘이 갈린다"가 핵심. 한 쌍을 이뤄 대비
 - 캡션은 `.cf-caption`(공용)을 사용. 별도 `.ec-caption` 만들지 말 것
 
@@ -237,7 +237,7 @@
 - 래퍼가 1층뿐이면 의미 없음. `.wa-outer` 안에 반드시 `.wa-inner`(이전 코어)가 들어가야 "감싼 구조"가 성립
 - `.wa-feature` 4개 이상: 그리드가 깨짐. 3개 이상 보여주려면 `.wa-middle`을 두 줄로 분할하거나 `.cache-compare` 같은 다른 컴포넌트 검토
 - `.wa-cache` / `.wa-monitor` / `.wa-retry` 외 임의 modifier 추가: 색·의미 매핑 일관성 깨짐. 추가 색이 필요하면 CSS에 정식 modifier로 등록
-- 시간 흐름 표현(MISS → HIT)에 사용 금지 → `.rc-timeline` 사용. `.wrapper-arch`는 정적 구조 전용
+- 시간 흐름 표현(MISS → HIT)에 사용 금지 → `.timeline-spans` 사용. `.wrapper-arch`는 정적 구조 전용
 
 ### .journey-forward
 
@@ -356,72 +356,72 @@
 
 ---
 
-### .qr-flow
+### .rt-flow
 
-**언제 쓰는가**: **"단계별 분기 + 공통 결과 풀" 플로우차트**. 여러 단계(stage)가 순서대로 흐르고, 각 단계에서 "조건 충족 시 결과 반환(실선 ↑)" / "미충족 시 다음 단계로 fall-through(점선 ⇢)"가 동시에 존재할 때. 출력 후보가 단계마다 공통이면 위쪽 `.qr-pool` 박스에 묶고, 각 단계 성공 경로는 `.qr-up` 수직 stem + 라벨로 박스 전체를 가리킨다. CH06 `QueryRouter` 3단계(키워드→컬럼→LLM) 분류기처럼 **단순→정교 단계 fall-through 구조**에 쓴다.
+**언제 쓰는가**: **"단계별 분기 + 공통 결과 풀" 플로우차트**. 여러 단계(stage)가 순서대로 흐르고, 각 단계에서 "조건 충족 시 결과 반환(실선 ↑)" / "미충족 시 다음 단계로 fall-through(점선 ⇢)"가 동시에 존재할 때. 출력 후보가 단계마다 공통이면 위쪽 `.rt-pool` 박스에 묶고, 각 단계 성공 경로는 `.rt-up` 수직 stem + 라벨로 박스 전체를 가리킨다. CH06 `QueryRouter` 3단계(키워드→컬럼→LLM) 분류기처럼 **단순→정교 단계 fall-through 구조**에 쓴다.
 
 **사용 챕터**: CH06
 
 **HTML 사용 예** (`projects/사내AI비서_v2/chapters/06-연차도-규정도-한번에.md` CH06 §6.4):
 
 ```html
-<div class="qr-flow">
-  <div class="qr-pool">
-    <span class="qr-pool-label">route 반환</span>
-    <span class="qr-out">structured</span>
-    <span class="qr-out">unstructured</span>
-    <span class="qr-out">hybrid</span>
+<div class="rt-flow">
+  <div class="rt-pool">
+    <span class="rt-pool-label">route 반환</span>
+    <span class="rt-out">structured</span>
+    <span class="rt-out">unstructured</span>
+    <span class="rt-out">hybrid</span>
   </div>
 
-  <div class="qr-up qr-up-1">
-    <span class="qr-up-stem"></span>
-    <span class="qr-up-label">명확</span>
-    <span class="qr-up-stem"></span>
+  <div class="rt-up rt-up-1">
+    <span class="rt-up-stem"></span>
+    <span class="rt-up-label">명확</span>
+    <span class="rt-up-stem"></span>
   </div>
-  <div class="qr-up qr-up-2">
-    <span class="qr-up-stem"></span>
-    <span class="qr-up-label">있음</span>
-    <span class="qr-up-stem"></span>
+  <div class="rt-up rt-up-2">
+    <span class="rt-up-stem"></span>
+    <span class="rt-up-label">있음</span>
+    <span class="rt-up-stem"></span>
   </div>
 
-  <div class="qr-node qr-input qr-input-col">질문 입력</div>
-  <div class="qr-arrow-h qr-arrow-1"><span>→</span></div>
-  <div class="qr-node qr-stage-1">
-    <span class="qr-stage-num">STAGE 1</span>키워드 매칭
+  <div class="rt-node rt-input rt-input-col">질문 입력</div>
+  <div class="rt-arrow-h rt-arrow-1"><span>→</span></div>
+  <div class="rt-node rt-stage-1">
+    <span class="rt-stage-num">STAGE 1</span>키워드 매칭
   </div>
-  <div class="qr-arrow-h dashed qr-arrow-2">
-    <span>⇢</span><span class="qr-arrow-lbl">불명확</span>
+  <div class="rt-arrow-h dashed rt-arrow-2">
+    <span>⇢</span><span class="rt-arrow-lbl">불명확</span>
   </div>
-  <div class="qr-node qr-stage-2">
-    <span class="qr-stage-num">STAGE 2</span>컬럼명 매칭
+  <div class="rt-node rt-stage-2">
+    <span class="rt-stage-num">STAGE 2</span>컬럼명 매칭
   </div>
-  <div class="qr-arrow-h dashed qr-arrow-3">
-    <span>⇢</span><span class="qr-arrow-lbl">없음</span>
+  <div class="rt-arrow-h dashed rt-arrow-3">
+    <span>⇢</span><span class="rt-arrow-lbl">없음</span>
   </div>
-  <div class="qr-node qr-stage-3">
-    <span class="qr-stage-num">STAGE 3</span>LLM 판단
+  <div class="rt-node rt-stage-3">
+    <span class="rt-stage-num">STAGE 3</span>LLM 판단
   </div>
-  <div class="qr-arrow-h qr-arrow-4"><span>→</span></div>
-  <div class="qr-node qr-final qr-final-col">최종 결정</div>
+  <div class="rt-arrow-h rt-arrow-4"><span>→</span></div>
+  <div class="rt-node rt-final rt-final-col">최종 결정</div>
 </div>
 ```
 
-**렌더 CSS**: `styles/diagrams.css` — 9컬럼 × 3행 CSS Grid. Row1 = `.qr-pool`(3~7열 span), Row2 = `.qr-up`(3, 5열), Row3 = stages 가로 흐름. 색상은 `--color-success`(pool), `--color-info`(입력), `--color-accent`(최종), `--color-border-strong`(stage).
+**렌더 CSS**: `styles/diagrams.css` — 9컬럼 × 3행 CSS Grid. Row1 = `.rt-pool`(3~7열 span), Row2 = `.rt-up`(3, 5열), Row3 = stages 가로 흐름. 색상은 `--color-success`(pool), `--color-info`(입력), `--color-accent`(최종), `--color-border-strong`(stage).
 
 **변형**:
-- `.qr-node` 기본 변형: `.qr-input`(info 블루), `.qr-final`(accent 인디고, 대시 테두리)
-- `.qr-arrow-h` modifier: `.dashed`(점선 + 뮤티드 컬러, fall-through 전용)
+- `.rt-node` 기본 변형: `.rt-input`(info 블루), `.rt-final`(accent 인디고, 대시 테두리)
+- `.rt-arrow-h` modifier: `.dashed`(점선 + 뮤티드 컬러, fall-through 전용)
 - `.qr-up-N` / `.qr-stage-N` / `.qr-arrow-N`의 `N`은 CSS에 명시적으로 grid-column 지정돼 있음. 단계 수가 달라지면 CSS 확장 필요 (현재 3단계 고정)
-- 출력 풀(`.qr-pool`) 내부 `.qr-out` 칩 개수는 3개 기준. 더 많으면 `grid-column` span 조정
+- 출력 풀(`.rt-pool`) 내부 `.rt-out` 칩 개수는 3개 기준. 더 많으면 `grid-column` span 조정
 
 **피해야 할 것**
 - 단계 수가 3개와 다르면 `qr-up-N` / `qr-stage-N` 수동 확장 필요. 4단계 이상은 **새 컴포넌트로 분기**를 고려. 기본 그리드 9열 구조는 "질문→3단계→최종"에 특화
-- `.qr-up` stem 상·하 양쪽에 두는 게 필수. stem 하나만 두면 연결선이 중간에 끊겨 보임
-- `.qr-up-label`에 긴 문장 금지. "명확"/"있음" 같은 2~4자 조건 라벨만. 더 길면 라벨이 넓어져 outputs pool 컬럼을 초과
-- `.qr-pool`을 비교(A vs B)에 사용 금지. 결과 **풀**(pool)을 표현하는 단일 목적지이며, 2분할이 필요하면 `../comparisons/`의 `.annotated-compare`나 `.reindex-compare`를 쓴다
-- 단계 내부에서 "여러 output 중 하나만 반환되는 경우"(예: CH06 STAGE 2 있음 → structured 단일)를 강조해야 하면 `.qr-pool` 옆에 별도 `.qr-out` 단일 칩을 배치하거나 본문으로 보충 설명. 단계마다 output 차이를 시각화하려면 수직 자기완결 레이아웃이 더 적합
+- `.rt-up` stem 상·하 양쪽에 두는 게 필수. stem 하나만 두면 연결선이 중간에 끊겨 보임
+- `.rt-up-label`에 긴 문장 금지. "명확"/"있음" 같은 2~4자 조건 라벨만. 더 길면 라벨이 넓어져 outputs pool 컬럼을 초과
+- `.rt-pool`을 비교(A vs B)에 사용 금지. 결과 **풀**(pool)을 표현하는 단일 목적지이며, 2분할이 필요하면 `../comparisons/`의 `.annotated-compare`나 `.reindex-compare`를 쓴다
+- 단계 내부에서 "여러 output 중 하나만 반환되는 경우"(예: CH06 STAGE 2 있음 → structured 단일)를 강조해야 하면 `.rt-pool` 옆에 별도 `.rt-out` 단일 칩을 배치하거나 본문으로 보충 설명. 단계마다 output 차이를 시각화하려면 수직 자기완결 레이아웃이 더 적합
 
-### .eng-pipe
+### .processing-pipe
 
 **언제 쓰는가**: **6개 단계의 파이프라인**을 입력·챔버·출력 블루프린트 스타일로 표현할 때. CH11 §11.2 "커넥트HR 엔진"처럼 RAG 파이프라인 6 스테이지(파싱·청킹·쿼리 확장·검색·리랭킹·부모/LLM)를 한 그림에 담음. 좌측 입력(accent-warm 아웃라인) · 중앙 2×3 챔버 그리드 · 우측 출력(success 아웃라인) 3-zone 구조.
 
@@ -429,53 +429,53 @@
 
 **HTML 사용 예**:
 ```html
-<div class="eng-pipe">
-  <div class="ep-head">
-    <span class="ep-tag">pipeline</span>
-    <span class="ep-name">커넥트HR 엔진</span>
-    <span class="ep-tag">6 stages</span>
+<div class="processing-pipe">
+  <div class="pp-head">
+    <span class="pp-tag">pipeline</span>
+    <span class="pp-name">커넥트HR 엔진</span>
+    <span class="pp-tag">6 stages</span>
   </div>
 
-  <div class="ep-body">
-    <div class="ep-port in">
-      <div class="ep-port-lbl">INPUT</div>
-      <div class="ep-port-rule"></div>
-      <div class="ep-port-name">질문</div>
-      <div class="ep-port-arrow">▶</div>
+  <div class="pp-body">
+    <div class="pp-port in">
+      <div class="pp-port-lbl">INPUT</div>
+      <div class="pp-port-rule"></div>
+      <div class="pp-port-name">질문</div>
+      <div class="pp-port-arrow">▶</div>
     </div>
 
-    <div class="ep-chambers">
-      <div class="ep-stages">
-        <div class="ep-stage"><span class="ep-stage-num">01</span><span class="ep-stage-name">파싱</span><div class="ep-stage-fn">parse_pdf_hybrid</div></div>
-        <div class="ep-stage"><span class="ep-stage-num">02</span><span class="ep-stage-name">청킹</span><div class="ep-stage-fn">semantic_chunking</div></div>
-        <div class="ep-stage"><span class="ep-stage-num">03</span><span class="ep-stage-name">쿼리 확장</span><div class="ep-stage-fn">QueryExpander</div></div>
-        <div class="ep-stage"><span class="ep-stage-num">04</span><span class="ep-stage-name">검색</span><div class="ep-stage-fn">EnsembleRetriever</div></div>
-        <div class="ep-stage"><span class="ep-stage-num">05</span><span class="ep-stage-name">리랭킹</span><div class="ep-stage-fn">CrossEncoderReranker</div></div>
-        <div class="ep-stage"><span class="ep-stage-num">06</span><span class="ep-stage-name">부모·LLM</span><div class="ep-stage-fn">ParentDoc + Agent</div></div>
+    <div class="pp-chambers">
+      <div class="pp-stages">
+        <div class="pp-stage"><span class="pp-stage-num">01</span><span class="pp-stage-name">파싱</span><div class="pp-stage-fn">parse_pdf_hybrid</div></div>
+        <div class="pp-stage"><span class="pp-stage-num">02</span><span class="pp-stage-name">청킹</span><div class="pp-stage-fn">semantic_chunking</div></div>
+        <div class="pp-stage"><span class="pp-stage-num">03</span><span class="pp-stage-name">쿼리 확장</span><div class="pp-stage-fn">QueryExpander</div></div>
+        <div class="pp-stage"><span class="pp-stage-num">04</span><span class="pp-stage-name">검색</span><div class="pp-stage-fn">EnsembleRetriever</div></div>
+        <div class="pp-stage"><span class="pp-stage-num">05</span><span class="pp-stage-name">리랭킹</span><div class="pp-stage-fn">CrossEncoderReranker</div></div>
+        <div class="pp-stage"><span class="pp-stage-num">06</span><span class="pp-stage-name">부모·LLM</span><div class="pp-stage-fn">ParentDoc + Agent</div></div>
       </div>
     </div>
 
-    <div class="ep-port out">
-      <div class="ep-port-lbl">OUTPUT</div>
-      <div class="ep-port-rule"></div>
-      <div class="ep-port-name">답변</div>
-      <div class="ep-port-arrow">▶</div>
+    <div class="pp-port out">
+      <div class="pp-port-lbl">OUTPUT</div>
+      <div class="pp-port-rule"></div>
+      <div class="pp-port-name">답변</div>
+      <div class="pp-port-arrow">▶</div>
     </div>
   </div>
 
-  <div class="ep-caption">그림 11-10. 질문이 들어와 6단계 파이프라인을 지나 답변이 나가기까지</div>
+  <div class="pp-caption">그림 11-10. 질문이 들어와 6단계 파이프라인을 지나 답변이 나가기까지</div>
 </div>
 ```
 
-**렌더 CSS**: `styles/diagrams.css` 의 `/* Engine Pipeline (CH11 §11.2) */` 블록 (`.eng-pipe`, `.ep-head`, `.ep-tag`, `.ep-name`, `.ep-body`, `.ep-port`, `.ep-port.in/.out`, `.ep-port-lbl/-rule/-name/-arrow`, `.ep-chambers`, `.ep-stages`, `.ep-stage`, `.ep-stage-num/-name/-fn`, `.ep-caption`)
+**렌더 CSS**: `styles/diagrams.css` 의 `/* Engine Pipeline (CH11 §11.2) */` 블록 (`.processing-pipe`, `.pp-head`, `.pp-tag`, `.pp-name`, `.pp-body`, `.pp-port`, `.pp-port.in/.out`, `.pp-port-lbl/-rule/-name/-arrow`, `.pp-chambers`, `.pp-stages`, `.pp-stage`, `.pp-stage-num/-name/-fn`, `.pp-caption`)
 
-**변형**: 스테이지 개수는 6개 기준(2×3 그리드). 5 이하면 `.ep-stages`의 grid-template-columns를 1fr·반복 개수로 조정. 7 이상은 세로가 길어져 `.rag-pipeline-box`를 쓰거나 새 컴포넌트로 분리. 포트 색:
-- `.ep-port.in` — `--color-accent-warm` 아웃라인 (INPUT, 질문)
-- `.ep-port.out` — `--color-success` 아웃라인 (OUTPUT, 답변)
+**변형**: 스테이지 개수는 6개 기준(2×3 그리드). 5 이하면 `.pp-stages`의 grid-template-columns를 1fr·반복 개수로 조정. 7 이상은 세로가 길어져 `.pipeline-box`를 쓰거나 새 컴포넌트로 분리. 포트 색:
+- `.pp-port.in` — `--color-accent-warm` 아웃라인 (INPUT, 질문)
+- `.pp-port.out` — `--color-success` 아웃라인 (OUTPUT, 답변)
 스테이지 번호 색은 `--color-accent` 인디고 고정.
 
 **피해야 할 것**
-- 스테이지 4개 이하: 6칸 그리드가 비게 되어 공백이 크다. 3~5단계는 `.rag-pipeline-box`(가로 flex) 사용
-- `.ep-port`를 3개 이상 두기 금지: INPUT · OUTPUT 두 쌍이 기본 구조. 제3의 포트가 필요하면 별도 컴포넌트
-- `.ep-stage-fn`에 2줄 이상 텍스트: 셀 높이가 부풀어 그리드 균형이 깨짐. 함수명 한 줄로
+- 스테이지 4개 이하: 6칸 그리드가 비게 되어 공백이 크다. 3~5단계는 `.pipeline-box`(가로 flex) 사용
+- `.pp-port`를 3개 이상 두기 금지: INPUT · OUTPUT 두 쌍이 기본 구조. 제3의 포트가 필요하면 별도 컴포넌트
+- `.pp-stage-fn`에 2줄 이상 텍스트: 셀 높이가 부풀어 그리드 균형이 깨짐. 함수명 한 줄로
 - 입력·출력 포트를 같은 색으로 쓰기: 입력·출력 구분이 색으로 되어 있으므로 `.in`·`.out` modifier로 반드시 구분

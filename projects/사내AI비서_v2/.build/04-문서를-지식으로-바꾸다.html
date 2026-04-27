@@ -321,49 +321,49 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 <p><code>DEFAULT_CHUNK_SIZE</code>(500), <code>DEFAULT_OVERLAP</code>(100)은 <code>chunker.py</code> 상단에 선언된 모듈 상수입니다. <code>main.py</code>에서 <code>--chunk-size</code>로 넘겨 덮어쓸 수 있습니다.</p>
 <p><code>step = chunk_size - overlap</code> 이 핵심입니다. 500자를 자르지만 다음 청크는 400자 뒤에서 시작하므로 결과적으로 <strong>100자가 겹칩니다</strong>. <code>while</code> 루프가 텍스트 끝까지 반복하며 청크 리스트를 쌓아 올립니다.</p>
 <p>각 조각에는 <strong>메타데이터</strong>도 함께 붙습니다. 출처 파일명, 페이지, 분류. 챕터 3에서 설계한 라벨이 여기서 쓰이고, 나중에 에이전트가 &quot;이 답변의 출처는 취업규칙 3페이지입니다&quot;라고 당당하게 말할 수 있게 됩니다.</p>
-<div class="chunk-with-meta">
-  <div class="cwm-title">청크 한 조각 = 본문 + 메타데이터 라벨</div>
-  <div class="cwm-card">
-    <div class="cwm-body">
+<div class="card-meta">
+  <div class="cm-title">청크 한 조각 = 본문 + 메타데이터 라벨</div>
+  <div class="cm-card">
+    <div class="cm-body">
       제5조(연차유급휴가) 신입사원은 입사 후 3년 동안은 연차가 없다. 대신 매월 1회 '리프레시 데이'를 유급으로 제공한다. 3년 근속 시점에 30일의 연차가 일시에 발생한다. …
     </div>
-    <div class="cwm-meta">
-      <span class="cwm-tag"><b>출처</b> HR_취업규칙_v1.0.pdf</span>
-      <span class="cwm-tag"><b>페이지</b> 3</span>
-      <span class="cwm-tag"><b>분류</b> HR</span>
-      <span class="cwm-tag"><b>chunk_id</b> hr_취업규칙_v1_0_text_p003_c0002</span>
+    <div class="cm-meta">
+      <span class="cm-tag"><b>출처</b> HR_취업규칙_v1.0.pdf</span>
+      <span class="cm-tag"><b>페이지</b> 3</span>
+      <span class="cm-tag"><b>분류</b> HR</span>
+      <span class="cm-tag"><b>chunk_id</b> hr_취업규칙_v1_0_text_p003_c0002</span>
     </div>
   </div>
-  <div class="cwm-note">이 라벨들이 ChromaDB에 <code>metadata</code> 필드로 같이 저장됩니다. 검색할 때 "HR 폴더의 3페이지 근처 문서만"처럼 필터링도 가능하고, 답변에 출처를 붙일 때도 이 값을 그대로 씁니다.</div>
+  <div class="cm-note">이 라벨들이 ChromaDB에 <code>metadata</code> 필드로 같이 저장됩니다. 검색할 때 "HR 폴더의 3페이지 근처 문서만"처럼 필터링도 가능하고, 답변에 출처를 붙일 때도 이 값을 그대로 씁니다.</div>
 </div>
 <h3>4.4.2 양념: 임베딩</h3>
 <p>컴퓨터는 글자를 모릅니다. 숫자만 연산합니다. <strong>임베딩(Embedding)</strong> 은 텍스트의 의미를 숫자 벡터(768개 숫자 리스트)로 바꾸는 과정입니다. 핵심은 <strong>의미가 비슷한 텍스트는 비슷한 숫자</strong>가 된다는 점입니다.</p>
-<div class="embed-example-row">
-  <div class="eer-card">
-    <div class="eer-group similar">
-      <div class="eer-group-label good">의미가 비슷하면 숫자도 비슷</div>
-      <div class="eer-item">
-        <div class="eer-text">"연차 사용 규정"</div>
-        <div class="eer-vec">[ 0.92, 0.87, ... ]</div>
+<div class="example-row">
+  <div class="er-card">
+    <div class="er-group similar">
+      <div class="er-group-label good">의미가 비슷하면 숫자도 비슷</div>
+      <div class="er-item">
+        <div class="er-text">"연차 사용 규정"</div>
+        <div class="er-vec">[ 0.92, 0.87, ... ]</div>
       </div>
-      <div class="eer-item">
-        <div class="eer-text">"휴가 관련 정책"</div>
-        <div class="eer-vec">[ 0.91, 0.85, ... ]</div>
+      <div class="er-item">
+        <div class="er-text">"휴가 관련 정책"</div>
+        <div class="er-vec">[ 0.91, 0.85, ... ]</div>
       </div>
     </div>
-    <div class="eer-group different">
-      <div class="eer-group-label bad">의미가 다르면 숫자도 다름</div>
-      <div class="eer-item">
-        <div class="eer-text">"매출 현황 보고서"</div>
-        <div class="eer-vec">[-0.15, 0.08, ... ]</div>
+    <div class="er-group different">
+      <div class="er-group-label bad">의미가 다르면 숫자도 다름</div>
+      <div class="er-item">
+        <div class="er-text">"매출 현황 보고서"</div>
+        <div class="er-vec">[-0.15, 0.08, ... ]</div>
       </div>
     </div>
   </div>
-  <div class="eer-image">
+  <div class="er-image">
     <img src="../assets/CH04/image/04_embedding-concept.png" alt="">
   </div>
 </div>
-<div class="eer-caption">그림 4-5. 왼쪽(문장 임베딩 벡터 예시. 앞 몇 자리만 봐도 비슷·다름이 드러남), 오른쪽(임베딩 공간에 찍힌 좌표. 의미가 가까운 문서가 한 곳에 모임)</div>
+<div class="er-caption">그림 4-5. 왼쪽(문장 임베딩 벡터 예시. 앞 몇 자리만 봐도 비슷·다름이 드러남), 오른쪽(임베딩 공간에 찍힌 좌표. 의미가 가까운 문서가 한 곳에 모임)</div>
 <p>&quot;숫자가 비슷하다&quot;는 걸 어떻게 판단할까요? 벡터를 좌표 위의 <strong>화살표</strong>라고 생각하시면 됩니다. 두 화살표가 같은 방향이면 의미가 비슷하고, 반대면 다릅니다. <strong>코사인 유사도(Cosine Similarity)</strong> 가 이 각도를 측정합니다.</p>
 <ul>
 <li>같은 방향(각도 0°) → 유사도 <strong>1</strong> (완전히 같은 의미)</li>

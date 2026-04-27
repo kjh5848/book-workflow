@@ -117,16 +117,16 @@
 - `.afm-box.afm-faint.afm-dashed`: 외부 의존 / 미구현 박스 (예: Ollama LLM, 다음 챕터에서 만들 컴포넌트)
 - `.afm-box.afm-on`에는 `.afm-faint` / `.afm-dashed` 조합 금지 (진함과 흐림이 충돌)
 
-### `.arch11` (최종 완성 구성도)
+### `.arch-final` (최종 완성 구성도)
 
-**언제 쓰는가**: 책 **마지막 챕터의 완성 시스템 전체 구성도**를 한 장으로 선언할 때. `.arch-fullmap`이 "이 챕터가 전체에서 어디에 해당하는가"를 보여준다면, `.arch11`은 "11개 챕터 전체가 어떻게 한 시스템으로 조립됐는가"를 보여주는 **최종 조립도** 전용. 3행 2열 스택(사용자·Runtime / LLM·Tools / Vector·PG) 구조로 A4 세로 폭에 맞음. d1-tokens 에디토리얼 스타일 계승(LLM 박스 브라켓 장식 `::before/::after`, accent-bg 인디고 core, col-t 앰버/RAG 뱃지).
+**언제 쓰는가**: 책 **마지막 챕터의 완성 시스템 전체 구성도**를 한 장으로 선언할 때. `.arch-fullmap`이 "이 챕터가 전체에서 어디에 해당하는가"를 보여준다면, `.arch-final`은 "11개 챕터 전체가 어떻게 한 시스템으로 조립됐는가"를 보여주는 **최종 조립도** 전용. 3행 2열 스택(사용자·Runtime / LLM·Tools / Vector·PG) 구조로 A4 세로 폭에 맞음. d1-tokens 에디토리얼 스타일 계승(LLM 박스 브라켓 장식 `::before/::after`, accent-bg 인디고 core, col-t 앰버/RAG 뱃지).
 
 **사용 챕터**: CH11
 
 **HTML 사용 예** (요약):
 
 ```html
-<div class="arch11">
+<div class="arch-final">
   <div class="header">
     <div class="sub">시스템 아키텍처 (System Architecture)</div>
     <div class="title">커넥트HR 에이전트</div>
@@ -175,7 +175,7 @@
 
 전체 샘플은 `projects/사내AI비서_v2/chapters/11-커넥트HR-에이전트의-완성.md` §11.5 참조.
 
-**렌더 CSS**: `styles/diagrams.css` 의 `/* System Architecture (arch11, CH11 §11.5) */` 블록
+**렌더 CSS**: `styles/diagrams.css` 의 `/* System Architecture (arch-final, CH11 §11.5) */` 블록
 
 **변형**: Row별 grid-template-columns 비율은 콘텐츠 양에 맞게 고정:
 - `.row-client`: `180px 36px 1fr` (사용자 좁음 · 화살표 · Runtime 넓음)
@@ -188,4 +188,4 @@ Runtime `.col-a` 내부는 `.core > .loop-inner + .engine-inner` 중첩 구조(�
 - 행·열 개수 변경 금지 (3행 2열 고정 구조). 늘리려면 별도 컴포넌트
 - `.col-a .core` 내부에 `.loop-inner`·`.engine-inner` 외 다른 요소 추가 금지 (Executor 안 "부품"만)
 - Row별 `.flow-arrows` 누락: Row 1·Row 2는 요청/응답 화살표가 시각 흐름의 핵심. 생략하면 3행 2열이 단순 표처럼 보임
-- `.arch11`을 `.arch-fullmap`과 동일한 위치(각 챕터 끝)에 쓰기 금지: 최종 챕터 한 번만. 중간 챕터는 `.arch-fullmap`으로
+- `.arch-final`을 `.arch-fullmap`과 동일한 위치(각 챕터 끝)에 쓰기 금지: 최종 챕터 한 번만. 중간 챕터는 `.arch-fullmap`으로

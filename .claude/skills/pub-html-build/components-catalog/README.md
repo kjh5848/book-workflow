@@ -50,10 +50,10 @@
 | `eer-` | embedding example row | cards |
 | `ac-` | annotated compare | comparisons |
 | `otd-` | overlap text demo | comparisons |
-| `rc-` | reindex-compare (CH03) / rc-timeline (CH07) | comparisons + pipelines (주의: 충돌) |
+| `rc-` | reindex-compare (CH03) / timeline-spans (CH07) | comparisons + pipelines (주의: 충돌) |
 | `rag-` | rag pipeline | pipelines |
 | `jf-` | journey forward | pipelines |
-| `s-` | rag-step 내부 (pipeline 전용) | pipelines |
+| `s-` | step-card 내부 (pipeline 전용) | pipelines |
 | `rl-` | react-loop caption | captions |
 | `mm-` | minimap | 글로벌 |
 | `at-` | arch-tree | 글로벌 |

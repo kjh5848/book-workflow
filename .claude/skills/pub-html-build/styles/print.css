@@ -73,7 +73,7 @@ h2 { page-break-before: auto; }
 .chapter-image,
 .goal-box,
 .remember,
-.rag-pipeline-box,
+.pipeline-box,
 .compare-diagram,
 .tip,
 .result,
@@ -124,7 +124,7 @@ h2 { page-break-before: auto; }
 .figure-pair,
 .librarian-scene,
 .llm-rag-split,
-.rag-pipeline-box,
+.pipeline-box,
 .annotated-compare,
 .terminal-log {
   page-break-inside: avoid;
@@ -198,7 +198,7 @@ h2 { page-break-before: auto; }
 .chapter-minimap,
 .prep-section,
 .prep-section-md,
-.rag-pipeline-box,
+.pipeline-box,
 .compare-diagram,
 .annotated-compare,
 .result,
@@ -210,8 +210,8 @@ h2 { page-break-before: auto; }
 .goal-box,
 .term-box,
 .chapter-image img,
-.rag-step,
-.rag-step .s-num,
+.step-card,
+.step-card .sc-num,
 .jf-item,
 .ac-block {
   box-shadow: none !important;

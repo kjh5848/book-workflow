@@ -49,8 +49,8 @@
   /* ─────────────── 4. Secondary · 브랜드 보조 액센트 (오렌지) ───────────────
    * Primary와 한 세트로 움직이는 브랜드 보조 컬러.
    * 사용처: :::remember · :::tip · .term · h1 .num · 미니맵 아이콘 ·
-   *         arch11 user 아이콘 · tool b 뱃지 · part-arch-box.new ·
-   *         eng-pipe ep-port.in
+   *         arch-final user 아이콘 · tool b 뱃지 · part-arch-box.new ·
+   *         processing-pipe pp-port.in
    */
   --color-accent-warm:        #ff7849;
   --color-accent-warm-bg:     #fff4ed;
@@ -92,7 +92,7 @@
 
   /* ─────────────── 5. Elevation (그림자) ───────────────
    * 이미지·다이어그램 공용 그림자. `.chapter-image img`와 동일 톤으로
-   * 모든 HTML 다이어그램(arch11·terminal-log·rag-pipeline-box·llm-rag-split·
+   * 모든 HTML 다이어그램(arch-final·terminal-log·pipeline-box·llm-rag-split·
    * librarian-scene·annotated-compare·figure-group 등)에 적용해 시각 무게를 통일.
    */
   --shadow-figure: none;  /* 그림자 OFF — 컴포넌트·이미지 모두 테두리만으로 경계 표시 */

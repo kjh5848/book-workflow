@@ -123,35 +123,35 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 </div>
 <p>세 층이 한 방향으로만 얽히기 때문에, 한 층의 내부를 바꿔도 다른 층은 영향이 적습니다. 가령 벡터DB를 Qdrant로 갈아끼울 땐 Infrastructure만 손대면 됩니다. 약어 사전을 사내 용어집으로 교체할 땐 Domain의 <code>QueryExpander</code>만 고치면 됩니다. 위층은 아무것도 모릅니다.</p>
 <p>가운데 칸 Domain에 놓인 네 부품이 한 질문 안에서 어떻게 손을 잡는지를 한 줄에 펴면 이렇게 됩니다.</p>
-<div class="rag-pipeline-box">
-<div class="rag-pipeline-title">그림 11-2. RAG 엔진. 질문이 들어와 답변이 나가기까지</div>
-<div class="rag-pipeline">
-<div class="rag-step">
-<div class="s-num">01</div>
-<div class="s-title">QueryExpander</div>
-<div class="s-desc">사내 약어를 풀어 질문을 보강</div>
-<div class="s-meta">expand()</div>
+<div class="pipeline-box">
+<div class="pipeline-title">그림 11-2. RAG 엔진. 질문이 들어와 답변이 나가기까지</div>
+<div class="pipeline">
+<div class="step-card">
+<div class="sc-num">01</div>
+<div class="sc-title">QueryExpander</div>
+<div class="sc-desc">사내 약어를 풀어 질문을 보강</div>
+<div class="sc-meta">expand()</div>
 </div>
-<div class="rag-arrow">→</div>
-<div class="rag-step">
-<div class="s-num">02</div>
-<div class="s-title">EnsembleRetriever</div>
-<div class="s-desc">BM25와 ChromaDB로 자식 청크 검색</div>
-<div class="s-meta">search()</div>
+<div class="flow-arrow">→</div>
+<div class="step-card">
+<div class="sc-num">02</div>
+<div class="sc-title">EnsembleRetriever</div>
+<div class="sc-desc">BM25와 ChromaDB로 자식 청크 검색</div>
+<div class="sc-meta">search()</div>
 </div>
-<div class="rag-arrow">→</div>
-<div class="rag-step">
-<div class="s-num">03</div>
-<div class="s-title">CrossEncoderReranker</div>
-<div class="s-desc">딥러닝 모델로 정합성 채점</div>
-<div class="s-meta">rerank()</div>
+<div class="flow-arrow">→</div>
+<div class="step-card">
+<div class="sc-num">03</div>
+<div class="sc-title">CrossEncoderReranker</div>
+<div class="sc-desc">딥러닝 모델로 정합성 채점</div>
+<div class="sc-meta">rerank()</div>
 </div>
-<div class="rag-arrow">→</div>
-<div class="rag-step">
-<div class="s-num">04</div>
-<div class="s-title">ParentDocumentRetriever</div>
-<div class="s-desc">자식 청크에서 부모 페이지 복원</div>
-<div class="s-meta">resolve()</div>
+<div class="flow-arrow">→</div>
+<div class="step-card">
+<div class="sc-num">04</div>
+<div class="sc-title">ParentDocumentRetriever</div>
+<div class="sc-desc">자식 청크에서 부모 페이지 복원</div>
+<div class="sc-meta">resolve()</div>
 </div>
 </div>
 </div>
@@ -407,34 +407,34 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 <div class="dialogue"><span class="speaker">동료</span>: "질문 타입이 세 개 다 다른데 세 번 다 근거까지 붙어요."</div>
 <h2>11.4 엔진의 내부 - 6단계로 한 줄에</h2>
 <p>웹 화면에서 본 세 답변이 안에서는 어떤 단계를 거쳐 만들어졌는지, RAG 엔진의 내부를 한 장에 정리하면 이렇게 보입니다.</p>
-<div class="eng-pipe">
-<div class="ep-head">
-<span class="ep-tag">pipeline</span>
-<span class="ep-name">커넥트HR 엔진</span>
-<span class="ep-tag">6 stages</span>
+<div class="processing-pipe">
+<div class="pp-head">
+<span class="pp-tag">pipeline</span>
+<span class="pp-name">커넥트HR 엔진</span>
+<span class="pp-tag">6 stages</span>
 </div>
-<div class="ep-body">
-<div class="ep-port in">
-<div class="ep-port-lbl">INPUT</div>
-<div class="ep-port-rule"></div>
-<div class="ep-port-name">질문</div>
-<div class="ep-port-arrow">▶</div>
+<div class="pp-body">
+<div class="pp-port in">
+<div class="pp-port-lbl">INPUT</div>
+<div class="pp-port-rule"></div>
+<div class="pp-port-name">질문</div>
+<div class="pp-port-arrow">▶</div>
 </div>
-<div class="ep-chambers">
-<div class="ep-stages">
-<div class="ep-stage"><span class="ep-stage-num">01</span><span class="ep-stage-name">파싱</span><div class="ep-stage-fn">parse_pdf_hybrid</div></div>
-<div class="ep-stage"><span class="ep-stage-num">02</span><span class="ep-stage-name">청킹</span><div class="ep-stage-fn">semantic_chunking</div></div>
-<div class="ep-stage"><span class="ep-stage-num">03</span><span class="ep-stage-name">쿼리 확장</span><div class="ep-stage-fn">QueryExpander</div></div>
-<div class="ep-stage"><span class="ep-stage-num">04</span><span class="ep-stage-name">검색</span><div class="ep-stage-fn">EnsembleRetriever</div></div>
-<div class="ep-stage"><span class="ep-stage-num">05</span><span class="ep-stage-name">리랭킹</span><div class="ep-stage-fn">CrossEncoderReranker</div></div>
-<div class="ep-stage"><span class="ep-stage-num">06</span><span class="ep-stage-name">부모·LLM</span><div class="ep-stage-fn">ParentDoc + Agent</div></div>
+<div class="pp-chambers">
+<div class="pp-stages">
+<div class="pp-stage"><span class="pp-stage-num">01</span><span class="pp-stage-name">파싱</span><div class="pp-stage-fn">parse_pdf_hybrid</div></div>
+<div class="pp-stage"><span class="pp-stage-num">02</span><span class="pp-stage-name">청킹</span><div class="pp-stage-fn">semantic_chunking</div></div>
+<div class="pp-stage"><span class="pp-stage-num">03</span><span class="pp-stage-name">쿼리 확장</span><div class="pp-stage-fn">QueryExpander</div></div>
+<div class="pp-stage"><span class="pp-stage-num">04</span><span class="pp-stage-name">검색</span><div class="pp-stage-fn">EnsembleRetriever</div></div>
+<div class="pp-stage"><span class="pp-stage-num">05</span><span class="pp-stage-name">리랭킹</span><div class="pp-stage-fn">CrossEncoderReranker</div></div>
+<div class="pp-stage"><span class="pp-stage-num">06</span><span class="pp-stage-name">부모·LLM</span><div class="pp-stage-fn">ParentDoc + Agent</div></div>
 </div>
 </div>
-<div class="ep-port out">
-<div class="ep-port-lbl">OUTPUT</div>
-<div class="ep-port-rule"></div>
-<div class="ep-port-name">답변</div>
-<div class="ep-port-arrow">▶</div>
+<div class="pp-port out">
+<div class="pp-port-lbl">OUTPUT</div>
+<div class="pp-port-rule"></div>
+<div class="pp-port-name">답변</div>
+<div class="pp-port-arrow">▶</div>
 </div>
 </div>
 </div>
@@ -443,7 +443,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 <p>챕터 8~10에서 따로 실험하던 부품들이 각 단계에 박혀 있습니다. Semantic 청킹은 02, 약어 사전은 03, 하이브리드 검색은 04, 리랭커는 05, 부모 문서 확장과 LLM 답변 생성은 06. 따로 볼 때는 각자의 평가표만 있었지만, 지금은 한 줄로 꿰어져 한 질문의 응답을 함께 만들어 냅니다.</p>
 <h2>11.5 11챕터의 자리, 한 장에</h2>
 <p>11.4의 파이프라인이 &quot;질문이 답변으로 흐르는 길&quot;이었다면, 아래 구성도는 그 길을 떠받치는 <strong>시스템 전체</strong>를 한 장에 담은 모습입니다. 사용자부터 LLM, 에이전트 루프, 도구, 저장소까지.</p>
-<div class="arch11">
+<div class="arch-final">
 <div class="header">
 <div class="sub">시스템 아키텍처 (System Architecture)</div>
 <div class="title">커넥트HR 에이전트</div>

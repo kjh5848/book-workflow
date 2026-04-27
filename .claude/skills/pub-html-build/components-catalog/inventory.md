@@ -42,7 +42,7 @@
 - `.afm-box` (+ `.afm-faint`, `.afm-on`, `.afm-dashed`, `.afm-round`)
 - `.afm-zone`, `.afm-zone-ch`, `.afm-zone-label`
 - `.afm-tag`, `.afm-label`, `.afm-sub`, `.afm-note`
-- `.arch11` — 최종 완성 구성도 (CH11 §11.5). 3행 2열 스택 + d1-tokens 에디토리얼 계승. 상세: [`fullmap/README.md`](fullmap/README.md)
+- `.arch-final` — 최종 완성 구성도 (CH11 §11.5). 3행 2열 스택 + d1-tokens 에디토리얼 계승. 상세: [`fullmap/README.md`](fullmap/README.md)
   - `.header > .sub/.title/.desc` (상단 제목)
   - `.row-client` — 사용자·Gateway(col-c) · flow-arrows · Runtime(col-a)
   - `.row-ext` — LLM(bracket box) · flow-arrows · Tools(col-t)
@@ -53,15 +53,15 @@
 ### cards
 개별 카드 단위.
 
-- `.chunk-with-meta` + `.cwm-title`, `.cwm-card`, `.cwm-body`, `.cwm-meta`, `.cwm-tag`, `.cwm-note` (CH04)
-- `.embed-example-row` + `.eer-card`, `.eer-group` (`.similar`/`.different`), `.eer-group-label` (`.good`/`.bad`), `.eer-item`, `.eer-text`, `.eer-vec`, `.eer-image`, `.eer-caption` (CH04)
+- `.card-meta` + `.cm-title`, `.cm-card`, `.cm-body`, `.cm-meta`, `.cm-tag`, `.cm-note` (CH04)
+- `.example-row` + `.er-card`, `.er-group` (`.similar`/`.different`), `.er-group-label` (`.good`/`.bad`), `.er-item`, `.er-text`, `.er-vec`, `.er-image`, `.er-caption` (CH04)
 
 ### comparisons
 비교형 시각 요소.
 
 - `.annotated-compare` + `.ac-heading`, `.ac-block` (`.llm`/`.truth`), `.ac-label`, `.ac-name`, `.ac-tech`, `.ac-content`, `.ac-strike`, `.ac-note` (CH01)
-- `.overlap-text-demo` + `.otd-row` (`.otd-original`), `.otd-label` (`.c1`/`.c2`/`.c3`), `.otd-arrow`, `.otd-note`, `.otd-text` (CH03)
-- `.reindex-compare` + `.rc-arrow`, `.rc-badge-full`, `.rc-badge-inc` (CH03) — **주의**: CH07의 `.rc-timeline`과 같은 `rc-*` 접두어지만 별도 컴포넌트
+- `.text-overlap` + `.to-row` (`.to-original`), `.to-label` (`.c1`/`.c2`/`.c3`), `.to-arrow`, `.to-note`, `.to-text` (CH03)
+- `.reindex-compare` + `.rc-arrow`, `.rc-badge-full`, `.rc-badge-inc` (CH03) — **주의**: CH07의 `.timeline-spans`과 같은 `rc-*` 접두어지만 별도 컴포넌트
 - `.cache-diff` (CH07)
 - `.dual-image` + `figure`/`figcaption` (CH04)
 - `.proc-compare` + `.pc-case` (`.pc-tool`/`.pc-mcp`), `.pc-header` (카드 헤더), `.pc-caption` (그림 캡션), `.pc-badge` (`.pc-badge-tool`/`.pc-badge-mcp`), `.pc-boundary` (`.pc-left`/`.pc-right`), `.pc-layout`, `.pc-bridge`, `.pc-node` (`.pc-store`), `.pc-arrow` (CH06 프로세스 경계 비교)
@@ -69,14 +69,14 @@
 ### pipelines
 흐름/타임라인/파이프라인.
 
-- `.rag-pipeline-box`, `.rag-pipeline-title`, `.rag-pipeline`, `.rag-step`, `.s-num`, `.s-title`, `.s-desc`, `.s-meta`, `.rag-arrow` (CH01)
-- `.rc-timeline` (CH07) — CH03 reindex-compare의 `rc-*`와 네임스페이스 충돌 주의
-- `.ec-cabinet` (CH07)
+- `.pipeline-box`, `.pipeline-title`, `.pipeline`, `.step-card`, `.sc-num`, `.sc-title`, `.sc-desc`, `.sc-meta`, `.flow-arrow` (CH01)
+- `.timeline-spans` (CH07) — CH03 reindex-compare의 `rc-*`와 네임스페이스 충돌 주의
+- `.cabinet-spans` (CH07)
 - `.wrapper-arch` (CH07)
 - `.journey-forward`, `.jf-group`, `.jf-group-label`, `.jf-items`, `.jf-item`, `.jf-part-desc`, `.jf-ch`, `.jf-title`, `.jf-sub`, `.jf-hint`, `.jf-desc` (CH01 여정 맵)
 - `.journey-roadmap`, `.roadmap-line`, `.roadmap-part`, `.roadmap-node`, `.node-dot`, `.node-icon`, `.node-title`, `.node-story` (CH01)
-- `.qr-flow`, `.qr-pool`, `.qr-pool-label`, `.qr-out`, `.qr-up` (+ `.qr-up-1`/`.qr-up-2`), `.qr-up-stem`, `.qr-up-label`, `.qr-node` (+ `.qr-input`/`.qr-final`), `.qr-stage-num`, `.qr-arrow-h` (+ `.dashed`), `.qr-arrow-lbl`, `.qr-input-col`/`.qr-arrow-1~4`/`.qr-stage-1~3`/`.qr-final-col` (CH06 QueryRouter 3단계)
-- `.eng-pipe` + `.ep-head`, `.ep-tag`, `.ep-name`, `.ep-body`, `.ep-port` (+ `.in`/`.out`), `.ep-port-lbl`/`-rule`/`-name`/`-arrow`, `.ep-chambers`, `.ep-stages`, `.ep-stage` (+ `.ep-stage-num`/`-name`/`-fn`), `.ep-caption` (CH11 §11.2 6-stage 엔진 파이프라인)
+- `.rt-flow`, `.rt-pool`, `.rt-pool-label`, `.rt-out`, `.rt-up` (+ `.rt-up-1`/`.rt-up-2`), `.rt-up-stem`, `.rt-up-label`, `.rt-node` (+ `.rt-input`/`.rt-final`), `.rt-stage-num`, `.rt-arrow-h` (+ `.dashed`), `.rt-arrow-lbl`, `.rt-input-col`/`.rt-arrow-1~4`/`.rt-stage-1~3`/`.rt-final-col` (CH06 QueryRouter 3단계)
+- `.processing-pipe` + `.pp-head`, `.pp-tag`, `.pp-name`, `.pp-body`, `.pp-port` (+ `.in`/`.out`), `.pp-port-lbl`/`-rule`/`-name`/`-arrow`, `.pp-chambers`, `.pp-stages`, `.pp-stage` (+ `.pp-stage-num`/`-name`/`-fn`), `.pp-caption` (CH11 §11.2 6-stage 엔진 파이프라인)
 
 ### terminals
 셸/서버 로그 창 재현.
@@ -90,7 +90,7 @@
 인라인 라벨/캡션/태그.
 
 - `.caption`
-- `.eer-caption`, `.cwm-note`
+- `.er-caption`, `.cm-note`
 - `.afm-tag`, `.afm-zone-ch`, `.afm-zone-label`, `.afm-note`
 - `.rl-caption` (CH06 ReAct 루프)
 - Markdown 이탤릭 캡션 규칙: `*그림 N-N. 설명*` (전자책은 Typst 미경유라 수동 번호 유지)
@@ -109,25 +109,35 @@
 
 | 챕터 | 주요 컴포넌트 |
 |-----|--------------|
-| CH01 | journey-forward, journey-roadmap, annotated-compare, rag-pipeline-box |
+| CH01 | journey-forward, journey-roadmap, annotated-compare, pipeline-box |
 | CH02 | arch-fullmap (이하 CH03~CH10 공통) |
-| CH03 | overlap-text-demo, reindex-compare |
-| CH04 | chunk-with-meta, embed-example-row, dual-image |
+| CH03 | text-overlap, reindex-compare |
+| CH04 | card-meta, example-row, dual-image |
 | CH05 | (주로 rag chain 코드 + fullmap) |
-| CH06 | qr-flow (QueryRouter 3단계), proc-compare (@tool vs MCP), rl-caption (ReAct 루프), arch-fullmap |
-| CH07 | rc-timeline, ec-cabinet, wrapper-arch, cache-diff |
+| CH06 | rt-flow (QueryRouter 3단계), proc-compare (@tool vs MCP), rl-caption (ReAct 루프), arch-fullmap |
+| CH07 | timeline-spans, cabinet-spans, wrapper-arch, cache-diff |
 | CH08~10 | arch-fullmap 주로 |
 
 ## 주의사항 (네임스페이스)
 
-- `rc-*` 접두어 **중복 사용**:
-  - CH03: `reindex-compare` (재인덱싱 비교) — `rc-arrow`, `rc-badge-full`, `rc-badge-inc`
-  - CH07: `rc-timeline` (타임라인) — `rc-*` 서브 클래스
-  - 신규 컴포넌트 생성 시 `rc-*` 접두어 재사용 금지. 고유 접두어 확보 필요.
-- `s-*` 접두어는 `rag-pipeline` 내부 step 전용.
-- `qr-*` 접두어는 `.qr-flow` (CH06 QueryRouter) 전용. 다른 컴포넌트에서 재사용 금지.
-- `pc-*` 접두어는 `.proc-compare` (CH06 @tool vs MCP) 전용.
-- `sp-*` 접두어는 **스프링 레퍼런스 책 시리즈 공용 컴포넌트** 전용 (아래 섹션 참조).
+각 컴포넌트마다 고유 접두어를 두 글자 약자로 부여한다. 신규 컴포넌트는 기존 접두어와 충돌하지 않는 짧은 이니셜을 골라야 한다.
+
+| 접두어 | 컴포넌트 | 챕터 |
+|-------|---------|-----|
+| `cm-*` | `.card-meta` (청크 카드) | CH04 |
+| `er-*` | `.example-row` (임베딩 예시) | CH04 |
+| `to-*` | `.text-overlap` (오버랩 시각화) | CH03 |
+| `rc-*` | `.reindex-compare` (재인덱싱 비교 — `rc-arrow`/`rc-badge-full`/`rc-badge-inc`) | CH03 |
+| `ts-*` | `.timeline-spans` (타임라인 — `ts-axis`/`ts-event`/`ts-bar` 등) | CH07 |
+| `cs-*` | `.cabinet-spans` (캐비닛 — `cs-shelf`/`cs-file`/`cs-lookup`) | CH07 |
+| `sc-*` | `.step-card` (`.pipeline-box` 내부 step — `sc-num`/`sc-title`/`sc-desc`/`sc-meta`) | 범용 |
+| `pp-*` | `.processing-pipe` (다단계 파이프 — `pp-port`/`pp-stage` 등) | CH11 |
+| `rt-*` | `.rt-flow` (CH06 QueryRouter 라우팅 — `rt-pool`/`rt-stage`/`rt-arrow` 등) | CH06 |
+| `pc-*` | `.proc-compare` (@tool vs MCP 프로세스 경계) | CH06 |
+| `sp-*` | 스프링 레퍼런스 책 시리즈 공용 (아래 섹션 참조) | 스프링 책 |
+| `afm-*` | `.arch-fullmap` (책 구성도) | 전 챕터 |
+| `at-*` | `.arch-tree` (아키텍처 트리) | 전 챕터 |
+| `tl-*` | `.terminal-log` (셸/서버 로그) | 전 챕터 |
 
 ## 스프링 시리즈 공용 컴포넌트 (sp-*)
 

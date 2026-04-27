@@ -5,7 +5,7 @@
 ## 속함
 
 - `.annotated-compare` + `.ac-*` (LLM 환각 vs 사내규정, CH01)
-- `.overlap-text-demo` + `.otd-*` (청크 오버랩 시각화, CH03)
+- `.text-overlap` + `.otd-*` (청크 오버랩 시각화, CH03)
 - `.reindex-compare` + `.rc-arrow`, `.rc-badge-full`, `.rc-badge-inc` (전체 vs 증분 재인덱싱, CH03)
 - `.cache-diff` (캐시 전후 시간선, CH07)
 - `.dual-image` + `figure`/`figcaption` (2분할 이미지, CH04)
@@ -13,12 +13,12 @@
 
 ## 속하지 않음
 
-- 순차 흐름 타임라인(`.rc-timeline`) → [`../pipelines/`](../pipelines/) — 같은 `rc-*` 접두어지만 별도
+- 순차 흐름 타임라인(`.timeline-spans`) → [`../pipelines/`](../pipelines/) — 같은 `rc-*` 접두어지만 별도
 - 청크 단위 카드 → [`../cards/`](../cards/)
 
 ## 주의
 
-`rc-*` 접두어는 이 카테고리(CH03 reindex-compare)와 pipelines 카테고리(CH07 rc-timeline) **두 곳에서 사용** 중이다. 신규 `rc-*` 클래스 추가 금지.
+`rc-*` 접두어는 이 카테고리(CH03 reindex-compare)와 pipelines 카테고리(CH07 timeline-spans) **두 곳에서 사용** 중이다. 신규 `rc-*` 클래스 추가 금지.
 
 ## 컴포넌트 목록
 
@@ -66,36 +66,36 @@
 
 ---
 
-### .overlap-text-demo
+### .text-overlap
 
-**언제 쓰는가**: **하나의 긴 문장을 청크 단위로 쪼갤 때 겹치는 구간을 하이라이트**할 때. 진실값 비교가 아니라 "같은 원본이 이렇게 잘린다"를 순차적으로 보여주는 용도. `<mark>`로 겹침 구간을 강조하고 `.otd-arrow`로 흐름을 아래로 이어간다. 청크 오버랩, 슬라이딩 윈도우처럼 **같은 원본 텍스트의 분할 결과를 나열**하는 경우에 쓴다.
+**언제 쓰는가**: **하나의 긴 문장을 청크 단위로 쪼갤 때 겹치는 구간을 하이라이트**할 때. 진실값 비교가 아니라 "같은 원본이 이렇게 잘린다"를 순차적으로 보여주는 용도. `<mark>`로 겹침 구간을 강조하고 `.to-arrow`로 흐름을 아래로 이어간다. 청크 오버랩, 슬라이딩 윈도우처럼 **같은 원본 텍스트의 분할 결과를 나열**하는 경우에 쓴다.
 
 **사용 챕터**: CH03
 
 **HTML 사용 예** (`projects/사내AI비서_v2/chapters/03-어떤-문서를-넣을까.md` L140 부근):
 
 ```html
-<div class="overlap-text-demo">
-  <div class="otd-row otd-original">
-    <span class="otd-label">원본</span>
-    <span class="otd-text">신입사원은 첫 3년간 연차가 없습니다. 대신 매월 1회 리프레시 데이를 유급으로 제공합니다.</span>
+<div class="text-overlap">
+  <div class="to-row to-original">
+    <span class="to-label">원본</span>
+    <span class="to-text">신입사원은 첫 3년간 연차가 없습니다. 대신 매월 1회 리프레시 데이를 유급으로 제공합니다.</span>
   </div>
-  <div class="otd-arrow">청크 크기 500자 · 오버랩 100자로 자르면</div>
-  <div class="otd-row">
-    <span class="otd-label c1">청크 1</span>
-    <span class="otd-text">신입사원은 첫 3년간 연차가 없습니다. <mark>대신 매월 1회</mark></span>
+  <div class="to-arrow">청크 크기 500자 · 오버랩 100자로 자르면</div>
+  <div class="to-row">
+    <span class="to-label c1">청크 1</span>
+    <span class="to-text">신입사원은 첫 3년간 연차가 없습니다. <mark>대신 매월 1회</mark></span>
   </div>
-  <div class="otd-row">
-    <span class="otd-label c2">청크 2</span>
-    <span class="otd-text"><mark>대신 매월 1회</mark> 리프레시 데이를 유급으로 제공합니다.</span>
+  <div class="to-row">
+    <span class="to-label c2">청크 2</span>
+    <span class="to-text"><mark>대신 매월 1회</mark> 리프레시 데이를 유급으로 제공합니다.</span>
   </div>
-  <div class="otd-note">겹친 <b>오버랩 구간</b>이 경계에서 문맥이 끊기지 않게 해줍니다.</div>
+  <div class="to-note">겹친 <b>오버랩 구간</b>이 경계에서 문맥이 끊기지 않게 해줍니다.</div>
 </div>
 ```
 
 **렌더 CSS**: `styles/diagrams.css:379-435` (컨테이너 + 행 + 라벨 색상 + mark 강조 + 화살표 + 각주)
 
-**변형**: `.otd-row`에 `.otd-original` modifier로 원본 행을 회색 배경으로 구분. `.otd-label`에 `.c1`/`.c2`/`.c3`로 청크별 색상(blue/indigo/purple). 각 행의 `<mark>`가 겹치는 구간을 노란색으로 강조.
+**변형**: `.to-row`에 `.to-original` modifier로 원본 행을 회색 배경으로 구분. `.to-label`에 `.c1`/`.c2`/`.c3`로 청크별 색상(blue/indigo/purple). 각 행의 `<mark>`가 겹치는 구간을 노란색으로 강조.
 
 **피해야 할 것**
 - A vs B 진실값 비교에 사용 금지. `.annotated-compare`를 써야 한다
@@ -143,12 +143,12 @@
 
 **변형**: `.rc-badge-full`(danger 배경)과 `.rc-badge-inc`(info 배경)로 카드 헤더 색 구분. `.rc-doc`에 `.rc-changed`(주황/변경), `.rc-keep`(회색/유지), `.rc-new`(녹색/신규) modifier로 문서별 상태 표시.
 
-**주의**: `rc-*` 접두어를 CH07 `.rc-timeline`과 공유하지만 별개 컴포넌트다. 이 카테고리 안에서는 `.reindex-compare` 하위로만 사용하고, 시간 순 타임라인은 pipelines 카테고리를 쓴다.
+**주의**: `rc-*` 접두어를 CH07 `.timeline-spans`과 공유하지만 별개 컴포넌트다. 이 카테고리 안에서는 `.reindex-compare` 하위로만 사용하고, 시간 순 타임라인은 pipelines 카테고리를 쓴다.
 
 **피해야 할 것**
 - 3개 이상 전략 비교 금지. `grid-template-columns: 1fr 1fr` 고정이므로 좌우 2열 전용
 - 진실값 비교(`.annotated-compare`) 대체재로 쓰지 말 것. 이 컴포넌트는 "전략의 절차 대비"가 목적이지 "틀림/맞음"이 아니다
-- `.rc-timeline`(pipelines)에 이 카드 스타일을 섞지 말 것. 접두어는 같지만 레이아웃이 다르다
+- `.timeline-spans`(pipelines)에 이 카드 스타일을 섞지 말 것. 접두어는 같지만 레이아웃이 다르다
 
 ---
 
@@ -188,7 +188,7 @@
 **변형**: `.cd-col-title`에 `.cd-response`(인디고 `#4f46e5`) 또는 `.cd-embedding`(에메랄드 `#059669`) modifier로 `--cd-accent` 커스텀 속성이 바뀌어 배지 배경색이 결정된다. `.cd-badge`는 모노스페이스 폰트로 클래스 이름 그대로 표기.
 
 **피해야 할 것**
-- 시간 경과(before/after) 비교에 쓰지 말 것. 그리드는 항목별 스펙 대조용이지 타임라인이 아니다. 시간선은 `.rc-timeline`(pipelines)을 쓴다
+- 시간 경과(before/after) 비교에 쓰지 말 것. 그리드는 항목별 스펙 대조용이지 타임라인이 아니다. 시간선은 `.timeline-spans`(pipelines)을 쓴다
 - 3개 이상 캐시 비교 금지. `grid-template-columns: 110px 1fr 1fr` 고정
 - 숫자 성능 비교(ms, MB)에만 치우치지 말 것. "무엇을·어디에·얼마나·언제"처럼 속성 전반을 보여주는 게 이 컴포넌트의 강점
 
@@ -286,5 +286,5 @@
 - 3개 이상 카드 비교 금지. 프로세스 경계 대비는 **두 가지 전략**(단일 vs 분리) 전제. 셋 이상이면 `.reindex-compare` 또는 `.cache-diff`를 고려
 - solid 배경 배지(예: `background: var(--color-info)` + 흰 글자) 사용 금지. 본문 톤과 대비가 너무 강해 시선을 빼앗음. 반드시 **tinted**(light bg + dark text) 유지
 - `.pc-boundary` 점선 대신 실선 사용 금지. 점선은 "소속 경계"를 은유하는 핵심 시각 언어
-- `.pc-node`를 3~4개 이상 연속 나열 금지. 이 컴포넌트는 **경계 표시가 주제**이므로 노드가 많으면 파이프라인(`../pipelines/`의 `.rag-pipeline-box`)이 더 적합
+- `.pc-node`를 3~4개 이상 연속 나열 금지. 이 컴포넌트는 **경계 표시가 주제**이므로 노드가 많으면 파이프라인(`../pipelines/`의 `.pipeline-box`)이 더 적합
 - 마크다운 이탤릭 캡션(`*그림 ...*`)을 컴포넌트 바깥에 배치 금지. `.pc-caption`을 컴포넌트 내부 마지막 자식으로 넣어 간격·스타일 통일

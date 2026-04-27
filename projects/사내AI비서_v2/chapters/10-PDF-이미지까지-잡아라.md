@@ -165,32 +165,32 @@ pypdf 결과, 빈 문자열.
 
 챕터 4부터 7까지 쌓아 올린 파이프라인은 이번 챕터에서 건드리지 않습니다. 파싱·청킹·임베딩·검색·에이전트·캐시·모니터링까지 모든 층이 원래 자리에 그대로 있습니다. 챕터 8과 9에서 실험한 튜닝(단락 청킹·리랭킹·약어 확장·부모 문서 검색 등)은 아직 이 파이프라인에 얹지 않은 부품 상태로 따로 놓여 있습니다. 이번 장의 할 일은 기존 파이프라인의 앞단과 뒷단에 한 층씩 새로 얹고(PDF 이미지 파서와 RAG 평가 프레임워크), 뒷단에서 그 평가 도구로 챕터 8·9의 부품들을 조합해 어떤 조합이 정말 수치를 끌어올리는지 확인하는 작업입니다. 이 과정을 마치면 커넥트HR 파이프라인은 챕터 7의 기본 형태에서 스캔본까지 읽고 품질을 수치로 검증하는 새 버전으로 올라가 다음 챕터의 조립대 위로 넘어갑니다.
 
-<div class="rag-pipeline-box">
+<div class="pipeline-box">
 <div class="sp-figure-title">그림 10-2. 챕터 4~7 파이프라인은 그대로 두고 앞뒤에 두 층을 더합니다. 챕터 8·9 튜닝은 뒷단 평가에서 부품으로 조립합니다</div>
 
-<div class="rag-step">
-<div class="s-meta">챕터 10 추가 · 앞단</div>
-<div class="s-num">NEW</div>
-<div class="s-title">PDF 이미지 파서</div>
-<div class="s-desc">스캔본·그래프·표가 들어와도 읽어냄. OCR(확대경) · Vision LLM(눈) · 하이브리드(pypdf → Vision 폴백)</div>
+<div class="step-card">
+<div class="sc-meta">챕터 10 추가 · 앞단</div>
+<div class="sc-num">NEW</div>
+<div class="sc-title">PDF 이미지 파서</div>
+<div class="sc-desc">스캔본·그래프·표가 들어와도 읽어냄. OCR(확대경) · Vision LLM(눈) · 하이브리드(pypdf → Vision 폴백)</div>
 </div>
 
-<div class="rag-arrow">↓</div>
+<div class="flow-arrow">↓</div>
 
-<div class="rag-step">
-<div class="s-meta">챕터 4~7 기존 파이프라인 (그대로)</div>
-<div class="s-num">유지</div>
-<div class="s-title">청킹 · 임베딩 · 검색 · 에이전트 · 운영 래퍼</div>
-<div class="s-desc">손대지 않습니다. 챕터 8·9의 검색 튜닝과 질의 재작성은 파이프라인에 얹지 않은 부품 상태로 옆에 놓여 있고, 뒷단 평가에서 조합으로 꺼내 씁니다.</div>
+<div class="step-card">
+<div class="sc-meta">챕터 4~7 기존 파이프라인 (그대로)</div>
+<div class="sc-num">유지</div>
+<div class="sc-title">청킹 · 임베딩 · 검색 · 에이전트 · 운영 래퍼</div>
+<div class="sc-desc">손대지 않습니다. 챕터 8·9의 검색 튜닝과 질의 재작성은 파이프라인에 얹지 않은 부품 상태로 옆에 놓여 있고, 뒷단 평가에서 조합으로 꺼내 씁니다.</div>
 </div>
 
-<div class="rag-arrow">↓</div>
+<div class="flow-arrow">↓</div>
 
-<div class="rag-step">
-<div class="s-meta">챕터 10 추가 · 뒷단</div>
-<div class="s-num">NEW</div>
-<div class="s-title">RAG 평가 프레임워크</div>
-<div class="s-desc">답변 품질을 숫자로 측정. Precision@k · Recall · Hallucination Rate · Latency</div>
+<div class="step-card">
+<div class="sc-meta">챕터 10 추가 · 뒷단</div>
+<div class="sc-num">NEW</div>
+<div class="sc-title">RAG 평가 프레임워크</div>
+<div class="sc-desc">답변 품질을 숫자로 측정. Precision@k · Recall · Hallucination Rate · Latency</div>
 </div>
 
 </div>

@@ -346,28 +346,28 @@ LLM도 같은 방식이면 됩니다. 사내 문서 전체를 외우게 할 필�
 
 <div class="fig-scale-75">
 <div class="figure-group">
-<div class="rag-pipeline-box">
-  <div class="rag-pipeline-title">RAG 파이프라인. 사서가 일하는 순서</div>
-  <div class="rag-pipeline">
-    <div class="rag-step">
-      <div class="s-meta">서가에 책 꽂기</div>
-      <div class="s-num">STEP 01</div>
-      <div class="s-title">문서 저장</div>
-      <div class="s-desc">문서를 벡터로 변환해<br>ChromaDB에 저장</div>
+<div class="pipeline-box">
+  <div class="pipeline-title">RAG 파이프라인. 사서가 일하는 순서</div>
+  <div class="pipeline">
+    <div class="step-card">
+      <div class="sc-meta">서가에 책 꽂기</div>
+      <div class="sc-num">STEP 01</div>
+      <div class="sc-title">문서 저장</div>
+      <div class="sc-desc">문서를 벡터로 변환해<br>ChromaDB에 저장</div>
     </div>
-    <div class="rag-arrow">→</div>
-    <div class="rag-step">
-      <div class="s-meta">사서가 책 찾기</div>
-      <div class="s-num">STEP 02</div>
-      <div class="s-title">문서 검색</div>
-      <div class="s-desc">질문과 가장 비슷한<br>문서를 자동으로 찾기</div>
+    <div class="flow-arrow">→</div>
+    <div class="step-card">
+      <div class="sc-meta">사서가 책 찾기</div>
+      <div class="sc-num">STEP 02</div>
+      <div class="sc-title">문서 검색</div>
+      <div class="sc-desc">질문과 가장 비슷한<br>문서를 자동으로 찾기</div>
     </div>
-    <div class="rag-arrow">→</div>
-    <div class="rag-step">
-      <div class="s-meta">AI가 읽고 답하기</div>
-      <div class="s-num">STEP 03</div>
-      <div class="s-title">답변 생성</div>
-      <div class="s-desc">찾은 문서를 LLM에<br>넘겨서 답변 생성</div>
+    <div class="flow-arrow">→</div>
+    <div class="step-card">
+      <div class="sc-meta">AI가 읽고 답하기</div>
+      <div class="sc-num">STEP 03</div>
+      <div class="sc-title">답변 생성</div>
+      <div class="sc-desc">찾은 문서를 LLM에<br>넘겨서 답변 생성</div>
     </div>
   </div>
 </div>

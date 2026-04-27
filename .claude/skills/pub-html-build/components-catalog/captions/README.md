@@ -6,8 +6,8 @@
 
 - 이미지 캡션: Markdown 이탤릭 `*그림 N-N. 설명*` (이 프로젝트는 Typst 미경유 전자책이라 수동 번호 유지)
 - `.caption` (일반 캡션)
-- `.eer-caption` (임베딩 예시 전용)
-- `.cwm-note` (청크 카드 보조 설명)
+- `.er-caption` (임베딩 예시 전용)
+- `.cm-note` (청크 카드 보조 설명)
 - `.rl-caption` (CH06 ReAct 루프 캡션)
 - 태그/뱃지: `.afm-tag`, `.afm-zone-ch`, `.afm-zone-label`, `.afm-note`
 - `.api-tag`, `.rag-tag`, `.agent-tag`, `.tune-tag`
@@ -74,7 +74,7 @@
 - Markdown 이탤릭으로 충분한 자리에 HTML `.caption` 남용 금지
 - `.chapter-image` 바깥에서 단독 사용 금지 (스코핑 CSS)
 
-#### .eer-caption (임베딩 예시 캡션)
+#### .er-caption (임베딩 예시 캡션)
 
 **언제 쓰는가**: CH04 임베딩 예시 박스(`.eer-*`) 바로 아래. 좌/우 2열 구성의 이중 이미지에 공통 캡션이 필요할 때.
 
@@ -86,7 +86,7 @@
   <div class="eer-left">...</div>
   <div class="eer-right">...</div>
 </div>
-<div class="eer-caption">그림 4-5. 왼쪽(문장 임베딩 벡터 예시. 앞 몇 자리만 봐도 비슷/다름이 드러남), 오른쪽(임베딩 공간에 찍힌 좌표. 의미가 가까운 문서가 한 곳에 모임)</div>
+<div class="er-caption">그림 4-5. 왼쪽(문장 임베딩 벡터 예시. 앞 몇 자리만 봐도 비슷/다름이 드러남), 오른쪽(임베딩 공간에 찍힌 좌표. 의미가 가까운 문서가 한 곳에 모임)</div>
 ```
 
 **렌더 CSS**: `diagrams.css:1918`
@@ -97,7 +97,7 @@
 - 단일 이미지에 사용 금지 (좌/우 2열 전용)
 - 임베딩 박스 바깥에서 사용 금지
 
-#### .cwm-note (청크 카드 보조 설명)
+#### .cm-note (청크 카드 보조 설명)
 
 **언제 쓰는가**: CH04 청크 카드(`.cwm-*`) 하단에 "이 데이터가 실제로 어디에 저장되는지" 같은 보조 설명이 필요할 때.
 
@@ -105,7 +105,7 @@
 
 **HTML 사용 예**:
 ```html
-<div class="cwm-note">이 라벨들이 ChromaDB에 <code>metadata</code> 필드로 같이 저장됩니다. 검색할 때 "HR 폴더의 3페이지 근처 문서만"처럼 필터링도 가능합니다.</div>
+<div class="cm-note">이 라벨들이 ChromaDB에 <code>metadata</code> 필드로 같이 저장됩니다. 검색할 때 "HR 폴더의 3페이지 근처 문서만"처럼 필터링도 가능합니다.</div>
 ```
 
 **렌더 CSS**: `diagrams.css:1824`, `diagrams.css:1832` (내부 `code` 규칙)

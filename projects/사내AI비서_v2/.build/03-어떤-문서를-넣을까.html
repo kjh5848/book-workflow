@@ -194,25 +194,25 @@
 </table>
 <h3>3.6.1 오버랩이 왜 필요한가</h3>
 <p>500자마다 딱 잘라 버리면 문장이 청크 경계에서 끊깁니다. 그래서 앞뒤 청크가 일정 구간(여기선 100자) 겹치게 자릅니다. 실제 사내 규정 문장으로 어떻게 잘리는지 보겠습니다.</p>
-<div class="overlap-text-demo">
-  <div class="otd-row otd-original">
-    <span class="otd-label">원본</span>
-    <span class="otd-text">신입사원은 첫 3년간 연차가 없습니다. 대신 매월 1회 리프레시 데이를 유급으로 제공합니다. 3년 근속 시점에 30일의 연차가 일시에 발생합니다.</span>
+<div class="text-overlap">
+  <div class="to-row to-original">
+    <span class="to-label">원본</span>
+    <span class="to-text">신입사원은 첫 3년간 연차가 없습니다. 대신 매월 1회 리프레시 데이를 유급으로 제공합니다. 3년 근속 시점에 30일의 연차가 일시에 발생합니다.</span>
   </div>
-  <div class="otd-arrow">청크 사이즈에 맞춰 자르되, 100자씩 겹치게</div>
-  <div class="otd-row">
-    <span class="otd-label c1">청크 1</span>
-    <span class="otd-text">신입사원은 첫 3년간 연차가 없습니다. <mark>대신 매월 1회 리프레시 데이를 유급으로 제공합니다.</mark></span>
+  <div class="to-arrow">청크 사이즈에 맞춰 자르되, 100자씩 겹치게</div>
+  <div class="to-row">
+    <span class="to-label c1">청크 1</span>
+    <span class="to-text">신입사원은 첫 3년간 연차가 없습니다. <mark>대신 매월 1회 리프레시 데이를 유급으로 제공합니다.</mark></span>
   </div>
-  <div class="otd-row">
-    <span class="otd-label c2">청크 2</span>
-    <span class="otd-text"><mark>대신 매월 1회 리프레시 데이를 유급으로 제공합니다.</mark> 3년 근속 시점에 <mark>30일의 연차가 일시에 발생합니다.</mark></span>
+  <div class="to-row">
+    <span class="to-label c2">청크 2</span>
+    <span class="to-text"><mark>대신 매월 1회 리프레시 데이를 유급으로 제공합니다.</mark> 3년 근속 시점에 <mark>30일의 연차가 일시에 발생합니다.</mark></span>
   </div>
-  <div class="otd-row">
-    <span class="otd-label c3">청크 3</span>
-    <span class="otd-text"><mark>30일의 연차가 일시에 발생합니다.</mark> 단, 입사 후 3년이 경과하기 전 …</span>
+  <div class="to-row">
+    <span class="to-label c3">청크 3</span>
+    <span class="to-text"><mark>30일의 연차가 일시에 발생합니다.</mark> 단, 입사 후 3년이 경과하기 전 …</span>
   </div>
-  <div class="otd-note">노란색이 <b>오버랩 영역</b>입니다. 같은 문장이 양쪽 청크에 모두 들어가 있어, 어느 청크가 검색돼도 경계 문장이 살아 있습니다. 오버랩이 0이라면 "리프레시 데이…"가 어느 청크에서도 온전히 나오지 않는 상황이 생깁니다.</div>
+  <div class="to-note">노란색이 <b>오버랩 영역</b>입니다. 같은 문장이 양쪽 청크에 모두 들어가 있어, 어느 청크가 검색돼도 경계 문장이 살아 있습니다. 오버랩이 0이라면 "리프레시 데이…"가 어느 청크에서도 온전히 나오지 않는 상황이 생깁니다.</div>
 </div>
 <p>이 책에서는 챕터 4에서 <strong>고정 크기(500자 + 100자 오버랩)</strong> 으로 시작하고, 챕터 8에서 의미 기준 청킹과 다른 오버랩 값을 비교 실험합니다.</p>
 <h2>3.7 재인덱싱 전략</h2>
