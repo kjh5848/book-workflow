@@ -19,11 +19,19 @@
 | 개념          | 정체       | 역할                                                                                        |
 | ------------- | ---------- | ------------------------------------------------------------------------------------------- |
 | **STEP**      | 흐름       | 1~7번까지 순서대로 진행하는 워크플로우 단계                                                 |
-| **에이전트**  | 전문가     | 각 역할을 담당하는 서브에이전트 (writer, editor, illustrator, publisher, analyst-architect) |
+| **에이전트**  | 전문가     | 각 역할을 담당하는 서브에이전트 (writer, editor, analyst-architect, publisher / pm-strategist는 책 외 영역) |
 | **스킬**      | 도구       | 하나의 작업만 수행하고 결과를 돌려주는 원자적 도구 (22개)                                   |
 | **검토 모드** | 체크리스트 | 산출물 품질을 검증하는 관점과 질문 목록 (3개)                                               |
 
 메인 세션이 workflow를 따라가며 전문 에이전트를 디스패치하고, 각 에이전트가 스킬을 써서 산출물을 만든다.
+
+### 명령어 처리 규칙 (메인 세션 행동)
+
+사용자가 아래 명령어 표의 명령어 중 하나를 입력하면 메인 세션은 다음 순서를 따른다.
+
+1. **상세 칼럼의 워크플로우 파일을 먼저 Read한다** — 흐름·산출물 템플릿·검토 체크리스트는 그 파일에 있음
+2. 가이드대로 진행하며 표시된 에이전트를 순서대로 디스패치한다 — 에이전트 AGENT.md가 자기 담당 step을 `@import`하므로 메인 세션이 step 내용을 프롬프트에 풀어 넣지 않아도 된다
+3. 산출물을 명시 경로에 저장하고 progress.json·answers.md를 갱신한다
 
 ## 전체 워크플로우 (7 STEP)
 
@@ -61,7 +69,7 @@ Phase 6 ── 출판 (인쇄소)
 | `검토 [챕터]`      | —    | `review/feedback-log.md`             | `.claude/workflow/review-guide.md`                 |
 | `프롤로그 생성`    | 6    | `book/프롤로그.md`                   | `.claude/workflow/step6-프롤로그.md`               |
 | `마무리`           | 7    | `book/에필로그.md` 등                | `.claude/workflow/step7-마무리.md`                 |
-| `이미지 분석`      | 5    | `[IMAGE PROMPT]` 플레이스홀더       | illustrator + image-analyzer 스킬                  |
+| `이미지 분석`      | 5    | `[IMAGE PROMPT]` 플레이스홀더       | image-analyzer 스킬 (메인 세션 직접 호출)         |
 | `출판정보 생성`    | 출판 | `book/publish-info-*.md`             | publisher + pub-info 스킬                          |
 | `인쇄소`           | 출판 | `book/output/*.pdf`                  | Typst 파이프라인. 아래 "인쇄소 실행 흐름" 참조     |
 | `HTML 빌드`        | 집필 | `.build/*.html`                      | `pub-html-build` 스킬. 아래 "HTML 파이프라인" 참조. PDF가 필요하면 별도 스킬 `pub-html-to-pdf` |
@@ -178,6 +186,6 @@ projects/[책이름]/
 | `.claude/rules/`                   | 규칙 8개 (위 표 참조)                                                                   |
 | `.claude/hooks/`                   | PreToolUse 훅 (챕터 스타일 강제)                                                        |
 | `.claude/skills/CATALOG.md`        | 22개 스킬 카탈로그                                                                      |
-| `.claude/agents/`                  | 에이전트 6개 (analyst-architect, writer, editor, illustrator, publisher, pm-strategist) |
+| `.claude/agents/`                  | 에이전트 5개 (analyst-architect, writer, editor, publisher, pm-strategist) |
 | `.claude/workflow/step[N]-*.md`    | STEP별 실행 가이드                                                                      |
 | `.claude/workflow/review-guide.md` | 검토 모드 체크리스트                                                                    |
