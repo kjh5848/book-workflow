@@ -1,7 +1,7 @@
 # STEP 5. 챕터 집필 — "쓴다" (챕터마다 반복)
 
 > **목적**: 이야기 파트 + 기술 파트 초안 작성.
-> **에이전트**: writer → editor (이미지: 유저 요청 시 illustrator)
+> **에이전트**: writer → editor (이미지: 유저 요청 시 메인 세션이 visual·image-analyzer·screenshot 스킬 호출)
 > **검토**: [인사이트 검토] + [의도감시 검토] + [감수 검토] (3개 모두)
 > **산출물**: `chapters/NN-제목.md`
 
@@ -69,7 +69,7 @@ Phase 5a ── 글 작성 (유저 대화 필수)
 
 Phase 5b ── 이미지 생성 (유저 요청 시)
   유저가 코드 실행 결과를 확인한 후 요청
-  Mermaid/D2 다이어그램 → illustrator 에이전트
+  Mermaid/D2 다이어그램 → 메인 세션이 visual·design-doc-mermaid 스킬 호출
   터미널/브라우저 캡처 → 유저가 screenshot 스킬 직접 호출
   개념도 → 유저가 [GEMINI PROMPT]를 Gemini에 수동 입력
 

@@ -1,7 +1,7 @@
 # STEP 3. 시나리오 + 버전 설계 — "어떤 순서로 이야기하지"
 
 > **목적**: 책 전체를 관통하는 이야기 + 코드를 버전별로 쪼개기.
-> **에이전트**: analyst-architect → illustrator → editor
+> **에이전트**: analyst-architect → editor (시각 자료는 메인 세션이 직접 visual·image-analyzer 스킬 호출)
 > **검토**: [인사이트 검토] + [감수 검토]
 > **산출물**: `planning/scenario.md` + `versions/`
 
