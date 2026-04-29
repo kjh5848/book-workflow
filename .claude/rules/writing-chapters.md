@@ -26,6 +26,52 @@ paths:
 
 ---
 
+## 형식 표준 (책 무관 강제)
+
+언어·도메인이 달라도 모든 책의 챕터 마크다운에 적용되는 검증 가능한 형식. 항목별 정식 정의는 단일 진실원에 있고, 여기서는 **검증 시점에 챕터에 강제할 항목**만 모은다.
+
+### 1. "이것만은 기억하자" — `:::remember` directive 의무
+
+마크다운 H2 (`## 이것만은 기억하자`)로 직접 적지 않는다. **반드시** `:::remember` directive를 사용해서 카탈로그 박스로 렌더되도록 한다.
+
+```markdown
+:::remember
+- **첫 번째 핵심**. 짧은 설명
+- **두 번째 핵심**. 짧은 설명
+- **다음 챕터에서는** 이런 걸 만납니다
+:::
+```
+
+이유: H2 평문은 박스 없이 본문 톤과 섞인다. `:::remember`는 `.remember` CSS 박스로 렌더되어 시각적 강조 + 챕터 닫는 신호 명확.
+
+### 2. 다이어그램 빈도 — 실습 1개당 흐름 다이어그램 1개 이상
+
+각 실습 섹션에는 **데이터·요청·상태가 흐르는 시각화**를 최소 1개 포함한다. "코드 → 결과" 사이를 글자만으로 잇지 않는다.
+
+**서버 내부 흐름 시각화 권장**: `@PostMapping → Service → 외부 API → 응답` 같은 **코드 진입점부터 응답까지** 한 화면에 보여주는 다이어그램이 챕터마다 한 번 이상 등장하면 독자 이해도 급상승.
+
+권장 컴포넌트는 단일 진실원 카탈로그에서 고른다 → `.claude/skills/pub-html-build/components-catalog/inventory.md` (전수 목록 + 접두어 네임스페이스).
+
+### 3. 코드 작성 형식 — `code.md` 참조
+
+다언어 TODO 표준(Python/Java/Kotlin/JS/HTML/Bash)·`# TODO:` 종결어미·`# N.` 단계 번호·코드블록 헤더·실습 코드블록 앞 안내문은 **`code.md`의 다언어 TODO 표준 + 실습 코드블록 작성 규칙**이 단일 진실원. 챕터 검토 시 그곳 규칙을 따른다.
+
+### 4. 시각 토큰·인라인 스타일 — `brand-tokens.md` 참조
+
+색 토큰(Primary·Secondary·Info)·인라인 `style="..."` 금지·hex 직접 박힘 금지·Utility 토큰 신규 사용 금지·세 파일 동기화는 **`brand-tokens.md`** 가 단일 진실원. 챕터에서 컴포넌트를 만지거나 새 클래스를 도입할 때 그곳을 따른다.
+
+### 5. 검증 체크리스트 (editor가 챕터 검토 시)
+
+- [ ] `:::remember` directive 존재 1개 이상 (#1)
+- [ ] 실습 코드블록 수 ≤ 흐름 다이어그램 수 (#2)
+- [ ] TODO 주석 모두 `~합니다` + `# N.`/`// N.` 단계 번호 동반 (#3, code.md)
+- [ ] 인라인 `style="..."` 0건 (#4, brand-tokens.md)
+- [ ] hex 색 직접 박힘 0건 (#4, brand-tokens.md)
+- [ ] Utility 토큰(`success/warning/danger`) 신규 사용 0건 (#4, brand-tokens.md)
+- [ ] 카탈로그에 없는 신규 클래스 사용 0건 — 있으면 `inventory.md` 추가 후 사용 (#2)
+
+---
+
 ## 코드 분석 참조 (최우선)
 
 챕터 집필·수정 전에 반드시 **`projects/[책이름]/planning/code-analysis-vN.md`** (가장 최근 버전)를 읽는다. 완성 코드의 구조·재사용 관계·기술 스택·의도 밖 제외 목록을 정리한 단일 근거.
@@ -116,10 +162,10 @@ paths:
 |------|-------------|------|
 | Mermaid/D2 다이어그램 | MD 안에 mermaid 코드블록 | writer |
 | 플로우 카드 (시퀀스·단계 흐름) | `[FLOW CARD: id]` + desc 서술 | writer 삽입 → 유저가 visual 스킬 호출 |
-| 개념도 | `[GEMINI PROMPT: 설명]` | writer 삽입 → 유저가 Gemini에 입력 |
+| 개념도 | `[IMAGE PROMPT: 설명]` | writer 삽입 → 유저가 Gemini에 입력 |
 | 실행 결과 캡처 | `[CAPTURE NEEDED: 설명]` | writer 삽입 → 유저가 screenshot 스킬 호출 |
 
-**경로 규칙**: `assets/CH{N}/{gemini|terminal|diagram}/{NN}_{id}.png`
+**경로 규칙**: `assets/CH{N}/{image|terminal|diagram}/{NN}_{id}.png`
 
 ### 플로우 카드 플레이스홀더 형식
 
