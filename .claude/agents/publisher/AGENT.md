@@ -19,18 +19,49 @@ model: sonnet
 @.claude/rules/structure.md
 @.claude/rules/brand-tokens.md
 
-## 소유 스킬
+## 소유 스킬 — 두 출판 경로
+
+오픈스킬북스 책은 **두 갈래로 동시 출판**된다. publisher는 두 경로를 모두 빌드한다.
+
+| 경로 | 사이즈 | 산출물 | 플랫폼 |
+|------|--------|--------|--------|
+| **전자책** | A4 (210×297) | `.build/pdf/*.pdf` | e퍼플 등 전자책 플랫폼 |
+| **POD 인쇄** | B5 (188×257) | `book/output/*.pdf` | 교보 바로출판 등 POD |
+
+### 전자책 경로 (HTML → A4 PDF)
 
 | 스킬 | 역할 | 스킬 경로 |
 |------|------|----------|
-| pub-build | PDF 빌드 (MD→Typst→PDF) | skills/pub-build/ |
-| pub-layout-check | 레이아웃 분석 | skills/pub-layout-check/ |
-| pub-image-optimize | 이미지 autocrop + 크기 조절 | skills/pub-image-optimize/ |
-| pub-page-fit | 페이지 밀도 조정 전략 | skills/pub-page-fit/ |
-| pub-typst-design | Typst 템플릿 규칙 | skills/pub-typst-design/ |
-| pub-d2-diagram | D2 다이어그램 빌드 | skills/pub-d2-diagram/ |
-| pdf-ty | Typst 기반 PDF 빌드 | skills/pdf-ty/ |
+| pub-html-build | MD → HTML 빌드 + 디자인 토큰 | skills/pub-html-build/ |
+| pub-html-to-pdf | HTML → A4 PDF (Playwright Chromium) | skills/pub-html-to-pdf/ |
+| pub-page-fit-html | HTML PDF 자동 밀도 조정 | skills/pub-page-fit-html/ |
+
+### POD 경로 (Typst → B5 PDF)
+
+| 스킬 | 역할 | 스킬 경로 |
+|------|------|----------|
+| pub-build | MD → Typst → B5 PDF 빌드 파이프라인 | skills/pub-build/ |
+| pdf-ty | Typst PDF 사용자 트리거 | skills/pdf-ty/ |
+| pub-typst-design | Typst 템플릿 + B5 preset | skills/pub-typst-design/ |
+| pub-page-fit | Typst 레이아웃 자동수정 | skills/pub-page-fit/ |
+| pub-image-optimize | autocrop + Typst auto-image | skills/pub-image-optimize/ |
+| pub-d2-diagram | D2 다이어그램 빌드 (Typst용) | skills/pub-d2-diagram/ |
+
+### 공용
+
+| 스킬 | 역할 | 스킬 경로 |
+|------|------|----------|
+| pub-studio | 프리뷰 에디터 + 검증 빌드 통합 | skills/pub-studio/ |
+| pub-layout-check | PDF 레이아웃 분석 (두 경로 모두) | skills/pub-layout-check/ |
 | pub-info | 출판예정도서 정보 생성 | skills/pub-info/ |
+
+### 디스패치 명령어 매핑
+
+| 명령어 | 경로 | 호출 스킬 |
+|--------|------|----------|
+| `인쇄소` | **두 경로 모두** | 전자책 + POD 동시 빌드 |
+| `전자책 빌드` | 전자책만 | pub-html-build → pub-html-to-pdf → pub-page-fit-html |
+| `POD 빌드` | POD만 | pub-build → pub-typst-design → pub-page-fit → pub-image-optimize |
 
 ## 규칙
 

@@ -1,18 +1,26 @@
 ---
 name: pub-html-to-pdf
-description: Use when you already built an HTML preview with `pub-html-build` and need to rasterize it to an A4 PDF via headless Chromium. Optional — the book's canonical PDF path is `pub-build` (Typst); this skill is kept as a fallback/utility to share a single chapter as a PDF.
+description: 전자책용 A4 PDF 빌드. pub-html-build이 만든 .build/NN-*.html을 Playwright Chromium으로 A4 PDF로 변환. Paged.js로 페이지 조판 강제.
 ---
 
-# pub-html-to-pdf
+# pub-html-to-pdf — 전자책 A4 PDF 빌드
 
 `pub-html-build`이 만든 `.build/NN-*.html`을 **Playwright Chromium**으로 열어 A4 PDF로 내린다. Paged.js를 선택적으로 주입해 페이지 조판을 강제할 수 있다.
 
+## 두 경로 분담 (출판)
+
+| 용도 | 사이즈 | 빌드 경로 |
+|---|---|---|
+| **전자책** (e퍼플 등) | A4 (210×297) | `pub-html-build` → `pub-html-to-pdf` (이 스킬) |
+| **POD 인쇄** (교보 바로출판 등) | B5 (188×257) | `pub-build` (Typst) |
+
 ## 언제 쓰는가
 
-- 챕터 프리뷰 한 장을 **PDF 파일로 공유**해야 할 때 (카카오톡·메일 첨부 등)
-- 정식 전자책 PDF는 이 스킬의 출력이 아니라 `pub-build`(Typst 파이프라인)의 결과임에 유의
+- **전자책 표준 출력**: e퍼플 등 전자책 플랫폼용 A4 PDF
+- 챕터 프리뷰 한 장을 PDF 파일로 공유할 때 (카카오톡·메일 첨부)
+- POD 인쇄용 B5 PDF가 필요하면 이 경로가 아닌 `pub-build`(Typst) 사용
 
-HTML 프리뷰만 필요하면 이 스킬은 호출하지 않는다.
+HTML 프리뷰만 필요하면 이 스킬은 호출하지 않고 `pub-html-build`만 쓴다.
 
 ## 빌드 실행
 
@@ -59,7 +67,7 @@ chapters/NN-*.md
 .build/pdf/NN-*.pdf
 ```
 
-정식 전자책은 이 경로가 아니라 `chapters/**.md → pub-build(Typst) → .pdf-build/*.pdf`.
+전자책 표준 경로는 위 흐름. POD 인쇄용 B5 PDF가 필요하면 `chapters/**.md → pub-build(Typst) → book/output/*.pdf`로 별도 빌드.
 
 ---
 
