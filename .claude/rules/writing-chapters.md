@@ -28,7 +28,7 @@ paths:
 
 ## 형식 표준 (책 무관 강제)
 
-언어·도메인이 달라도 모든 책의 챕터 마크다운에 적용되는 검증 가능한 형식.
+언어·도메인이 달라도 모든 책의 챕터 마크다운에 적용되는 검증 가능한 형식. 항목별 정식 정의는 단일 진실원에 있고, 여기서는 **검증 시점에 챕터에 강제할 항목**만 모은다.
 
 ### 1. "이것만은 기억하자" — `:::remember` directive 의무
 
@@ -48,48 +48,27 @@ paths:
 
 각 실습 섹션에는 **데이터·요청·상태가 흐르는 시각화**를 최소 1개 포함한다. "코드 → 결과" 사이를 글자만으로 잇지 않는다.
 
-권장 컴포넌트 (카탈로그 우선):
-- `.terminal-log` — 실행 결과·로그
-- `.pipeline-box` + `.pipeline-flow` + `.step-card` — 단계 흐름 (입력 → 처리 → 출력)
-- `.sp-figure` + `.sp-flow` + `.sp-step` — 가로 단계 카드 (1→2→3)
-- `.sp-row` + 변형(`.accent`/`.warm`/`.info`) — 라벨+값 비교 행
-- `.sp-compare` (`.bad`/`.good`) — BEFORE/AFTER, A/B 비교
-- `.sp-chip` — 컴포넌트·노드 라벨
-
 **서버 내부 흐름 시각화 권장**: `@PostMapping → Service → 외부 API → 응답` 같은 **코드 진입점부터 응답까지** 한 화면에 보여주는 다이어그램이 챕터마다 한 번 이상 등장하면 독자 이해도 급상승.
 
-### 3. TODO 주석 표준 — 다언어 통일
+권장 컴포넌트는 단일 진실원 카탈로그에서 고른다 → `.claude/skills/pub-html-build/components-catalog/inventory.md` (전수 목록 + 접두어 네임스페이스).
 
-```python
-# TODO: 청크 단위로 자르되 overlap만큼 겹칩니다
-# 1. chunk_size 단위로 슬라이스
-# 2. 인접 청크 사이 overlap 만큼 중첩
-```
-```java
-// TODO: Base64 디코드 후 파일로 저장합니다
-// 1. Base64.getDecoder().decode(...)
-// 2. Files.write(path, bytes)
-```
+### 3. 코드 작성 형식 — `code.md` 참조
 
-규칙:
-- 종결어미: 모든 언어에서 `~합니다` 통일 (단, 단계 주석 `# 1.`/`// 1.`은 동사 원형 또는 `~한다` 허용)
-- `# TODO:` (Python) / `// TODO:` (Java·JS·Kotlin) — 언어 컨벤션 따름
-- `# N.` / `// N.` 단계 번호 **필수**. 한 줄 TODO만 넣지 않는다
+다언어 TODO 표준(Python/Java/Kotlin/JS/HTML/Bash)·`# TODO:` 종결어미·`# N.` 단계 번호·코드블록 헤더·실습 코드블록 앞 안내문은 **`code.md`의 다언어 TODO 표준 + 실습 코드블록 작성 규칙**이 단일 진실원. 챕터 검토 시 그곳 규칙을 따른다.
 
-### 4. 인라인 스타일·hex 색 금지
+### 4. 시각 토큰·인라인 스타일 — `brand-tokens.md` 참조
 
-- `<div style="...">` 인라인 스타일 금지. 카탈로그 컴포넌트 클래스(`inventory.md`)로만 호출
-- 색은 `var(--color-*)` 토큰만. `#xxxxxx`/`#xxx` 직접 박힘 금지
-- Utility 토큰(`--color-success`/`warning`/`danger`) 신규 사용 금지 → Primary(`accent`) / Secondary(`accent-warm`) / Info로 표현
+색 토큰(Primary·Secondary·Info)·인라인 `style="..."` 금지·hex 직접 박힘 금지·Utility 토큰 신규 사용 금지·세 파일 동기화는 **`brand-tokens.md`** 가 단일 진실원. 챕터에서 컴포넌트를 만지거나 새 클래스를 도입할 때 그곳을 따른다.
 
 ### 5. 검증 체크리스트 (editor가 챕터 검토 시)
 
-- [ ] `:::remember` directive 존재 1개
-- [ ] 실습 코드블록 수 ≤ 흐름 다이어그램 수
-- [ ] TODO 주석 모두 `~합니다` + `# N.`/`// N.` 단계 번호 동반
-- [ ] 인라인 `style="..."` 0건
-- [ ] hex 색 직접 박힘 0건
-- [ ] 카탈로그에 없는 신규 클래스 사용 0건 (있으면 → inventory.md 추가 후 사용)
+- [ ] `:::remember` directive 존재 1개 이상 (#1)
+- [ ] 실습 코드블록 수 ≤ 흐름 다이어그램 수 (#2)
+- [ ] TODO 주석 모두 `~합니다` + `# N.`/`// N.` 단계 번호 동반 (#3, code.md)
+- [ ] 인라인 `style="..."` 0건 (#4, brand-tokens.md)
+- [ ] hex 색 직접 박힘 0건 (#4, brand-tokens.md)
+- [ ] Utility 토큰(`success/warning/danger`) 신규 사용 0건 (#4, brand-tokens.md)
+- [ ] 카탈로그에 없는 신규 클래스 사용 0건 — 있으면 `inventory.md` 추가 후 사용 (#2)
 
 ---
 
