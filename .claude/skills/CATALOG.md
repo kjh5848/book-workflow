@@ -1,4 +1,4 @@
-# 스킬 카탈로그 (23개 + PM 13개 + 인쇄소 6개)
+# 스킬 카탈로그 (23개 + PM 13개 + 인쇄소 11개)
 
 하나의 작업만 수행하고 결과를 돌려주는 원자적 도구. 판단하지 않는다.
 
@@ -17,12 +17,17 @@
 | `image-analyzer/` | `claude-sonnet-4-6` | E1 | analysis-guide |
 | `screenshot/` | — | — | terminal-capture, browser-capture, capture.py |
 | `review/` | `claude-opus-4-6` | D1, D3, D4, D5 | review-rules |
-| `pub-studio/` | `claude-sonnet-4-6` | — | 프리뷰 에디터 + 검증 빌드 (8개 모듈) |
-| `pub-build/` | — | — | MD→Typst→PDF 빌드 파이프라인 |
-| `pub-typst-design/` | — | — | Typst 템플릿 + 컴포넌트 |
-| `pub-layout-check/` | — | — | PDF 레이아웃 분석 |
-| `pub-page-fit/` | — | — | 레이아웃 자동수정 전략 |
-| `pub-image-optimize/` | — | — | 이미지 공백제거 + 크기조절 |
+| `pub-studio/` | `claude-sonnet-4-6` | — | 프리뷰 에디터 + 검증 빌드 (8개 모듈, 공용) |
+| `pub-html-build/` | — | — | **전자책 경로**: MD → HTML 빌드 + 디자인 토큰 + 컴포넌트 카탈로그 |
+| `pub-html-to-pdf/` | — | — | **전자책 경로**: HTML → A4 PDF (Playwright Chromium) |
+| `pub-page-fit-html/` | — | — | **전자책 경로**: HTML PDF 자동 밀도 조정 |
+| `pub-build/` | — | — | **POD 경로**: MD → Typst → B5 PDF 빌드 파이프라인 |
+| `pdf-ty/` | — | — | **POD 경로**: Typst PDF 빌드 사용자 트리거 |
+| `pub-typst-design/` | — | — | **POD 경로**: Typst 템플릿 + 컴포넌트 + B5 preset |
+| `pub-page-fit/` | — | — | **POD 경로**: Typst 레이아웃 자동수정 전략 |
+| `pub-image-optimize/` | — | — | **POD 경로**: 이미지 공백제거(autocrop) + Typst auto-image |
+| `pub-layout-check/` | — | — | **공용**: PDF 레이아웃 분석 (두 경로 모두) |
+| `pub-info/` | — | — | **공용**: 출판예정도서 정보 생성 |
 
 ---
 
@@ -150,26 +155,59 @@
 
 ---
 
-## 인쇄소 스킬 (publisher 에이전트 → pub-studio 통합, 6개)
+## 인쇄소 스킬 (publisher 에이전트, 11개 — 두 출판 경로 분담)
 
-MD→PDF 빌드 + 디자인 프리뷰 + 레이아웃 검증을 처리하는 출판 파이프라인 스킬.
+오픈스킬북스 책은 **두 갈래 출판 경로**로 분담. 각 경로의 사이즈·플랫폼이 다르며, 두 경로를 모두 빌드해 두 형태로 동시 출판한다.
+
+| 경로 | 사이즈 | 산출물 | 플랫폼 |
+|------|--------|--------|--------|
+| **전자책** | A4 (210×297) | `.build/pdf/*.pdf` | e퍼플 등 전자책 플랫폼 |
+| **POD 인쇄** | B5 (188×257, 4x6배판) | `book/output/*.pdf` | 교보 바로출판 등 POD |
+
+### 전자책 경로 (HTML → A4 PDF, 3개)
 
 | # | 스킬 | 하는 일 | 폴더 |
 |---|------|---------|------|
-| P1 | pub-studio | 프리뷰 에디터 + 검증 빌드 통합 (OOP 8모듈) | pub-studio/ |
-| P2 | pub-build | MD→Typst→PDF 빌드 파이프라인 | pub-build/ |
-| P3 | pub-typst-design | Typst 템플릿 + 컴포넌트 디자인 | pub-typst-design/ |
-| P4 | pub-layout-check | PDF 레이아웃 분석 (빈 페이지, 고아줄, 공백) | pub-layout-check/ |
-| P5 | pub-page-fit | 레이아웃 자동수정 전략 | pub-page-fit/ |
-| P6 | pub-image-optimize | 이미지 공백제거(autocrop) + 크기조절 | pub-image-optimize/ |
+| H1 | pub-html-build | MD → HTML 빌드 + 디자인 토큰 + 컴포넌트 카탈로그 (책 빌드 엔진) | pub-html-build/ |
+| H2 | pub-html-to-pdf | HTML → A4 PDF (Playwright Chromium + Paged.js) | pub-html-to-pdf/ |
+| H3 | pub-page-fit-html | HTML PDF 자동 밀도 조정 (빈 공간·고아 페이지 해소 루프) | pub-page-fit-html/ |
+
+### POD 인쇄 경로 (Typst → B5 PDF, 5개)
+
+| # | 스킬 | 하는 일 | 폴더 |
+|---|------|---------|------|
+| T1 | pub-build | MD → Typst → PDF 빌드 파이프라인 (B5 표준) | pub-build/ |
+| T2 | pdf-ty | Typst PDF 빌드 사용자 트리거 (`/pdf-ty`) | pdf-ty/ |
+| T3 | pub-typst-design | Typst 템플릿·타이포그래피·페이지 설정 (B5_4x6배판 preset 등) | pub-typst-design/ |
+| T4 | pub-page-fit | Typst 레이아웃 자동수정 전략 | pub-page-fit/ |
+| T5 | pub-image-optimize | 이미지 공백제거(autocrop) + Typst auto-image (런타임 크기 조절) | pub-image-optimize/ |
+
+### 공용 (3개)
+
+| # | 스킬 | 하는 일 | 폴더 |
+|---|------|---------|------|
+| S1 | pub-studio | 프리뷰 에디터 + 검증 빌드 통합 (OOP 8모듈) | pub-studio/ |
+| S2 | pub-layout-check | PDF 레이아웃 분석 (빈 페이지·고아줄·공백) — 두 경로 모두 사용 | pub-layout-check/ |
+| F1 | pub-info | 출판예정도서 정보 생성 (서점 등록용) | pub-info/ |
 
 ### 의존 관계
 
 ```
-pub-studio (통합)
-  ├→ pub-build (빌드 엔진)
-  ├→ pub-typst-design (템플릿)
-  ├→ pub-layout-check (분석)
-  ├→ pub-page-fit (자동수정 전략)
-  └→ pub-image-optimize (이미지 최적화)
+[전자책 경로]
+  pub-html-build → pub-html-to-pdf → pub-page-fit-html
+                                        ↑
+                            pub-layout-check (공용)
+
+[POD 경로]
+  pub-build → pub-typst-design → pub-page-fit → pub-image-optimize
+                                        ↑
+                            pub-layout-check (공용)
+                            pub-image-optimize (autocrop은 공용 가능, auto-image는 Typst 전용)
 ```
+
+### 두 경로 분담 원칙
+
+1. **모든 책은 두 경로로 동시 빌드** — 전자책 + POD 모두 출판
+2. 챕터 마크다운은 **단일 진실원** (`projects/<책>/chapters/`) — 두 경로가 같은 입력을 사용
+3. **컴포넌트는 두 경로 호환** — `.sp-figure`·`.scene-actors` 같은 컴포넌트는 HTML/Typst 모두 동작하도록 설계
+4. **사이즈별 색상·여백 토큰**은 각 경로의 design 스킬이 별도 관리 (`pub-html-build/styles/` vs `pub-typst-design/references/templates/`)

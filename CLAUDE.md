@@ -71,23 +71,30 @@ Phase 6 ── 출판 (인쇄소)
 | `마무리`           | 7    | `book/에필로그.md` 등                | `.claude/workflow/step7-마무리.md`                 |
 | `이미지 분석`      | 5    | `[IMAGE PROMPT]` 플레이스홀더       | image-analyzer 스킬 (메인 세션 직접 호출)         |
 | `출판정보 생성`    | 출판 | `book/publish-info-*.md`             | publisher + pub-info 스킬                          |
-| `인쇄소`           | 출판 | `book/output/*.pdf`                  | Typst 파이프라인. 아래 "인쇄소 실행 흐름" 참조     |
-| `HTML 빌드`        | 집필 | `.build/*.html`                      | `pub-html-build` 스킬. 아래 "HTML 파이프라인" 참조. PDF가 필요하면 별도 스킬 `pub-html-to-pdf` |
+| `인쇄소`           | 출판 | `book/output/*.pdf` (B5) + `.build/pdf/*.pdf` (A4) | **두 경로 동시 빌드** — POD(Typst B5) + 전자책(HTML A4). 아래 "인쇄소 실행 흐름" 참조 |
+| `전자책 빌드`      | 출판 | `.build/pdf/*.pdf`                   | 전자책 경로만 (HTML→A4 PDF). `pub-html-build` + `pub-html-to-pdf` |
+| `POD 빌드`         | 출판 | `book/output/*.pdf`                  | POD 경로만 (MD→Typst→B5 PDF). `pub-build` + `pub-typst-design` |
+| `HTML 빌드`        | 집필 | `.build/*.html`                      | 집필 중 미리보기 (PDF 없음). `pub-html-build` 스킬. 아래 "HTML 파이프라인" 참조 |
 | `이어하기`         | —    | —                                    | `progress.json` + 최근 수정 파일로 상태 복구       |
 | `현재 상태`        | —    | 터미널 출력                          | progress.json 기반                                 |
 | `PM 전략 [서비스]` | —    | `docs/pm/[서비스]-전략.md`           | pm-strategist 에이전트                             |
 | `퍼널 설계 [범위]` | —    | `docs/pm/[범위]-퍼널.md`             | pm-strategist 에이전트                             |
 | `GTM [대상]`       | —    | `docs/pm/[대상]-GTM.md`              | pm-strategist 에이전트                             |
 
-### `인쇄소` 실행 흐름
+### `인쇄소` 실행 흐름 (두 경로 동시)
 
-표지 위자드(메인 세션) → Publisher 서브에이전트(PDF 빌드) 순서로 실행.
+오픈스킬북스 책은 **전자책(A4) + POD(B5) 두 경로로 동시 출판**된다.
+
 - **Phase A**: 출판정보 확인 → 표지 디자인 위자드 (4단계) → 유저 선택. 상세: `.claude/agents/publisher/AGENT.md`
-- **Phase B**: Publisher 디스패치 — 온보딩 → 디자인 → 다이어그램 → PDF → 검수. 상세: `.claude/agents/publisher/AGENT.md`
+- **Phase B**: Publisher 디스패치 — 두 경로 빌드:
+  - **전자책 경로**: pub-html-build → pub-html-to-pdf → pub-page-fit-html → `.build/pdf/*.pdf` (A4)
+  - **POD 경로**: pub-build → pub-typst-design → pub-page-fit → pub-image-optimize → `book/output/*.pdf` (B5)
+  - **공용 검증**: pub-layout-check (두 경로 PDF 모두 분석)
+- **단일 경로만 빌드**하려면 `전자책 빌드` 또는 `POD 빌드` 명령어 사용
 
-### HTML 파이프라인
+### HTML 파이프라인 (집필 미리보기)
 
-마크다운 → HTML → PDF 빌드. 상세: `.claude/skills/pub-html-build/SKILL.md`
+마크다운 → HTML 미리보기. PDF 없이 화면 검수용. 상세: `.claude/skills/pub-html-build/SKILL.md`
 
 ```bash
 python .claude/skills/pub-html-build/build_html.py --project-root projects/<책이름> --chapter N
