@@ -19,7 +19,7 @@
 | 개념          | 정체       | 역할                                                                                        |
 | ------------- | ---------- | ------------------------------------------------------------------------------------------- |
 | **STEP**      | 흐름       | 1~7번까지 순서대로 진행하는 워크플로우 단계                                                 |
-| **에이전트**  | 전문가     | 각 역할을 담당하는 서브에이전트 (writer, editor, analyst-architect, publisher / pm-strategist는 책 외 영역) |
+| **에이전트**  | 전문가     | 각 역할을 담당하는 서브에이전트 (writer, editor, analyst-architect, publisher) |
 | **스킬**      | 도구       | 하나의 작업만 수행하고 결과를 돌려주는 원자적 도구 (22개)                                   |
 | **검토 모드** | 체크리스트 | 산출물 품질을 검증하는 관점과 질문 목록 (3개)                                               |
 
@@ -77,9 +77,6 @@ Phase 6 ── 출판 (인쇄소)
 | `HTML 빌드`        | 집필 | `.build/*.html`                      | 집필 중 미리보기 (PDF 없음). `pub-html-build` 스킬. 아래 "HTML 파이프라인" 참조 |
 | `이어하기`         | —    | —                                    | `progress.json` + 최근 수정 파일로 상태 복구       |
 | `현재 상태`        | —    | 터미널 출력                          | progress.json 기반                                 |
-| `PM 전략 [서비스]` | —    | `docs/pm/[서비스]-전략.md`           | pm-strategist 에이전트                             |
-| `퍼널 설계 [범위]` | —    | `docs/pm/[범위]-퍼널.md`             | pm-strategist 에이전트                             |
-| `GTM [대상]`       | —    | `docs/pm/[대상]-GTM.md`              | pm-strategist 에이전트                             |
 
 ### `인쇄소` 실행 흐름 (두 경로 동시)
 
@@ -193,6 +190,6 @@ projects/[책이름]/
 | `.claude/rules/`                   | 규칙 8개 (위 표 참조)                                                                   |
 | `.claude/hooks/`                   | PreToolUse 훅 (챕터 스타일 강제)                                                        |
 | `.claude/skills/CATALOG.md`        | 22개 스킬 카탈로그                                                                      |
-| `.claude/agents/`                  | 에이전트 5개 (analyst-architect, writer, editor, publisher, pm-strategist) |
+| `.claude/agents/`                  | 에이전트 4개 (analyst-architect, writer, editor, publisher) |
 | `.claude/workflow/step[N]-*.md`    | STEP별 실행 가이드                                                                      |
 | `.claude/workflow/review-guide.md` | 검토 모드 체크리스트                                                                    |
