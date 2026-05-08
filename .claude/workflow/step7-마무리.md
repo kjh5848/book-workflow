@@ -3,7 +3,9 @@
 > **목적**: 책의 처음과 끝을 닫는다.
 > **에이전트**: writer → editor → publisher
 > **검토**: [감수 검토]
-> **산출물**: `book/front/머릿말.md`, `book/back/afterword.md`
+> **산출물**: `book/front/preface.md`, `book/back/afterword.md`
+>
+> **파일명 규칙**: 영문 파일명을 사용한다 (`preface.md`·`prologue.md`·`afterword.md`). 글로벌 룰 `.claude/rules/writing-preface.md`의 paths 스코핑(`preface*`)과 일치시켜 룰 자동 로드를 보장한다. 한국어 파일명(`머릿말.md`)은 paths 매칭이 실패한다.
 
 ---
 
@@ -29,9 +31,13 @@
 3. 마무리 (책의 목표 + 읽는 방법)
    — 이 책이 무엇이고 무엇이 아닌지
    — 대상 독자 + 읽는 방법
-4. 저자별 독립 섹션 (각 저자의 소감 + 서명)
+4. 저자별 독립 섹션 (공저일 때만)
    — 저자 수만큼 독립 섹션
-   — 각 섹션: 소감 1~2문단 + 이름 서명
+   — 각 섹션: "왜 이 책을 배워야 하는가"를 저자마다 다른 관점(시사점·정책/사회·기술 등)으로 풀이
+   — 분량: 대표저자 2~3문단, 다른 저자 1~2문단
+   — 헤더에 이름만 (직책·라벨 금지). 본문 끝 단독 서명
+   — 비유 허용 (본문은 비유 금지지만 저자별 섹션은 예외)
+   — 상세 패턴: `.claude/rules/writing-preface.md`
 ```
 
 - 전체 분량 2페이지
@@ -117,7 +123,7 @@
 ```
 book/
 ├── front/
-│   ├── 머릿말.md         ← STEP 7에서 생성
+│   ├── preface.md       ← STEP 7에서 생성 (writing-preface.md 룰 자동 로드)
 │   ├── prologue.md      ← STEP 6에서 생성
 │   └── roadmap.md       ← STEP 6에서 생성
 ├── body/
@@ -125,5 +131,5 @@ book/
 │   ├── ch02.md
 │   └── ...
 └── back/
-    └── afterword.md     ← STEP 7에서 생성
+    └── afterword.md     ← STEP 7에서 생성 (writing-epilogue.md 룰 자동 로드)
 ```
