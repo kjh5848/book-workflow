@@ -1,0 +1,168 @@
+{
+  "project": "스프링-레퍼런스-기술모음_v1",
+  "title": "스프링과 함께 하는 레퍼런스 기술 모음",
+  "alias": "스프링레퍼런스",
+  "status": "in_progress",
+  "current_step": "step_5_chapters",
+  "created_at": "2026-04-24",
+  "updated_at": "2026-04-27",
+  "steps": {
+    "step_1_seed": {
+      "name": "씨앗",
+      "status": "pending",
+      "artifact": null,
+      "artifact_version": 0,
+      "review": {
+        "insight": null,
+        "audit": null
+      },
+      "questions_pending": 0
+    },
+    "step_2_code": {
+      "name": "코드 해부",
+      "status": "pending",
+      "artifact": null,
+      "artifact_version": 0,
+      "review": {
+        "insight": null,
+        "audit": null
+      },
+      "questions_pending": 0
+    },
+    "step_3_scenario": {
+      "name": "시나리오+버전",
+      "status": "pending",
+      "artifact": null,
+      "artifact_version": 0,
+      "versions_created": [],
+      "review": {
+        "insight": null,
+        "audit": null
+      },
+      "questions_pending": 0
+    },
+    "step_4_outline": {
+      "name": "뼈대",
+      "status": "pending",
+      "artifact": null,
+      "artifact_version": 0,
+      "gap_analysis": null,
+      "review": {
+        "insight": null,
+        "audit": null
+      },
+      "questions_pending": 0
+    },
+    "step_5_chapters": {
+      "name": "챕터 집필",
+      "status": "done_v8_all",
+      "chapters": [
+        {
+          "number": 1,
+          "title": "내 로컬에선 되는데 — Docker로 시작하는 개발 환경",
+          "file": "chapters/01-내-로컬에선-되는데-Docker로-시작하는-개발-환경.md",
+          "status": "draft-v8"
+        },
+        {
+          "number": 2,
+          "title": "비밀번호를 맡기지 않는 로그인 (OAuth/OIDC)",
+          "file": "chapters/02-비밀번호를-맡기지-않는-로그인-OAuth-2.0-OIDC.md",
+          "status": "draft-v8"
+        },
+        {
+          "number": 3,
+          "title": "새로고침 한 번에 로그아웃되는 서버 (Redis 세션 공유)",
+          "file": "chapters/03-새로고침-한-번에-로그아웃되는-서버-Redis-세션-공유.md",
+          "status": "draft-v8"
+        },
+        {
+          "number": 4,
+          "title": "사진을 글자로 받아쓴다 (Base64 이미지 업로드)",
+          "file": "chapters/04-사진을-글자로-받아쓴다-Spring-이미지-업로드-Base64.md",
+          "status": "draft-v8"
+        },
+        {
+          "number": 5,
+          "title": "주소만 내주는 업로드 (Presigned URL + S3 + Lambda)",
+          "file": "chapters/05-주소만-내주는-업로드-Presigned-URL-S3-Lambda.md",
+          "status": "draft-v8"
+        },
+        {
+          "number": 6,
+          "title": "전화·알림·인터폰 (Polling·SSE·WebSocket)",
+          "file": "chapters/06-전화-알림-인터폰-Polling-SSE-WebSocket.md",
+          "status": "draft-v8"
+        },
+        {
+          "number": 7,
+          "title": "한 통의 필름을 여러 조각으로 (HLS·FFmpeg)",
+          "file": "chapters/07-한-통의-필름을-여러-조각으로-HLS-FFmpeg.md",
+          "status": "draft-v8"
+        },
+        {
+          "number": 8,
+          "title": "책 뒤에 색인 카드를 붙였다 (Elasticsearch)",
+          "file": "chapters/08-책-뒤에-색인-카드를-붙였다-Elasticsearch.md",
+          "status": "draft-v8"
+        },
+        {
+          "number": 9,
+          "title": "컨베이어 벨트 위에 올려 둔다 (RabbitMQ)",
+          "file": "chapters/09-컨베이어-벨트-위에-올려-둔다-RabbitMQ.md",
+          "status": "draft-v8"
+        }
+      ]
+    },
+    "step_6_prologue": {
+      "name": "프롤로그",
+      "status": "pending",
+      "artifact": null,
+      "review": {
+        "audit": null
+      }
+    },
+    "step_7_finish": {
+      "name": "마무리",
+      "status": "pending",
+      "artifacts": {
+        "preface": null,
+        "afterword": null
+      },
+      "final_title": null,
+      "total_pages": null,
+      "review": {
+        "audit": null
+      }
+    }
+  },
+  "_chapter_template": {
+    "id": "CH01",
+    "title": "",
+    "version": "v0.1",
+    "status": "pending",
+    "artifact": null,
+    "images": {
+      "total_placeholders": 0,
+      "completed": 0,
+      "status": "pending"
+    },
+    "review": {
+      "insight": null,
+      "intent_watch": null,
+      "audit": null
+    },
+    "questions_pending": 0
+  },
+  "_status_values": [
+    "pending",
+    "in_progress",
+    "done",
+    "review"
+  ],
+  "_review_values": [
+    null,
+    "pass",
+    "conditional_pass",
+    "fail"
+  ]
+}

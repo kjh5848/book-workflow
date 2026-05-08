@@ -1,0 +1,187 @@
+{
+  "project": "사내AI비서_v2",
+  "title": "AI도 모르는 우리 회사 이야기",
+  "alias": "사내AI비서",
+  "status": "in_progress",
+  "current_step": "step_5_chapters",
+  "book_version": "v6",
+  "created_at": "2026-03-04",
+  "updated_at": "2026-04-25",
+  "milestone": "ch11_split",
+  "_milestone_note": "CH10 §10.7~§10.10을 CH11(커넥트HR 에이전트의 완성)로 분리. ex11 레포 신설 + PDF 캡처 근거 + 카테고리 분기 추가",
+  "steps": {
+    "step_1_seed": {
+      "name": "씨앗",
+      "status": "done",
+      "artifact": "planning/seed-v1.md",
+      "artifact_version": 1,
+      "review": {
+        "insight": "pass",
+        "audit": "pass"
+      },
+      "questions_pending": 0
+    },
+    "step_2_code": {
+      "name": "코드 해부",
+      "status": "done",
+      "artifact": "planning/code-analysis-v1.md",
+      "artifact_version": 1,
+      "review": {
+        "insight": "pass",
+        "audit": "pass"
+      },
+      "questions_pending": 0
+    },
+    "step_3_scenario": {
+      "name": "시나리오+버전",
+      "status": "pending",
+      "artifact": null,
+      "artifact_version": null,
+      "versions_created": [],
+      "review": {
+        "insight": null,
+        "audit": null
+      },
+      "questions_pending": 0,
+      "_note": "v2는 통합흐름 뼈대만. planning/scenario-v2.md로 재작성 예정"
+    },
+    "step_4_outline": {
+      "name": "뼈대",
+      "status": "pending",
+      "artifact": null,
+      "artifact_version": null,
+      "review": {
+        "insight": null,
+        "audit": null
+      },
+      "questions_pending": 0,
+      "_note": "planning/outline-v3.md로 재작성 예정"
+    },
+    "step_5_chapters": {
+      "name": "챕터 집필",
+      "status": "done_v8_사내비서",
+      "chapters": [
+        {
+          "number": 1,
+          "title": "환각과 RAG의 첫 만남",
+          "file": "chapters/01-환각과-RAG의-첫-만남.md",
+          "status": "draft-v8"
+        },
+        {
+          "number": 2,
+          "title": "일단 사내 시스템부터",
+          "file": "chapters/02-일단-사내-시스템부터.md",
+          "status": "draft-v8"
+        },
+        {
+          "number": 3,
+          "title": "어떤 문서를 넣을까",
+          "file": "chapters/03-어떤-문서를-넣을까.md",
+          "status": "draft-v8"
+        },
+        {
+          "number": 4,
+          "title": "문서를 지식으로 바꾸다",
+          "file": "chapters/04-문서를-지식으로-바꾸다.md",
+          "status": "draft-v8"
+        },
+        {
+          "number": 5,
+          "title": "답이 돌아온다 (LCEL 파이프라인)",
+          "file": "chapters/05-답이-돌아온다.md",
+          "status": "draft-v8"
+        },
+        {
+          "number": 6,
+          "title": "연차도 규정도 한번에",
+          "file": "chapters/06-연차도-규정도-한번에.md",
+          "status": "draft-v8"
+        },
+        {
+          "number": 7,
+          "title": "실제로 써보니 (UI·캐싱·로깅)",
+          "file": "chapters/07-실제로-써보니.md",
+          "status": "draft-v8"
+        },
+        {
+          "number": 8,
+          "title": "엉뚱한 문서를 가져온다 (청킹·하이브리드·리랭킹)",
+          "file": "chapters/08-엉뚱한-문서를-가져온다.md",
+          "status": "draft-v8"
+        },
+        {
+          "number": 9,
+          "title": "질문을 제대로 이해 못한다 (Query Rewrite·HyDE)",
+          "file": "chapters/09-질문을-제대로-이해-못한다.md",
+          "status": "draft-v8"
+        },
+        {
+          "number": 10,
+          "title": "PDF 이미지까지 잡아라 (Vision LLM·OCR)",
+          "file": "chapters/10-PDF-이미지까지-잡아라.md",
+          "status": "draft-v8"
+        },
+        {
+          "number": 11,
+          "title": "커넥트HR 에이전트의 완성 (레이어드 아키텍처)",
+          "file": "chapters/11-커넥트HR-에이전트의-완성.md",
+          "status": "draft-v8"
+        }
+      ],
+      "_note": "CH01~CH11 총 11장으로 재편(원래 10장 계획에서 CH11 분리). Ch.1~11 차례로 폴리싱 진행"
+    },
+    "step_6_prologue": {
+      "name": "프롤로그+로드맵",
+      "status": "pending",
+      "artifacts": {},
+      "review": {
+        "audit": null
+      },
+      "_note": "Ch.1 PDF 확정 후 착수"
+    },
+    "step_7_finish": {
+      "name": "마무리",
+      "status": "pending",
+      "artifacts": {},
+      "review": {
+        "audit": null
+      }
+    },
+    "step_8_pdf_pipeline": {
+      "name": "HTML 프리뷰 파이프라인",
+      "status": "done",
+      "artifacts": {
+        "templates": ".claude/skills/pub-html-build/templates/",
+        "styles": ".claude/skills/pub-html-build/styles/",
+        "builder": ".claude/skills/pub-html-build/build_html.py",
+        "pdf_builder": ".claude/skills/pub-html-to-pdf/build_pdf.py"
+      },
+      "_note": "HTML 프리뷰는 pub-html-build, 선택적 PDF는 pub-html-to-pdf (정식 전자책 PDF는 pub-build Typst 경로)"
+    }
+  },
+  "_chapter_template": {
+    "id": "CH01",
+    "title": "",
+    "version": "v0.1",
+    "status": "pending",
+    "artifact": null,
+    "review": {
+      "insight": null,
+      "intent_watch": null,
+      "audit": null
+    },
+    "questions_pending": 0
+  },
+  "_status_values": [
+    "pending",
+    "in_progress",
+    "done",
+    "review"
+  ],
+  "_review_values": [
+    null,
+    "pass",
+    "conditional_pass",
+    "fail"
+  ]
+}
