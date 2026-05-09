@@ -813,54 +813,67 @@ python<span class="w"> </span>-m<span class="w"> </span>tuning.step3_hybrid_sear
 <div class="dialogue"><span class="speaker">팀장</span>: "사람들이 항상 깔끔하게 질문하진 않잖아요."</div>
 <h2>8.7 튜닝 구성도</h2>
 <p>이번 챕터에서 실험한 세 가지 튜닝과, 앞으로 다룰 튜닝을 한 장으로 정리합니다. 모든 튜닝을 다 적용할 필요는 없습니다. 문서와 질문 성격에 맞춰 필요한 것만 골라 씁니다.</p>
-<div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-2xl);margin:var(--space-xl) 0">
-<div style="font-size:var(--fs-lg);font-weight:600;color:var(--color-text-heading);margin-bottom:var(--space-xl);text-align:center">그림 8-13. RAG 튜닝 메뉴판. 필요한 것만 골라 씁니다</div>
-<table style="border-collapse:collapse;width:100%;font-size:var(--fs-sm)">
-<tr style="background:var(--color-surface-alt)">
-<th style="padding:8px 12px;border:1px solid var(--color-border);text-align:center;width:30px"></th>
-<th style="padding:8px 12px;border:1px solid var(--color-border)">튜닝</th>
-<th style="padding:8px 12px;border:1px solid var(--color-border)">무엇을 바꾸나</th>
-<th style="padding:8px 12px;border:1px solid var(--color-border)">언제 쓰나</th>
-<th style="padding:8px 12px;border:1px solid var(--color-border);text-align:center">챕터</th>
-</tr>
-<tr style="background:var(--color-success-bg)">
-<td style="padding:8px 12px;border:1px solid var(--color-border);text-align:center;font-size:var(--fs-lg)">✓</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);font-weight:700">청킹 전략</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border)">문서를 자르는 방법 (Fixed → Recursive → Semantic)</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border)">주제가 섞이는 문제가 있을 때</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);text-align:center;font-weight:700">8</td>
-</tr>
-<tr style="background:var(--color-success-bg)">
-<td style="padding:8px 12px;border:1px solid var(--color-border);text-align:center;font-size:var(--fs-lg)">✓</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);font-weight:700">리랭킹</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border)">가져온 문서를 Cross-Encoder로 재정렬</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border)">검색 결과 상위에 엉뚱한 문서가 섞일 때</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);text-align:center;font-weight:700">8</td>
-</tr>
-<tr style="background:var(--color-success-bg)">
-<td style="padding:8px 12px;border:1px solid var(--color-border);text-align:center;font-size:var(--fs-lg)">✓</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);font-weight:700">하이브리드 검색</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border)">벡터 + BM25를 alpha 가중합으로 합침</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border)">의미 검색과 키워드 검색 둘 다 필요할 때</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);text-align:center;font-weight:700">8</td>
-</tr>
-<tr>
-<td style="padding:8px 12px;border:1px solid var(--color-border);text-align:center;color:var(--color-text-subtle)">-</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);color:var(--color-text-muted)">쿼리 재작성</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);color:var(--color-text-muted)">불완전한 질문을 LLM이 이해할 수 있는 형태로 변환</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);color:var(--color-text-muted)">"병가 어떻게 써?"처럼 모호한 질문이 많을 때</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);text-align:center;color:var(--color-text-muted)">9</td>
-</tr>
-<tr>
-<td style="padding:8px 12px;border:1px solid var(--color-border);text-align:center;color:var(--color-text-subtle)">-</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);color:var(--color-text-muted)">파이프라인 조립</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);color:var(--color-text-muted)">위 튜닝 중 필요한 것만 골라 하나의 파이프라인으로 조립</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);color:var(--color-text-muted)">실서비스에 적용할 때</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);text-align:center;color:var(--color-text-muted)">10</td>
-</tr>
-</table>
-<div style="font-size:var(--fs-xs);color:var(--color-text-subtle);margin-top:var(--space-sm)">✓ 이번 챕터에서 실험한 항목 · - 다음 챕터에서 다룰 항목</div>
+<div class="ch-slot">
+  <div class="ch-name"><b>CH 08</b> · 엉뚱한 문서를 가져온다 - 튜닝 메뉴판 (청킹 · 리랭킹 · 하이브리드)</div>
+  <div class="tuning-card">
+    <div class="tc-header">
+      <div class="tc-sub">chapter 08 · tuning menu</div>
+      <div class="tc-title">RAG 튜닝 메뉴판</div>
+      <div class="tc-desc">검색 품질 실험 3종 + 앞으로 다룰 항목 2종</div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th class="mark"></th>
+          <th>튜닝</th>
+          <th>무엇을 바꾸나</th>
+          <th>언제 쓰나</th>
+          <th class="ch-col">챕터</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="row-new">
+          <td class="col-mark">✓</td>
+          <td class="col-name">청킹 전략</td>
+          <td>문서를 자르는 방법 (Fixed → Recursive → Semantic)</td>
+          <td>주제가 섞이는 문제가 있을 때</td>
+          <td class="col-ch">8</td>
+        </tr>
+        <tr class="row-new">
+          <td class="col-mark">✓</td>
+          <td class="col-name">리랭킹</td>
+          <td>가져온 문서를 Cross-Encoder로 재정렬</td>
+          <td>검색 결과 상위에 엉뚱한 문서가 섞일 때</td>
+          <td class="col-ch">8</td>
+        </tr>
+        <tr class="row-new">
+          <td class="col-mark">✓</td>
+          <td class="col-name">하이브리드 검색</td>
+          <td>벡터 + BM25를 alpha 가중합으로 합침</td>
+          <td>의미 검색과 키워드 검색 둘 다 필요할 때</td>
+          <td class="col-ch">8</td>
+        </tr>
+        <tr class="row-future">
+          <td class="col-mark">–</td>
+          <td class="col-name">쿼리 재작성</td>
+          <td>불완전한 질문을 LLM이 이해할 수 있는 형태로 변환</td>
+          <td>"병가 어떻게 써?"처럼 모호한 질문이 많을 때</td>
+          <td class="col-ch">9</td>
+        </tr>
+        <tr class="row-future">
+          <td class="col-mark">–</td>
+          <td class="col-name">파이프라인 조립</td>
+          <td>위 튜닝 중 필요한 것만 골라 하나로 조립</td>
+          <td>실서비스에 적용할 때</td>
+          <td class="col-ch">10</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="tc-legend">✓ 이번 챕터 실험 · – 앞으로 다룰 항목</div>
+  </div>
+  <div class="ch-note">CH08은 <b>세 실험(청킹·리랭킹·하이브리드)</b> 모두 시도 · 어떤 조합을 쓸지는 CH10에서 선별</div>
 </div>
+<p class="thought">그림 8-13. 챕터 8의 결과. RAG 튜닝 메뉴판에 검색 품질 3종(청킹·리랭킹·하이브리드)이 새로 채워졌습니다</p>
 <h2>용어 정리</h2>
 <table>
 <thead>

@@ -746,56 +746,96 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 <p><strong>토큰 수가 추정값인 이유는?</strong> Ollama는 응답 메타데이터에 토큰 사용량을 포함하지 않습니다. 그래서 이 책에서는 <code>단어 수 × 2</code>를 한국어 기준 대략적 추정치로 씁니다. 정확한 과금이 필요한 OpenAI API는 응답 객체의 <code>usage.prompt_tokens</code> / <code>usage.completion_tokens</code>를 읽어 실제 값으로 대체하면 됩니다.</p>
 <p><strong>Router로 실행 경로를 나누면 더 빠르지 않을까요?</strong> 비정형 질문은 문서 검색 체인으로, 정형 질문은 DB 도구로 경로를 나눠서 쏘면 ReAct 한 단계를 절약할 수 있습니다. 다만 그렇게 분기를 두면 답변은 체인에서 나오고 근거 문서는 파이프라인 안에 머물러 응답 UI의 근거 패널과 연결이 끊깁니다. 챕터 7은 ex06의 에이전트 엔진을 그대로 쓰면서 캐시·재시도·토큰 기록만 덧씌우는 게 목표이므로, Router는 질문 유형 라벨 용도로만 남기고 실행은 AgentExecutor 단일 경로로 유지합니다. 검색 도구가 찍은 결과는 <code>intermediate_steps</code>에 자동으로 남아 근거 패널이 그대로 작동합니다. 경로 분기로 속도를 짜내는 튜닝은 챕터 8부터 다루는 검색 품질 최적화 영역입니다.</p>
 <h2>7.7 전체 구성도에서 챕터 7의 자리</h2>
-<div class="arch-fullmap">
-  <div class="arch-fullmap-title">전체 구성도. 짙은 박스가 챕터 7 범위</div>
-  <div class="afm-row afm-user">
-    <div class="afm-box afm-built afm-round"><div class="afm-label">사내 직원 · 관리자</div></div>
-  </div>
-  <div class="afm-zone">
-    <span class="afm-zone-ch">챕터 2</span>
-    <span class="afm-zone-label">대시보드</span>
-    <div class="afm-row">
-      <div class="afm-box afm-built"><div class="afm-label">FastAPI</div><div class="afm-sub">REST API · 관리자 웹</div></div>
+<div class="ch-slot">
+  <div class="ch-name"><b>CH 07</b> · 실제로 써보니 - 운영 ops 3 chip NEW</div>
+  <div class="arch11">
+    <div class="header">
+      <div class="sub">chapter 07</div>
+      <div class="title">운영 안정화</div>
+      <div class="desc">ResponseCache + TokenTracker + Retry</div>
+    </div>
+    <div class="row-client">
+      <div class="col-c">
+        <div class="user"><div class="ico">◉</div><div class="n">사용자</div><div class="s">채팅으로 질문</div></div>
+        <div class="flow"><span class="d">↓ 질문</span><span class="u">↑ 답변</span></div>
+        <div class="api"><div class="l">API 게이트웨이 (Gateway)</div><div class="n">FastAPI</div><div class="s">대시보드 · REST</div></div>
+      </div>
+      <div class="flow-arrows"><div class="fa-pair"><div class="fa-arrow call">→</div></div><div class="fa-pair"><div class="fa-arrow ret">←</div></div></div>
+      <div class="col-a">
+        <div class="title">Runtime · 운영 ops 추가</div>
+        <div class="ops">
+          <div class="chip new">
+            <span class="new-badge">NEW</span>
+            <div class="l">캐시 (Cache)</div><div class="n">Response</div><div class="s">TTL 1시간</div>
+          </div>
+          <div class="chip new">
+            <span class="new-badge">NEW</span>
+            <div class="l">관찰 (Monitor)</div><div class="n">Tracker</div><div class="s">토큰·로그</div>
+          </div>
+          <div class="chip new">
+            <span class="new-badge">NEW</span>
+            <div class="l">재시도 (Retry)</div><div class="n">Resilience</div><div class="s">3회</div>
+          </div>
+        </div>
+        <div class="loop-inner">
+          <div class="loop-label">ReAct 루프</div>
+          <div class="stages">
+            <div class="st">Reason</div><div class="arr">→</div>
+            <div class="st">Act</div><div class="arr">→</div>
+            <div class="st">Observe</div><div class="arr">↻</div>
+          </div>
+        </div>
+        <div class="engine-inner">
+          <div class="engine-label">RAG Engine</div>
+          <div class="engine-name">기초 체인</div>
+          <div class="stages-6">
+            <div class="s future"><span class="num">01</span><span class="nm">파싱</span></div>
+            <div class="s"><span class="num">02</span><span class="nm">청킹</span></div>
+            <div class="s future"><span class="num">03</span><span class="nm">확장</span></div>
+            <div class="s"><span class="num">04</span><span class="nm">검색</span></div>
+            <div class="s future"><span class="num">05</span><span class="nm">리랭크</span></div>
+            <div class="s"><span class="num">06</span><span class="nm">LLM</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="lvl-lbl"><span class="up">↑ 프롬프트 · 도구 호출</span> &nbsp;·&nbsp; <span class="down">↓ 응답 · 결과</span></div>
+    <div class="row-ext">
+      <div class="llm"><div class="box">
+        <div class="l">외부 · LLM (External)</div>
+        <div class="n">Ollama</div>
+        <div class="models">
+          <div class="m"><span class="mn">deepseek-r1:8b</span><span class="mu">추론</span></div>
+          <div class="m"><span class="mn">llama3.1:8b</span><span class="mu">Tool Calling</span></div>
+          <div class="m future"><span class="mn">qwen2.5vl:7b</span><span class="mu">CH10에서</span></div>
+        </div>
+      </div></div>
+      <div class="flow-arrows"><div class="fa-pair"><div class="fa-arrow ret">←</div></div><div class="fa-pair"><div class="fa-arrow call">→</div></div></div>
+      <div class="col-t">
+        <div class="title">도구 호출 · MCP Tools</div>
+        <div class="tool"><div class="no">01</div><div><div class="n">leave_balance</div><div class="s">연차 조회</div></div><div class="b">SQL</div></div>
+        <div class="tool"><div class="no">02</div><div><div class="n">sales_sum</div><div class="s">부서·기간 매출</div></div><div class="b">SQL</div></div>
+        <div class="tool"><div class="no">03</div><div><div class="n">list_employees</div><div class="s">이름·부서</div></div><div class="b">SQL</div></div>
+        <div class="tool"><div class="no">04</div><div><div class="n">search_documents</div><div class="s">LCEL · Top-k</div></div><div class="b rag">RAG</div></div>
+      </div>
+    </div>
+    <div class="lvl-lbl muted"><span class="up">↑</span> &nbsp;·&nbsp; <span class="down">↓</span></div>
+    <div class="stores">
+      <div class="st">
+        <div class="l">벡터 저장소 (Vector Store)</div>
+        <div class="n">ChromaDB</div>
+        <div class="s">ko-sroberta · 768차원</div>
+      </div>
+      <div class="st">
+        <div class="l">관계형 DB (Relational)</div>
+        <div class="n">PostgreSQL</div>
+        <div class="s">직원 · 연차 · 매출</div>
+      </div>
     </div>
   </div>
-  <div class="afm-zone">
-    <span class="afm-zone-ch">챕터 6 + 챕터 7</span>
-    <span class="afm-zone-label">오케스트레이션 + 운영</span>
-    <div class="afm-row afm-two">
-      <div class="afm-box afm-on"><div class="afm-tag">+ 캐시 · 재시도</div><div class="afm-label">ConnectHRAgent</div><div class="afm-sub">ReAct · 사후 분류 + TokenTracker</div></div>
-      <div class="afm-box afm-on"><div class="afm-tag">+ 임베딩 캐시</div><div class="afm-label">MCP Tools</div><div class="afm-sub">DB 조회 · 문서 검색</div></div>
-    </div>
-  </div>
-  <div class="afm-zone">
-    <span class="afm-zone-ch">챕터 5</span>
-    <span class="afm-zone-label">검색 (실시간)</span>
-    <div class="afm-row">
-      <div class="afm-box afm-built"><div class="afm-label">LCEL Chain</div><div class="afm-sub">검색기 → 프롬프트 → LLM</div></div>
-    </div>
-  </div>
-  <div class="afm-zone">
-    <span class="afm-zone-ch">챕터 4</span>
-    <span class="afm-zone-label">파싱·벡터화 (오프라인)</span>
-    <div class="afm-row afm-three">
-      <div class="afm-box afm-built afm-dashed"><div class="afm-label">챕터 3 문서 규칙</div><div class="afm-sub">PDF·Word·Excel·HWP</div></div>
-      <div class="afm-box afm-built"><div class="afm-label">Doc Pipeline</div><div class="afm-sub">파싱·청킹·임베딩</div></div>
-      <div class="afm-box afm-built"><div class="afm-label">ChromaDB</div><div class="afm-sub">벡터 저장소</div></div>
-    </div>
-  </div>
-  <div class="afm-zone">
-    <span class="afm-zone-ch">챕터 2</span>
-    <span class="afm-zone-label">데이터</span>
-    <div class="afm-row">
-      <div class="afm-box afm-built"><div class="afm-label">PostgreSQL</div><div class="afm-sub">직원·연차·매출</div></div>
-    </div>
-  </div>
-  <div class="afm-row afm-ext">
-    <div class="afm-box afm-faint afm-dashed"><div class="afm-label">Ollama LLM (외부)</div></div>
-  </div>
-  <div class="afm-note">
-    챕터 7은 새 박스를 얹지 않고 <b>챕터 6 오케스트레이션 세 박스를 운영 래퍼로 감싼 챕터</b>입니다. 같은 에이전트지만 이제는 캐시, 토큰 추적, 재시도가 붙어 실제 배포에 견딥니다. 챕터 8부터는 검색 품질 튜닝(Hybrid Search, Reranker) 영역으로 넘어갑니다.
-  </div>
+  <div class="ch-note">새로: <b>ops 3 chip · Cache · Monitor · Retry</b> · 나머지 기존 유지</div>
 </div>
+<p class="thought">그림 7-10. 챕터 7의 결과. Cache, Monitor, Retry 세 운영 chip이 Runtime 위에 새로 자리를 잡았습니다</p>
 <div class="tip">
 <p><strong>종료합니다</strong></p>
 <p><code>Ctrl + C</code>로 서버를 종료합니다. Docker 컨테이너는 챕터 8에서도 같은 PostgreSQL·ChromaDB를 쓰므로 그대로 두세요.</p>

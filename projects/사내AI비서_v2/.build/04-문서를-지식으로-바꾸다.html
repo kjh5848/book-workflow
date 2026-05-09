@@ -806,6 +806,72 @@ python<span class="w"> </span>src/main.py<span class="w"> </span>--chunk-size<sp
 </tr>
 </tbody>
 </table>
+<div class="ch-slot">
+  <div class="ch-name"><b>CH 04</b> · 문서를 지식으로 - ChromaDB NEW</div>
+  <div class="arch11">
+    <div class="header">
+      <div class="sub">chapter 04</div>
+      <div class="title">벡터 저장소</div>
+      <div class="desc">임베딩 + ChromaDB 첫 등장</div>
+    </div>
+    <div class="row-client">
+      <div class="col-c">
+        <div class="user"><div class="ico">◉</div><div class="n">사용자</div><div class="s">채팅으로 질문</div></div>
+        <div class="flow"><span class="d">↓ 질문</span><span class="u">↑ 답변</span></div>
+        <div class="api"><div class="l">API 게이트웨이 (Gateway)</div><div class="n">FastAPI</div><div class="s">대시보드 · REST</div></div>
+      </div>
+      <div class="flow-arrows empty">
+        <div class="fa-pair"><div class="fa-arrow call">→</div></div>
+        <div class="fa-pair"><div class="fa-arrow ret">←</div></div>
+      </div>
+      <div class="gap gap-col-a"></div>
+    </div>
+    <div class="lvl-lbl muted"><span class="up">↑</span> &nbsp;·&nbsp; <span class="down">↓</span></div>
+    <div class="row-ext">
+      <div class="gap gap-llm"></div>
+      <div class="flow-arrows empty"><div class="fa-pair"><div class="fa-arrow ret">←</div></div><div class="fa-pair"><div class="fa-arrow call">→</div></div></div>
+      <div class="gap gap-col-t"></div>
+    </div>
+    <div class="lvl-lbl"><span class="up">↑ 임베딩 저장</span> &nbsp;·&nbsp; <span class="down">↓ 유사도 검색</span></div>
+<pre><code>&lt;div class=&quot;doc-pipeline&quot;&gt;
+  &lt;div class=&quot;dp-step&quot;&gt;
+    &lt;span class=&quot;lbl&quot;&gt;1&lt;/span&gt;
+    &lt;span class=&quot;name&quot;&gt;사내 문서&lt;/span&gt;
+    &lt;span class=&quot;desc&quot;&gt;PDF · DOCX · XLSX&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;dp-arrow&quot;&gt;→&lt;/div&gt;
+  &lt;div class=&quot;dp-step&quot;&gt;
+    &lt;span class=&quot;lbl&quot;&gt;2&lt;/span&gt;
+    &lt;span class=&quot;name&quot;&gt;MD 변환&lt;/span&gt;
+    &lt;span class=&quot;desc&quot;&gt;통합 포맷 · 청킹&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;dp-arrow&quot;&gt;→&lt;/div&gt;
+  &lt;div class=&quot;dp-step&quot;&gt;
+    &lt;span class=&quot;lbl&quot;&gt;3&lt;/span&gt;
+    &lt;span class=&quot;name&quot;&gt;임베딩&lt;/span&gt;
+    &lt;span class=&quot;desc&quot;&gt;ko-sroberta · 768차원&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;dp-to-db&quot;&gt;↓ 벡터로 저장&lt;/div&gt;
+
+&lt;div class=&quot;stores&quot;&gt;
+  &lt;div class=&quot;st new&quot;&gt;
+    &lt;span class=&quot;new-badge&quot;&gt;NEW · CH4&lt;/span&gt;
+    &lt;div class=&quot;l&quot;&gt;벡터 저장소 (Vector Store)&lt;/div&gt;
+    &lt;div class=&quot;n&quot;&gt;ChromaDB&lt;/div&gt;
+    &lt;div class=&quot;s&quot;&gt;ko-sroberta · 768차원&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;st&quot;&gt;
+    &lt;div class=&quot;l&quot;&gt;관계형 DB (Relational)&lt;/div&gt;
+    &lt;div class=&quot;n&quot;&gt;PostgreSQL&lt;/div&gt;
+    &lt;div class=&quot;s&quot;&gt;직원 · 연차 · 매출&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+  </div>
+  <div class="ch-note">이전: <b>사용자·FastAPI·PostgreSQL</b> · 새로: <b>사내 문서 → MD → 임베딩 → ChromaDB</b></div>
+</div>
+<p class="thought">그림 4-7. 챕터 4의 결과. 사내 문서가 임베딩을 거쳐 ChromaDB에 새로 자리를 잡았습니다</p>
 <div class="remember">
 <p><strong>이것만은 기억하자</strong></p>
 <ul>

@@ -672,56 +672,84 @@ Style: architecture-infographic
 <p><strong>→ 에이전트가 &quot;어느 자료함을 열지&quot; 스스로 판단</strong></p>
 </div>
 <h2>6.7 전체 구성도에서 챕터 6의 자리</h2>
-<div class="arch-fullmap">
-  <div class="arch-fullmap-title">전체 구성도. 짙은 박스가 챕터 6 범위</div>
-  <div class="afm-row afm-user">
-    <div class="afm-box afm-built afm-round"><div class="afm-label">사내 직원 · 관리자</div></div>
-  </div>
-  <div class="afm-zone">
-    <span class="afm-zone-ch">챕터 2</span>
-    <span class="afm-zone-label">대시보드</span>
-    <div class="afm-row">
-      <div class="afm-box afm-built"><div class="afm-label">FastAPI</div><div class="afm-sub">REST API · 관리자 웹</div></div>
+<div class="ch-slot">
+  <div class="ch-name"><b>CH 06</b> · 연차도 규정도 - ReAct · @tool · MCP NEW</div>
+  <div class="arch11">
+    <div class="header">
+      <div class="sub">chapter 06</div>
+      <div class="title">통합 에이전트 · 도구 호출</div>
+      <div class="desc">ReAct 루프 + llama3.1 + MCP 4 도구</div>
+    </div>
+    <div class="row-client">
+      <div class="col-c">
+        <div class="user"><div class="ico">◉</div><div class="n">사용자</div><div class="s">채팅으로 질문</div></div>
+        <div class="flow"><span class="d">↓ 질문</span><span class="u">↑ 답변</span></div>
+        <div class="api"><div class="l">API 게이트웨이 (Gateway)</div><div class="n">FastAPI</div><div class="s">대시보드 · REST</div></div>
+      </div>
+      <div class="flow-arrows"><div class="fa-pair"><div class="fa-arrow call">→</div></div><div class="fa-pair"><div class="fa-arrow ret">←</div></div></div>
+      <div class="col-a">
+        <div class="title">Runtime · ReAct + Engine</div>
+        <div class="loop-inner new">
+          <span class="new-badge">NEW · CH6</span>
+          <div class="loop-label">ReAct 루프</div>
+          <div class="stages">
+            <div class="st">Reason</div><div class="arr">→</div>
+            <div class="st">Act</div><div class="arr">→</div>
+            <div class="st">Observe</div><div class="arr">↻</div>
+          </div>
+        </div>
+        <div class="engine-inner">
+          <div class="engine-label">RAG Engine</div>
+          <div class="engine-name">기초 체인 (CH05)</div>
+          <div class="stages-6">
+            <div class="s future"><span class="num">01</span><span class="nm">파싱</span></div>
+            <div class="s"><span class="num">02</span><span class="nm">청킹</span></div>
+            <div class="s future"><span class="num">03</span><span class="nm">확장</span></div>
+            <div class="s"><span class="num">04</span><span class="nm">검색</span></div>
+            <div class="s future"><span class="num">05</span><span class="nm">리랭크</span></div>
+            <div class="s"><span class="num">06</span><span class="nm">LLM</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="lvl-lbl"><span class="up">↑ 프롬프트 · 도구 호출</span> &nbsp;·&nbsp; <span class="down">↓ 응답 · 결과</span></div>
+    <div class="row-ext">
+      <div class="llm"><div class="box">
+        <div class="l">외부 · LLM (External)</div>
+        <div class="n">Ollama</div>
+        <div class="models">
+          <div class="m"><span class="mn">deepseek-r1:8b</span><span class="mu">추론</span></div>
+          <div class="m new"><span class="mn">llama3.1:8b</span><span class="mu">Tool Calling</span></div>
+          <div class="m future"><span class="mn">qwen2.5vl:7b</span><span class="mu">CH10에서</span></div>
+        </div>
+      </div></div>
+      <div class="flow-arrows"><div class="fa-pair"><div class="fa-arrow ret">←</div><div class="fa-label">응답</div></div><div class="fa-pair"><div class="fa-label">호출</div><div class="fa-arrow call">→</div></div></div>
+      <div class="col-t new">
+        <span class="new-badge">NEW · CH6</span>
+        <div class="title">도구 호출 · MCP Tools</div>
+        <div class="tool"><div class="no">01</div><div><div class="n">leave_balance</div><div class="s">연차 조회</div></div><div class="b">SQL</div></div>
+        <div class="tool"><div class="no">02</div><div><div class="n">sales_sum</div><div class="s">부서·기간 매출</div></div><div class="b">SQL</div></div>
+        <div class="tool"><div class="no">03</div><div><div class="n">list_employees</div><div class="s">이름·부서</div></div><div class="b">SQL</div></div>
+        <div class="tool"><div class="no">04</div><div><div class="n">search_documents</div><div class="s">LCEL · Top-k</div></div><div class="b rag">RAG</div></div>
+      </div>
+    </div>
+    <div class="lvl-lbl muted"><span class="up">↑</span> &nbsp;·&nbsp; <span class="down">↓</span></div>
+    <div class="stores">
+      <div class="st">
+        <div class="l">벡터 저장소 (Vector Store)</div>
+        <div class="n">ChromaDB</div>
+        <div class="s">ko-sroberta · 768차원</div>
+      </div>
+      <div class="st">
+        <div class="l">관계형 DB (Relational)</div>
+        <div class="n">PostgreSQL</div>
+        <div class="s">직원 · 연차 · 매출</div>
+      </div>
     </div>
   </div>
-  <div class="afm-zone">
-    <span class="afm-zone-ch">챕터 6</span>
-    <span class="afm-zone-label">오케스트레이션</span>
-    <div class="afm-row afm-two">
-      <div class="afm-box afm-on"><div class="afm-tag">오늘 만든 부분</div><div class="afm-label">Tool Calling Agent</div><div class="afm-sub">ReAct 패턴 · 사후 분류</div></div>
-      <div class="afm-box afm-on"><div class="afm-tag">오늘 만든 부분</div><div class="afm-label">MCP Tools</div><div class="afm-sub">DB 조회 · 문서 검색</div></div>
-    </div>
-  </div>
-  <div class="afm-zone">
-    <span class="afm-zone-ch">챕터 5</span>
-    <span class="afm-zone-label">검색 (실시간)</span>
-    <div class="afm-row">
-      <div class="afm-box afm-built"><div class="afm-label">LCEL Chain</div><div class="afm-sub">검색기 → 프롬프트 → LLM</div></div>
-    </div>
-  </div>
-  <div class="afm-zone">
-    <span class="afm-zone-ch">챕터 4</span>
-    <span class="afm-zone-label">파싱·벡터화 (오프라인)</span>
-    <div class="afm-row afm-three">
-      <div class="afm-box afm-built afm-dashed"><div class="afm-label">챕터 3 문서 규칙</div><div class="afm-sub">PDF·Word·Excel·HWP</div></div>
-      <div class="afm-box afm-built"><div class="afm-label">Doc Pipeline</div><div class="afm-sub">파싱·청킹·임베딩</div></div>
-      <div class="afm-box afm-built"><div class="afm-label">ChromaDB</div><div class="afm-sub">벡터 저장소</div></div>
-    </div>
-  </div>
-  <div class="afm-zone">
-    <span class="afm-zone-ch">챕터 2</span>
-    <span class="afm-zone-label">데이터</span>
-    <div class="afm-row">
-      <div class="afm-box afm-built"><div class="afm-label">PostgreSQL</div><div class="afm-sub">직원·연차·매출</div></div>
-    </div>
-  </div>
-  <div class="afm-row afm-ext">
-    <div class="afm-box afm-faint afm-dashed"><div class="afm-label">Ollama LLM (외부)</div></div>
-  </div>
-  <div class="afm-note">
-    오늘 채운 건 <b>Tool Calling Agent와 MCP Tools</b> 두 박스입니다. 위쪽 사용자 입력부터 아래쪽 데이터, 문서 저장소까지 전 구간이 하나로 연결됐습니다. 챕터 7에서는 이 에이전트를 실제 운영에 올렸을 때 생기는 속도, 비용 문제를 ResponseCache와 TokenTracker로 잡습니다.
-  </div>
+  <div class="ch-note">새로: <b>ReAct 루프 + llama3.1(Tool Calling) + MCP 4 도구</b></div>
 </div>
+<p class="thought">그림 6-7. 챕터 6의 결과. ReAct 루프와 MCP 4도구가 새로 자리를 잡았습니다</p>
 <div class="tip">
 <p><strong>종료합니다</strong></p>
 <p><code>Ctrl + C</code>로 서버를 종료합니다. Docker 컨테이너는 챕터 7에서도 같은 PostgreSQL·ChromaDB를 쓰므로 그대로 두세요.</p>

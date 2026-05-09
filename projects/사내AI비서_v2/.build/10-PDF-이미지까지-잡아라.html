@@ -1065,6 +1065,87 @@ python<span class="w"> </span>-m<span class="w"> </span>tuning.step3_eval_framew
 </tr>
 </tbody>
 </table>
+<div class="ch-slot">
+  <div class="ch-name"><b>CH 10</b> · PDF 이미지까지 - stage 01 + qwen-vl NEW</div>
+  <div class="arch11">
+    <div class="header">
+      <div class="sub">chapter 10</div>
+      <div class="title">Vision 파서</div>
+      <div class="desc">parse_pdf_hybrid + qwen2.5vl (멀티모달)</div>
+    </div>
+    <div class="row-client">
+      <div class="col-c">
+        <div class="user"><div class="ico">◉</div><div class="n">사용자</div><div class="s">채팅으로 질문</div></div>
+        <div class="flow"><span class="d">↓ 질문</span><span class="u">↑ 답변</span></div>
+        <div class="api"><div class="l">API 게이트웨이 (Gateway)</div><div class="n">FastAPI</div><div class="s">대시보드 · REST</div></div>
+      </div>
+      <div class="flow-arrows"><div class="fa-pair"><div class="fa-arrow call">→</div></div><div class="fa-pair"><div class="fa-arrow ret">←</div></div></div>
+      <div class="col-a">
+        <div class="title">Runtime · Vision 파서 추가</div>
+        <div class="ops">
+          <div class="chip"><div class="l">캐시 (Cache)</div><div class="n">Response</div><div class="s">TTL 1시간</div></div>
+          <div class="chip"><div class="l">관찰 (Monitor)</div><div class="n">Tracker</div><div class="s">토큰·로그</div></div>
+          <div class="chip"><div class="l">재시도 (Retry)</div><div class="n">Resilience</div><div class="s">3회</div></div>
+        </div>
+        <div class="loop-inner">
+          <div class="loop-label">ReAct 루프</div>
+          <div class="stages">
+            <div class="st">Reason</div><div class="arr">→</div>
+            <div class="st">Act</div><div class="arr">→</div>
+            <div class="st">Observe</div><div class="arr">↻</div>
+          </div>
+        </div>
+        <div class="engine-inner">
+          <div class="engine-label">RAG Engine</div>
+          <div class="engine-name">stage 01 파싱 업그레이드</div>
+          <div class="stages-6">
+            <div class="s new"><span class="num">01</span><span class="nm">파싱</span></div>
+            <div class="s"><span class="num">02</span><span class="nm">청킹</span></div>
+            <div class="s"><span class="num">03</span><span class="nm">확장</span></div>
+            <div class="s"><span class="num">04</span><span class="nm">검색</span></div>
+            <div class="s"><span class="num">05</span><span class="nm">리랭크</span></div>
+            <div class="s"><span class="num">06</span><span class="nm">LLM</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="lvl-lbl"><span class="up">↑ Vision 호출</span> &nbsp;·&nbsp; <span class="down">↓ OCR 텍스트</span></div>
+    <div class="row-ext">
+      <div class="llm"><div class="box">
+        <div class="l">외부 · LLM (External)</div>
+        <div class="n">Ollama</div>
+        <div class="models">
+          <div class="m"><span class="mn">deepseek-r1:8b</span><span class="mu">추론</span></div>
+          <div class="m"><span class="mn">llama3.1:8b</span><span class="mu">Tool Calling</span></div>
+          <div class="m new"><span class="mn">qwen2.5vl:7b</span><span class="mu">Vision</span></div>
+        </div>
+      </div></div>
+      <div class="flow-arrows"><div class="fa-pair"><div class="fa-arrow ret">←</div></div><div class="fa-pair"><div class="fa-arrow call">→</div></div></div>
+      <div class="col-t">
+        <div class="title">도구 호출 · MCP Tools</div>
+        <div class="tool"><div class="no">01</div><div><div class="n">leave_balance</div><div class="s">연차 조회</div></div><div class="b">SQL</div></div>
+        <div class="tool"><div class="no">02</div><div><div class="n">sales_sum</div><div class="s">부서·기간 매출</div></div><div class="b">SQL</div></div>
+        <div class="tool"><div class="no">03</div><div><div class="n">list_employees</div><div class="s">이름·부서</div></div><div class="b">SQL</div></div>
+        <div class="tool"><div class="no">04</div><div><div class="n">search_documents</div><div class="s">LCEL · Top-k</div></div><div class="b rag">RAG</div></div>
+      </div>
+    </div>
+    <div class="lvl-lbl muted"><span class="up">↑</span> &nbsp;·&nbsp; <span class="down">↓</span></div>
+    <div class="stores">
+      <div class="st">
+        <div class="l">벡터 저장소 (Vector Store)</div>
+        <div class="n">ChromaDB</div>
+        <div class="s">ko-sroberta · 768차원</div>
+      </div>
+      <div class="st">
+        <div class="l">관계형 DB (Relational)</div>
+        <div class="n">PostgreSQL</div>
+        <div class="s">직원 · 연차 · 매출</div>
+      </div>
+    </div>
+  </div>
+  <div class="ch-note">새로: <b>stage 01 파싱(Vision) + qwen2.5vl 모델</b> · 다른 stage는 CH08(05 리랭크)·CH09(03 확장)에서 누적</div>
+</div>
+<p class="thought">그림 10-12. 챕터 10의 결과. RAG Engine의 stage 01(파싱)이 업그레이드되고 qwen2.5vl 모델이 새로 자리를 잡았습니다</p>
 <div class="remember">
 <p><strong>이것만은 기억하자</strong></p>
 <ul>
