@@ -76,7 +76,41 @@
 <li>표도 보존됩니다. 엑셀 시트가 <code>| 열1 | 열2 |</code> 형태로 변환됩니다.</li>
 <li>사람도 읽을 수 있습니다. 변환 결과가 제대로인지 눈으로 바로 검증할 수 있습니다.</li>
 </ul>
-<div class="chapter-image diagram"><img src="../assets/CH03/diagram/03_parser-flow.png" alt="" /><div class="caption">그림 3-3. 파서가 다양한 형식을 Markdown 텍스트로 통일합니다. 그래야 청킹하고 검색할 수 있습니다</div></div>
+<div class="sp-figure">
+  <div class="parser-flow">
+    <div class="pf-node input">
+      <strong>사내 문서</strong>
+      <small>.pdf · .docx · .xlsx</small>
+    </div>
+    <div class="pf-arrow-h">→</div>
+    <div class="pf-node decision">
+      <strong>파서 선택</strong>
+      <small>확장자 판정</small>
+    </div>
+    <div class="pf-arrow-h">→</div>
+    <div class="pf-branches">
+      <div class="pf-branch"><span class="pf-key">PDF</span><span class="pf-value">pypdf</span></div>
+      <div class="pf-branch"><span class="pf-key">DOCX</span><span class="pf-value">python-docx</span></div>
+      <div class="pf-branch"><span class="pf-key">XLSX</span><span class="pf-value">openpyxl</span></div>
+    </div>
+    <div class="pf-arrow-h">→</div>
+    <div class="pf-node merge">
+      <strong>Markdown 변환</strong>
+      <small>통합 텍스트</small>
+    </div>
+    <div class="pf-arrow-h">→</div>
+    <div class="pf-node">
+      <strong>청킹</strong>
+      <small>의미 단위 분할</small>
+    </div>
+    <div class="pf-arrow-h">→</div>
+    <div class="pf-node">
+      <strong>벡터 DB</strong>
+      <small>ChromaDB 저장</small>
+    </div>
+  </div>
+  <div class="caption">그림 3-3. 파서가 다양한 형식을 Markdown으로 통일한 뒤 청킹·벡터화해서 검색 가능하게 만듭니다</div>
+</div>
 <div class="tip">
 <p><strong>반드시 Markdown일 필요는 없습니다</strong></p>
 <p>일반 텍스트(plain text)나 JSON으로 변환해도 벡터 DB에 넣을 수 있습니다. 다만 Markdown은 <strong>제목, 표, 목록 같은 문서 구조를 보존하면서도 가볍다</strong>는 점에서 RAG 파이프라인에 가장 널리 쓰입니다.</p>

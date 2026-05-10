@@ -3487,3 +3487,88 @@
     border: 1px solid var(--color-accent-border); color: var(--color-accent-text);
     border-radius: var(--radius-md); font-size: 14px; line-height: 1.8; margin-top: 16px;
   }
+
+
+/* ═══════════════════════════════════════════════════════════
+ * 분기-합류 흐름도 (.parser-flow)
+ * 입력 → 분기 노드 → N갈래 → 합류 → 출력 패턴
+ * 사용처: CH03 그림 3-3 (파서 흐름), CH04 그림 4-4 (전략 패턴)
+ * ═══════════════════════════════════════════════════════════ */
+.parser-flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 20px 0 0;
+  padding: 24px 18px;
+  background: #fff;
+  border: 1.5px solid var(--color-accent-border);
+  border-radius: 12px;
+  box-shadow: var(--shadow-figure);
+  flex-wrap: wrap;
+}
+.parser-flow .pf-node {
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-accent-border);
+  border-radius: 10px;
+  padding: 12px 16px;
+  text-align: center;
+  min-width: 130px;
+}
+.parser-flow .pf-node strong {
+  display: block;
+  color: var(--color-accent-text);
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+.parser-flow .pf-node small {
+  color: var(--color-text-muted);
+  font-size: 11px;
+}
+.parser-flow .pf-node.input {
+  background: var(--color-info-bg);
+  border-color: var(--color-info);
+}
+.parser-flow .pf-node.input strong { color: var(--color-info-text); }
+.parser-flow .pf-node.decision {
+  background: var(--color-accent-bg);
+  border-color: var(--color-accent);
+}
+.parser-flow .pf-node.merge {
+  background: var(--color-accent-warm-bg);
+  border-color: var(--color-accent-warm);
+}
+.parser-flow .pf-node.merge strong { color: var(--color-accent-warm-text); }
+.parser-flow .pf-arrow-h {
+  color: var(--color-accent);
+  font-size: 22px;
+  font-weight: 700;
+  align-self: center;
+}
+.parser-flow .pf-branches {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.parser-flow .pf-branch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  white-space: nowrap;
+}
+.parser-flow .pf-key {
+  color: var(--color-info-text);
+  font-weight: 700;
+  min-width: 48px;
+}
+.parser-flow .pf-value {
+  color: var(--color-text-heading);
+  font-weight: 700;
+}

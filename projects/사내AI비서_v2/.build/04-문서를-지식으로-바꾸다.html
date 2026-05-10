@@ -182,7 +182,34 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 </tr>
 </tbody>
 </table>
-<div class="chapter-image diagram"><img src="../assets/CH04/diagram/04_parser-select.png" alt="" /><div class="caption">그림 4-4. 파일 확장자에 따라 적절한 파서를 자동 분기합니다. 통합 함수 하나로 처리합니다</div></div>
+<div class="sp-figure">
+  <div class="parser-flow">
+    <div class="pf-node input">
+      <strong>사내 문서</strong>
+      <small>.pdf · .docx · .xlsx</small>
+    </div>
+    <div class="pf-arrow-h">→</div>
+    <div class="pf-node decision">
+      <strong>extract_text()</strong>
+      <small>확장자 판정</small>
+    </div>
+    <div class="pf-arrow-h">→</div>
+    <div class="pf-branches">
+      <div class="pf-branch"><span class="pf-key">.pdf</span><span class="pf-value">pypdf</span></div>
+      <div class="pf-branch"><span class="pf-key">.docx</span><span class="pf-value">python-docx</span></div>
+      <div class="pf-branch"><span class="pf-key">.xlsx</span><span class="pf-value">openpyxl</span></div>
+    </div>
+    <div class="pf-arrow-h">→</div>
+    <div class="pf-node merge">
+      <strong>Markdown 통합</strong>
+      <small>텍스트 출력</small>
+    </div>
+  </div>
+  <div class="sp-callout">
+    <strong>전략 패턴(Strategy)</strong>. 호출자는 <code>extract_text(path)</code> 하나만 알면 되고, 새 형식이 늘어도 매핑 한 줄만 추가하면 됩니다.
+  </div>
+  <div class="caption">그림 4-4. 파일이 들어오면 확장자에 따라 파서가 선택되고, 통합 텍스트(Markdown)로 출력됩니다</div>
+</div>
 <p><code>ex04/src/extractor.py</code>의 통합 함수가 확장자를 보고 파서를 자동 선택합니다. 이 함수는 이미 구현된 상태이고 우리는 <code>ex04/src/main.py</code>에서 호출만 합니다.</p>
 <div class="term-box">
 <p><strong>extractor의 전략 패턴</strong>. <code>ex04/src/extractor.py</code>의 <code>extract_text()</code> 함수는 <code>{&quot;.pdf&quot;: extract_from_pdf, &quot;.docx&quot;: extract_from_docx, &quot;.xlsx&quot;: extract_from_xlsx}</code> 같은 딕셔너리 매핑으로 파서를 고릅니다. 새 형식을 추가할 때 딕셔너리에 한 줄만 추가하면 되는 구조입니다.</p>
@@ -213,7 +240,8 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 </tr>
 </tbody>
 </table>
-<p>Step 1을 먼저 돌려 <code>data/markdown/</code> 결과물을 눈으로 검증하고, 괜찮으면 Step 2로 넘어갑니다. <code>--step</code> 인자를 빼면 전체가 순서대로 실행됩니다. 이 섹션(4.3)에서는 Step 1을, 다음 섹션(4.4)에서 Step 2를 채웁니다. 먼저 <code>step1_python_parsing</code>의 TODO부터.</p>
+<p>Step 1을 먼저 돌려 <code>data/markdown/</code> 결과물을 눈으로 검증하고, 괜찮으면 Step 2로 넘어갑니다. <code>--step</code> 인자를 빼면 전체가 순서대로 실행됩니다. 이 섹션(4.3)에서는 Step 1을, 다음 섹션(4.4)에서 Step 2를 채웁니다.</p>
+<p><code>ex04/src/main.py</code>를 열고 <code>step1_python_parsing</code> 함수의 TODO 주석 아래 <code>pass</code>를 지우고 아래 코드를 작성합니다.</p>
 <div class="code-block highlight" data-lang="python"><div class="cb-title"><span class="badge">실습 1</span> ex04/src/main.py. step1_python_parsing</div><span class="k">def</span><span class="w"> </span><span class="nf">step1_python_parsing</span><span class="p">(</span><span class="n">docs_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
     <span class="cb-todo"># TODO: extract_all_from_directory()로 문서 추출 → 결과 출력 → 마크다운 저장</span>
     <span class="c1"># 1. docs_dir(data/docs/) 안의 PDF/DOCX/XLSX를 한꺼번에 파싱</span>
@@ -221,7 +249,8 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
     <span class="c1"># 2. 파싱 결과를 data/markdown/에 .md 파일로 저장 (눈으로 확인용)</span>
     <span class="n">save_results_as_markdown</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">results</span></div>
-<p><code>extract_all_from_directory()</code> 는 <code>ex04/src/extractor.py</code>에 이미 구현돼 있고 <code>save_results_as_markdown()</code> 은 <code>_pipeline_utils.py</code>의 헬퍼입니다. 우리가 하는 일은 <strong>둘을 순서대로 호출</strong>하는 것뿐입니다. <code>main()</code> 끝부분에는 <code>--step</code> 인자 분기 TODO가 있는데, 여기에 <code>step1_python_parsing</code>을 연결합니다.</p>
+<p><code>extract_all_from_directory()</code> 는 <code>ex04/src/extractor.py</code>에 이미 구현돼 있고 <code>save_results_as_markdown()</code> 은 <code>_pipeline_utils.py</code>의 헬퍼입니다. 우리가 하는 일은 <strong>둘을 순서대로 호출</strong>하는 것뿐입니다.</p>
+<p>이어서 같은 파일 <code>ex04/src/main.py</code>의 <code>main()</code> 함수 분기 TODO를 채웁니다. <code>step1_python_parsing</code>을 <code>--step 1</code> 인자에 연결합니다.</p>
 <div class="code-block highlight" data-lang="python"><div class="cb-title"><span class="badge">실습 1</span> ex04/src/main.py. main() 분기</div><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">parse_arguments</span><span class="p">()</span>
     <span class="n">steps_to_run</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">step</span><span class="p">))</span>
@@ -729,41 +758,39 @@ python<span class="w"> </span>src/main.py<span class="w"> </span>--chunk-size<sp
       <div class="gap gap-col-t"></div>
     </div>
     <div class="lvl-lbl"><span class="up">↑ 임베딩 저장</span> &nbsp;·&nbsp; <span class="down">↓ 유사도 검색</span></div>
-<pre><code>&lt;div class=&quot;doc-pipeline&quot;&gt;
-  &lt;div class=&quot;dp-step&quot;&gt;
-    &lt;span class=&quot;lbl&quot;&gt;1&lt;/span&gt;
-    &lt;span class=&quot;name&quot;&gt;사내 문서&lt;/span&gt;
-    &lt;span class=&quot;desc&quot;&gt;PDF · DOCX · XLSX&lt;/span&gt;
-  &lt;/div&gt;
-  &lt;div class=&quot;dp-arrow&quot;&gt;→&lt;/div&gt;
-  &lt;div class=&quot;dp-step&quot;&gt;
-    &lt;span class=&quot;lbl&quot;&gt;2&lt;/span&gt;
-    &lt;span class=&quot;name&quot;&gt;MD 변환&lt;/span&gt;
-    &lt;span class=&quot;desc&quot;&gt;통합 포맷 · 청킹&lt;/span&gt;
-  &lt;/div&gt;
-  &lt;div class=&quot;dp-arrow&quot;&gt;→&lt;/div&gt;
-  &lt;div class=&quot;dp-step&quot;&gt;
-    &lt;span class=&quot;lbl&quot;&gt;3&lt;/span&gt;
-    &lt;span class=&quot;name&quot;&gt;임베딩&lt;/span&gt;
-    &lt;span class=&quot;desc&quot;&gt;ko-sroberta · 768차원&lt;/span&gt;
-  &lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&quot;dp-to-db&quot;&gt;↓ 벡터로 저장&lt;/div&gt;
-
-&lt;div class=&quot;stores&quot;&gt;
-  &lt;div class=&quot;st new&quot;&gt;
-    &lt;span class=&quot;new-badge&quot;&gt;NEW · CH4&lt;/span&gt;
-    &lt;div class=&quot;l&quot;&gt;벡터 저장소 (Vector Store)&lt;/div&gt;
-    &lt;div class=&quot;n&quot;&gt;ChromaDB&lt;/div&gt;
-    &lt;div class=&quot;s&quot;&gt;ko-sroberta · 768차원&lt;/div&gt;
-  &lt;/div&gt;
-  &lt;div class=&quot;st&quot;&gt;
-    &lt;div class=&quot;l&quot;&gt;관계형 DB (Relational)&lt;/div&gt;
-    &lt;div class=&quot;n&quot;&gt;PostgreSQL&lt;/div&gt;
-    &lt;div class=&quot;s&quot;&gt;직원 · 연차 · 매출&lt;/div&gt;
-  &lt;/div&gt;
-&lt;/div&gt;
-</code></pre>
+    <div class="doc-pipeline">
+      <div class="dp-step">
+        <span class="lbl">1</span>
+        <span class="name">사내 문서</span>
+        <span class="desc">PDF · DOCX · XLSX</span>
+      </div>
+      <div class="dp-arrow">→</div>
+      <div class="dp-step">
+        <span class="lbl">2</span>
+        <span class="name">MD 변환</span>
+        <span class="desc">통합 포맷 · 청킹</span>
+      </div>
+      <div class="dp-arrow">→</div>
+      <div class="dp-step">
+        <span class="lbl">3</span>
+        <span class="name">임베딩</span>
+        <span class="desc">ko-sroberta · 768차원</span>
+      </div>
+    </div>
+    <div class="dp-to-db">↓ 벡터로 저장</div>
+    <div class="stores">
+      <div class="st new">
+        <span class="new-badge">NEW · CH4</span>
+        <div class="l">벡터 저장소 (Vector Store)</div>
+        <div class="n">ChromaDB</div>
+        <div class="s">ko-sroberta · 768차원</div>
+      </div>
+      <div class="st">
+        <div class="l">관계형 DB (Relational)</div>
+        <div class="n">PostgreSQL</div>
+        <div class="s">직원 · 연차 · 매출</div>
+      </div>
+    </div>
   </div>
   <div class="ch-note">이전: <b>사용자·FastAPI·PostgreSQL</b> · 새로: <b>사내 문서 → MD → 임베딩 → ChromaDB</b></div>
 </div>

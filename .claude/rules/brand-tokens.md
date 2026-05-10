@@ -33,8 +33,9 @@
 - `:::goal` / `:::tip` / `:::remember` / `:::note` / `:::term-box` / `:::prep` 등 **boxes 계열** directive — 약한 색 배경(`--color-accent-bg`·`--color-accent-warm-bg`·무채색 계열) 허용
 - 비교 강조: `.annotated-compare .ac-block.llm / .truth`처럼 **반드시 대비가 필요한 블록**만 약한 색 배경
 - 번호 뱃지·태그: 점·원·사각 뱃지는 진한 색 배경 OK
+- **다이어그램 외곽 테두리 강조**: 흐름도·구조도 등 그림 단위 다이어그램(`.parser-flow` 등)의 최상위 컨테이너는 `1.5px solid var(--color-accent-border)` 컬러 테두리 허용. 안의 노드와 외곽을 시각적으로 분리하기 위함이며, 배경은 여전히 `#fff`를 유지한다
 
-**원칙 요약**: "흰 종이 위에 테두리만 그어 박스를 만든다"가 기본. 색은 포인트에만.
+**원칙 요약**: "흰 종이 위에 테두리만 그어 박스를 만든다"가 기본. 색은 포인트(테두리·뱃지)에만.
 
 ## Elevation (그림자) — 이미지·다이어그램 공용
 
@@ -43,7 +44,7 @@ HTML 다이어그램은 **이미지와 같은 시각 무게**를 갖도록 공�
 - **단일 진실원**: `tokens.css`의 `--shadow-figure` (현재 `none` — 그림자 비활성화, 테두리만으로 경계 표시)
 - **적용 대상**:
   - 이미지: `.chapter-image img`
-  - 단독 다이어그램: `.arch11`, `.terminal-log`, `.rag-pipeline-box`, `.llm-rag-split`, `.librarian-scene`, `.annotated-compare`
+  - 단독 다이어그램: `.arch11`, `.terminal-log`, `.rag-pipeline-box`, `.llm-rag-split`, `.librarian-scene`, `.annotated-compare`, `.parser-flow`
   - 묶음 래퍼: `.figure-group` (여러 다이어그램을 하나의 "그림 N-N" 단위로 묶을 때)
 - **중첩 금지**: `.figure-group > *`는 `box-shadow: none !important`. 래퍼에만 그림자를 남긴다.
 - **신규 다이어그램 추가 시**: 단독 사용 컴포넌트는 `box-shadow: var(--shadow-figure)` 셀렉터 목록에 편입한다.
