@@ -914,8 +914,7 @@ python<span class="w"> </span>-m<span class="w"> </span>tuning.step3_eval_framew
 <div class="dialogue"><span class="speaker">팀장</span>: "스캔본이 한 장뿐인데도 숫자에 반영되네요. 종류가 다른 문서를 한 파이프라인으로 다 받는다는 점에서도 D가 맞는 옷이에요."</div>
 <p>의자 등받이에 몸이 닿는 순간, 머릿속에서 다른 정리가 됐습니다.</p>
 <p class="thought">튜닝은 지표 하나를 위로 올리는 게 아니라, 쌓아 둔 부품이 서로 물려 돌아가는지 확인하는 작업이구나.</p>
-<p>![](../assets/챕터 10/gemini/10_eval-concept.png)
-<em>그림 10-11. 평가 프레임워크. 질문과 정답 쌍을 반복 돌려 숫자로 품질을 측정합니다</em></p>
+<div class="chapter-image gemini"><img src="../assets/CH10/gemini/10_eval-concept.png" alt="" /><div class="caption">그림 10-11. 평가 프레임워크. 질문과 정답 쌍을 반복 돌려 숫자로 품질을 측정합니다</div></div>
 <h2>10.6 튜닝 메뉴판 - 무엇을 골라 쓸까</h2>
 <p>평가 결과에서 고른 D 조합을 실제로 어떻게 조립할지, 챕터 8~10에 등장한 튜닝을 한 줄씩 놓고 재점검할 차례였습니다. 오픈이가 화이트보드에 튜닝 이름을 하나씩 적어 내려갔습니다.</p>
 <div class="dialogue"><span class="speaker">오픈이</span>: "전부 다 켜면 좋겠지만, 느려지고 복잡해집니다. 평가에서 숫자로 증명된 것만 남기겠습니다."</div>
@@ -1013,58 +1012,10 @@ python<span class="w"> </span>-m<span class="w"> </span>tuning.step3_eval_framew
 <div class="dialogue"><span class="speaker">팀장</span>: "HyDE랑 Multi-Query, Compression은 왜 뺐어요?"</div>
 <div class="dialogue"><span class="speaker">오픈이</span>: "셋 다 질문이 들어올 때마다 LLM을 한 번씩 더 부릅니다. 하지만 규정 문서에서는 질문과 문서 어휘가 거의 같아 가상 답변(HyDE)이나 질문 확장(Multi-Query)의 이득이 작고, 청크도 이미 짧아서 Compression이 얻을 게 별로 없었습니다. 비용은 올라가는데 숫자는 제자리였던 거죠."</div>
 <p>체크한 일곱 항목이 커넥트HR 에이전트에 실제로 적용한 D 조합입니다. RAG 평가는 조합 밖에서 이 일곱 가지가 제값을 하는지 수치로 검증하는 장치로 따로 돌립니다.</p>
-<h2>용어 정리</h2>
-<table>
-<thead>
-<tr>
-<th>본문 속 표현</th>
-<th>진짜 용어</th>
-<th>정식 정의</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>&quot;확대경으로 글자 읽기&quot;</td>
-<td><strong>OCR (Optical Character Recognition)</strong></td>
-<td>이미지에서 문자를 인식해 텍스트로 변환</td>
-</tr>
-<tr>
-<td>&quot;눈을 가진 LLM&quot;</td>
-<td><strong>Vision LLM</strong></td>
-<td>이미지·표·도식을 이해해 자연어로 설명하는 멀티모달 LLM</td>
-</tr>
-<tr>
-<td>&quot;이미지 감지 후 분기&quot;</td>
-<td><strong>하이브리드 파서</strong></td>
-<td><code>page.get_images()</code>·텍스트 길이로 Vision LLM과 pypdf를 자동 선택</td>
-</tr>
-<tr>
-<td>&quot;정답 비율&quot;</td>
-<td><strong>Precision@k</strong></td>
-<td>상위 k개 중 정답 청크 비율</td>
-</tr>
-<tr>
-<td>&quot;정답 커버리지&quot;</td>
-<td><strong>Recall@k</strong></td>
-<td>정답 문서 중 상위 k개에 포함된 비율</td>
-</tr>
-<tr>
-<td>&quot;근거 없는 답변 비율&quot;</td>
-<td><strong>Hallucination Rate</strong></td>
-<td>답변 문장 중 문서 근거가 없는 비율. 답변과 근거 문서의 단어 겹침으로 간단히 잡거나, 더 정확히 잴 땐 별도 LLM에 채점을 맡깁니다</td>
-</tr>
-<tr>
-<td>&quot;성적표&quot;</td>
-<td><strong>RAG Evaluation Framework</strong></td>
-<td>평가셋(질문·정답)으로 파이프라인을 돌려 Precision·Recall·환각률을 수치화</td>
-</tr>
-<tr>
-<td>&quot;튜닝 조합 스위치&quot;</td>
-<td><strong>Strategy Pattern (A/B/C/D)</strong></td>
-<td>파서·청킹·쿼리변환·검색·리랭크 부품을 갈아끼워 조합별로 성능을 비교</td>
-</tr>
-</tbody>
-</table>
+<h2>10.7 전체 구성도에서 챕터 10의 자리</h2>
+<p>이번 챕터에서 RAG Engine의 첫 번째 stage(01 파싱)가 새로 손질됐습니다. 텍스트 레이어가 살아 있는 페이지는 그대로 pypdf가 처리하고, 스캔본처럼 텍스트가 비어 있는 페이지는 <code>parse_pdf_hybrid</code>가 Vision LLM에게 넘겨 글자를 꺼냅니다. 외부 LLM 자리에는 <code>qwen2.5vl:7b</code>가 새로 들어와, 추론용 deepseek-r1·도구 호출용 llama3.1과 함께 세 모델이 각자의 역할을 맡습니다.</p>
+<p>여기에 챕터 8의 stage 05(리랭크)와 챕터 9의 stage 03(확장)이 누적돼 있어, 이제 RAG Engine 6단계 중 세 자리가 튜닝 작업으로 채워졌습니다. 청킹·하이브리드 검색·약어 확장·Parent Doc·리랭커·Vision 파서까지, 챕터마다 더한 부품이 한 그림 안에서 어떻게 자리를 잡았는지 한눈에 보이는 구성도입니다.</p>
+<p>평가 프레임워크는 이 그림 안에 들어가지 않습니다. 파이프라인 옆에서 채점기 역할로 따로 돌면서, 다음 챕터에서 D 조합을 하나의 파이프라인으로 조립할 때 쓸 근거를 만들어 줍니다.</p>
 <div class="ch-slot">
   <div class="ch-name"><b>CH 10</b> · PDF 이미지까지 - stage 01 + qwen-vl NEW</div>
   <div class="arch11">
@@ -1146,6 +1097,58 @@ python<span class="w"> </span>-m<span class="w"> </span>tuning.step3_eval_framew
   <div class="ch-note">새로: <b>stage 01 파싱(Vision) + qwen2.5vl 모델</b> · 다른 stage는 CH08(05 리랭크)·CH09(03 확장)에서 누적</div>
 </div>
 <p class="thought">그림 10-12. 챕터 10의 결과. RAG Engine의 stage 01(파싱)이 업그레이드되고 qwen2.5vl 모델이 새로 자리를 잡았습니다</p>
+<h2>용어 정리</h2>
+<table>
+<thead>
+<tr>
+<th>본문 속 표현</th>
+<th>진짜 용어</th>
+<th>정식 정의</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&quot;확대경으로 글자 읽기&quot;</td>
+<td><strong>OCR (Optical Character Recognition)</strong></td>
+<td>이미지에서 문자를 인식해 텍스트로 변환</td>
+</tr>
+<tr>
+<td>&quot;눈을 가진 LLM&quot;</td>
+<td><strong>Vision LLM</strong></td>
+<td>이미지·표·도식을 이해해 자연어로 설명하는 멀티모달 LLM</td>
+</tr>
+<tr>
+<td>&quot;이미지 감지 후 분기&quot;</td>
+<td><strong>하이브리드 파서</strong></td>
+<td><code>page.get_images()</code>·텍스트 길이로 Vision LLM과 pypdf를 자동 선택</td>
+</tr>
+<tr>
+<td>&quot;정답 비율&quot;</td>
+<td><strong>Precision@k</strong></td>
+<td>상위 k개 중 정답 청크 비율</td>
+</tr>
+<tr>
+<td>&quot;정답 커버리지&quot;</td>
+<td><strong>Recall@k</strong></td>
+<td>정답 문서 중 상위 k개에 포함된 비율</td>
+</tr>
+<tr>
+<td>&quot;근거 없는 답변 비율&quot;</td>
+<td><strong>Hallucination Rate</strong></td>
+<td>답변 문장 중 문서 근거가 없는 비율. 답변과 근거 문서의 단어 겹침으로 간단히 잡거나, 더 정확히 잴 땐 별도 LLM에 채점을 맡깁니다</td>
+</tr>
+<tr>
+<td>&quot;성적표&quot;</td>
+<td><strong>RAG Evaluation Framework</strong></td>
+<td>평가셋(질문·정답)으로 파이프라인을 돌려 Precision·Recall·환각률을 수치화</td>
+</tr>
+<tr>
+<td>&quot;튜닝 조합 스위치&quot;</td>
+<td><strong>Strategy Pattern (A/B/C/D)</strong></td>
+<td>파서·청킹·쿼리변환·검색·리랭크 부품을 갈아끼워 조합별로 성능을 비교</td>
+</tr>
+</tbody>
+</table>
 <div class="remember">
 <p><strong>이것만은 기억하자</strong></p>
 <ul>

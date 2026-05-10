@@ -161,8 +161,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 인물은 성별·나이 중립적, 도서관 카디건과 안경 착용.
 기존 "안내데스크/리셉션" 느낌은 완전히 배제 — 창구/카운터 없음.
 -->
-<p>![](../assets/챕터 6/gemini/06_chapter-opening-2.png)
-<em>그림 6-1. 서가뿐 아니라 장부실 열쇠까지 쥔 사서. 질문 하나에 두 자료함을 모두 살피는 통합 에이전트</em></p>
+<div class="chapter-image gemini"><img src="../assets/CH06/gemini/06_chapter-opening-2.png" alt="" /><div class="caption">그림 6-1. 서가뿐 아니라 장부실 열쇠까지 쥔 사서. 질문 하나에 두 자료함을 모두 살피는 통합 에이전트</div></div>
 <p>목요일 오후 4시. 창밖이 노랗게 물들고 있었습니다. 키보드 소리가 드문드문 울리는 사무실이었습니다.</p>
 <p>챕터 5에서 채팅 UI를 띄워 두고 동료들이 한 번씩 써 보게 했습니다. 첫 반응은 나쁘지 않았습니다. 그런데 얼마 후 다른 동료가 노트북을 들고 책상 앞까지 왔습니다.</p>
 <div class="dialogue"><span class="speaker">동료</span>: "이게 그 AI 비서예요? 한번 써봐도 되죠?"</div>
@@ -238,8 +237,7 @@ Bottom caption (small): "어느 자료함을 열지 사서가 알아서 판단�
 No reception desk, no counter, no service window — strictly prohibited.
 Style: architecture-infographic
 -->
-<p>![](../assets/챕터 6/gemini/06_librarian-two-rooms.png)
-<em>그림 6-2. 어느 자료함을 열지는 사서가 알아서 판단합니다.</em></p>
+<div class="chapter-image gemini"><img src="../assets/CH06/gemini/06_librarian-two-rooms.png" alt="" /><div class="caption">그림 6-2. 어느 자료함을 열지는 사서가 알아서 판단합니다.</div></div>
 <p>AI 비서도 같은 구조가 됩니다. 한 명의 <strong>에이전트</strong>가 질문을 보고 장부 도구(<code>leave_balance</code> 등)를 열지, 문서 도구(<code>search_documents</code>)를 열지, 둘 다 열지 판단합니다. 판단 주체는 에이전트 속 LLM 자신이지, 바깥의 분류기가 아닙니다. 이번 챕터의 <strong>통합 에이전트</strong>가 이 &quot;만능 사서&quot;입니다.</p>
 <h3>6.3.1 파이프라인에서 에이전트로 (챕터 5 엔진은 유지됩니다)</h3>
 <p>챕터 5에서 만든 건 <strong>고정된 파이프라인</strong>이었습니다. 질문이 들어오면 언제나 같은 순서로 흐릅니다. Retriever로 문서 조각을 가져오고, Prompt로 감싸고, LLM에 보내고, 답을 돌려받죠. 입력 질문이 &quot;휴가 규정&quot;이든 &quot;A 사원 연차&quot;든 똑같은 경로를 탑니다. 문제는 그 경로 중간에 <strong>PostgreSQL 장부를 들여다보는 단계가 없다</strong>는 점입니다. 체인을 새로 짠다 해도 &quot;이 질문에는 DB를 볼까 문서만 볼까?&quot;를 <strong>실시간으로 판단할 자리가 없습니다</strong>. 고정 파이프는 분기가 약합니다.</p>
@@ -632,8 +630,7 @@ Style: architecture-infographic
 </tr>
 </tbody>
 </table>
-<p>![](../assets/챕터 6/terminal/06_chat-hybrid-demo.png)
-<em>그림 6-5. 복합 질문 &quot;정시우 사원의 연차 잔여와 휴가 규정을 설명해주세요&quot;에 대한 답변입니다. DB에서 숫자를 꺼내고 문서에서 절차를 찾아 한 답으로 정리합니다</em></p>
+<div class="chapter-image terminal"><img src="../assets/CH06/terminal/06_chat-hybrid-demo.png" alt="" /><div class="caption">그림 6-5. 복합 질문 &quot;정시우 사원의 연차 잔여와 휴가 규정을 설명해주세요&quot;에 대한 답변입니다. DB에서 숫자를 꺼내고 문서에서 절차를 찾아 한 답으로 정리합니다</div></div>
 <p>&quot;정시우 사원의 연차 잔여와 휴가 규정을 설명해주세요&quot;라는 복합 질문이 들어왔을 때, 에이전트 머릿속의 사슬 추론은 이렇게 흘러갑니다.</p>
 <blockquote>
 <p><strong>Reason 1</strong>: &quot;연차 잔여일은 DB에 있겠지. leave_balance를 호출하자.&quot;
@@ -643,8 +640,7 @@ Style: architecture-infographic
 <strong>Reason 3</strong>: &quot;두 정보 다 모였다. 답변을 만들자.&quot;</p>
 </blockquote>
 <p>챕터 1의 사슬 추론은 머릿속에서 한 번에 끝났지만, ReAct는 <strong>도구를 호출하고 결과를 확인하는 행동</strong>이 추론 사이사이에 끼어듭니다. 생각의 고리가 행동으로 이어지고, 행동의 결과가 다음 생각의 입력이 됩니다.</p>
-<p>![](../assets/챕터 6/terminal/06_agent-run-real.png)
-<em>그림 6-6. <code>python -m src.agent</code> 실행 결과입니다. 도구 호출 → 사후 분류 → 최종 답변까지 실제 단계별 로그가 찍힙니다</em></p>
+<div class="chapter-image terminal"><img src="../assets/CH06/terminal/06_agent-run-real.png" alt="" /><div class="caption">그림 6-6. <code>python -m src.agent</code> 실행 결과입니다. 도구 호출 → 사후 분류 → 최종 답변까지 실제 단계별 로그가 찍힙니다</div></div>
 <div class="dialogue"><span class="speaker">동료</span>: "이제 진짜 비서 같은데요."</div>
 <p>오픈이가 수첩을 꺼냈습니다. 입사 3일 차에 처음 AI 비서를 켰을 때와 지금의 차이를 한 장 안에 적어 두고 싶었습니다.</p>
 <div class="memo-box">

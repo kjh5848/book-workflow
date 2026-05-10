@@ -878,8 +878,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 <p>다섯 가지 도구를 실험했습니다. 오픈이가 동료들의 질문 패턴을 다시 펼쳐 봤습니다. 약어를 많이 쓰고, 근거로 규정 전문을 보고 싶어합니다. 약어 사전과 Parent Doc — 이 두 개면 충분합니다.</p>
 <p class="thought">전부 켤 필요 없어. 아픈 데만 약을 바르면 돼.</p>
 <h2>9.6 사서가 달라졌다</h2>
-<p>![](../assets/챕터 9/diagram/09_sequence-pipeline.png)
-<em>그림 9-16. 챕터 9 파이프라인. 질문을 변환(확장, 재작성, HyDE)한 뒤 검색하고, 결과를 가공(Parent, Compression)해 LLM에 넘깁니다</em></p>
+<div class="chapter-image diagram"><img src="../assets/CH09/diagram/09_sequence-pipeline.png" alt="" /><div class="caption">그림 9-16. 챕터 9 파이프라인. 질문을 변환(확장, 재작성, HyDE)한 뒤 검색하고, 결과를 가공(Parent, Compression)해 LLM에 넘깁니다</div></div>
 <p>동료에게 다시 써 보라고 했습니다. 동료가 키보드를 두드렸습니다.</p>
 <div class="dialogue"><span class="speaker">동료</span>: "WFH 정책이 뭐야?"</div>
 <p>&quot;재택근무&quot; 문서를 정확히 가져와 답변을 내놓습니다. 약어 사전이 &quot;WFH&quot;를 &quot;재택근무(Work From Home)&quot;로 바꿔 놓은 덕이었습니다.</p>
@@ -893,191 +892,10 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 <div class="dialogue"><span class="speaker">팀장</span>: "텍스트는 됐는데요. PDF 속 표랑 이미지는?"</div>
 <div class="dialogue"><span class="speaker">오픈이</span>: "표요?"</div>
 <div class="dialogue"><span class="speaker">팀장</span>: "규정집에 표가 있잖아요. 그건 텍스트 검색으로 잡히나요?"</div>
-<h2>9.7 전체 구성도에서 챕터 9의 자리</h2>
-<div class="arch-fullmap">
-  <div class="arch-fullmap-title" style="text-align:center">그림 9-17. 전체 구성도. 짙은 박스가 챕터 9 튜닝 대상</div>
-  <div class="afm-row afm-user">
-    <div class="afm-box afm-built afm-round"><div class="afm-label">사내 직원 · 관리자</div></div>
-  </div>
-  <div class="afm-zone">
-    <span class="afm-zone-ch">챕터 2</span>
-    <span class="afm-zone-label">대시보드</span>
-    <div class="afm-row">
-      <div class="afm-box afm-built"><div class="afm-label">FastAPI</div><div class="afm-sub">REST API · 관리자 웹</div></div>
-    </div>
-  </div>
-  <div class="afm-zone">
-    <span class="afm-zone-ch">챕터 6+7</span>
-    <span class="afm-zone-label">오케스트레이션 + 운영</span>
-    <div class="afm-row afm-two">
-      <div class="afm-box afm-built"><div class="afm-label">ConnectHRAgent</div><div class="afm-sub">ReAct · 사후 분류 + 캐시</div></div>
-      <div class="afm-box afm-built"><div class="afm-label">MCP Tools</div><div class="afm-sub">DB · 문서</div></div>
-    </div>
-  </div>
-  <div class="afm-zone">
-    <span class="afm-zone-ch">챕터 5</span>
-    <span class="afm-zone-label">검색 (실시간)</span>
-    <div class="afm-row">
-      <div class="afm-box afm-on"><div class="afm-tag">챕터 9 질의/결과 튜닝</div><div class="afm-label">LCEL Chain</div><div class="afm-sub">HyDE · Multi-Query · Parent Doc · Compression</div></div>
-    </div>
-  </div>
-  <div class="afm-zone">
-    <span class="afm-zone-ch">챕터 4</span>
-    <span class="afm-zone-label">파싱·벡터화 (오프라인)</span>
-    <div class="afm-row afm-three">
-      <div class="afm-box afm-built afm-dashed"><div class="afm-label">챕터 3 문서 규칙</div><div class="afm-sub">PDF·Word·Excel·HWP</div></div>
-      <div class="afm-box afm-built"><div class="afm-label">Doc Pipeline</div><div class="afm-sub">파싱·청킹·임베딩</div></div>
-      <div class="afm-box afm-built"><div class="afm-label">ChromaDB</div><div class="afm-sub">벡터 저장소</div></div>
-    </div>
-  </div>
-  <div class="afm-zone">
-    <span class="afm-zone-ch">챕터 2</span>
-    <span class="afm-zone-label">데이터</span>
-    <div class="afm-row">
-      <div class="afm-box afm-built"><div class="afm-label">PostgreSQL</div><div class="afm-sub">직원·연차·매출</div></div>
-    </div>
-  </div>
-  <div class="afm-row afm-ext">
-    <div class="afm-box afm-faint afm-dashed"><div class="afm-label">Ollama LLM (외부)</div></div>
-  </div>
-  <div class="afm-note">
-    챕터 9는 LCEL Chain의 <b>입구(쿼리 변환)</b> 와 <b>출구(결과 가공)</b> 를 다듬었습니다. 같은 ChromaDB, 같은 문서인데 질문 해석력이 올라가 체감 품질이 크게 개선됩니다. 챕터 10에서는 텍스트로 못 잡는 <b>이미지, 표</b> 영역을 Vision LLM으로 공략합니다.
-  </div>
-</div>
-<h2>9.8 튜닝 구성도</h2>
-<p>챕터 8에서 검색 엔진 자체를 손봤고, 이번 챕터에서는 검색의 앞뒤를 다듬었습니다. 지금까지 실험한 튜닝과 앞으로 다룰 튜닝을 한 장으로 정리합니다.</p>
-<div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-2xl);margin:var(--space-xl) 0">
-<div style="font-size:var(--fs-lg);font-weight:600;color:var(--color-text-heading);margin-bottom:var(--space-xl);text-align:center">그림 9-18. RAG 튜닝 메뉴판. 필요한 것만 골라 씁니다</div>
-<table style="border-collapse:collapse;width:100%;font-size:var(--fs-sm)">
-<tr style="background:var(--color-surface-alt)">
-<th style="padding:8px 12px;border:1px solid var(--color-border);text-align:center;width:30px"></th>
-<th style="padding:8px 12px;border:1px solid var(--color-border)">튜닝</th>
-<th style="padding:8px 12px;border:1px solid var(--color-border)">무엇을 바꾸나</th>
-<th style="padding:8px 12px;border:1px solid var(--color-border)">언제 쓰나</th>
-<th style="padding:8px 12px;border:1px solid var(--color-border);text-align:center">챕터</th>
-</tr>
-<tr style="background:var(--color-success-bg)">
-<td style="padding:8px 12px;border:1px solid var(--color-border);text-align:center;font-size:var(--fs-lg)">✓</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);font-weight:700">청킹 전략</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border)">문서를 자르는 방법 (Fixed → Recursive → Semantic)</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border)">주제가 섞이는 문제가 있을 때</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);text-align:center;font-weight:700">8</td>
-</tr>
-<tr style="background:var(--color-success-bg)">
-<td style="padding:8px 12px;border:1px solid var(--color-border);text-align:center;font-size:var(--fs-lg)">✓</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);font-weight:700">리랭킹</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border)">가져온 문서를 Cross-Encoder로 재정렬</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border)">검색 결과 상위에 엉뚱한 문서가 섞일 때</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);text-align:center;font-weight:700">8</td>
-</tr>
-<tr style="background:var(--color-success-bg)">
-<td style="padding:8px 12px;border:1px solid var(--color-border);text-align:center;font-size:var(--fs-lg)">✓</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);font-weight:700">하이브리드 검색</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border)">벡터 + BM25를 alpha 가중합으로 합침</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border)">의미 검색과 키워드 검색 둘 다 필요할 때</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);text-align:center;font-weight:700">8</td>
-</tr>
-<tr style="background:var(--color-success-bg)">
-<td style="padding:8px 12px;border:1px solid var(--color-border);text-align:center;font-size:var(--fs-lg)">✓</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);font-weight:700">HyDE</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border)">가상 답변을 먼저 생성해 답변-문서 유사도로 검색</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border)">질문과 문서의 어휘 차이가 클 때</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);text-align:center;font-weight:700">9</td>
-</tr>
-<tr style="background:var(--color-success-bg)">
-<td style="padding:8px 12px;border:1px solid var(--color-border);text-align:center;font-size:var(--fs-lg)">✓</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);font-weight:700">Multi-Query</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border)">한 질문을 여러 표현으로 재작성해 합집합 검색</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border)">질문의 의미가 넓어 한 방향만으로 부족할 때</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);text-align:center;font-weight:700">9</td>
-</tr>
-<tr style="background:var(--color-success-bg)">
-<td style="padding:8px 12px;border:1px solid var(--color-border);text-align:center;font-size:var(--fs-lg)">✓</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);font-weight:700">약어·동의어 확장</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border)">사내 용어 사전으로 약어를 원 표현으로 치환</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border)">사내 약어, 줄임말 검색 실패가 잦을 때</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);text-align:center;font-weight:700">9</td>
-</tr>
-<tr style="background:var(--color-success-bg)">
-<td style="padding:8px 12px;border:1px solid var(--color-border);text-align:center;font-size:var(--fs-lg)">✓</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);font-weight:700">Parent Document</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border)">작은 청크로 검색하되 부모 문서 단위로 반환</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border)">조각만 보면 맥락이 부족할 때</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);text-align:center;font-weight:700">9</td>
-</tr>
-<tr style="background:var(--color-success-bg)">
-<td style="padding:8px 12px;border:1px solid var(--color-border);text-align:center;font-size:var(--fs-lg)">✓</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);font-weight:700">Contextual Compression</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border)">검색된 문서에서 질문과 무관한 부분 제거</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border)">부모 문서가 길어 토큰 비용이 부담될 때</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);text-align:center;font-weight:700">9</td>
-</tr>
-<tr>
-<td style="padding:8px 12px;border:1px solid var(--color-border);text-align:center;color:var(--color-text-subtle)">-</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);color:var(--color-text-muted)">Vision LLM</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);color:var(--color-text-muted)">이미지, 표를 Vision 모델로 읽어 텍스트 변환</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);color:var(--color-text-muted)">PDF 속 표, 차트, 이미지가 검색에 빠질 때</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);text-align:center;color:var(--color-text-muted)">10</td>
-</tr>
-<tr>
-<td style="padding:8px 12px;border:1px solid var(--color-border);text-align:center;color:var(--color-text-subtle)">-</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);color:var(--color-text-muted)">하이브리드 파서</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);color:var(--color-text-muted)">텍스트 + 시각 요소를 함께 파싱하는 파이프라인</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);color:var(--color-text-muted)">복합 문서(텍스트+표+이미지)를 처리할 때</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);text-align:center;color:var(--color-text-muted)">10</td>
-</tr>
-<tr>
-<td style="padding:8px 12px;border:1px solid var(--color-border);text-align:center;color:var(--color-text-subtle)">-</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);color:var(--color-text-muted)">RAG 평가 프레임워크</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);color:var(--color-text-muted)">검색 정확도, 답변 충실도를 숫자로 측정</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);color:var(--color-text-muted)">튜닝 전후 품질을 객관적으로 비교할 때</td>
-<td style="padding:8px 12px;border:1px solid var(--color-border);text-align:center;color:var(--color-text-muted)">10</td>
-</tr>
-</table>
-<div style="font-size:var(--fs-xs);color:var(--color-text-subtle);margin-top:var(--space-sm)">✓ 챕터 8~9에서 실험한 항목 · - 챕터 10에서 다룰 항목</div>
-</div>
-<h2>용어 정리</h2>
-<table>
-<thead>
-<tr>
-<th>본문 속 표현</th>
-<th>진짜 용어</th>
-<th>정식 정의</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>&quot;단어를 번역&quot;</td>
-<td><strong>약어·동의어 확장</strong></td>
-<td>사내 용어 사전을 이용해 약어를 원 표현으로 치환</td>
-</tr>
-<tr>
-<td>&quot;답을 먼저 상상&quot;</td>
-<td><strong>HyDE</strong></td>
-<td>질문에 대한 가상 답변을 LLM이 먼저 생성하고, 그 답변으로 검색</td>
-</tr>
-<tr>
-<td>&quot;여러 갈래로 물어보기&quot;</td>
-<td><strong>Multi-Query</strong></td>
-<td>한 질문을 LLM이 여러 표현으로 재작성해 각각 검색 후 합집합</td>
-</tr>
-<tr>
-<td>&quot;원본 문서 전체 꺼내기&quot;</td>
-<td><strong>Parent Document Retriever</strong></td>
-<td>작은 청크로 검색하되 반환은 큰 부모 문서 단위</td>
-</tr>
-<tr>
-<td>&quot;핵심 문장만 추리기&quot;</td>
-<td><strong>Contextual Compression</strong></td>
-<td>검색된 문서에서 질문과 무관한 부분을 LLM이 제거</td>
-</tr>
-<tr>
-<td>&quot;조건을 필터로 변환&quot;</td>
-<td><strong>Self-Query Retriever</strong></td>
-<td>LLM이 질문에서 메타데이터 조건을 뽑아 <code>where</code> 필터로 심음</td>
-</tr>
-</tbody>
-</table>
+<h2>9.7 튜닝 구성도</h2>
+<p>챕터 8에서는 검색 엔진 안쪽을 손봤습니다. 청크를 자르는 방법, 결과를 다시 정렬하는 방법, 두 검색기를 섞는 방법까지 세 종류였습니다. 이번 챕터에서 다룬 다섯 가지는 그 검색 엔진의 <strong>앞뒤</strong>를 다듬은 실험입니다. 질문이 검색기에 닿기 전에 모양을 바꾸는 쪽(HyDE, Multi-Query, 약어·동의어 확장)과, 검색 결과를 LLM에 넘기기 전에 다듬는 쪽(Parent Document, Contextual Compression)으로 나뉩니다.</p>
+<p>두 챕터를 합치면 누적 여덟 개의 튜닝이 메뉴판에 채워집니다. 챕터 10에서는 텍스트로는 잡히지 않는 영역(이미지, 표)과 품질을 숫자로 재는 평가 프레임워크가 더해질 예정입니다.</p>
+<p>모든 튜닝을 한꺼번에 적용할 필요는 없습니다. 문서 성격과 질문 패턴에 맞춰 필요한 것부터 하나씩 골라 씁니다.</p>
 <div class="ch-slot">
   <div class="ch-name"><b>CH 09</b> · 질문을 제대로 이해 못한다 - 튜닝 메뉴판 (CH08·09 누적 8종)</div>
   <div class="tuning-card">
@@ -1181,6 +999,48 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
   <div class="ch-note">CH09는 질문 쪽 다섯 실험 - <b>HyDE · Multi-Query · 약어 · Parent Doc · Compression</b> 추가. 누적 8종이 CH10에서 파이프라인으로 선별 조립됨</div>
 </div>
 <p class="thought">그림 9-18. 챕터 9의 결과. 메뉴판에 질의 5종(HyDE·Multi-Query·약어·Parent Doc·Compression)이 새로 채워져 누적 8종이 되었습니다</p>
+<h2>용어 정리</h2>
+<table>
+<thead>
+<tr>
+<th>본문 속 표현</th>
+<th>진짜 용어</th>
+<th>정식 정의</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&quot;단어를 번역&quot;</td>
+<td><strong>약어·동의어 확장</strong></td>
+<td>사내 용어 사전을 이용해 약어를 원 표현으로 치환</td>
+</tr>
+<tr>
+<td>&quot;답을 먼저 상상&quot;</td>
+<td><strong>HyDE</strong></td>
+<td>질문에 대한 가상 답변을 LLM이 먼저 생성하고, 그 답변으로 검색</td>
+</tr>
+<tr>
+<td>&quot;여러 갈래로 물어보기&quot;</td>
+<td><strong>Multi-Query</strong></td>
+<td>한 질문을 LLM이 여러 표현으로 재작성해 각각 검색 후 합집합</td>
+</tr>
+<tr>
+<td>&quot;원본 문서 전체 꺼내기&quot;</td>
+<td><strong>Parent Document Retriever</strong></td>
+<td>작은 청크로 검색하되 반환은 큰 부모 문서 단위</td>
+</tr>
+<tr>
+<td>&quot;핵심 문장만 추리기&quot;</td>
+<td><strong>Contextual Compression</strong></td>
+<td>검색된 문서에서 질문과 무관한 부분을 LLM이 제거</td>
+</tr>
+<tr>
+<td>&quot;조건을 필터로 변환&quot;</td>
+<td><strong>Self-Query Retriever</strong></td>
+<td>LLM이 질문에서 메타데이터 조건을 뽑아 <code>where</code> 필터로 심음</td>
+</tr>
+</tbody>
+</table>
 <div class="remember">
 <p><strong>이것만은 기억하자</strong></p>
 <ul>

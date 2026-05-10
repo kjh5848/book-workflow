@@ -30,8 +30,7 @@
 <p><strong>이번 챕터는 코드 실습이 없습니다.</strong> 챕터 4에서 문서를 실제로 파싱하고 벡터 DB에 저장하기 전에, &quot;어떤 문서를 어떤 규칙으로 넣을 것인가&quot;를 먼저 정리합니다. 규칙 없이 바로 구현하면 검색 품질이 엉망이 됩니다.</p>
 </div>
 <h2>3.1 공유 드라이브를 전부 넣었더니</h2>
-<p>![](../assets/챕터 3/gemini/03_chapter-opening.png)
-<em>그림 3-1. 공유 드라이브의 문서 더미. 정리 없이 이걸 전부 넣으면 어떻게 될까</em></p>
+<div class="chapter-image gemini"><img src="../assets/CH03/gemini/03_chapter-opening.png" alt="" /><div class="caption">그림 3-1. 공유 드라이브의 문서 더미. 정리 없이 이걸 전부 넣으면 어떻게 될까</div></div>
 <p>수요일 오후 3시. 사무실에 커피 머신 돌아가는 소리만 낮게 깔려 있었습니다.</p>
 <p>챕터 1 더미 문서 3개로 RAG는 이미 잘 돌았습니다. 챕터 2 사내 시스템도 켜졌으니 이제 남은 절반. <strong>문서 검색</strong>을 본격으로 채워 넣을 차례였습니다.</p>
 <p class="thought">이건 금방이겠지.</p>
@@ -61,8 +60,7 @@
 <li><strong>서가에 꽂습니다</strong>. 분류에 맞는 위치에 넣습니다.</li>
 </ol>
 <p>라벨 없이 마구잡이로 꽂으면 나중에 찾을 수 없습니다. 사내 문서도 마찬가지입니다. 벡터 DB에 넣기 전에 <strong>분류하고 라벨을 붙이고 정리하는 단계</strong>가 필요합니다. 이 단계를 건너뛰면 검색 품질이 엉망이 됩니다.</p>
-<p>![](../assets/챕터 3/gemini/03_document-pipeline.png)
-<em>그림 3-2. 사내 문서를 벡터 DB에 넣기까지. 정리 없이 넣으면 검색 품질이 떨어집니다</em></p>
+<div class="chapter-image gemini"><img src="../assets/CH03/gemini/03_document-pipeline.png" alt="" /><div class="caption">그림 3-2. 사내 문서를 벡터 DB에 넣기까지. 정리 없이 넣으면 검색 품질이 떨어집니다</div></div>
 <h2>3.3 넣을 문서와 뺄 문서</h2>
 <p>모든 문서를 넣을 필요는 없습니다. 오히려 불필요한 문서가 섞이면 검색 품질이 떨어집니다. 동료가 당한 것처럼 폐기된 규정이 검색되면 곤란합니다.</p>
 <p><strong>넣어야 할 것</strong>. 현재 유효한 규정, 정책, 가이드. 자주 질문받는 내용이 담긴 문서.</p>
@@ -78,8 +76,7 @@
 <li>표도 보존됩니다. 엑셀 시트가 <code>| 열1 | 열2 |</code> 형태로 변환됩니다.</li>
 <li>사람도 읽을 수 있습니다. 변환 결과가 제대로인지 눈으로 바로 검증할 수 있습니다.</li>
 </ul>
-<p>![](../assets/챕터 3/diagram/03_parser-flow.png)
-<em>그림 3-3. 파서가 다양한 형식을 Markdown 텍스트로 통일합니다. 그래야 청킹하고 검색할 수 있습니다</em></p>
+<div class="chapter-image diagram"><img src="../assets/CH03/diagram/03_parser-flow.png" alt="" /><div class="caption">그림 3-3. 파서가 다양한 형식을 Markdown 텍스트로 통일합니다. 그래야 청킹하고 검색할 수 있습니다</div></div>
 <div class="tip">
 <p><strong>반드시 Markdown일 필요는 없습니다</strong></p>
 <p>일반 텍스트(plain text)나 JSON으로 변환해도 벡터 DB에 넣을 수 있습니다. 다만 Markdown은 <strong>제목, 표, 목록 같은 문서 구조를 보존하면서도 가볍다</strong>는 점에서 RAG 파이프라인에 가장 널리 쓰입니다.</p>
@@ -283,108 +280,8 @@
 <p><strong>한국어 청킹의 특수성</strong>. 영어는 단어 사이에 공백이 있어 토큰 수 기반 청킹이 자연스럽습니다. 한국어는 띄어쓰기 단위가 영어보다 크고 조사가 붙어 같은 500자라도 정보 밀도가 다를 수 있습니다. 챕터 8에서 의미 기반 청킹(Semantic Chunking)과 비교 실험합니다.</p>
 <p><strong>메타데이터 필터링</strong>. 벡터DB는 저장할 때 메타데이터를 함께 넣어 두고, 검색할 때 <code>{&quot;file_type&quot;: &quot;pdf&quot;}</code>처럼 필터를 걸 수 있습니다. 지금은 메타데이터를 출처 표시용으로만 쓰지만, 문서가 많아지면 필터링으로 검색 범위를 좁힐 수 있습니다. 구체적인 필터 문법은 다음 챕터에서 실제로 써 보면서 익힙니다.</p>
 <h2>3.10 전체 구성도에서 챕터 3의 자리</h2>
-<p>이번 챕터가 설계한 &quot;문서 규칙&quot;은 챕터 4 파싱, 벡터화 파이프라인의 <strong>입구</strong>에 놓입니다. 다음 챕터에서 이 규칙에 맞춰 정리된 문서를 실제로 파싱하고 청킹해서 벡터DB에 저장합니다.</p>
-<div class="arch-fullmap">
-  <div class="arch-fullmap-title">전체 구성도. 짙은 박스가 챕터 3 범위</div>
-  <div class="afm-row afm-user">
-    <div class="afm-box afm-built afm-round">
-      <div class="afm-label">사내 직원 · 관리자</div>
-    </div>
-  </div>
-  <div class="afm-zone">
-    <span class="afm-zone-ch">챕터 2</span>
-    <span class="afm-zone-label">대시보드</span>
-    <div class="afm-row">
-      <div class="afm-box afm-built">
-        <div class="afm-label">FastAPI</div>
-        <div class="afm-sub">REST API · 관리자 웹</div>
-      </div>
-    </div>
-  </div>
-  <div class="afm-zone">
-    <span class="afm-zone-ch">챕터 6</span>
-    <span class="afm-zone-label">오케스트레이션</span>
-    <div class="afm-row afm-two">
-      <div class="afm-box afm-faint"><div class="afm-label">Tool Calling Agent</div><div class="afm-sub">ReAct 패턴 · 사후 분류</div></div>
-      <div class="afm-box afm-faint"><div class="afm-label">MCP Tools</div><div class="afm-sub">DB 조회 · 문서 검색</div></div>
-    </div>
-  </div>
-  <div class="afm-zone">
-    <span class="afm-zone-ch">챕터 5</span>
-    <span class="afm-zone-label">검색 (실시간)</span>
-    <div class="afm-row">
-      <div class="afm-box afm-faint"><div class="afm-label">LCEL Chain</div><div class="afm-sub">검색기 → 프롬프트 → LLM</div></div>
-    </div>
-  </div>
-  <div class="afm-zone">
-    <span class="afm-zone-ch">챕터 4</span>
-    <span class="afm-zone-label">파싱·벡터화 (오프라인)</span>
-    <div class="afm-row afm-three">
-      <div class="afm-box afm-on afm-dashed">
-        <div class="afm-tag">오늘 설계한 규칙</div>
-        <div class="afm-label">챕터 3 문서 규칙</div>
-        <div class="afm-sub">PDF·Word·Excel·HWP</div>
-      </div>
-      <div class="afm-box afm-faint"><div class="afm-label">Doc Pipeline</div><div class="afm-sub">파싱·청킹·임베딩</div></div>
-      <div class="afm-box afm-faint"><div class="afm-label">벡터 DB</div><div class="afm-sub">벡터 저장소</div></div>
-    </div>
-  </div>
-  <div class="afm-zone">
-    <span class="afm-zone-ch">챕터 2</span>
-    <span class="afm-zone-label">데이터</span>
-    <div class="afm-row">
-      <div class="afm-box afm-built"><div class="afm-label">PostgreSQL</div><div class="afm-sub">직원·연차·매출</div></div>
-    </div>
-  </div>
-  <div class="afm-row afm-ext">
-    <div class="afm-box afm-faint afm-dashed"><div class="afm-label">Ollama LLM (외부)</div></div>
-  </div>
-  <div class="afm-note">
-    오늘은 코드 대신 <b>규칙</b>을 설계했습니다. 챕터 4에서 이 규칙을 따르는 문서를 실제로 파싱, 청킹해서 <b>벡터 DB</b>에 저장합니다.
-  </div>
-</div>
-<h2>용어 정리</h2>
-<table>
-<thead>
-<tr>
-<th>본문 속 표현</th>
-<th>진짜 용어</th>
-<th>정식 정의</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>&quot;같은 말로 번역&quot;</td>
-<td><strong>파싱 (Parsing)</strong></td>
-<td>다양한 형식(PDF·DOCX·XLSX)에서 텍스트를 추출해 통일된 형태로 변환하는 과정</td>
-</tr>
-<tr>
-<td>&quot;도서관 분류 라벨&quot;</td>
-<td><strong>메타데이터 (Metadata)</strong></td>
-<td>문서 내용이 아닌, 문서에 대한 정보 (파일명·형식·경로 등)</td>
-</tr>
-<tr>
-<td>&quot;문서 조각내기&quot;</td>
-<td><strong>청킹 (Chunking)</strong></td>
-<td>긴 문서를 벡터 DB에 저장할 수 있는 크기로 분할하는 과정</td>
-</tr>
-<tr>
-<td>&quot;조각이 겹치는 부분&quot;</td>
-<td><strong>오버랩 (Overlap)</strong></td>
-<td>청크 경계에서 문맥이 잘리지 않도록 앞뒤를 겹치게 자르는 기법</td>
-</tr>
-<tr>
-<td>&quot;문서 다시 넣기&quot;</td>
-<td><strong>재인덱싱 (Re-indexing)</strong></td>
-<td>변경되거나 추가된 문서를 벡터 DB에 반영하는 과정</td>
-</tr>
-<tr>
-<td>&quot;쓰레기 넣으면 쓰레기&quot;</td>
-<td><strong>GIGO (Garbage In, Garbage Out)</strong></td>
-<td>입력 데이터 품질이 출력 품질을 결정한다는 원칙</td>
-</tr>
-</tbody>
-</table>
+<p>챕터 3은 코드를 한 줄도 쓰지 않았습니다. 그 대신 <strong>문서 규칙 네 장</strong>을 정리했습니다. 파일 포맷, 청킹 전략, 메타데이터, 재인덱싱 정책. 이 네 결정이 챕터 4 파싱·벡터화 파이프라인의 <strong>입구</strong>에 놓입니다.</p>
+<p>아래 카드는 이번 챕터에서 정한 규칙을 한 장으로 묶은 룩북입니다. 챕터 4부터는 이 규칙에 맞춰 문서를 파싱·청킹해서 벡터DB에 저장합니다.</p>
 <div class="ch-slot">
   <div class="ch-name"><b>CH 03</b> · 어떤 문서를 넣을까 - 문서 전략 룩북</div>
   <div class="doc-strategy-card">
@@ -442,6 +339,48 @@
   <div class="ch-note">arch11 박스 없음 · CH03은 <b>규칙을 세우는 챕터</b>, 박스가 생기는 건 CH04부터</div>
 </div>
 <p class="thought">그림 3-4. 챕터 3의 결과. 코드 대신 네 가지 문서 규칙(포맷·청킹·메타데이터·재인덱싱)을 정리했습니다</p>
+<h2>용어 정리</h2>
+<table>
+<thead>
+<tr>
+<th>본문 속 표현</th>
+<th>진짜 용어</th>
+<th>정식 정의</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&quot;같은 말로 번역&quot;</td>
+<td><strong>파싱 (Parsing)</strong></td>
+<td>다양한 형식(PDF·DOCX·XLSX)에서 텍스트를 추출해 통일된 형태로 변환하는 과정</td>
+</tr>
+<tr>
+<td>&quot;도서관 분류 라벨&quot;</td>
+<td><strong>메타데이터 (Metadata)</strong></td>
+<td>문서 내용이 아닌, 문서에 대한 정보 (파일명·형식·경로 등)</td>
+</tr>
+<tr>
+<td>&quot;문서 조각내기&quot;</td>
+<td><strong>청킹 (Chunking)</strong></td>
+<td>긴 문서를 벡터 DB에 저장할 수 있는 크기로 분할하는 과정</td>
+</tr>
+<tr>
+<td>&quot;조각이 겹치는 부분&quot;</td>
+<td><strong>오버랩 (Overlap)</strong></td>
+<td>청크 경계에서 문맥이 잘리지 않도록 앞뒤를 겹치게 자르는 기법</td>
+</tr>
+<tr>
+<td>&quot;문서 다시 넣기&quot;</td>
+<td><strong>재인덱싱 (Re-indexing)</strong></td>
+<td>변경되거나 추가된 문서를 벡터 DB에 반영하는 과정</td>
+</tr>
+<tr>
+<td>&quot;쓰레기 넣으면 쓰레기&quot;</td>
+<td><strong>GIGO (Garbage In, Garbage Out)</strong></td>
+<td>입력 데이터 품질이 출력 품질을 결정한다는 원칙</td>
+</tr>
+</tbody>
+</table>
 <div class="remember">
 <p><strong>이것만은 기억하자</strong></p>
 <ul>

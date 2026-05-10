@@ -944,7 +944,7 @@ python -m tuning.step3_eval_framework --strategy all --k 3
 
 *튜닝은 지표 하나를 위로 올리는 게 아니라, 쌓아 둔 부품이 서로 물려 돌아가는지 확인하는 작업이구나.*
 
-![](../assets/챕터 10/gemini/10_eval-concept.png)
+![](../assets/CH10/gemini/10_eval-concept.png)
 *그림 10-11. 평가 프레임워크. 질문과 정답 쌍을 반복 돌려 숫자로 품질을 측정합니다*
 
 ## 10.6 튜닝 메뉴판 - 무엇을 골라 쓸까
@@ -1053,18 +1053,13 @@ python -m tuning.step3_eval_framework --strategy all --k 3
 
 체크한 일곱 항목이 커넥트HR 에이전트에 실제로 적용한 D 조합입니다. RAG 평가는 조합 밖에서 이 일곱 가지가 제값을 하는지 수치로 검증하는 장치로 따로 돌립니다.
 
-## 용어 정리
+## 10.7 전체 구성도에서 챕터 10의 자리
 
-| 본문 속 표현 | 진짜 용어 | 정식 정의 |
-|-------------|---------|----------|
-| "확대경으로 글자 읽기" | **OCR (Optical Character Recognition)** | 이미지에서 문자를 인식해 텍스트로 변환 |
-| "눈을 가진 LLM" | **Vision LLM** | 이미지·표·도식을 이해해 자연어로 설명하는 멀티모달 LLM |
-| "이미지 감지 후 분기" | **하이브리드 파서** | `page.get_images()`·텍스트 길이로 Vision LLM과 pypdf를 자동 선택 |
-| "정답 비율" | **Precision@k** | 상위 k개 중 정답 청크 비율 |
-| "정답 커버리지" | **Recall@k** | 정답 문서 중 상위 k개에 포함된 비율 |
-| "근거 없는 답변 비율" | **Hallucination Rate** | 답변 문장 중 문서 근거가 없는 비율. 답변과 근거 문서의 단어 겹침으로 간단히 잡거나, 더 정확히 잴 땐 별도 LLM에 채점을 맡깁니다 |
-| "성적표" | **RAG Evaluation Framework** | 평가셋(질문·정답)으로 파이프라인을 돌려 Precision·Recall·환각률을 수치화 |
-| "튜닝 조합 스위치" | **Strategy Pattern (A/B/C/D)** | 파서·청킹·쿼리변환·검색·리랭크 부품을 갈아끼워 조합별로 성능을 비교 |
+이번 챕터에서 RAG Engine의 첫 번째 stage(01 파싱)가 새로 손질됐습니다. 텍스트 레이어가 살아 있는 페이지는 그대로 pypdf가 처리하고, 스캔본처럼 텍스트가 비어 있는 페이지는 `parse_pdf_hybrid`가 Vision LLM에게 넘겨 글자를 꺼냅니다. 외부 LLM 자리에는 `qwen2.5vl:7b`가 새로 들어와, 추론용 deepseek-r1·도구 호출용 llama3.1과 함께 세 모델이 각자의 역할을 맡습니다.
+
+여기에 챕터 8의 stage 05(리랭크)와 챕터 9의 stage 03(확장)이 누적돼 있어, 이제 RAG Engine 6단계 중 세 자리가 튜닝 작업으로 채워졌습니다. 청킹·하이브리드 검색·약어 확장·Parent Doc·리랭커·Vision 파서까지, 챕터마다 더한 부품이 한 그림 안에서 어떻게 자리를 잡았는지 한눈에 보이는 구성도입니다.
+
+평가 프레임워크는 이 그림 안에 들어가지 않습니다. 파이프라인 옆에서 채점기 역할로 따로 돌면서, 다음 챕터에서 D 조합을 하나의 파이프라인으로 조립할 때 쓸 근거를 만들어 줍니다.
 
 <div class="ch-slot">
   <div class="ch-name"><b>CH 10</b> · PDF 이미지까지 - stage 01 + qwen-vl NEW</div>
@@ -1148,6 +1143,19 @@ python -m tuning.step3_eval_framework --strategy all --k 3
 </div>
 
 *그림 10-12. 챕터 10의 결과. RAG Engine의 stage 01(파싱)이 업그레이드되고 qwen2.5vl 모델이 새로 자리를 잡았습니다*
+
+## 용어 정리
+
+| 본문 속 표현 | 진짜 용어 | 정식 정의 |
+|-------------|---------|----------|
+| "확대경으로 글자 읽기" | **OCR (Optical Character Recognition)** | 이미지에서 문자를 인식해 텍스트로 변환 |
+| "눈을 가진 LLM" | **Vision LLM** | 이미지·표·도식을 이해해 자연어로 설명하는 멀티모달 LLM |
+| "이미지 감지 후 분기" | **하이브리드 파서** | `page.get_images()`·텍스트 길이로 Vision LLM과 pypdf를 자동 선택 |
+| "정답 비율" | **Precision@k** | 상위 k개 중 정답 청크 비율 |
+| "정답 커버리지" | **Recall@k** | 정답 문서 중 상위 k개에 포함된 비율 |
+| "근거 없는 답변 비율" | **Hallucination Rate** | 답변 문장 중 문서 근거가 없는 비율. 답변과 근거 문서의 단어 겹침으로 간단히 잡거나, 더 정확히 잴 땐 별도 LLM에 채점을 맡깁니다 |
+| "성적표" | **RAG Evaluation Framework** | 평가셋(질문·정답)으로 파이프라인을 돌려 Precision·Recall·환각률을 수치화 |
+| "튜닝 조합 스위치" | **Strategy Pattern (A/B/C/D)** | 파서·청킹·쿼리변환·검색·리랭크 부품을 갈아끼워 조합별로 성능을 비교 |
 
 :::remember
 **이것만은 기억하자**
