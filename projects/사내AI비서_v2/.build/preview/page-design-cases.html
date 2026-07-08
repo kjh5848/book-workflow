@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>PDF 페이지 디자인 케이스북 — 사내AI비서_v2</title>
+<style>
+  :root {
+    --bg: #f7f8fb;
+    --card-bg: #ffffff;
+    --border: #e2e8f0;
+    --border-strong: #cbd5e0;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --accent: #4f46e5;
+    --warn: #c2410c;
+    --bad: #dc2626;
+    --good: #047857;
+    --neutral-bg: #f1f5f9;
+    --page-bg: #fafbfc;
+    --page-content: #cbd5e0;
+    --page-empty: #f5f5f5;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 32px 24px 80px;
+    line-height: 1.55;
+  }
+  header {
+    max-width: 1100px;
+    margin: 0 auto 28px;
+  }
+  h1 {
+    font-size: 22px;
+    margin: 0 0 8px;
+  }
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin: 0 0 16px;
+  }
+  .legend {
+    display: inline-flex;
+    align-items: center;
+    gap: 18px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .legend .dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 24px;
+    margin-bottom: 22px;
+  }
+  .card-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+  .card-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin: 0;
+  }
+  .pattern-tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    background: var(--neutral-bg);
+    color: var(--text-muted);
+    letter-spacing: 0.4px;
+  }
+  .pattern-tag.bad { background: #fef2f2; color: var(--bad); }
+  .pattern-tag.warn { background: #fff7ed; color: var(--warn); }
+  .case-meta {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin: 4px 0 18px;
+  }
+  .case-meta code {
+    background: var(--neutral-bg);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+  }
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 12px 0 16px;
+  }
+  .side {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    background: var(--page-bg);
+  }
+  .side-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .side-label .badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: var(--neutral-bg);
+    color: var(--text-muted);
+  }
+  .side-label .badge.bad { background: #fef2f2; color: var(--bad); }
+  .side-label .badge.good { background: #ecfdf5; color: var(--good); }
+  /* PDF 페이지 미니뷰 (A4 비율 1:1.414) */
+  .page-mini {
+    background: white;
+    border: 1px solid var(--border-strong);
+    border-radius: 4px;
+    width: 100%;
+    aspect-ratio: 1 / 1.414;
+    padding: 12px;
+    margin-bottom: 8px;
+    position: relative;
+    overflow: hidden;
+    font-size: 9px;
+    color: var(--page-content);
+  }
+  .page-mini.empty {
+    background: linear-gradient(180deg, white 0%, white 8%, var(--page-empty) 8%);
+  }
+  .page-mini .pgnum {
+    position: absolute;
+    bottom: 4px;
+    right: 8px;
+    color: var(--text-muted);
+    font-size: 9px;
+  }
+  .text-line {
+    height: 4px;
+    background: var(--page-content);
+    border-radius: 2px;
+    margin-bottom: 5px;
+  }
+  .text-line.short { width: 70%; }
+  .text-line.tiny { width: 35%; }
+  .text-line.full { width: 100%; }
+  .text-line.heading {
+    height: 7px;
+    background: var(--text);
+    width: 50%;
+    margin: 10px 0 8px;
+  }
+  .figure-block {
+    background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+    border: 1px dashed var(--accent);
+    border-radius: 4px;
+    margin: 6px 0;
+    padding: 4px;
+    text-align: center;
+    font-size: 8px;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .figure-block.tall { padding: 24px 4px; }
+  .figure-block.short { padding: 12px 4px; }
+  .figure-block.huge { padding: 36px 4px; }
+  .caption-line {
+    font-size: 7px;
+    color: var(--text-muted);
+    text-align: center;
+    margin: 4px 0 8px;
+    font-style: italic;
+  }
+  .code-block-mini {
+    background: #1e293b;
+    color: #e2e8f0;
+    border-radius: 3px;
+    padding: 5px 6px;
+    font-family: 'Menlo', monospace;
+    font-size: 7px;
+    line-height: 1.5;
+    margin: 4px 0;
+  }
+  /* 페이지 사용률 게이지 */
+  .gauge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+  .gauge-bar {
+    flex: 1;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .gauge-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 3px;
+  }
+  .gauge-fill.bad { background: var(--bad); }
+  .gauge-fill.warn { background: var(--warn); }
+  .gauge-fill.good { background: var(--good); }
+  .gauge-value { min-width: 36px; text-align: right; font-weight: 700; color: var(--text); }
+  /* 처방 박스 */
+  .prescription {
+    background: #ecfdf5;
+    border-left: 3px solid var(--good);
+    border-radius: 0 6px 6px 0;
+    padding: 12px 14px;
+    margin-top: 14px;
+    font-size: 13px;
+  }
+  .prescription strong {
+    color: var(--good);
+    font-weight: 700;
+  }
+  .prescription .stage {
+    display: inline-block;
+    background: var(--good);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-right: 8px;
+    letter-spacing: 0.5px;
+  }
+  .prescription pre {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 8px 10px;
+    font-size: 11px;
+    margin: 8px 0 0;
+    overflow-x: auto;
+  }
+  .prescription code {
+    font-family: 'Menlo', monospace;
+    font-size: 11px;
+  }
+  /* 추가: 그림 잘림 시각화 */
+  .cross-page-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--bad);
+    z-index: 2;
+  }
+  .cross-page-line::after {
+    content: 'page break';
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    font-size: 7px;
+    color: var(--bad);
+    background: white;
+    padding: 0 4px;
+    border-radius: 2px;
+    font-weight: 700;
+  }
+  footer {
+    max-width: 1100px;
+    margin: 40px auto 0;
+    padding: 20px 0;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>PDF 페이지 디자인 케이스북</h1>
+  <p class="subtitle">사내AI비서_v2 빌드(2026-05-10)에서 감지된 9개 빈 공간 사례 — 5가지 패턴별 BEFORE/AFTER 처방</p>
+  <div class="legend">
+    <span><span class="dot" style="background: var(--bad)"></span>심각 (≤10%)</span>
+    <span><span class="dot" style="background: var(--warn)"></span>주의 (11~45%)</span>
+    <span><span class="dot" style="background: var(--good)"></span>정상 (≥80%)</span>
+    <span><span class="dot" style="background: var(--accent)"></span>그림</span>
+  </div>
+</header>
+
+<div class="container">
+
+<!-- =============== CARD 1: 심각한 고아 (ch7 p19) =============== -->
+<div class="card">
+  <div class="card-header">
+    <h2 class="card-title">패턴 1. 심각한 고아 페이지</h2>
+    <span class="pattern-tag bad">고아 · Orphan</span>
+  </div>
+  <div class="case-meta">
+    <strong>사례</strong>: <code>ch7 p19</code> (실제 사용률 5%, 2줄만 페이지 끝에 남고 94% 빈 공간)
+  </div>
+
+  <div class="compare">
+    <div class="side">
+      <div class="side-label">BEFORE <span class="badge bad">5%</span></div>
+      <div class="page-mini">
+        <div class="text-line full"></div>
+        <div class="text-line short"></div>
+        <div style="height: 320px;"></div>
+        <span class="pgnum">p19</span>
+      </div>
+      <div class="gauge"><div class="gauge-bar"><div class="gauge-fill bad" style="width:5%"></div></div><span class="gauge-value">5%</span></div>
+    </div>
+    <div class="side">
+      <div class="side-label">AFTER <span class="badge good">85%</span></div>
+      <div class="page-mini">
+        <div class="text-line heading"></div>
+        <div class="text-line full"></div>
+        <div class="text-line full"></div>
+        <div class="text-line full"></div>
+        <div class="text-line short"></div>
+        <div class="text-line full"></div>
+        <div class="text-line full"></div>
+        <div class="text-line tiny"></div>
+        <span class="pgnum">p18</span>
+      </div>
+      <div class="gauge"><div class="gauge-bar"><div class="gauge-fill good" style="width:85%"></div></div><span class="gauge-value">85%</span></div>
+    </div>
+  </div>
+
+  <div class="prescription">
+    <span class="stage">3단 수동</span>
+    <strong>앞 절(p18)에서 두 문장을 압축하면 그 두 줄이 p18 끝에 흡수됩니다.</strong>
+    <p style="margin: 8px 0 0">
+    챕터 마크다운에서 p18 마지막 문단의 군더더기 표현을 제거(예: "그렇게 해서 결국" → "결국") 하면 행 길이가 줄어 마지막 두 줄이 같은 페이지에 들어갑니다. 결과적으로 p19는 다음 절의 헤딩으로 시작.
+    </p>
+  </div>
+</div>
+
+<!-- =============== CARD 2: 일반 고아 (ch5 p12, p16) =============== -->
+<div class="card">
+  <div class="card-header">
+    <h2 class="card-title">패턴 2. 일반 고아 페이지</h2>
+    <span class="pattern-tag warn">고아 · Mild</span>
+  </div>
+  <div class="case-meta">
+    <strong>사례</strong>: <code>ch5 p12</code> (10%) · <code>ch5 p16</code> (22%)
+  </div>
+
+  <div class="compare">
+    <div class="side">
+      <div class="side-label">BEFORE <span class="badge bad">10%</span></div>
+      <div class="page-mini">
+        <div class="text-line full"></div>
+        <div class="text-line short"></div>
+        <div class="text-line tiny"></div>
+        <div style="height: 280px;"></div>
+        <span class="pgnum">p12</span>
+      </div>
+      <div class="gauge"><div class="gauge-bar"><div class="gauge-fill bad" style="width:10%"></div></div><span class="gauge-value">10%</span></div>
+    </div>
+    <div class="side">
+      <div class="side-label">AFTER <span class="badge good">88%</span></div>
+      <div class="page-mini">
+        <div class="text-line heading"></div>
+        <div class="text-line full"></div>
+        <div class="text-line full"></div>
+        <div class="code-block-mini">
+          chain = (<br>
+          &nbsp;&nbsp;{"context": ...}<br>
+          &nbsp;&nbsp;| prompt | llm
+        </div>
+        <div class="text-line full"></div>
+        <div class="text-line short"></div>
+        <span class="pgnum">p11→p12</span>
+      </div>
+      <div class="gauge"><div class="gauge-bar"><div class="gauge-fill good" style="width:88%"></div></div><span class="gauge-value">88%</span></div>
+    </div>
+  </div>
+
+  <div class="prescription">
+    <span class="stage">3단 수동</span>
+    <strong>다음 섹션(p13) 헤딩 앞 한 문단을 짧게 다듬어 p12로 끌어내립니다.</strong>
+    <p style="margin: 8px 0 0">
+    다음 절의 도입 한 문단(2~3줄)을 p12로 흘려보내면 페이지 사용률이 90% 가까이로 올라갑니다. 본문 흐름도 자연스러워짐 — "이제 코드로 확인해 봅시다" 같은 짧은 도입은 다음 절 첫 줄로 두기 적합.
+    </p>
+  </div>
+</div>
+
+<!-- =============== CARD 3: 빈공간 + 고아 다중 (ch6) =============== -->
+<div class="card">
+  <div class="card-header">
+    <h2 class="card-title">패턴 3. 빈 공간 + 고아 다중 발생</h2>
+    <span class="pattern-tag warn">밀도 불균형</span>
+  </div>
+  <div class="case-meta">
+    <strong>사례</strong>: <code>ch6 p11</code> (44%) · <code>p18</code> (33%) · <code>p19</code> (49%) · <code>p22</code> (25%) — 한 챕터에 4건 집중
+  </div>
+
+  <div class="compare">
+    <div class="side">
+      <div class="side-label">BEFORE <span class="badge bad">평균 38%</span></div>
+      <div class="page-mini">
+        <div class="text-line full"></div>
+        <div class="text-line short"></div>
+        <div class="figure-block tall">그림</div>
+        <div class="text-line full"></div>
+        <div style="height: 110px;"></div>
+        <span class="pgnum">p11</span>
+      </div>
+      <div class="gauge"><div class="gauge-bar"><div class="gauge-fill warn" style="width:44%"></div></div><span class="gauge-value">44%</span></div>
+    </div>
+    <div class="side">
+      <div class="side-label">AFTER <span class="badge good">82%</span></div>
+      <div class="page-mini">
+        <div class="text-line full"></div>
+        <div class="text-line short"></div>
+        <div class="figure-block short">그림 (max-h 축소)</div>
+        <div class="text-line full"></div>
+        <div class="text-line full"></div>
+        <div class="text-line full"></div>
+        <div class="text-line short"></div>
+        <div class="code-block-mini">code...</div>
+        <span class="pgnum">p11</span>
+      </div>
+      <div class="gauge"><div class="gauge-bar"><div class="gauge-fill good" style="width:82%"></div></div><span class="gauge-value">82%</span></div>
+    </div>
+  </div>
+
+  <div class="prescription">
+    <span class="stage">1단 자동 → 2단 CSS</span>
+    <strong>같은 챕터에 4건이 몰린 경우 우선 자동 도구로 일괄 처리합니다.</strong>
+    <pre><code># 1단: density-scale로 컴포넌트 padding·gap을 점진 축소
+.claude/skills/pub-html-to-pdf/.venv/bin/python \
+  .claude/skills/pub-page-fit-html/auto_fit.py \
+  --project-root projects/사내AI비서_v2 --chapter 6
+# 0.95 → 0.90 → 0.85 단계 시도. 보통 0.90에서 4건 모두 50% 이하 해소</code></pre>
+    <p style="margin: 10px 0 0">자동으로 안 풀리는 1~2건은 그림 max-height를 12cm → 10cm로 책별 오버라이드(<code>.build/tokens.css</code>).</p>
+  </div>
+</div>
+
+<!-- =============== CARD 4: 밀림 빈공간 (ch4 p14, ch9 p24) =============== -->
+<div class="card">
+  <div class="card-header">
+    <h2 class="card-title">패턴 4. 밀림 빈공간 (Push)</h2>
+    <span class="pattern-tag warn">밀림 · Push</span>
+  </div>
+  <div class="case-meta">
+    <strong>사례</strong>: <code>ch4 p14</code> (35%) · <code>ch9 p24</code> (39%) — 큰 그림이 다음 페이지로 밀리며 앞 페이지에 빈 공간
+  </div>
+
+  <div class="compare">
+    <div class="side">
+      <div class="side-label">BEFORE <span class="badge bad">35%</span></div>
+      <div class="page-mini">
+        <div class="text-line full"></div>
+        <div class="text-line short"></div>
+        <div class="text-line full"></div>
+        <div class="text-line tiny"></div>
+        <div style="height: 220px;"></div>
+        <span class="pgnum">p14</span>
+      </div>
+      <div class="page-mini" style="margin-top: 8px;">
+        <div class="figure-block huge">큰 그림 (12cm)</div>
+        <div class="caption-line">그림 4-5. 코사인 유사도</div>
+        <div class="text-line short"></div>
+        <span class="pgnum">p15</span>
+      </div>
+      <div class="gauge"><div class="gauge-bar"><div class="gauge-fill warn" style="width:35%"></div></div><span class="gauge-value">35%</span></div>
+    </div>
+    <div class="side">
+      <div class="side-label">AFTER <span class="badge good">88%</span></div>
+      <div class="page-mini">
+        <div class="text-line full"></div>
+        <div class="text-line short"></div>
+        <div class="text-line full"></div>
+        <div class="text-line tiny"></div>
+        <div class="figure-block short">그림 (10cm)</div>
+        <div class="caption-line">그림 4-5. 코사인 유사도</div>
+        <div class="text-line full"></div>
+        <span class="pgnum">p14</span>
+      </div>
+      <div class="gauge"><div class="gauge-bar"><div class="gauge-fill good" style="width:88%"></div></div><span class="gauge-value">88%</span></div>
+    </div>
+  </div>
+
+  <div class="prescription">
+    <span class="stage">2단 CSS</span>
+    <strong>해당 그림의 max-height만 한 단계 줄이면 같은 페이지에 들어갑니다.</strong>
+    <pre><code>/* projects/사내AI비서_v2/.build/tokens.css 에 추가 (책별 오버라이드) */
+.chapter-image.diagram img {
+  max-height: 10cm;  /* 12cm → 10cm */
+}</code></pre>
+    <p style="margin: 10px 0 0">전역 print.css는 건드리지 않습니다. 다른 챕터에 영향 X.</p>
+  </div>
+</div>
+
+<!-- =============== CARD 5: 캡션 분리 (가상) =============== -->
+<div class="card">
+  <div class="card-header">
+    <h2 class="card-title">패턴 5. 캡션만 다음 페이지로 분리</h2>
+    <span class="pattern-tag warn">분리 · Split</span>
+  </div>
+  <div class="case-meta">
+    <strong>사례</strong>: 그림이 페이지 하단에 들어갔는데 캡션만 다음 페이지로 떨어지는 경우 (이번 빌드에서 print.css 보강으로 사전 차단됨)
+  </div>
+
+  <div class="compare">
+    <div class="side">
+      <div class="side-label">BEFORE (CSS 보강 전) <span class="badge bad">분리</span></div>
+      <div class="page-mini">
+        <div class="text-line full"></div>
+        <div class="text-line full"></div>
+        <div class="figure-block tall">그림</div>
+        <span class="pgnum">p7</span>
+      </div>
+      <div class="page-mini" style="margin-top: 8px;">
+        <div class="caption-line">그림 7-2. 캡션이 외로이 다음 페이지로...</div>
+        <div class="text-line full"></div>
+        <span class="pgnum">p8</span>
+      </div>
+    </div>
+    <div class="side">
+      <div class="side-label">AFTER (CSS 보강 후) <span class="badge good">묶음</span></div>
+      <div class="page-mini">
+        <div class="text-line full"></div>
+        <div class="text-line short"></div>
+        <div class="figure-block short">그림</div>
+        <div class="caption-line">그림 7-2. 그림과 캡션이 함께</div>
+        <div class="text-line full"></div>
+        <span class="pgnum">p7</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="prescription">
+    <span class="stage">2단 CSS (이번 보강에 포함)</span>
+    <strong>그림+캡션 묶음 규칙은 print.css에 이미 추가되었습니다.</strong>
+    <pre><code>/* .claude/skills/pub-html-build/styles/print.css */
+.chapter-image, figure, .figure-group, .figure-pair {
+  break-after: avoid;
+}
+.caption {
+  break-before: avoid;
+}</code></pre>
+    <p style="margin: 10px 0 0">이 규칙은 빈 공간을 새로 만들지 않습니다 — 그림 자체는 이미 break-inside: avoid 처리됨.</p>
+  </div>
+</div>
+
+</div>
+
+<footer>
+  <p>가이드 문서: <code>.claude/skills/pub-page-fit-html/references/page-design.md</code></p>
+  <p>이 프리뷰: <code>projects/사내AI비서_v2/.build/preview/page-design-cases.html</code></p>
+  <p>출처: <a href="https://www.smashingmagazine.com/2015/01/designing-for-print-with-css/">Smashing Magazine</a> · <a href="https://css-tricks.com/almanac/properties/p/page-break/">CSS-Tricks</a> · <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7774853/">PMC: Ten simple rules for typographically appealing scientific texts</a></p>
+</footer>
+
+</body>
+</html>

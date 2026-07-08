@@ -23,6 +23,24 @@
 - 캡션은 **존댓말**. 반말 종결(`-다`/`-이다`) 금지.
 - 그림 번호 접두어 `그림 N-N:` (콜론) 금지. `그림 N-N.` (마침표)는 이 프로젝트 허용.
 
+## Wrapper 결정 룰 (단일 진실원: `.claude/rules/structure.md`)
+
+**기본 원칙**: 모든 그림에서 **캡션은 그림 박스 밖**. wrapper로 `<figure>` 시맨틱 태그를 사용해 그림 + 캡션을 한 단위로 묶는다. 외곽 한 겹은 그림 컴포넌트가 담당 (이중 박스 금지).
+
+| 그림 종류 | 그림 컴포넌트 | 외곽 한 겹 책임 | 구조 |
+|----------|-------------|----------------|------|
+| **이미지** (Gemini·screenshot) | `<img>` | 이미지 자체 dashed 1px 테두리 | `<figure class="chapter-image">` + `<img>` + `<div class="caption">` |
+| **HTML 다이어그램 — 자체 외곽 있음** | `.parser-flow`·`.terminal-log`·`.rag-pipeline-box` (컬러 1.5px) | 컴포넌트 자체 컬러 외곽 | `<figure>` + `<.parser-flow>` + `<div class="caption">` |
+| **HTML 다이어그램 — 자체 외곽 없음** | `.sp-row`·`.sp-step` 등 단순 자식 | `.sp-figure` 회색 점선 1px | `<figure>` + `<.sp-figure>` + `<div class="caption">` |
+
+작성:
+- **이미지**: 마크다운 이탤릭 `*그림 N-N. 설명*` (이미지 바로 아래) — 빌드 시 자동 변환
+- **HTML 다이어그램**: `<div class="caption">그림 N-N. 설명</div>` 명시 (컴포넌트 형제로, `<figure>` 안)
+
+**캡션 위 여백 18px**. 글로벌 `.caption { margin-top: 18px }` (`base.css:47`, `diagrams.css:2852`). 14px은 답답하다고 검수에서 확인되어 18px로 상향.
+
+**시각 단일 진실원**: `projects/<책>/.build/preview/captions-preview.html`
+
 ## 컴포넌트 목록
 
 ### 군 1. Markdown 이미지 캡션 (Markdown 규칙)

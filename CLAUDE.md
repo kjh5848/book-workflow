@@ -21,7 +21,7 @@
 | **STEP**      | 흐름       | 1~7번까지 순서대로 진행하는 워크플로우 단계                                                 |
 | **에이전트**  | 전문가     | 각 역할을 담당하는 서브에이전트 (writer, editor, analyst-architect, publisher) |
 | **스킬**      | 도구       | 하나의 작업만 수행하고 결과를 돌려주는 원자적 도구 (22개)                                   |
-| **검토 모드** | 체크리스트 | 산출물 품질을 검증하는 관점과 질문 목록 (3개)                                               |
+| **검토 모드** | 체크리스트 | 산출물 품질을 검증하는 관점과 질문 목록 (4개)                                               |
 
 메인 세션이 workflow를 따라가며 전문 에이전트를 디스패치하고, 각 에이전트가 스킬을 써서 산출물을 만든다.
 
@@ -67,6 +67,8 @@ Phase 6 ── 출판 (인쇄소)
 | `뼈대 세우기`      | 4    | `planning/outline.md`                | `.claude/workflow/step4-뼈대.md`                   |
 | `챕터 작성 [N]`    | 5    | `chapters/NN-제목.md`                | `.claude/workflow/step5-챕터집필.md`               |
 | `검토 [챕터]`      | —    | `review/feedback-log.md`             | `.claude/workflow/review-guide.md`                 |
+| `친절도 점검 [챕터]` | —  | `review/friendliness-CH<NN>.md`      | editor 디스패치 → review 친절도 모드. 상세: `.claude/skills/review/references/friendliness-checklist.md` |
+| `친절도 종합`       | —    | `review/friendliness-summary.md`     | 11챕터 보고서를 챕터 × 질문 매트릭스로 합본 |
 | `프롤로그 생성`    | 6    | `book/프롤로그.md`                   | `.claude/workflow/step6-프롤로그.md`               |
 | `마무리`           | 7    | `book/에필로그.md` 등                | `.claude/workflow/step7-마무리.md`                 |
 | `이미지 분석`      | 5    | `[IMAGE PROMPT]` 플레이스홀더       | image-analyzer 스킬 (메인 세션 직접 호출)         |
@@ -144,7 +146,7 @@ projects/[책이름]/
 
 ---
 
-## 검토 모드 (3개)
+## 검토 모드 (4개)
 
 산출물 완성 후 체크리스트를 돌리는 검증 단계. 상세: `.claude/workflow/review-guide.md`
 
@@ -153,6 +155,7 @@ projects/[책이름]/
 | **인사이트** | STEP 1~5  | 저자가 놓친 부분을 짚어주는 추가 질문              |
 | **의도감시** | STEP 5    | seed.md 의도에서 벗어나지 않았는지 검증            |
 | **감수**     | 전 STEP   | 기술 감수자 + 독자 대변인 + 이야기 편집장 3인 관점 |
+| **친절도**   | 챕터 완성 후 | 11질문 패널(서사·캐릭터·비유·톤·용어·실습·전환·이전 챕터 회수). 상세: `.claude/skills/review/references/friendliness-checklist.md` |
 
 ---
 

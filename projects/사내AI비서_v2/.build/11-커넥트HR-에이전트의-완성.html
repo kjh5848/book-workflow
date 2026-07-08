@@ -89,7 +89,6 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 <div class="dialogue"><span class="speaker">팀장</span>: "이번엔 새 이론을 얹지 말고, 지금까지 본 튜닝을 한 자리에 모아 이어 붙이기만 해요."</div>
 <p>오픈이가 에디터에서 새 파일을 열었습니다. pipeline.py. 키보드 위에 손을 올린 채 빈 화면을 잠시 바라봤습니다. 이번 장의 할 일은 지금까지 따로 실험하던 <strong>튜닝 부품</strong>을 한 파일에 모아 질의 흐름 하나로 엮는 것입니다. 챕터 8·9에서는 조각별로 돌려 성능을 비교만 했다면, 여기서는 같은 개념을 함수로 <code>pipeline.py</code> 안에 모아 <code>run_pipeline</code> 하나로 차례차례 호출합니다.</p>
 <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:28px 20px;margin:var(--space-xl) 0">
-<div style="font-size:12px;font-weight:700;color:var(--color-text-muted);letter-spacing:1px;margin-bottom:20px;text-align:center">그림 11-1. RAG 엔진. 질문이 들어와 답변이 나가기까지</div>
 <!-- 입력 포트 -->
 <div style="text-align:center">
 <div style="display:inline-block;padding:6px 16px;background:var(--color-surface-alt);border:1px dashed var(--color-border);border-radius:20px;font-size:11px;font-weight:600;color:var(--color-text-muted)">사용자 질문</div>
@@ -163,6 +162,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 </div>
 <div style="margin-top:18px;padding-top:12px;border-top:1px solid var(--color-border-dashed);font-size:11px;color:var(--color-text-muted);line-height:1.6;text-align:center">최초 실행 시 <code style="font-size:10px;background:var(--color-surface-alt);padding:1px 5px;border-radius:3px">ex11/data/docs</code>를 하이브리드 파서(pypdf → Vision)로 인덱싱해 <b>자식 청크는 ChromaDB</b>에, <b>부모 페이지는 parent_docs.json</b>에 나눠 적재합니다. 네 부품은 질문이 들어올 때마다 자식 검색 → 부모 복원 순으로 실행됩니다</div>
 </div>
+<div class="caption">그림 11-1. RAG 엔진. 질문이 들어와 답변이 나가기까지</div>
 <p>파이프라인을 <strong>레이어드 아키텍처</strong>로 분리합니다. <code>pipeline.py</code>의 <code>RagPipeline</code>이 질의가 들어올 때마다 네 부품(<code>QueryExpander</code>·<code>EnsembleRetriever</code>·<code>CrossEncoderReranker</code>·<code>ParentDocumentRetriever</code>)을 차례대로 부르고, 그 부품들은 <code>src/tools/</code>의 ChromaDB·BM25 같은 외부 저장소를 끌어 씁니다. 벡터DB는 <code>ex11/data/docs</code>를 자체 인덱싱해 <strong>자식·부모 두 저장소</strong>로 빌드합니다. 페이지 단위 원문은 부모로 <code>ex11/data/parent_docs.json</code>에 두고, 220자 정도로 잘게 쪼갠 자식 청크는 ChromaDB에 <code>parent_id</code> 메타데이터와 함께 적재합니다. PDF는 <code>src/tuning/hybrid_parser.py</code>(챕터 10의 하이브리드 파서를 이식한 모듈)가 pypdf로 먼저 꺼내 보고 스캔본이면 Vision LLM으로 넘어가 텍스트를 뽑습니다. BM25 인덱스와 Cross-Encoder 모델은 <code>EnsembleRetriever</code>·<code>CrossEncoderReranker</code> 객체가 최초 사용 시 1회만 초기화합니다.</p>
 <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:24px 20px;margin:var(--space-xl) 0">
 <div style="font-size:12px;font-weight:700;color:var(--color-text-muted);margin-bottom:20px;text-align:center;letter-spacing:1px">레이어드 아키텍처. 위에서 아래로 호출·참조만 흐릅니다</div>
@@ -357,7 +357,6 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 </ul>
 <p>두 갈래가 한 엔드포인트 안에서 자연스럽게 갈라집니다.</p>
 <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:24px;margin:var(--space-xl) 0">
-<div style="font-size:var(--fs-sm);font-weight:700;color:var(--color-accent-text);margin-bottom:16px;text-align:center">그림 11-2. 카테고리에 따라 갈라지는 근거 모양</div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
 <div style="border:1px solid var(--color-info);border-radius:8px;padding:12px;background:var(--color-info-bg)">
 <div style="font-size:11px;font-weight:700;color:var(--color-info-text);letter-spacing:1px;margin-bottom:8px">정형 질문 → JSON</div>
@@ -380,6 +379,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 </div>
 <div style="margin-top:14px;font-size:12px;color:var(--color-text-muted);line-height:1.6;text-align:center">같은 UI에서 질문의 성격에 따라 근거 모양이 자동으로 바뀝니다. 숫자는 숫자로, 문장은 이미지로</div>
 </div>
+<div class="caption">그림 11-2. 카테고리에 따라 갈라지는 근거 모양</div>
 <div class="dialogue"><span class="speaker">동료</span>: "이제 매출은 매출답게, 규정은 규정답게 보여지네요."</div>
 <div class="dialogue"><span class="speaker">팀장</span>: "좋아요. 이걸로 직원들이 '믿고 쓸 수 있는' 에이전트가 됐어요."</div>
 <p class="thought">근거의 모양이 곧 답변의 신뢰다.</p>
@@ -485,7 +485,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 <p class="thought">세 개 다 잡았네.</p>
 <div class="dialogue"><span class="speaker">오픈이</span>: "병가·WFH·서약서 다 되네요. 서약서는 챕터 10에서 Vision 붙여 둔 덕분이네요."</div>
 <div class="dialogue"><span class="speaker">동료</span>: "질문 타입이 세 개 다 다른데 세 번 다 근거까지 붙네요."</div>
-<h2>11.4 엔진의 내부: 파이프라인 한 장</h2>
+<h2>11.4 엔진의 내부 - 파이프라인 한 장</h2>
 <p>웹 화면에서 본 세 답변이 안에서는 어떤 단계를 거쳐 만들어졌는지, 파이프라인 전체를 한 장에 정리하면 이렇게 보입니다.</p>
 <div class="eng-pipe">
 <div class="ep-head">
@@ -519,7 +519,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 </div>
 </div>
 <div class="caption">그림 11-10. 질문이 들어와 6단계 파이프라인을 지나 답변이 나가기까지</div>
-<p>01(파싱)과 02(청킹)는 서버가 처음 뜰 때 한 번만 도는 <strong>인덱싱</strong> 단계입니다. 문서를 벡터DB에 올리는 일이라 매 질문마다 반복할 필요가 없죠. 나머지 03부터 06(쿼리 확장·검색·리랭킹·부모·LLM)이 질문이 들어올 때마다 도는 <strong>질의</strong> 단계이고, 실습 1의 <code>run_pipeline</code>이 이 03~06을 차례로 호출합니다.</p>
+<p>01(파싱)과 02(청킹)는 서버가 처음 뜰 때 한 번만 도는 <strong>인덱싱</strong> 단계입니다. 문서를 벡터DB에 올리는 일이라 매 질문마다 반복할 필요가 없습니다. 나머지 03부터 06(쿼리 확장·검색·리랭킹·부모·LLM)이 질문이 들어올 때마다 도는 <strong>질의</strong> 단계이고, 실습 1의 <code>run_pipeline</code>이 이 03~06을 차례로 호출합니다.</p>
 <p>챕터 8~10에서 따로 실험하던 부품들이 각 단계에 박혀 있습니다. Semantic 청킹은 02, 약어 사전은 03, 하이브리드 검색은 04, 리랭커는 05, 부모 문서 확장과 LLM 답변 생성은 06. 따로 볼 때는 각자의 평가표만 있었지만, 지금은 한 줄로 꿰어져 한 질문의 응답을 함께 만들어 냅니다.</p>
 <h2>11.5 전체 구성도의 완성</h2>
 <p>11.4의 파이프라인이 &quot;질문이 답변으로 흐르는 길&quot;이었다면, 아래 구성도는 그 길을 떠받치는 <strong>시스템 전체</strong>를 한 장에 담은 모습입니다. LLM부터 에이전트 루프, 도구, 저장소까지.</p>
@@ -618,14 +618,30 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 <td><strong>Response Modality Routing</strong></td>
 <td>질문 성격에 따라 응답 형태(JSON 수치·문서 이미지 등)를 달리 내보내는 로직</td>
 </tr>
+<tr>
+<td>&quot;세 층으로 나눈 구조&quot;</td>
+<td><strong>레이어드 아키텍처 (Layered Architecture)</strong></td>
+<td>Application → Domain → Infrastructure 세 층이 단방향으로만 호출하는 코드 구조 패턴</td>
+</tr>
+<tr>
+<td>&quot;필요한 부품을 처음에 받아 두는 방식&quot;</td>
+<td><strong>생성자 주입 (Constructor Injection)</strong></td>
+<td>객체가 의존 부품을 직접 만들지 않고 외부에서 주입받는 패턴. 객체 수명·테스트 용이성·교체 비용에 영향</td>
+</tr>
+<tr>
+<td>&quot;챕터 10 메뉴판의 네 조합 중 D&quot;</td>
+<td><strong>D Configuration (Full Stack)</strong></td>
+<td>Semantic 청킹 + 하이브리드 검색 + 리랭킹 + 약어 확장 + Parent Doc + Vision 파서가 모두 켜진 조합</td>
+</tr>
 </tbody>
 </table>
 <div class="remember">
 <p><strong>이것만은 기억하자</strong></p>
 <ul>
+<li><strong>커넥트HR이라는 사서 한 명이 완성됐습니다.</strong> 챕터 4에서 손에 자료(임베딩)를 쥐여 준 뒤 챕터 8에서 면접관(리랭커)을, 챕터 9에서 귀(약어 사전)를, 챕터 10에서 눈(Vision)을 차례로 달았고, 이번 챕터에서 그 부품들을 한 파일에 묶어 한 명의 직원으로 출근시켰습니다.</li>
 <li><strong>조립이 가장 큰 일의 절반입니다.</strong> 챕터 8~10에서 실험한 튜닝 부품을 한 파일에 함수로 모아 <code>run_pipeline</code> 하나로 엮으면 파이프라인이 완성됐습니다. 쌓인 부품이 많을수록 조립의 힘이 커집니다.</li>
 <li><strong>근거는 답변만큼 중요합니다.</strong> 사용자는 답의 내용뿐 아니라 &quot;어디서 나왔는지&quot;로 신뢰를 판단합니다. 정형 수치는 JSON으로, 비정형 내용은 문서 이미지로. 질문의 성격에 맞춰 근거의 모양을 바꿉니다.</li>
-<li><strong>여기서 끝이 아닙니다.</strong> 평가셋을 늘리고, 사용자 로그로 실패 쿼리를 수집하고, Langfuse 같은 도구로 운영 중 품질을 상시 관측하세요. 커넥트HR 에이전트는 이제 <strong>계속 자라는</strong> 시스템입니다.</li>
+<li><strong>여기서 끝이 아닙니다.</strong> 평가셋을 늘리고, 사용자 로그로 실패 쿼리를 수집하고, Langfuse 같은 도구로 운영 중 품질을 상시 관측하세요. 커넥트HR이라는 사서는 이제 <strong>계속 자라는</strong> 시스템입니다.</li>
 </ul>
 </div>
 

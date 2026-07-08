@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>캡션·테두리 룰 프리뷰 — 오픈스킬북스</title>
+<link rel="stylesheet" href="../styles/fonts.css">
+<link rel="stylesheet" href="../styles/tokens.css">
+<link rel="stylesheet" href="../styles/base.css">
+<link rel="stylesheet" href="../styles/components.css">
+<link rel="stylesheet" href="../styles/diagrams.css">
+<style>
+  body {
+    max-width: 980px;
+    margin: 40px auto 120px;
+    padding: 0 24px;
+    font-family: var(--font-body);
+    color: var(--color-text);
+    background: var(--color-bg);
+  }
+  .brand-sub {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-text-subtle);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  h1 { font-size: 28px; font-weight: 800; color: var(--color-text-heading); margin: 0 0 8px; letter-spacing: -0.3px; }
+  h2 { font-size: 20px; font-weight: 700; margin: 56px 0 16px; padding-bottom: 8px; border-bottom: 2px solid var(--color-border-dashed); color: var(--color-text-heading); }
+  h3 { font-size: 15px; font-weight: 700; margin: 28px 0 8px; color: var(--color-text-heading); }
+  .lead { color: var(--color-text-secondary); font-size: 14px; line-height: 1.7; margin-bottom: 12px; }
+
+  /* 룰 표 */
+  .rule-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0 8px;
+    font-size: 13px;
+  }
+  .rule-table th { background: var(--color-surface); padding: 10px 12px; text-align: left; font-weight: 700; border-bottom: 2px solid var(--color-border); color: var(--color-text-heading); }
+  .rule-table td { padding: 10px 12px; border-bottom: 1px solid var(--color-border-dashed); vertical-align: top; line-height: 1.6; }
+  .rule-table code { font-size: 12px; }
+
+  /* 케이스 라벨 */
+  .case-label {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+  }
+  .case-label.good { background: #d1fae5; color: #065f46; }
+  .case-label.bad { background: #fee2e2; color: #991b1b; }
+  .case-reason {
+    color: var(--color-text-muted);
+    font-size: 12px;
+    margin: 4px 0 14px;
+    line-height: 1.6;
+  }
+  .case-reason b { color: var(--color-text-heading); }
+
+  /* 데모 그림용 placeholder 박스 */
+  .demo-image {
+    width: 100%;
+    height: 180px;
+    background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-accent-text);
+    font-weight: 700;
+    font-size: 14px;
+    border: 1px dashed var(--color-border-dashed);
+  }
+
+  /* 잘못된 케이스 — 캡션 위 여백 4px 데모 */
+  .bad-tight-caption { margin-top: 4px !important; }
+
+  /* 코드 스니펫 */
+  pre.snippet {
+    background: var(--color-surface-alt);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--color-text-muted);
+    margin: 8px 0 0;
+    overflow-x: auto;
+    line-height: 1.6;
+  }
+
+  /* 섹션 컨테이너 */
+  .case-block { margin: 24px 0 36px; padding: 16px 0 0; }
+  .case-block + .case-block { border-top: 1px dashed var(--color-border-dashed); padding-top: 22px; }
+</style>
+</head>
+<body>
+
+<div class="brand-sub">오픈스킬북스 시각 단일 진실원</div>
+<h1>캡션·테두리 룰 프리뷰</h1>
+<p class="lead">
+이 페이지는 <code>.claude/rules/structure.md</code>의 캡션 룰을 시각으로 보여 주는 단일 진실원입니다.
+<b>모든 그림에서 캡션은 그림 박스 밖</b>이 핵심 원칙입니다. wrapper로 <code>&lt;figure&gt;</code> 시맨틱 태그를 사용해 그림 + 캡션을 한 단위로 묶고, 외곽 한 겹은 안쪽 그림 컴포넌트가 담당합니다.
+</p>
+
+<h2>1. 룰 표 — 그림 종류별 wrapper · 외곽 책임</h2>
+
+<table class="rule-table">
+  <thead>
+    <tr>
+      <th style="width:22%">그림 종류</th>
+      <th style="width:24%">그림 컴포넌트</th>
+      <th style="width:24%">외곽 한 겹 책임</th>
+      <th style="width:30%">구조 (캡션은 항상 박스 밖)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>이미지</b><br><small>(Gemini·screenshot)</small></td>
+      <td><code>&lt;img&gt;</code></td>
+      <td>이미지 자체 dashed 1px</td>
+      <td><code>&lt;figure class="chapter-image"&gt; + &lt;img&gt; + &lt;div class="caption"&gt;</code><br>(또는 마크다운 이탤릭 자동 변환)</td>
+    </tr>
+    <tr>
+      <td><b>HTML 다이어그램<br>(자체 외곽 있음)</b></td>
+      <td><code>.parser-flow</code>·<code>.terminal-log</code>·<code>.rag-pipeline-box</code> 등</td>
+      <td>컴포넌트 자체 컬러 1.5px</td>
+      <td><code>&lt;figure&gt; + &lt;.parser-flow&gt; + &lt;div class="caption"&gt;</code></td>
+    </tr>
+    <tr>
+      <td><b>HTML 다이어그램<br>(자체 외곽 없음)</b></td>
+      <td><code>.sp-row</code>·<code>.sp-step</code> 등 단순 자식</td>
+      <td><code>.sp-figure</code> 회색 점선 1px</td>
+      <td><code>&lt;figure&gt; + &lt;.sp-figure&gt; + &lt;div class="caption"&gt;</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p class="lead">
+공통 규칙: 캡션 위 여백 <b>18px</b>(글로벌 <code>.caption</code>) · 캡션은 그림 박스 밖 · 이중 외곽 금지 · 존댓말 · 가운데 정렬 · <code>그림 N-N:</code> 콜론 접두어 금지(마침표만).
+</p>
+
+<h2>2. 정상 케이스 (3가지)</h2>
+
+<div class="case-block">
+  <span class="case-label good">GOOD · A1</span>
+  <h3>이미지 캡션 — <code>&lt;figure class="chapter-image"&gt;</code> + 이미지 + 캡션</h3>
+  <p class="case-reason"><b>언제</b>: Gemini·screenshot으로 받은 PNG/JPG 이미지. 마크다운 본문에 <code>![](경로)</code> 다음 줄에 <code>*그림 N-N. 설명*</code> 이탤릭 — 빌드 시 <code>&lt;figure class="chapter-image"&gt;</code>로 자동 묶임.</p>
+  <figure class="chapter-image">
+    <div class="demo-image">[이미지 자리 — 가상 데모]</div>
+    <div class="caption">그림 N-1. 이미지의 dashed 테두리가 외곽 한 겹이고, 캡션은 이미지 박스 밖에 위치합니다</div>
+  </figure>
+  <pre class="snippet">![](../assets/CH01/01_chapter-opening.png)
+*그림 1-1. 환각이 시작되는 장면*</pre>
+</div>
+
+<div class="case-block">
+  <span class="case-label good">GOOD · A2</span>
+  <h3>HTML 다이어그램 (자체 외곽 있음) — <code>&lt;figure&gt;</code> + <code>.parser-flow</code> + 캡션</h3>
+  <p class="case-reason"><b>언제</b>: <code>.parser-flow</code>처럼 자체 컬러 외곽을 가진 다이어그램. <code>&lt;figure&gt;</code> wrapper는 외곽 없음, 캡션은 컴포넌트 형제로 박스 밖에 위치.</p>
+  <figure>
+    <div class="parser-flow">
+      <div class="pf-node input"><strong>입력</strong><small>예시 노드</small></div>
+      <div class="pf-arrow-h">→</div>
+      <div class="pf-node decision"><strong>판정</strong><small>예시 노드</small></div>
+      <div class="pf-arrow-h">→</div>
+      <div class="pf-node merge"><strong>출력</strong><small>예시 노드</small></div>
+    </div>
+    <div class="caption">그림 N-2. 컬러 외곽이 메인 박스가 되고, 캡션은 18px 떨어져 박스 밖에 분리됩니다</div>
+  </figure>
+  <pre class="snippet">&lt;figure&gt;
+  &lt;div class="parser-flow"&gt;...&lt;/div&gt;
+  &lt;div class="caption"&gt;그림 N-N. ...&lt;/div&gt;
+&lt;/figure&gt;</pre>
+</div>
+
+<div class="case-block">
+  <span class="case-label good">GOOD · A3</span>
+  <h3>HTML 다이어그램 (자체 외곽 없음) — <code>&lt;figure&gt;</code> + <code>.sp-figure</code> + 캡션</h3>
+  <p class="case-reason"><b>언제</b>: <code>.sp-row</code>·<code>.sp-step</code>처럼 자체 외곽이 없는 단순 자식. <code>.sp-figure</code>가 회색 점선 외곽 한 겹을 그리고, 캡션은 <code>&lt;figure&gt;</code> 안 <code>.sp-figure</code> 형제로 박스 밖에 위치.</p>
+  <figure>
+    <div class="sp-figure">
+      <div class="sp-row">
+        <div class="sp-row-label">키</div>
+        <div class="sp-row-value">값 — 자체 외곽이 없는 단순 행 컴포넌트</div>
+      </div>
+      <div class="sp-row">
+        <div class="sp-row-label">키 2</div>
+        <div class="sp-row-value">값 2</div>
+      </div>
+    </div>
+    <div class="caption">그림 N-3. sp-figure의 회색 점선 외곽이 한 겹이고, 캡션은 18px 떨어져 박스 밖에 분리됩니다</div>
+  </figure>
+  <pre class="snippet">&lt;figure&gt;
+  &lt;div class="sp-figure"&gt;
+    &lt;div class="sp-row"&gt;...&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="caption"&gt;그림 N-N. ...&lt;/div&gt;
+&lt;/figure&gt;</pre>
+</div>
+
+<h2>3. 잘못된 케이스 (3가지)</h2>
+
+<div class="case-block">
+  <span class="case-label bad">⚠️ BAD · B1</span>
+  <h3>캡션이 박스 안 — <code>.sp-figure</code> 또는 컴포넌트 안에 캡션 삽입</h3>
+  <p class="case-reason"><b>문제</b>: 캡션이 그림 컴포넌트 안에 들어가 있어 그림의 일부처럼 보임. 그림과 캡션의 분리감이 사라지고, 시각 단위가 모호해짐.<br><b>해결</b>: 캡션을 컴포넌트 밖, <code>&lt;figure&gt;</code> wrapper 안에 형제로 위치.</p>
+  <div class="sp-figure">
+    <div class="sp-row">
+      <div class="sp-row-label">키</div>
+      <div class="sp-row-value">값</div>
+    </div>
+    <div class="caption">그림 N-4. 캡션이 sp-figure 박스 안에 갇혀 있습니다 (잘못된 예)</div>
+  </div>
+  <pre class="snippet">&lt;!-- 잘못 — 캡션이 박스 안 --&gt;
+&lt;div class="sp-figure"&gt;
+  &lt;div class="sp-row"&gt;...&lt;/div&gt;
+  &lt;div class="caption"&gt;...&lt;/div&gt;
+&lt;/div&gt;</pre>
+</div>
+
+<div class="case-block">
+  <span class="case-label bad">⚠️ BAD · B2</span>
+  <h3>캡션 위 여백 부족 — <code>margin-top: 4px</code></h3>
+  <p class="case-reason"><b>문제</b>: 그림과 캡션이 너무 가까워 답답해 보임. 14px도 부족하다는 검수에서 18px로 상향됨.<br><b>해결</b>: 글로벌 <code>.caption { margin-top: 18px }</code>을 그대로 사용 (별도 inline-style 강제 금지).</p>
+  <figure>
+    <div class="parser-flow">
+      <div class="pf-node input"><strong>입력</strong><small>예시 노드</small></div>
+      <div class="pf-arrow-h">→</div>
+      <div class="pf-node merge"><strong>출력</strong><small>예시 노드</small></div>
+    </div>
+    <div class="caption bad-tight-caption">그림 N-5. 캡션이 그림에 너무 붙어 답답합니다 (잘못된 예 — margin-top 4px 강제)</div>
+  </figure>
+</div>
+
+<div class="case-block">
+  <span class="case-label bad">⚠️ BAD · B3</span>
+  <h3><code>그림 N-N:</code> 콜론 접두어 위반</h3>
+  <p class="case-reason"><b>문제</b>: HTML 파이프라인은 자동 번호를 부여하지 않으므로 수동 번호 형식(<code>그림 N-N.</code> 마침표)이 룰. 콜론(<code>:</code>) 사용 금지.<br><b>해결</b>: <code>그림 N-6: ...</code> → <code>그림 N-6. ...</code>.</p>
+  <figure>
+    <div class="sp-figure">
+      <div class="sp-row">
+        <div class="sp-row-label">예시</div>
+        <div class="sp-row-value">콜론 접두어를 쓴 캡션</div>
+      </div>
+    </div>
+    <div class="caption">그림 N-6: 콜론 접두어가 들어간 잘못된 캡션 형식 (마침표만 허용)</div>
+  </figure>
+</div>
+
+<h2>4. 책임 분담</h2>
+
+<table class="rule-table">
+  <thead>
+    <tr><th>책임</th><th>위치</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>룰 단일 진실원</td><td><code>.claude/rules/structure.md</code> "캡션 단일 진실원" 섹션</td></tr>
+    <tr><td>외곽 테두리 룰</td><td><code>.claude/rules/brand-tokens.md</code> "wrapper 이중 외곽 금지" 항목</td></tr>
+    <tr><td>CSS 정의</td><td><code>base.css</code>(<code>.caption</code> 18px) · <code>diagrams.css</code>(<code>figure</code> wrapper · <code>.caption</code> 18px)</td></tr>
+    <tr><td>카탈로그 문서</td><td><code>.claude/skills/pub-html-build/components-catalog/captions/README.md</code></td></tr>
+    <tr><td>시각 단일 진실원 (이 페이지)</td><td><code>projects/&lt;책&gt;/.build/preview/captions-preview.html</code></td></tr>
+  </tbody>
+</table>
+
+</body>
+</html>

@@ -124,7 +124,10 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 <p>책장에서 <strong>인사규정 v2.3</strong>을 꺼냈습니다. 페이지를 넘겼습니다. &quot;연차는 입사 1년차에 15일…&quot; 규정은 나옵니다. 그런데 <strong>&quot;김대리가 지금 며칠 남았는지&quot;</strong> 는 어디에도 없었습니다. 당연한 이야기였습니다. 규정집은 &quot;어떻게 발생하는가&quot;를 적는 곳이지, &quot;누가 얼마 남았는가&quot;를 적는 곳이 아닙니다.</p>
 <p class="thought">아, 이건 문서 문제가 아니구나.</p>
 <p>매출도 마찬가지입니다. 작년 매출 보고서 PDF는 있지만 &quot;이번 달&quot;은 DB에만 있죠. 실시간 숫자는 문서에 없었습니다. 규정집을 덮고 의자에 기댔습니다. 천장 형광등이 한 번 깜빡였습니다.</p>
-<p>AI 비서가 진짜 업무를 도우려면 <strong>사내 데이터를 꺼낼 수 있는 시스템</strong>이 먼저 있어야 했습니다. AI에게 &quot;연차 잔여일 알려줘&quot;라고 시킬 대상. 지금까지 그게 없었던 것입니다.</p>
+<p>뒷자리에서 동료가 마우스 휠을 굴리던 손을 멈추고 돌아봤습니다.</p>
+<div class="dialogue"><span class="speaker">동료</span>: "그러게요. 어제 ChatGPT한테 '김대리 연차 며칠 남았어' 물어봤더니 '8일'이라고 자신 있게 답하더라고요. 김대리는 입사도 안 했는데."</div>
+<p>어제 만든 사서가 떠올랐습니다. 도서관 서가에 책을 꽂고, 질문에 맞는 페이지를 펼쳐 답하는 사서. 그러나 그 사서는 <strong>책장만 봅니다</strong>. 인사기록부 캐비닛 문은 열지 못합니다.</p>
+<p>AI 비서가 진짜 업무를 도우려면 <strong>사내 데이터를 꺼낼 수 있는 시스템</strong>이 먼저 있어야 했습니다. AI에게 &quot;연차 잔여일 알려줘&quot;라고 시킬 대상. 지금까지 그게 없었던 것입니다. 어제 RAG로는 결코 풀 수 없었던, 바로 그 영역입니다.</p>
 <p>그래서 이번 챕터는 AI 비서보다 <strong>사내 시스템</strong>을 먼저 실행해 봅니다. 코드를 한 줄씩 뜯지는 않습니다. 완성된 시스템을 띄워 &quot;이런 데이터가 이런 모양으로 들어온다&quot;를 눈으로 확인하는 것이 목적입니다.</p>
 <h2>2.2 직원, 연차, 매출 세 테이블</h2>
 <p>화이트보드 앞에 나란히 섰습니다. 팀장이 마커를 집어 들더니 왼쪽부터 박스 세 개를 그려 나갑니다. 마커 냄새가 한 번 훅 올라왔습니다.</p>
@@ -146,6 +149,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 <div class="dialogue"><span class="speaker">오픈이</span>: "좋네요. 커넥트HR 에이전트."</div>
 <p>이름이 붙으니 프로젝트가 진짜 시작된 느낌입니다. 지금은 사내 시스템 껍데기뿐이지만, 앞으로 챕터를 거듭하며 이 에이전트가 한 단계씩 자랍니다. 문서를 읽고, 질문에 답하고, DB를 조회하고, 결국 &quot;진짜 비서&quot;에 가까워지는 여정입니다.</p>
 <p>이제 실제로 실행해 볼 차례입니다.</p>
+<p class="thought">화이트보드의 박스 세 개가 진짜로 돌아가는 모습을 봐야 손이 풀릴 것 같습니다.</p>
 <h2>2.4 서버를 띄우고 Swagger UI에서 두드려보기</h2>
 <p><code>python run.py</code>로 서버를 띄웁니다.</p>
 <div class="code-block highlight" data-lang="bash"><div class="cb-title"><span class="badge bash">터미널</span> 서버 실행</div>python<span class="w"> </span>run.py</div>
@@ -160,7 +164,8 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 <div class="chapter-image terminal"><img src="../assets/CH02/terminal/02_admin-dashboard.png" alt="" /><div class="caption">그림 2-4. Jinja2 템플릿으로 만든 관리자 대시보드. 직원, 연차, 매출 현황을 한눈에 보여 줍니다</div></div>
 <p>좌측 <strong>직원 관리</strong> 메뉴에서 이름 &quot;홍길동&quot;과 부서, 직급, 입사일을 입력하고 저장을 누르면 아래 목록에 한 줄이 바로 추가됩니다. 사번은 시스템이 자동으로 부여합니다.</p>
 <div class="chapter-image terminal"><img src="../assets/CH02/terminal/02_admin-employees-list.png" alt="" /><div class="caption">그림 2-5. 직원 관리 목록. 맨 아래에 홍길동이 새 사번으로 추가된 모습입니다. API 호출법을 몰라도 CRUD가 됩니다</div></div>
-<p>지금까지 만든 부분이 전체 시스템에서 어디에 놓이는지 한번 보겠습니다. 아래는 이 책 전체에서 만들 <strong>커넥트HR 에이전트</strong>의 구성도입니다. 진하게 표시된 두 박스가 이번 챕터에서 실행한 부분입니다. 나머지는 다음 챕터들에서 하나씩 채워 갑니다.</p>
+<h2>2.6 전체 구성도에서 챕터 2의 자리</h2>
+<p>지금까지 만든 부분이 전체 시스템에서 어디에 놓이는지 한번 보겠습니다. 아래는 이 책 전체에서 만들 <strong>커넥트HR 에이전트</strong>의 구성도입니다. 챕터 1 끝(그림 1-12)에서 비워 뒀던 자리 가운데 두 칸을 이번 챕터에서 채웠습니다. 진하게 표시된 두 박스가 그 자리입니다. 나머지는 다음 챕터들에서 하나씩 채워 갑니다.</p>
 <div class="arch11">
 <div class="header">
 <div class="sub">chapter 02</div>
@@ -200,13 +205,13 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 </div>
 </div>
 </div>
-<div class="caption">그림 2-6. 챕터 2가 만든 부분. 순서대로 학습합니다.</div>
+<div class="caption">그림 2-6. 챕터 2의 결과. 사용자·FastAPI·PostgreSQL 세 자리가 새로 자리를 잡았습니다</div>
 <div class="tip">
 <p><strong>종료합니다</strong></p>
 <p><code>Ctrl + C</code>로 서버를 종료하고 <code>docker compose down</code>으로 컨테이너를 내립니다.</p>
 </div>
-<h2>2.6 API 엔드포인트 목록</h2>
-<p>이 시스템이 제공하는 API 전체 목록입니다. 챕터 6에서 커넥트HR 에이전트가 MCP 도구로 이 중 몇 개를 호출하게 됩니다.</p>
+<h2>2.7 API 엔드포인트 목록</h2>
+<p>이 시스템이 제공하는 API 전체 목록입니다. 챕터 6에서 커넥트HR 에이전트가 <strong>MCP(Model Context Protocol)</strong> 도구로 이 중 몇 개를 호출하게 됩니다. MCP는 AI 에이전트가 외부 시스템(여기서는 사내 API)을 호출할 때 쓰는 표준 프로토콜인데, 자세한 개념과 실제 도구 작성은 챕터 6에서 다룹니다.</p>
 <table>
 <thead>
 <tr>
@@ -281,7 +286,9 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 <p><code>/api/sales/dept-summary</code>는 부서별 매출 합계를 반환하는 특수 엔드포인트입니다. 챕터 6에서 에이전트의 <code>sales_sum</code> 도구가 이 엔드포인트를 호출해 &quot;개발팀 매출 얼마야?&quot; 같은 질문에 답하게 됩니다.</p>
 <p>Swagger UI를 마저 훑어보고 있는데 팀장이 모니터를 흘끗 보더니 한마디 던졌습니다.</p>
 <div class="dialogue"><span class="speaker">팀장</span>: "이제 AI 비서가 조회해볼 곳이 생겼네요."</div>
-<p>오프닝에 &quot;문서 검색만 되면 안 되지&quot;라며 판을 뒤집었던 그 사람입니다. 이제 그 판에 올려둘 시스템이 준비됐습니다.</p>
+<p>도입부에서 던진 &quot;김대리 연차 며칠 남았어&quot;라는 질문이 떠올랐습니다. 그때는 답할 곳이 없었지만, 이제 <code>/api/leaves</code>라는 답할 수 있는 창구가 생겼습니다.</p>
+<p>뒷자리에서 동료가 화면을 흘끗 보고 한마디 던졌습니다.</p>
+<div class="dialogue"><span class="speaker">동료</span>: "이제 데이터 좀 있는 비서 같네요. 자신 있게 거짓말은 안 하겠어요."</div>
 <h2>용어 정리</h2>
 <table>
 <thead>

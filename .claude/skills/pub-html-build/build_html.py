@@ -590,10 +590,22 @@ def open_in_browser(path: Path) -> bool:
 
 
 def resolve_preview_target(name: str) -> Path:
-    """--preview NAME → .build/preview/NAME.html 경로. 확장자·슬래시 허용."""
+    """--preview NAME → .build/preview/NAME.html 경로. 확장자·슬래시 허용.
+
+    책 프로젝트 .build/preview/에 파일이 없으면 스킬 내장
+    preview-templates/<NAME>.html을 자동 복사 (단일 진실원).
+    """
     if not name.endswith(".html"):
         name = f"{name}.html"
-    return BUILD_DIR / "preview" / name
+    target = BUILD_DIR / "preview" / name
+    if not target.exists():
+        skill_dir = Path(__file__).resolve().parent
+        skill_template = skill_dir / "preview-templates" / name
+        if skill_template.exists():
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text(skill_template.read_text())
+            print(f"📋 스킬 템플릿 복사: {skill_template.name} → {target.relative_to(PROJECT_ROOT) if target.is_relative_to(PROJECT_ROOT) else target}")
+    return target
 
 
 # ========== 메인 ============================================================

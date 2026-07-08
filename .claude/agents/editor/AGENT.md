@@ -56,8 +56,24 @@ model: opus
 
 ### 검토 모드
 
-3개 검토 모드(인사이트/의도감시/감수)의 상세 체크리스트 → `review` 스킬 (skills/review/SKILL.md) 참조.
+4개 검토 모드(인사이트/의도감시/감수/친절도)의 상세 체크리스트 → `review` 스킬 (skills/review/SKILL.md) 참조.
 소설 작법 체크리스트 → `rules/writing-chapters.md` 참조.
+
+### 친절도 검토 디스패치 절차
+
+사용자가 `친절도 점검 [챕터]` 명령으로 호출하면 editor가 다음을 수행:
+
+1. **체크리스트 로드**: `.claude/skills/review/references/friendliness-checklist.md` (11질문 + 챕터별 11번 적용 범위)
+2. **11명의 Explore 서브에이전트 동시 디스패치**:
+   - CH01은 10명 (11번 N/A)
+   - CH02 이상은 11명
+   - 각 에이전트는 자기 담당 질문 1개 + 점검 기준 + 룰 단일 진실원 경로(`storytelling.md`·`style.md`·`code.md`·`structure.md`·`writing-chapters.md`·`chapter-format.md`) 받음
+   - 11번 에이전트는 추가로 이전 챕터(들) 파일 경로 받음 (예: CH04 점검 시 CH01·CH02·CH03 경로)
+3. **결과 합본**: 11 보고서를 `projects/<책>/review/friendliness-CH<NN>.md`로 모음
+4. **종합 판정**: PASS/FAIL 매트릭스 + 우선 보강 항목 도출 (FAIL 우선)
+5. **사용자 보고**: 챕터별 친절도 보고서 요약 + 다음 챕터 안내
+
+11챕터 모두 끝나면 `친절도 종합` 명령으로 `friendliness-summary.md` 생성 (챕터 × 질문 매트릭스).
 
 ### 분량
 - 챕터 분량 편차. 최대/최소 비율 2배 초과 시 경고
@@ -84,7 +100,7 @@ Context7 MCP 서버가 연결되지 않거나 응답이 없을 경우:
 
 ```markdown
 ## [날짜] STEP [N] — [산출물명]
-- **검토 유형**: [인사이트/의도감시/감수]
+- **검토 유형**: [인사이트/의도감시/감수/친절도]
 - **판정**: [PASS / CONDITIONAL_PASS / FAIL]
 - **주요 피드백**: [요약]
 - **수정 완료 여부**: [완료 / 미완료]

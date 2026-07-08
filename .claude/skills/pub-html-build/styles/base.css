@@ -37,15 +37,16 @@
     border: 1px solid var(--color-border-dashed);
   }
   .chapter-image .caption {
-    margin-top: 14px;
+    margin-top: 18px;
     color: var(--color-text-secondary);
     font-size: 13px;
     font-style: italic;
   }
   /* 글로벌 .caption — 다이어그램·카드 등 chapter-image 외부에서도 동일 톤
-   * margin-top 14px: 그림(이미지·다이어그램)과 캡션 사이 숨돌릴 여백 확보 */
+   * margin-top 18px: 그림(이미지·다이어그램)과 캡션 사이 숨돌릴 여백 확보
+   * 검수에서 14px이 답답하다고 확인되어 18px로 상향 (캡션 룰 단일 진실원: structure.md) */
   .caption {
-    margin-top: 14px;
+    margin-top: 18px;
     margin-bottom: 4px;
     text-align: center;
     color: var(--color-text-secondary);

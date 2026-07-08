@@ -1,0 +1,47 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(open:*)",
+      "Bash(bash .claude/hooks/check-chapter-style.sh \"projects/사내AI비서_v2/chapters/07-실제로-써보니.md\")",
+      "Bash(pkill -9 -f \"chrome\")",
+      "Bash(pkill -9 -f \"Chromium\")",
+      "Bash(pkill -9 -f \"Google Chrome\")",
+      "Bash(identify \"/Users/nomadlab/Desktop/김주혁/workspace/coding-study/집필에이전트 v2/projects/사내AI비서_v2/assets/CH07/diagram/07_agent-flow.png\")",
+      "Bash(sips:*)",
+      "Bash(ls:*)",
+      "Bash(qlmanage:*)",
+      "Bash(mkdir -p /tmp/pub-skill-clean/.claude/skills)",
+      "Bash(cp -r \".claude/skills/pub-html-build\" /tmp/pub-skill-clean/.claude/skills/)",
+      "Read(//tmp/pub-skill-clean/.claude/skills/**)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git rev-list *)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR/.claude/hooks/check-chapter-style.sh\""
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR/.claude/hooks/auto-rebuild-chapter.sh\""
+          }
+        ]
+      }
+    ]
+  },
+  "outputStyle": "default",
+  "prefersReducedMotion": false
+}

@@ -21,9 +21,9 @@
 <div class="goal-box">
 <p><strong>이번 챕터가 끝나면</strong></p>
 <ul>
-<li>LLM이 모르는 것을 자신 있게 지어낸다는 걸 직접 확인합니다 <em>(환각)</em></li>
-<li>문서를 직접 건네주면 거짓말을 멈춘다는 걸 배웁니다 <em>(Context Injection)</em></li>
-<li>이걸 자동화한 RAG 파이프라인을 직접 만들어봅니다 <em>(RAG)</em></li>
+<li><strong>대규모 언어 모델(LLM, Large Language Model)</strong> 이 모르는 것을 자신 있게 지어낸다는 걸 직접 확인합니다 <em>(환각, Hallucination)</em></li>
+<li>문서를 프롬프트에 직접 건네주면 거짓말을 멈춘다는 걸 배웁니다 <em>(컨텍스트 주입, Context Injection)</em></li>
+<li>외부 지식을 검색해 LLM에 붙이는 자동화 파이프라인을 직접 만들어 봅니다 <em>(검색 증강 생성, RAG · Retrieval-Augmented Generation)</em></li>
 </ul>
 </div>
 <div class="preview-notice">
@@ -117,6 +117,7 @@ ollama<span class="w"> </span>pull<span class="w"> </span>nomic-embed-text</div>
 <div class="tip">
 <p><strong>지금은 개념만 잡으세요</strong></p>
 <p>LangChain, 임베딩, 벡터 DB 같은 용어가 한꺼번에 나와서 부담스러울 수 있습니다. 지금은 &quot;문서를 넣어주면 LLM이 정확하게 답한다&quot;는 <strong>RAG의 개념</strong>만 잡으면 충분합니다. 각 기술의 동작 원리는 챕터 4~챕터 5에서 차근차근 다룹니다.</p>
+<p>용어 미리보기: <strong>임베딩(Embedding)</strong> 은 텍스트를 의미를 담은 숫자 배열로 바꾸는 일, <strong>벡터(Vector)</strong> 는 그 숫자 배열, <strong>ChromaDB</strong>는 벡터를 저장하고 비슷한 것을 빠르게 찾아 주는 벡터 데이터베이스입니다.</p>
 </div>
 <h3>4. 실습 순서</h3>
 <p>이번 챕터의 실습 5개는 이 순서로 진행합니다.</p>
@@ -129,8 +130,9 @@ ollama<span class="w"> </span>pull<span class="w"> </span>nomic-embed-text</div>
 </ol>
 <p>환각을 직접 체험하고(step1), 문서를 넣으면 달라지는 걸 확인한 뒤(step2), RAG로 조립합니다(step3). 그다음 청킹 없이 돌려서 차이를 체감하고(step4), 추론이 필요한 질문까지 던져봅니다(step5). <strong>step1부터 순서대로 실행하세요.</strong></p>
 </div>
+<div class="pb-always"></div>
 <h2>1.1 그럴듯한 거짓말: LLM 환각(Hallucination)</h2>
-<div class="chapter-image gemini"><img src="../assets/CH01/gemini/01_chapter-opening.png" alt="" /><div class="caption">그림 1-1. 입사 3일 차, 첫 번째 미션</div></div>
+<div class="chapter-image gemini"><img src="../assets/CH01/gemini/01_chapter-opening.png" alt="" /><div class="caption">그림 1-1. 입사 3일 차, 첫 번째 미션입니다</div></div>
 <p>입사 3일 차.</p>
 <p>키보드 두드리는 소리만 또록또록 울리는 사무실. 모니터에는 사내 Wi-Fi 비밀번호가 적힌 포스트잇이 하나 붙어 있습니다. 오전 10시, 팀장이 커피잔을 들고 자리로 다가왔습니다. 잔에서 김이 올라오고 있었습니다.</p>
 <div class="dialogue"><span class="speaker">팀장</span>: "AI로 사내 문서 검색 시스템 만들어봐요. 직원들이 규정이나 정책 찾는 게 번거롭다고 해서."</div>
@@ -155,7 +157,7 @@ ollama<span class="w"> </span>pull<span class="w"> </span>nomic-embed-text</div>
 <span class="n">response</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="n">question</span><span class="p">)</span>
 <span class="c1"># 4. 답변을 출력</span>
 <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[bold]답변:[/bold]</span><span class="se">\n</span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
-<p><code>ChatOllama</code>는 LangChain이 Ollama LLM을 호출할 때 쓰는 래퍼입니다. <code>temperature=0</code>은 LLM이 창의적 변형 없이 가장 확률 높은 답변을 내놓게 하는 설정입니다. 이제 실행합니다.</p>
+<p><code>ChatOllama</code>는 LangChain이 Ollama LLM을 호출할 때 쓰는 래퍼입니다. <code>temperature=0</code>은 LLM이 창의적 변형 없이 가장 확률 높은 답변을 내놓게 하는 설정입니다. <strong>왜 0인가</strong>. 환각의 원인이 모델의 무작위성에 있는지 외부 정보 부족에 있는지를 가르려면, 같은 입력에 같은 답이 나와야 비교가 됩니다. 이제 실행합니다.</p>
 <div class="code-block highlight" data-lang="bash"><div class="cb-title"><span class="badge bash">터미널</span> 실행</div>python<span class="w"> </span>step1_fail.py</div>
 <div class="terminal-log">
   <div class="tl-chrome">
@@ -233,7 +235,7 @@ ollama<span class="w"> </span>pull<span class="w"> </span>nomic-embed-text</div>
 <span class="c1"># 3. LLM 호출 → 답변 출력</span>
 <span class="n">response</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
 <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[bold]답변:[/bold]</span><span class="se">\n</span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
-<p>step1과 달라진 부분은 <code>context_data</code>를 프롬프트에 직접 넣었다는 것뿐입니다.</p>
+<p>step1과 달라진 부분은 <code>context_data</code>를 프롬프트에 직접 넣었다는 것뿐입니다. <strong>왜 이렇게 하는가</strong>. LLM에게 &quot;정답지를 손에 쥐여 주는 것&quot;입니다. step1이 외운 지식만으로 답하던 것과 달리 step2는 <strong>눈앞에 놓인 문서</strong>에서 답을 찾도록 강제합니다.</p>
 <div class="code-block highlight" data-lang="bash"><div class="cb-title"><span class="badge bash">터미널</span> 실행</div>python<span class="w"> </span>step2_context.py</div>
 <div class="terminal-log">
   <div class="tl-chrome">
@@ -361,6 +363,7 @@ ollama<span class="w"> </span>pull<span class="w"> </span>nomic-embed-text</div>
 </div>
 </div>
 <div class="caption">그림 1-8. 위는 RAG 내부 3단계(저장·검색·생성)의 사서 비유,<br>아래는 같은 질문에서 LLM 단독(점선·근거 없음)과 RAG(실선·출처 포함)의 경로 차이입니다</div>
+<p>비유는 여기까지입니다. 이제 사서를 코드로 만들어 봅니다. RAG 3단계 중 첫 단계인 <strong>저장(서가에 책 꽂기)</strong> 부터 시작해서 검색·생성까지 차례로 조립합니다.</p>
 <h3>1.3.1 서가에 책 꽂기: 임베딩 + ChromaDB 인덱싱</h3>
 <p><code>ex01/step3_rag.py</code>에는 사내 규정 3개가 더미 데이터로 미리 준비되어 있습니다. 이 파일을 열고 TODO의 <code>pass</code>를 지우고 아래 코드를 작성합니다.</p>
 <div class="code-block highlight" data-lang="python"><div class="cb-title"><span class="badge">실습 3</span> ex01/step3_rag.py. RAG 파이프라인 (1/2: 문서 저장)</div><span class="c1"># 1. 더미 데이터 준비</span>
@@ -425,6 +428,7 @@ ollama<span class="w"> </span>pull<span class="w"> </span>nomic-embed-text</div>
 <div class="term-box">
 <p><strong>RetrievalQA란?</strong> LangChain이 제공하는 RAG 전용 체인 클래스. &quot;질문 받기 → Retriever로 문서 검색 → LLM에 문서와 질문 함께 전달 → 답변 반환&quot; 이 전 과정을 한 줄 호출로 돌려줍니다. 수동으로 이어붙여야 할 코드를 내장 추상화로 대체한 셈입니다.</p>
 </div>
+<p>체인이 조립됐습니다. 이제 같은 질문(휴가 규정)을 던져 step1·step2와 어떻게 다른지 확인합니다.</p>
 <div class="code-block highlight" data-lang="bash"><div class="cb-title"><span class="badge bash">터미널</span> 실행</div>python<span class="w"> </span>step3_rag.py</div>
 <div class="terminal-log">
   <div class="tl-chrome">
@@ -454,7 +458,7 @@ ollama<span class="w"> </span>pull<span class="w"> </span>nomic-embed-text</div>
 
 <span class="c1"># 2. 검색기 생성 — 통째로 하나뿐이므로 k=1로 검색해도 전체가 다 나옴</span>
 <span class="n">retriever</span> <span class="o">=</span> <span class="n">vectorstore</span><span class="o">.</span><span class="n">as_retriever</span><span class="p">(</span><span class="n">search_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;k&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span></div>
-<p>나머지 흐름(임베딩 생성 → 체인 조립 → 질문 실행)은 step3과 동일합니다.</p>
+<p>나머지 흐름(임베딩 생성 → 체인 조립 → 질문 실행)은 step3과 동일합니다. <strong>왜 일부러 청킹을 빼는가</strong>. 정상 동작 단계와 비교해야 청킹의 역할이 보입니다. 한 덩어리로 넣으면 검색이 어떤 식으로 무너지는지 직접 보고 나서, 다시 쪼개서 돌려 보겠습니다.</p>
 <div class="code-block highlight" data-lang="bash"><div class="cb-title"><span class="badge bash">터미널</span> 실행</div>python<span class="w"> </span>step4_no_chunking.py</div>
 <div class="fig-scale-80">
 <div class="terminal-log">
@@ -505,7 +509,7 @@ ollama<span class="w"> </span>pull<span class="w"> </span>nomic-embed-text</div>
     <div>이미 2회 사용했으므로, 남은 리프레시 데이는 <strong>6 - 2 = 4회</strong>입니다.</div>
   </div>
 </div>
-<div class="caption">그림 1-11. <code>step5_rag.py</code> 실행 결과. 규정을 바탕으로 연차를 스스로 계산하고 추론한 모습</div>
+<div class="caption">그림 1-11. <code>step5_rag.py</code> 실행 결과. 규정을 바탕으로 연차를 스스로 계산하고 추론한 모습입니다</div>
 <div class="term-box">
 <p><strong>사슬 추론(Chain-of-Thought)</strong> 이란? LLM이 최종 답을 곧바로 내놓지 않고, 먼저 문제를 작게 쪼개어 하나씩 따져본 뒤 답을 내놓게 하는 방식입니다. 생각의 고리가 사슬처럼 이어진다고 해서 &quot;사슬 추론&quot;이라 부릅니다. 연차 계산처럼 여러 단계가 필요한 질문에서 답의 정확도가 크게 올라갑니다.</p>
 </div>
@@ -514,8 +518,9 @@ ollama<span class="w"> </span>pull<span class="w"> </span>nomic-embed-text</div>
 <div class="dialogue"><span class="speaker">동료</span>: "오, 이제 진짜 AI 비서 같은데요. 그럼 이거 우리 회사 실제 문서 다 넣으면 바로 되는 거예요?"</div>
 <p>웃음이 나왔습니다.</p>
 <p class="thought">…아니, 여기부터가 시작이지.</p>
+<p>옆을 지나가던 팀장이 화면을 흘끗 보고 한마디 던졌습니다.</p>
+<div class="dialogue"><span class="speaker">팀장</span>: "원리는 본 거고요. 다음 주부터 사내 시스템부터 차례대로 만들어 봐요. 챕터 2 보세요."</div>
 <p>더미 데이터 3개로 원리만 보여준 상태입니다. 사내 문서는 PDF, DOCX, 엑셀로 존재하고, 파일 수도 수십 개, 분량도 천 페이지가 넘어갑니다. 이걸 수집하고, 파싱하고, 적절한 크기로 쪼개서 벡터 DB에 저장하는 과정이 필요합니다. 그리고 운영에 올리려면 캐시, 모니터링, 튜닝까지.</p>
-<div class="pb-always"></div>
 <h2>용어 정리</h2>
 <p>이야기에서 사용한 비유가 실제로 어떤 기술 용어에 해당하는지 정리합니다.</p>
 <table>
@@ -556,6 +561,16 @@ ollama<span class="w"> </span>pull<span class="w"> </span>nomic-embed-text</div>
 <td>&quot;관련 페이지만 건네기&quot;</td>
 <td><strong>청킹 (Chunking)</strong></td>
 <td>긴 문서를 의미 단위로 조각내어 검색 정확도를 높이는 기법</td>
+</tr>
+<tr>
+<td>&quot;제공된 문서에서만 답하기&quot;</td>
+<td><strong>그라운딩 (Grounding)</strong></td>
+<td>LLM이 제공된 컨텍스트에만 근거하도록 강제해 환각을 줄이는 기법</td>
+</tr>
+<tr>
+<td>&quot;단계적으로 따져보기&quot;</td>
+<td><strong>사슬 추론 (Chain-of-Thought)</strong></td>
+<td>LLM이 최종 답을 곧바로 내놓지 않고 문제를 단계별로 풀이한 뒤 답을 내놓는 방식</td>
 </tr>
 </tbody>
 </table>
@@ -638,6 +653,69 @@ ollama<span class="w"> </span>pull<span class="w"> </span>nomic-embed-text</div>
     <b>PART 1의 첫 챕터인 챕터 2</b>에서는 AI 비서가 조회할 실제 사내 시스템(직원, 연차, 매출 DB)을 FastAPI로 만들어봅니다.
   </p>
 </div>
+<h3>도착점 미리보기 — 챕터 11의 완성된 시스템</h3>
+<p>10개 챕터를 따라 한 단계씩 쌓아 올리면 마지막에 어떤 모습이 될지 한 장으로 보여드립니다. 사용자부터 LLM, 에이전트 루프, 도구, 저장소까지 모두 자리를 잡은 시스템입니다. 지금은 박스 이름이 낯설어도 괜찮습니다. 챕터 2부터 한 칸씩 채워 나가면, 챕터 11에서 이 그림이 그대로 완성됩니다.</p>
+<div class="arch11">
+<div class="header">
+<div class="sub">시스템 아키텍처 (System Architecture)</div>
+<div class="title">커넥트HR 에이전트</div>
+<div class="desc">11개 챕터에 걸쳐 완성한 RAG 시스템</div>
+</div>
+<div class="row-client">
+<div class="col-c">
+<div class="user"><div class="ico">◉</div><div class="n">사용자</div><div class="s">채팅으로 질문</div></div>
+<div class="flow"><span class="d">↓ 질문</span><span class="u">↑ 답변</span></div>
+<div class="api"><div class="l">API 게이트웨이 (Gateway)</div><div class="n">FastAPI</div><div class="s">REST · 세션</div></div>
+</div>
+<div class="flow-arrows">
+<div class="fa-pair"><div class="fa-label">요청</div><div class="fa-arrow call">→</div></div>
+<div class="fa-pair"><div class="fa-arrow ret">←</div><div class="fa-label">응답</div></div>
+</div>
+<div class="col-a">
+<div class="title">통합 에이전트 · 운영 (Runtime)</div>
+<div class="ops">
+<div class="chip"><div class="l">캐시 (Cache)</div><div class="n">Response</div><div class="s">TTL 1시간</div></div>
+<div class="chip"><div class="l">관찰 (Monitor)</div><div class="n">Tracker</div><div class="s">토큰·로그</div></div>
+<div class="chip"><div class="l">재시도 (Retry)</div><div class="n">Resilience</div><div class="s">3회</div></div>
+</div>
+<div class="core">
+<div class="l">실행기 (Executor)</div>
+<div class="n">통합 에이전트</div>
+<div class="loop-inner"><div class="loop-label">ReAct 루프</div><div class="stages"><div class="st">Reason</div><div class="arr">→</div><div class="st">Act</div><div class="arr">→</div><div class="st">Observe</div><div class="arr">↻</div></div></div>
+<div class="engine-inner"><div class="engine-label">RAG Engine</div><div class="engine-name">커넥트HR 엔진</div><div class="stages-6"><div class="s"><span class="num">01</span><span class="nm">파싱</span></div><div class="s"><span class="num">02</span><span class="nm">청킹</span></div><div class="s"><span class="num">03</span><span class="nm">확장</span></div><div class="s"><span class="num">04</span><span class="nm">검색</span></div><div class="s"><span class="num">05</span><span class="nm">리랭크</span></div><div class="s"><span class="num">06</span><span class="nm">LLM</span></div></div></div>
+</div>
+</div>
+</div>
+<div class="lvl-lbl"><span class="up">↑ 프롬프트 · 도구 호출</span> &nbsp;·&nbsp; <span class="down">↓ 응답 · 결과</span></div>
+<div class="row-ext">
+<div class="llm"><div class="box">
+<div class="l">외부 · LLM (External)</div>
+<div class="n">Ollama</div>
+<div class="models">
+<div class="m"><span class="mn">deepseek-r1:8b</span><span class="mu">추론 · Q&amp;A</span></div>
+<div class="m"><span class="mn">llama3.1:8b</span><span class="mu">Tool Calling</span></div>
+<div class="m"><span class="mn">qwen2.5vl:7b</span><span class="mu">Vision</span></div>
+</div>
+</div></div>
+<div class="flow-arrows">
+<div class="fa-pair"><div class="fa-arrow ret">←</div><div class="fa-label">응답</div></div>
+<div class="fa-pair"><div class="fa-label">호출</div><div class="fa-arrow call">→</div></div>
+</div>
+<div class="col-t">
+<div class="title">도구 호출 · MCP Tools</div>
+<div class="tool"><div class="no">01</div><div><div class="n">leave_balance</div><div class="s">연차 조회</div></div><div class="b">SQL</div></div>
+<div class="tool"><div class="no">02</div><div><div class="n">sales_sum</div><div class="s">부서·기간 매출</div></div><div class="b">SQL</div></div>
+<div class="tool"><div class="no">03</div><div><div class="n">list_employees</div><div class="s">이름·부서</div></div><div class="b">SQL</div></div>
+<div class="tool"><div class="no">04</div><div><div class="n">search_documents</div><div class="s">LCEL · Top-k</div></div><div class="b rag">RAG</div></div>
+</div>
+</div>
+<div class="lvl-lbl"><span class="up">↑ 조회 · 도구 실행</span> &nbsp;·&nbsp; <span class="down">↓ 레코드 · 문서</span></div>
+<div class="stores">
+<div class="st"><div class="l">벡터 저장소 (Vector Store)</div><div class="n">ChromaDB</div><div class="s">768차원 · 메타데이터</div></div>
+<div class="st"><div class="l">관계형 DB (Relational)</div><div class="n">PostgreSQL</div><div class="s">직원 · 연차 · 매출</div></div>
+</div>
+</div>
+<div class="caption">그림 1-12. 도착점 — 챕터 11에서 완성하는 커넥트HR 에이전트 시스템 아키텍처. 지금은 빈 칸도 챕터를 따라가다 보면 한 자리씩 채워집니다</div>
 
 </div>
 </body>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>CH06 캡션 수정 before/after — 사내AI비서</title>
+<link rel="stylesheet" href="../styles/fonts.css">
+<link rel="stylesheet" href="../styles/tokens.css">
+<link rel="stylesheet" href="../styles/base.css">
+<link rel="stylesheet" href="../styles/components.css">
+<link rel="stylesheet" href="../styles/diagrams.css">
+<style>
+  body { max-width: 1180px; margin: 40px auto 120px; padding: 0 24px; font-family: var(--font-body); color: var(--color-text); }
+  h1 { font-size: 26px; font-weight: 800; margin: 0 0 8px; color: var(--color-text-heading); }
+  .lead { color: var(--color-text-secondary); font-size: 14px; margin-bottom: 24px; line-height: 1.7; }
+  .case { margin: 28px 0 14px; }
+  .case h2 { font-size: 17px; font-weight: 700; margin: 0 0 6px; color: var(--color-text-heading); padding-bottom: 8px; border-bottom: 2px solid var(--color-border-dashed); }
+  .case .meta { color: var(--color-text-muted); font-size: 12px; margin: 4px 0 10px; }
+  .reason { background: var(--color-surface); border: 1px solid var(--color-border-dashed); border-radius: 6px; padding: 9px 12px; margin: 6px 0 10px; font-size: 12px; color: var(--color-text-muted); line-height: 1.6; }
+  .reason b { color: var(--color-text-heading); }
+  .ba { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 10px 0 18px; }
+  .ba-col { border: 1px solid var(--color-border); border-radius: 8px; padding: 12px 14px; background: #fff; }
+  .ba-col.before { border-color: #fca5a5; }
+  .ba-col.after { border-color: #86efac; }
+  .ba-tag { display: inline-block; padding: 2px 8px; font-size: 10.5px; font-weight: 700; border-radius: 4px; margin-bottom: 6px; }
+  .ba-col.before .ba-tag { background: #fee2e2; color: #991b1b; }
+  .ba-col.after .ba-tag { background: #d1fae5; color: #065f46; }
+  pre.snippet { background: var(--color-surface-alt); border: 1px solid var(--color-border); border-radius: 4px; padding: 6px 10px; font-family: var(--font-mono); font-size: 10.5px; color: var(--color-text-muted); margin: 0; overflow-x: auto; line-height: 1.55; white-space: pre-wrap; }
+  .summary { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; padding: 14px 18px; margin-top: 24px; }
+  .summary h2 { font-size: 16px; margin: 0 0 8px; }
+  .summary ul { margin: 0; padding-left: 22px; font-size: 13px; line-height: 1.8; }
+  .tone-bad { color: #dc2626; font-weight: 700; }
+  .tone-good { color: #047857; font-weight: 700; }
+  .number-flow { background: var(--color-info-bg, #eff6ff); border: 1px solid var(--color-info-border, #bfdbfe); border-radius: 6px; padding: 10px 14px; margin: 14px 0; font-size: 12.5px; color: var(--color-text-heading); line-height: 1.7; }
+</style>
+</head>
+<body>
+
+<h1>CH06 캡션 수정 — before/after</h1>
+<p class="lead">CH06의 진짜 [FIX]는 <b>6건</b>입니다. 그림 번호 6-3·6-4가 두 번씩 사용되어 시프트가 필요합니다.</p>
+
+<div class="number-flow">
+  <b>번호 흐름</b><br>
+  Before: 6-1 · 6-2 · <span class="tone-bad">6-3 (line 212)</span> · <span class="tone-bad">6-4 (line 229)</span> · <span class="tone-bad">6-3 (line 356, 중복)</span> · <span class="tone-bad">6-4 (line 535, 중복)</span> · 6-5 · 6-6 · 6-7<br>
+  After: 6-1 · 6-2 · <span class="tone-good">6-3 (line 212)</span> · <span class="tone-good">6-4 (line 229)</span> · <span class="tone-good">6-5 (line 356)</span> · <span class="tone-good">6-6 (line 535)</span> · <span class="tone-good">6-7</span> · <span class="tone-good">6-8</span> · <span class="tone-good">6-9</span>
+</div>
+
+<div class="case">
+  <h2>FIX 1 — line 356 그림 6-3(중복) → 6-5 + <code>.pc-caption</code> → <code>.caption</code> + 박스 밖</h2>
+  <div class="reason"><b>대상</b>: <code>.proc-compare</code> 컴포넌트 (LangChain @tool vs MCP). <b>변경</b>: 번호 시프트 + 클래스 교체 + 컴포넌트 닫는 div 다음 형제로.</div>
+  <div class="ba">
+    <div class="ba-col before">
+      <span class="ba-tag">⚠ BEFORE</span>
+      <pre class="snippet">  &lt;div class="<span class="tone-bad">pc-caption</span>"&gt;그림 <span class="tone-bad">6-3</span>. LangChain @tool...&lt;/div&gt;
+&lt;/div&gt;</pre>
+    </div>
+    <div class="ba-col after">
+      <span class="ba-tag">✓ AFTER</span>
+      <pre class="snippet">&lt;/div&gt;
+&lt;div class="<span class="tone-good">caption</span>"&gt;그림 <span class="tone-good">6-5</span>. LangChain @tool...&lt;/div&gt;</pre>
+    </div>
+  </div>
+</div>
+
+<div class="case">
+  <h2>FIX 2 — line 535 그림 6-4(중복) → 6-6 + <code>.rl-caption</code> → <code>.caption</code> + 박스 밖</h2>
+  <div class="reason"><b>대상</b>: <code>.react-loop</code> 컴포넌트 (ReAct 루프). <b>변경</b>: 번호 시프트 + 클래스 교체 + 박스 밖 형제로.</div>
+  <div class="ba">
+    <div class="ba-col before">
+      <span class="ba-tag">⚠ BEFORE</span>
+      <pre class="snippet">  &lt;div class="<span class="tone-bad">rl-caption</span>"&gt;그림 <span class="tone-bad">6-4</span>. ReAct 루프는...&lt;/div&gt;
+&lt;/div&gt;</pre>
+    </div>
+    <div class="ba-col after">
+      <span class="ba-tag">✓ AFTER</span>
+      <pre class="snippet">&lt;/div&gt;
+&lt;div class="<span class="tone-good">caption</span>"&gt;그림 <span class="tone-good">6-6</span>. ReAct 루프는...&lt;/div&gt;</pre>
+    </div>
+  </div>
+</div>
+
+<div class="case">
+  <h2>FIX 3·4·5 — 그림 6-5/6-6/6-7 시프트 → 6-7/6-8/6-9</h2>
+  <div class="reason"><b>대상</b>: line 596(이미지), line 609(이미지), line 711(챕터 6 결과 카드 마무리). <b>변경</b>: 번호만 시프트 (line 711의 마크다운 이탤릭은 <code>&lt;p class="thought"&gt;</code> 변환 방지를 위해 <code>&lt;div class="caption"&gt;</code>로도 변경).</div>
+  <div class="ba">
+    <div class="ba-col before">
+      <span class="ba-tag">⚠ BEFORE</span>
+      <pre class="snippet">596: *그림 <span class="tone-bad">6-5</span>. 복합 질문...*
+609: *그림 <span class="tone-bad">6-6</span>. python -m src.agent...*
+711: *그림 <span class="tone-bad">6-7</span>. 챕터 6의 결과...*</pre>
+    </div>
+    <div class="ba-col after">
+      <span class="ba-tag">✓ AFTER</span>
+      <pre class="snippet">596: *그림 <span class="tone-good">6-7</span>. 복합 질문...*
+609: *그림 <span class="tone-good">6-8</span>. python -m src.agent...*
+711: &lt;div class="caption"&gt;그림 <span class="tone-good">6-9</span>. 챕터 6의 결과...&lt;/div&gt;</pre>
+    </div>
+  </div>
+</div>
+
+<div class="summary">
+  <h2>요약 (총 6건)</h2>
+  <ul>
+    <li><b>FIX 1</b> (line 356): 그림 6-3(중복) → <span class="tone-good">6-5</span> + <code>.pc-caption</code> → <code>.caption</code> + 박스 밖</li>
+    <li><b>FIX 2</b> (line 535): 그림 6-4(중복) → <span class="tone-good">6-6</span> + <code>.rl-caption</code> → <code>.caption</code> + 박스 밖</li>
+    <li><b>FIX 3</b> (line 596): 그림 6-5 → <span class="tone-good">6-7</span></li>
+    <li><b>FIX 4</b> (line 609): 그림 6-6 → <span class="tone-good">6-8</span></li>
+    <li><b>FIX 5</b> (line 711): 그림 6-7 → <span class="tone-good">6-9</span> + 마크다운 이탤릭 → <code>&lt;div class="caption"&gt;</code></li>
+  </ul>
+</div>
+
+</body>
+</html>

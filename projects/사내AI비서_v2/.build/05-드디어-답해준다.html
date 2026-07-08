@@ -148,7 +148,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 <h2>5.1 &quot;그냥 답을 알려줘&quot;</h2>
 <div class="chapter-image gemini"><img src="../assets/CH05/gemini/05_chapter-opening.png" alt="" /><div class="caption">그림 5-1. 사서가 답해준다. 책을 찾아서 읽고, 출처와 함께 답해 줍니다</div></div>
 <p>수요일 점심 직후. 사무실 라디에이터가 한 번 울컥 소리를 내고 다시 잠잠해졌습니다.</p>
-<p>챕터 4에서 벡터 검색까지 돌렸고, 동료에게 CLI 사용법을 알려 줬습니다. 점심 먹고 돌아오니 그 동료가 또 의자를 돌려 제 쪽을 봤어요.</p>
+<p>챕터 4에서 벡터 검색까지 돌렸고, 동료에게 CLI 사용법을 알려 줬습니다. 점심 먹고 돌아오니 그 동료가 또 의자를 돌려 제 쪽을 봤습니다.</p>
 <div class="dialogue"><span class="speaker">동료</span>: "병가 쓸 때 증빙 서류 필요해요?"</div>
 <div class="dialogue"><span class="speaker">동료</span>: "연차 며칠 남았는지 어떻게 확인해요?"</div>
 <p>CLI가 켜진 터미널을 그대로 보여 줬습니다.</p>
@@ -214,8 +214,8 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
     <span class="lf-legend-item"><span class="lf-chip lf-chip-done"></span>챕터 4까지 (1~2)</span>
     <span class="lf-legend-item"><span class="lf-chip lf-chip-new"></span>이번 챕터에서 추가 (3~4)</span>
   </div>
-  <div class="lf-caption">그림 5-2. RAG Q&amp;A 흐름. 챕터 4까지가 1~2번이었고, 이번 챕터에서 3~4번을 추가합니다</div>
 </div>
+<div class="caption">그림 5-2. RAG Q&amp;A 흐름. 챕터 4까지가 1~2번이었고, 이번 챕터에서 3~4번을 추가합니다</div>
 <h2>5.3 LCEL 조립과 출처 강제(rag_chain.py)</h2>
 <p>검색 → 프롬프트 → LLM → 파싱. 각 단계를 직접 이어 붙여도 되지만, <strong>LangChain</strong>이 이걸 부품화해 줍니다. 조립 방식은 <strong>파이프 연산자(<code>|</code>)</strong>. 이를 <strong>LCEL(LangChain Expression Language)</strong> 이라 부릅니다.</p>
 <div class="lcel-pipeline">
@@ -255,10 +255,12 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
       <div class="lp-type">str</div>
     </div>
   </div>
-  <div class="lp-caption">그림 5-3. LCEL 파이프라인 구조. 앞 블록의 출력이 <code>|</code>를 타고 다음 블록의 입력이 됩니다</div>
 </div>
+<div class="caption">그림 5-3. LCEL 파이프라인 구조. 앞 블록의 출력이 <code>|</code>를 타고 다음 블록의 입력이 됩니다</div>
 <p><strong>파이프 연산자(<code>|</code>)</strong> 는 앞 블록의 출력을 뒤 블록의 입력으로 흘려보내는 역할을 합니다. 유닉스 셸의 <code>ls | grep</code> 파이프와 같은 발상입니다. 덕분에 Retriever, Prompt, LLM, Parser 어느 블록이든 <strong>같은 인터페이스만 지키면 자리 바꿔 낄 수 있습니다</strong>. LLM을 DeepSeek에서 GPT-4o로 갈아 끼울 때도 체인 구조는 건드리지 않고 LLM 블록만 교체하면 됩니다. 챕터 8~10에서 튜닝할 때 이 구조의 힘이 드러납니다.</p>
 <h3>출처 강제(Source Grounding)</h3>
+<p>옆 자리에서 모니터를 흘끗 본 팀장이 한마디 던졌습니다.</p>
+<div class="dialogue"><span class="speaker">팀장</span>: "제공 문서에서만이라고 못 박아 둬요. 안 그러면 또 끼워서 답해요."</div>
 <p>챕터 1에서 맛본 <strong>그라운딩</strong>의 강한 버전입니다. 그때는 &quot;참고 정보에서만 답하세요&quot; 한 줄이었지만, 실서비스에서는 그걸로 부족합니다. LLM이 여전히 &quot;문서에서 찾을 수 없으면&quot; 외부 지식을 슬쩍 섞어 지어냅니다.</p>
 <p>이번 챕터는 규칙을 <strong>네 개로 늘립니다</strong>. (1) 제공된 문서에서만, (2) 없으면 &quot;확인되지 않습니다&quot;, (3) 답변 끝에 <code>[출처: 파일명]</code>, (4) 추측 금지. <code>ex05/src/rag_chain.py</code> 상단에 상수 <code>RAG_SYSTEM_PROMPT</code>로 박혀 있습니다.</p>
 <h3>실습(rag_chain.py)</h3>
@@ -377,7 +379,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
         <span class="cb-todo"># TODO: self._turns 초기화</span>
         <span class="c1"># 1. 메모장 비우기</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_turns</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
-<p><code>deque(maxlen=5)</code>가 자동으로 오래된 턴을 제거해 주므로 우리가 할 일은 &quot;append → 텍스트 변환 → 비우기&quot; 셋뿐입니다. <code>ex05/src/session_manager.py</code>가 세션별로 이 <code>WindowMemory</code>를 하나씩 보관하고, 일정 시간 동안 호출이 없으면 TTL로 만료시킵니다.</p>
+<p><code>deque(maxlen=5)</code>가 자동으로 오래된 턴을 제거해 주므로 우리가 할 일은 &quot;append → 텍스트 변환 → 비우기&quot; 셋뿐입니다. <strong><code>ConversationManager</code></strong> (메모장 관리인) 클래스가 <code>ex05/src/session_manager.py</code>에 정의돼 있어, 세션별로 이 <code>WindowMemory</code>를 하나씩 보관하고, 일정 시간 동안 호출이 없으면 <strong>TTL(Time To Live, 유효 시간)</strong> 로 만료시킵니다.</p>
 <h2>5.5 서버 실행 + 채팅 UI</h2>
 <p>두 파일의 TODO를 모두 채웠으면 서버를 띄워 브라우저에서 직접 대화해 봅니다.</p>
 <div class="code-block highlight" data-lang="bash"><div class="cb-title"><span class="badge bash">터미널</span> 서버 실행</div>python<span class="w"> </span>run.py</div>
@@ -389,12 +391,12 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 <div class="chapter-image terminal"><img src="../assets/CH05/terminal/05_chat-response-followup.png" alt="" /><div class="caption">그림 5-7. 멀티턴 대화. 이전 질문을 기억해 &quot;거기&quot;, &quot;그럼&quot;을 해석합니다</div></div>
 <p>옆자리에서 동료가 화면을 넘겨다봤습니다.</p>
 <div class="dialogue"><span class="speaker">동료</span>: "아, 이제 답을 주네요. 아까는 문서 조각만 던지더니."</div>
-<p>오프닝에 &quot;이걸 내가 읽어?&quot; 하던 바로 그 사람입니다. 이번엔 읽을 것도, 해석할 것도 없이 답이 나왔습니다.</p>
+<p>이번엔 읽을 것도, 해석할 것도 없이 답이 나왔습니다.</p>
+<div class="dialogue"><span class="speaker">오픈이</span>: "검색 결과를 사용자가 직접 안 읽어도 되네요. 출처 라벨이 자동으로 붙으니 검증도 쉬워졌습니다."</div>
 <p>처음으로 <strong>사용자가 쓸 수 있는 형태</strong>의 비서가 생겼습니다. 벡터 검색 결과가 자연어 답변으로 바뀌고, 출처가 붙고, 이어지는 질문의 맥락까지 이해합니다. 다만 &quot;김대리 연차 며칠 남았어?&quot; 같은 <strong>실시간 DB 조회 질문</strong>은 아직 못 풉니다. 챕터 6에서 문서 질문과 DB 질문을 한 에이전트가 동시에 처리하도록 <strong>Tool Calling + ReAct 패턴</strong>을 얹습니다.</p>
 <h3>이 파이프라인, 다음 챕터에서 어떻게 되는가</h3>
-<p>지금 만든 LCEL 파이프라인은 여기서 끝이 아닙니다. 다음 챕터에서 이 구조가 <strong>그대로</strong> <strong>에이전트 도구 하나</strong>(<code>search_documents</code>)로 감싸지고, 옆에 DB 조회 도구(<code>leave_balance</code>, <code>sales_sum</code>, <code>list_employees</code>) 셋이 나란히 놓입니다. 에이전트가 질문을 보고 어떤 도구를 열지 스스로 판단하게 되죠. <strong>파이프라인 자체는 버려지지 않습니다.</strong></p>
+<p>지금 만든 LCEL 파이프라인은 여기서 끝이 아닙니다. 다음 챕터에서 이 구조가 <strong>그대로</strong> <strong>에이전트 도구 하나</strong>(<code>search_documents</code>)로 감싸지고, 옆에 DB 조회 도구(<code>leave_balance</code>, <code>sales_sum</code>, <code>list_employees</code>) 셋이 나란히 놓입니다. 에이전트가 질문을 보고 어떤 도구를 열지 스스로 판단하게 됩니다. <strong>파이프라인 자체는 버려지지 않습니다.</strong></p>
 <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-xl);margin:var(--space-xl) 0">
-<div style="font-size:var(--fs-sm);font-weight:700;color:var(--color-accent-text);margin-bottom:var(--space-lg);text-align:center">그림 5-4. 이번 챕터의 LCEL 파이프라인은 다음 챕터에서 에이전트 도구가 됩니다</div>
 <div style="display:grid;grid-template-columns:1fr 40px 1.3fr;gap:var(--space-md);align-items:center">
 <div style="border:2px solid var(--color-border);border-radius:var(--radius-md);padding:var(--space-lg) var(--space-md) var(--space-md);background:white;position:relative;min-height:180px;display:flex;flex-direction:column;justify-content:center">
 <div style="position:absolute;top:-11px;left:16px;background:var(--color-text-muted);color:white;padding:3px 10px;border-radius:var(--radius-sm);font-size:var(--fs-xs);font-weight:700">챕터 5. 지금</div>
@@ -442,6 +444,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 </div>
 <div style="margin-top:var(--space-md);font-size:var(--fs-xs);color:var(--color-text-muted);text-align:center">왼쪽이 이번 챕터, 오른쪽이 다음 챕터. 파이프라인이 <code style="background:white;padding:1px 5px;border-radius:3px;border:1px solid var(--color-border)">search_documents</code> 도구 안으로 들어가고, 옆에 SQL 도구 셋이 붙습니다.</div>
 </div>
+<div class="caption">그림 5-8. 이번 챕터의 LCEL 파이프라인은 다음 챕터에서 에이전트 도구가 됩니다</div>
 <h2>5.6 전체 구성도에서 챕터 5의 자리</h2>
 <div class="ch-slot">
   <div class="ch-name"><b>CH 05</b> · 사서가 답해준다 - RAG Engine + LLM NEW</div>
@@ -506,7 +509,11 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
   </div>
   <div class="ch-note">새로: <b>Runtime(RAG Engine) + stage 02·04·06 + LLM(deepseek)</b> · MCP Tools 없어 LLM이 Row 전체</div>
 </div>
-<p class="thought">그림 5-8. 챕터 5의 결과. RAG Engine과 Ollama LLM(deepseek)이 새로 자리를 잡았습니다</p>
+<div class="caption">그림 5-9. 챕터 5의 결과. RAG Engine과 Ollama LLM(deepseek)이 새로 자리를 잡았습니다</div>
+<p>이 그림이 처음으로 사용자부터 답변까지를 한 화면에 담습니다. 사용자의 채팅이 <strong>API 게이트웨이(FastAPI)</strong> 를 통과해 <strong>Runtime의 RAG Engine</strong> 으로 들어가고, 거기서 LCEL 4단계 체인이 ChromaDB와 Ollama(deepseek)를 차례로 부르며 자연어 답변을 만듭니다. 챕터 4까지는 ChromaDB만 외로이 서 있고 검색 결과를 사람이 직접 읽어야 했지만, 이번 챕터에서 사서(RAG Engine)와 통역사(LLM)가 자리잡으면서 <strong>&quot;질문 → 답변&quot;의 한 줄 경로가 닫혔습니다</strong>.</p>
+<p>NEW 표시가 붙은 칸 안의 stage 02·04·06이 이번 챕터에서 켠 자리입니다. <strong>stage 02 검색</strong>(Retriever)이 ChromaDB에서 의미가 가까운 청크를 가져오고, <strong>stage 04 프롬프트 조립</strong>(Prompt + LLM)이 출처를 강제하며 답변을 생성하고, <strong>stage 06 메모리</strong>(WindowMemory)가 최근 다섯 턴을 기억해 후속 질문을 이어 받습니다. 비어 있는 stage 01(파싱)·03(질의 변환)·05(리랭크)는 챕터 8~10 튜닝에서 채워질 빈자리입니다.</p>
+<p>ch-note에 적힌 &quot;MCP Tools 없어 LLM이 Row 전체&quot;는 이번 챕터의 한계를 짚어 줍니다. LLM이 도구 없이 한 가지 일(문서 검색 답변)만 한다는 뜻입니다. 다음 챕터에서 <strong>ReAct 에이전트</strong> 가 등장하면 지금 만든 LCEL 파이프라인이 그대로 도구 하나(<code>search_documents</code>)로 들어가고, 그 옆에 <strong>SQL 도구 셋</strong>(<code>leave_balance</code>·<code>sales_sum</code>·<code>list_employees</code>)이 나란히 붙어 사서가 장부실 열쇠까지 쥔 &quot;하이브리드 사서&quot;가 됩니다. 그림 5-8에서 미리 그려 두었던 변환이 챕터 6에서 코드로 실현됩니다.</p>
+<p class="thought">파이프라인은 그대로, 도구로 감싸진다는 게 챕터 6의 그림입니다.</p>
 <h2>용어 정리</h2>
 <table>
 <thead>

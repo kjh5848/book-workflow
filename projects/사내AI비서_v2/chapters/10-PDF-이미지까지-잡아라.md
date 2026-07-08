@@ -104,7 +104,6 @@ EasyOCR은 `Reader(["ko", "en"])`처럼 언어 코드만 지정하면 한국어+
 ## 10.1 스캔 PDF: 텍스트가 없다
 
 <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:32px;margin:var(--space-xl) 0">
-<div style="font-size:17px;font-weight:600;color:var(--color-text-heading);margin-bottom:24px;text-align:center">그림 10-1. 스캔 PDF 문제 해결. OCR + Vision LLM으로 이미지도 읽고, 숫자로 품질을 측정합니다</div>
 <div style="display:flex;align-items:stretch;gap:16px">
 <div style="flex:1;background:var(--color-danger-bg);border:1px solid #fca5a5;border-radius:var(--radius-md);padding:20px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center">
 <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--color-danger)" stroke-width="1.5"><circle cx="12" cy="7" r="4"/><path d="M5.5 21a6.5 6.5 0 0 1 13 0"/></svg>
@@ -140,6 +139,7 @@ EasyOCR은 `Reader(["ko", "en"])`처럼 언어 코드만 지정하면 한국어+
 </div>
 </div>
 </div>
+<div class="caption">그림 10-1. 스캔 PDF 문제 해결. OCR + Vision LLM으로 이미지도 읽고, 숫자로 품질을 측정합니다</div>
 
 챕터 9까지 검색과 쿼리, 모든 축을 다듬었습니다. 금요일 오후, 키보드 소리만 또록또록 울리는 사무실에서 오픈이가 모니터를 정리하고 있을 때 팀장이 다가왔습니다.
 
@@ -164,7 +164,6 @@ pypdf 결과, 빈 문자열.
 챕터 4부터 7까지 쌓아 올린 파이프라인은 이번 챕터에서 건드리지 않습니다. 파싱·청킹·임베딩·검색·에이전트·캐시·모니터링까지 모든 층이 원래 자리에 그대로 있습니다. 챕터 8·9에서 실험한 튜닝(단락 청킹·리랭킹·약어 확장·부모 문서 검색 등)은 아직 이 파이프라인에 얹지 않은 부품 상태로 따로 놓여 있습니다. 이번 장의 할 일은 기존 파이프라인의 앞단과 뒷단에 한 층씩 새로 얹고(PDF 이미지 파서 · RAG 평가 프레임워크), 뒷단에서 그 평가 도구로 챕터 8·9의 부품들을 조합해 어떤 조합이 정말 수치를 끌어올리는지 확인하는 작업입니다. 이 과정을 마치면 커넥트HR 파이프라인은 챕터 7의 기본 형태에서 스캔본까지 읽고 품질을 수치로 검증하는 **새 버전**으로 올라가 다음 챕터의 조립대 위로 넘어갑니다.
 
 <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-xl);margin:var(--space-xl) 0">
-<div style="font-size:var(--fs-sm);font-weight:700;color:var(--color-accent-text);margin-bottom:var(--space-lg);text-align:center">그림 10-2. 챕터 4~07 파이프라인은 그대로 두고 앞뒤에 두 층을 더합니다. 챕터 8·09 튜닝은 뒷단 평가에서 부품으로 조립합니다</div>
 
 <div style="display:flex;flex-direction:column;align-items:stretch;gap:var(--space-sm)">
 
@@ -207,6 +206,7 @@ pypdf 결과, 빈 문자열.
 
 <div style="margin-top:var(--space-md);font-size:var(--fs-xs);color:var(--color-text-muted);text-align:center">중간(회색 점선)은 손대지 않습니다. 맨 위(파서)와 맨 아래(평가)만 이번 챕터에서 추가합니다.</div>
 </div>
+<div class="caption">그림 10-2. 챕터 4~07 파이프라인은 그대로 두고 앞뒤에 두 층을 더합니다. 챕터 8·09 튜닝은 뒷단 평가에서 부품으로 조립합니다</div>
 
 ## 10.2 확대경 달기 - OCR
 
@@ -262,7 +262,6 @@ python -m tuning.step1_document_parser --step 1-1
 ```
 
 <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-xl);margin:var(--space-xl) 0;font-family:var(--font-mono)">
-<div style="font-size:var(--fs-sm);font-weight:700;color:var(--color-accent-text);margin-bottom:var(--space-xs);text-align:center">그림 10-3. 실험 1-1. OCR 파싱 (EasyOCR)</div>
 <div style="font-size:var(--fs-xs);color:var(--color-text-muted);margin-bottom:var(--space-lg)">대상: HR_정보보안서약서.pdf</div>
 <div style="display:flex;gap:var(--space-md);margin-bottom:var(--space-md);font-size:var(--fs-xs)">
 <div style="flex:1;background:var(--color-info-bg);border-radius:var(--radius-md);padding:var(--space-sm)"><span style="color:var(--color-text-muted)">전략</span><br><span style="font-weight:600">OCR (EasyOCR)</span></div>
@@ -275,11 +274,11 @@ python -m tuning.step1_document_parser --step 1-1
 </div>
 <div style="font-size:var(--fs-xs);color:var(--color-text-muted)">글자는 대부분 읽지만 표 구조는 일렬로 늘어섭니다.</div>
 </div>
+<div class="caption">그림 10-3. 실험 1-1. OCR 파싱 (EasyOCR)</div>
 
 1분 남짓 걸려 글자 대부분을 읽었지만, 미리보기를 보면 '정보보안 서사서'처럼 한글 오인식이 섞여 있습니다. 표는 더 심각했습니다.
 
 <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-xl);margin:var(--space-xl) 0">
-<div style="font-size:var(--fs-sm);font-weight:700;color:var(--color-accent-text);margin-bottom:var(--space-md);text-align:center">그림 10-4. OCR의 한계. 글자는 읽지만 표 구조가 사라집니다</div>
 <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:var(--space-md);align-items:center">
 <div>
 <div style="font-size:var(--fs-xs);font-weight:600;color:var(--color-text-heading);margin-bottom:var(--space-sm)">원본 (사람 눈에 보이는 것)</div>
@@ -297,6 +296,7 @@ python -m tuning.step1_document_parser --step 1-1
 </div>
 </div>
 </div>
+<div class="caption">그림 10-4. OCR의 한계. 글자는 읽지만 표 구조가 사라집니다</div>
 
 오픈이는 화면을 잠시 내려다봤습니다. 형광등 빛을 받은 커서가 "정보보안 서사서"라는 일곱 글자 옆에서 조용히 깜빡였습니다. 분명 규정집 첫 페이지에 또박또박 박혀 있던 제목. 기계의 눈을 거치자 '약'이 '사'로, '연'이 '년'으로 얼굴이 바뀌어 돌아와 있었습니다. 표도 마찬가지. 행과 열이 만들던 격자는 사라지고, 이름과 직급과 부서가 한 줄로 쏟아져 내렸습니다.
 
@@ -366,7 +366,6 @@ python -m tuning.step1_document_parser --step 1-2
 ```
 
 <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-xl);margin:var(--space-xl) 0;font-family:var(--font-mono)">
-<div style="font-size:var(--fs-sm);font-weight:700;color:var(--color-accent-text);margin-bottom:var(--space-xs);text-align:center">그림 10-5. 실험 1-2. Vision LLM 파싱</div>
 <div style="font-size:var(--fs-xs);color:var(--color-text-muted);margin-bottom:var(--space-lg)">대상: HR_정보보안서약서.pdf(스캔본 1p) · 모델: qwen2.5vl:7b · DPI: 100</div>
 <div style="display:flex;gap:var(--space-md);margin-bottom:var(--space-md);font-size:var(--fs-xs)">
 <div style="flex:1;background:var(--color-success-bg);border-radius:var(--radius-md);padding:var(--space-sm)"><span style="color:var(--color-text-muted)">전략</span><br><span style="font-weight:600">Vision LLM</span></div>
@@ -379,6 +378,7 @@ python -m tuning.step1_document_parser --step 1-2
 </div>
 <div style="font-size:var(--fs-xs);color:var(--color-text-muted)">제목·문서번호·조항 번호까지 마크다운 구조로 살려 냅니다.</div>
 </div>
+<div class="caption">그림 10-5. 실험 1-2. Vision LLM 파싱</div>
 
 글자 수는 OCR과 비슷한데도 제목과 조항 번호까지 정확히 돌려주고, 마크다운 표 구조가 살아 있어 훨씬 다루기 좋은 결과입니다. 대신 페이지 하나에 22초 남짓 걸렸습니다. 로컬 Vision LLM은 정확한 값을 주는 만큼 연산을 쓰고 있는 셈입니다. (qwen2.5vl:7b, CPU, DPI 100 기준. 더 큰 모델이나 GPU를 쓰면 품질은 올라가고 시간은 줄어듭니다)
 
@@ -435,6 +435,7 @@ python -m tuning.step1_document_parser --step 1-2
 <span style="color:var(--color-success)">| 이름 | 직급 | 부서 |<br>| 김철수 | 대리 | 인사팀 |<br>| 박영희 | 과장 | 개발팀 |</span>
 <div style="font-size:11px;color:var(--color-text-subtle);margin-top:8px">표 구조와 관계까지 설명합니다</div>
 </div>
+<div class="caption">그림 10-6. OCR은 빠르고 저렴하지만 구조를 모릅니다. Vision LLM은 느리지만 표, 차트, 조직도까지 정확하게 읽습니다</div>
 <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
 <span style="background:white;border:1px solid var(--color-border);border-radius:4px;padding:3px 10px;font-size:11px;color:var(--color-text-muted)">느림</span>
 <span style="background:white;border:1px solid var(--color-border);border-radius:4px;padding:3px 10px;font-size:11px;color:var(--color-text-muted)">비쌈</span>
@@ -442,7 +443,6 @@ python -m tuning.step1_document_parser --step 1-2
 </div>
 </div>
 </div>
-<div style="text-align:center;font-size:12px;color:var(--color-text-secondary);margin-top:-8px;margin-bottom:var(--space-xl)">그림 10-6. OCR은 빠르고 저렴하지만 구조를 모릅니다. Vision LLM은 느리지만 표, 차트, 조직도까지 정확하게 읽습니다</div>
 
 이해는 깊지만 그만큼 토큰과 메모리를 요구합니다. 이미 글자로 잘 꺼낼 수 있는 문서에까지 같은 비용을 치를 이유는 없습니다.
 
@@ -465,7 +465,6 @@ python -m tuning.step1_document_parser --step 1-2
 페이지마다 `page.get_text()`로 텍스트를 꺼낸 뒤, 길이가 50자 이상이면 pypdf 결과를 그대로 쓰고, 그보다 적으면 스캔본이나 차트 페이지로 보고 Vision에 넘깁니다. 판단은 페이지 단위로 독립이라, 10페이지짜리 문서에 스캔 페이지가 1장만 섞여 있어도 그 1장만 Vision으로 가고 나머지는 pypdf가 즉시 끝냅니다.
 
 <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-xl);margin:var(--space-xl) 0">
-<div style="font-size:var(--fs-sm);font-weight:700;color:var(--color-accent-text);margin-bottom:var(--space-lg);text-align:center">그림 10-7. 하이브리드 파서의 판단 흐름. 페이지마다 텍스트 길이로 분기합니다</div>
 <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
 <div style="background:white;border:1px solid var(--color-border-strong);border-radius:var(--radius-md);padding:10px 22px;font-size:13px;font-weight:700;color:var(--color-text-heading)">PDF 페이지 1장</div>
 <div style="width:2px;height:18px;background:var(--color-border-strong)"></div>
@@ -493,6 +492,7 @@ python -m tuning.step1_document_parser --step 1-2
 </div>
 <div style="margin-top:20px;padding-top:14px;border-top:1px solid var(--color-border-dashed);font-size:12px;color:var(--color-text-muted);line-height:1.7;text-align:center">일반 텍스트 페이지는 수백~수천 자, 스캔본·차트 페이지는 0~수십 자. 50자 기준 하나로 자연스럽게 갈라집니다</div>
 </div>
+<div class="caption">그림 10-7. 하이브리드 파서의 판단 흐름. 페이지마다 텍스트 길이로 분기합니다</div>
 
 간단하게 만들어 보겠습니다. `tuning/step2_hybrid_parser/hybrid_parser.py`를 열고 TODO의 `pass`를 지우고 아래 코드를 작성합니다.
 
@@ -536,7 +536,6 @@ python -m tuning.step2_hybrid_parser
 ```
 
 <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-xl);margin:var(--space-xl) 0;font-family:var(--font-mono)">
-<div style="font-size:var(--fs-sm);font-weight:700;color:var(--color-accent-text);margin-bottom:var(--space-xs);text-align:center">그림 10-8. 실험 2. 하이브리드 파싱</div>
 <div style="font-size:var(--fs-xs);color:var(--color-text-muted);margin-bottom:var(--space-lg)">대상: HR_정보보안서약서.pdf(스캔본 1p) · HR_취업규칙_v1.0.pdf(텍스트 1p) · Vision: qwen2.5vl:7b · DPI 100</div>
 <table style="width:100%;font-size:var(--fs-xs);border-collapse:collapse;margin-bottom:var(--space-md)">
 <tr style="color:var(--color-text-muted)"><th style="padding:4px 8px;text-align:left">페이지</th><th style="padding:4px 8px;text-align:left">전략</th><th style="text-align:right;padding:4px 8px">글자 수</th></tr>
@@ -549,6 +548,7 @@ python -m tuning.step2_hybrid_parser
 </div>
 <div style="font-size:var(--fs-xs);color:var(--color-text-muted)">스캔본은 Vision이, 텍스트 PDF는 pypdf가 맡습니다. 한 파이프라인이 두 경로를 자동 선택합니다.</div>
 </div>
+<div class="caption">그림 10-8. 실험 2. 하이브리드 파싱</div>
 
 오픈이가 실행 버튼을 누르고 터미널을 지켜봤습니다. 노트북 팬이 제법 오래 숨을 몰아쉬더니 첫 줄이 올라왔습니다. `서약서 p.1 ... vision`. 한 페이지를 읽는 데 1분 30초 남짓. 그러다가 다음 줄에서 속도가 뚝 바뀌었습니다. `취업규칙 p.1 ... text_layer`, 1,426자, 0.17초. 깜빡이 한 번에 끝이었습니다.
 
@@ -767,7 +767,6 @@ def estimate_hallucination_rate(
 오픈이가 `step3_eval_framework/pipelines.py`에 부품 함수들을 모았습니다. 한 함수가 한 조각을 담당합니다. 그리고 `strategies.py`에서 이 부품들을 묶어 A/B/C/D 네 조합으로 정의했습니다. D 조합(챕터 8~10 튜닝이 모두 켜진 최종 형태)을 기준으로, 파이프라인의 네 단계에 어떤 튜닝이 어디에 붙는지 한 장에 담았습니다.
 
 <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:32px 28px;margin:var(--space-xl) 0">
-<div style="font-size:var(--fs-sm);font-weight:700;color:var(--color-accent-text);margin-bottom:28px;text-align:center">그림 10-9. 튜닝 로드맵. 네 단계를 ㄹ자로 잇고 각 단계에 어떤 튜닝이 붙는지 표시합니다</div>
 
 <div style="display:grid;grid-template-columns:1fr 64px 1fr;gap:18px 12px;align-items:stretch;max-width:760px;margin:0 auto">
 
@@ -848,6 +847,7 @@ def estimate_hallucination_rate(
 ① 사용자 질문 ▶ ② 관련 문서 검색 ▼ ③ 벡터 저장소 참조(오프라인 준비 결과) ◀ ④ 답변 조립 + 근거 제공
 </div>
 </div>
+<div class="caption">그림 10-9. 튜닝 로드맵. 네 단계를 ㄹ자로 잇고 각 단계에 어떤 튜닝이 붙는지 표시합니다</div>
 
 각 조합(A/B/C/D)은 위 네 단계에서 **얼마나 많은 튜닝 스위치를 켜는지**만 다릅니다. A는 한 개도 켜지 않은 baseline, D는 모두 켠 최종 형태입니다.
 
@@ -909,7 +909,6 @@ python -m tuning.step3_eval_framework --strategy all --k 3
 `--strategy all`을 쓰면 A부터 D까지 차례로 벡터DB를 다시 짓고 같은 질문 셋을 돌려 **네 줄짜리 비교표**를 터미널에 찍어 줍니다.
 
 <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-xl);margin:var(--space-xl) 0;font-family:var(--font-mono)">
-<div style="font-size:var(--fs-sm);font-weight:700;color:var(--color-accent-text);margin-bottom:var(--space-xs);text-align:center">그림 10-10. RAG 평가 — 조합별 비교</div>
 <div style="font-size:var(--fs-xs);color:var(--color-text-muted);margin-bottom:var(--space-lg)">같은 질문 31개로 4가지 튜닝 조합을 비교한 <b>실측 결과표</b>입니다. 환경: data/docs 문서 6건(PDF 3 · DOCX 1 · XLSX 2), k=3, Vision: qwen2.5vl:7b, 로컬 임베딩(ko-sroberta-multitask)</div>
 <table style="width:100%;font-size:var(--fs-xs);border-collapse:collapse;margin-bottom:var(--space-sm)">
 <tr style="color:var(--color-text-muted)"><th style="padding:4px 8px;text-align:left">조합</th><th style="padding:4px 8px;text-align:left">구성</th><th style="text-align:right;padding:4px 8px">Precision@3</th><th style="text-align:right;padding:4px 8px">Recall@3</th><th style="text-align:right;padding:4px 8px">환각률</th><th style="text-align:right;padding:4px 8px">Latency</th></tr>
@@ -920,6 +919,7 @@ python -m tuning.step3_eval_framework --strategy all --k 3
 </table>
 <div style="font-size:var(--fs-xs);color:var(--color-success-text)">환각률은 D가 최저(0.871). Recall은 C·D가 베이스라인 A를 0.08~0.10 끌어올렸고, 스캔본까지 본문으로 편입되는 조합은 D뿐입니다</div>
 </div>
+<div class="caption">그림 10-10. RAG 평가 — 조합별 비교</div>
 
 :::tip
 **실측표를 어떻게 읽을까**
@@ -956,7 +956,6 @@ python -m tuning.step3_eval_framework --strategy all --k 3
 **팀장**: "규정 문서 성격 그대로 가면 돼요. 조항이 짧고, 약어가 많고, 스캔본도 일부 섞여 있고요."
 
 <div style="border:1px solid var(--color-border);border-radius:var(--radius-lg);overflow:hidden;margin:var(--space-xl) 0">
-<div style="font-size:var(--fs-sm);font-weight:700;color:var(--color-accent-text);padding:var(--space-md) var(--space-md) var(--space-sm);text-align:center">그림 10-12. 챕터 8~10 튜닝 메뉴판. 체크 표시가 커넥트HR 에이전트에 적용한 일곱 조합입니다</div>
 <table style="width:100%;border-collapse:collapse;font-size:13px">
 <thead>
 <tr style="background:var(--color-surface-alt)">
@@ -1044,6 +1043,7 @@ python -m tuning.step3_eval_framework --strategy all --k 3
 </tbody>
 </table>
 </div>
+<div class="caption">그림 10-12. 챕터 8~10 튜닝 메뉴판. 체크 표시가 커넥트HR 에이전트에 적용한 일곱 조합입니다</div>
 
 **오픈이**: "Semantic 청킹으로 단락별로 자르고, 리랭커로 순위를 보정하고, 검색은 BM25와 벡터를 섞은 하이브리드로 넓혀 두고, 약어 사전으로 WFH 같은 말을 풀어 주고, Parent Doc으로 짧은 청크에 맥락을 얹습니다. 스캔본은 Vision 파서로 텍스트를 꺼내 같은 벡터DB에 태우고요. 파이프라인 밖에서는 RAG 평가 프레임워크로 주기적으로 질문셋을 돌려 이 일곱 가지가 실제로 효과가 있는지 숫자로 확인합니다."
 
@@ -1141,8 +1141,7 @@ python -m tuning.step3_eval_framework --strategy all --k 3
   </div>
   <div class="ch-note">새로: <b>stage 01 파싱(Vision) + qwen2.5vl 모델</b> · 다른 stage는 CH08(05 리랭크)·CH09(03 확장)에서 누적</div>
 </div>
-
-*그림 10-12. 챕터 10의 결과. RAG Engine의 stage 01(파싱)이 업그레이드되고 qwen2.5vl 모델이 새로 자리를 잡았습니다*
+<div class="caption">그림 10-13. 챕터 10의 결과. RAG Engine의 stage 01(파싱)이 업그레이드되고 qwen2.5vl 모델이 새로 자리를 잡았습니다</div>
 
 ## 용어 정리
 
@@ -1156,6 +1155,7 @@ python -m tuning.step3_eval_framework --strategy all --k 3
 | "근거 없는 답변 비율" | **Hallucination Rate** | 답변 문장 중 문서 근거가 없는 비율. 답변과 근거 문서의 단어 겹침으로 간단히 잡거나, 더 정확히 잴 땐 별도 LLM에 채점을 맡깁니다 |
 | "성적표" | **RAG Evaluation Framework** | 평가셋(질문·정답)으로 파이프라인을 돌려 Precision·Recall·환각률을 수치화 |
 | "튜닝 조합 스위치" | **Strategy Pattern (A/B/C/D)** | 파서·청킹·쿼리변환·검색·리랭크 부품을 갈아끼워 조합별로 성능을 비교 |
+| "응답 시간" | **Latency** | 사용자 질문이 들어와서 답변이 나올 때까지 걸리는 총 시간. RAG에서는 검색 + LLM 호출 시간의 합 |
 
 :::remember
 **이것만은 기억하자**

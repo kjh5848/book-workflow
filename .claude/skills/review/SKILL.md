@@ -1,7 +1,7 @@
 ---
 name: review
 model: claude-opus-4-6
-description: 검토 모드 — PASS/FAIL/CONDITIONAL_PASS 판정, 재시도 프로토콜, 3개 검토 모드(인사이트/의도감시/감수) 체크리스트. 각 STEP 산출물 검토 시 로드. D 시리즈(검증) 중 D1, D3, D4, D5 담당.
+description: 검토 모드 — PASS/FAIL/CONDITIONAL_PASS 판정, 재시도 프로토콜, 4개 검토 모드(인사이트/의도감시/감수/친절도) 체크리스트. 각 STEP 산출물 검토 + 챕터 완성 후 친절도 점검 시 로드. D 시리즈(검증) 중 D1, D3, D4, D5 담당.
 ---
 
 # 검토 스킬
@@ -15,6 +15,7 @@ description: 검토 모드 — PASS/FAIL/CONDITIONAL_PASS 판정, 재시도 프�
 | STEP 3. 시나리오+버전 | 인사이트 + 감수 |
 | STEP 4. 뼈대 | 인사이트 + 감수 |
 | STEP 5. 챕터 집필 | 인사이트 + **의도감시** + 감수 (3개 모두) |
+| STEP 5 완료 후 / 챕터 완성 후 | **친절도** (사용자 명시 호출 — `친절도 점검 [챕터]`) |
 | STEP 6. 프롤로그 | 감수 |
 | STEP 7. 마무리 | 감수 |
 
@@ -42,16 +43,30 @@ description: 검토 모드 — PASS/FAIL/CONDITIONAL_PASS 판정, 재시도 프�
 |------|------|
 | D1. 용어-탐지기 | 비유 없이 등장하는 어려운 전문 용어 탐지 |
 
-## 3개 검토 모드
+## 4개 검토 모드
 
 | 모드 | 시점 | 내용 |
 |------|------|------|
 | **인사이트 검토** | STEP 1~5 | 저자가 놓친 부분을 짚어주는 추가 질문 |
 | **의도감시 검토** | STEP 5만 | seed.md 의도와의 정합성 7항목 검증 |
 | **감수 검토** | 전 STEP | 3인 편집장(기술/독자/이야기) 각 2~3개 질문 |
+| **친절도 검토** | 챕터 완성 후 (사용자 호출) | 11개 질문 패널을 챕터별로 평가. 챕터 안 흐름 + 챕터 간 맥락 회수 |
+
+## 친절도 검토 운용
+
+사용자가 `친절도 점검 [챕터]` 명령으로 호출. editor 에이전트가 받아 다음을 수행:
+
+1. `references/friendliness-checklist.md` 로드 (11질문 + 챕터별 11번 적용 범위 + 보고 형식)
+2. **11명의 Explore 서브에이전트 동시 디스패치** (CH01은 10명. 11번 N/A)
+3. 각 에이전트는 자기 담당 질문 1개 + 룰 단일 진실원 경로 + (11번만) 이전 챕터 경로 받음
+4. 11 결과 합본 → `projects/<책>/review/friendliness-CH<NN>.md`
+5. PASS/FAIL 판정 + 우선 보강 항목 도출
+
+상세 절차: `references/friendliness-checklist.md`
 
 ## 참조 파일
 
 | 파일 | 로드 시점 |
 |------|----------|
 | `references/review-rules.md` | 모든 검토 단계에서 |
+| `references/friendliness-checklist.md` | 친절도 검토 시 |

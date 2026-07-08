@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>그림 3-3 — 시스템 아키텍처 4안 (가로)</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'base',
+      themeVariables: {
+        fontFamily: '-apple-system, Pretendard, sans-serif',
+        primaryColor: '#eef2ff',
+        primaryBorderColor: '#4f46e5',
+        primaryTextColor: '#1e293b',
+        lineColor: '#4f46e5',
+        clusterBkg: '#fafbff',
+        clusterBorder: '#c7d2fe',
+      },
+      flowchart: { curve: 'basis', padding: 14 },
+    });
+  });
+</script>
+<style>
+  :root {
+    --bg: #f5f6fa;
+    --card-bg: #fff;
+    --border: #e2e8f0;
+    --border-strong: #cbd5e0;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --accent: #4f46e5;
+    --accent-text: #4338ca;
+    --accent-bg: #eef2ff;
+    --accent-border: #c7d2fe;
+    --warm: #c2410c;
+    --warm-bg: #fff7ed;
+    --warm-border: #fed7aa;
+    --info: #0369a1;
+    --info-bg: #e0f2fe;
+    --info-border: #bae6fd;
+    --layer-bg: #fafbff;
+    --layer-border: #dbe1f0;
+    --shadow: 0 2px 12px rgba(0,0,0,0.05);
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 32px 28px 80px;
+    line-height: 1.5;
+  }
+  header { max-width: 1100px; margin: 0 auto 24px; }
+  h1 { font-size: 22px; margin: 0 0 8px; }
+  .subtitle { color: var(--text-muted); font-size: 14px; margin: 0; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .variant-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px 28px 28px;
+    margin-bottom: 28px;
+    box-shadow: var(--shadow);
+  }
+  .variant-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 4px;
+  }
+  .variant-title { font-size: 17px; font-weight: 700; margin: 0; }
+  .variant-tag {
+    font-size: 11px; font-weight: 700;
+    padding: 3px 10px; border-radius: 999px;
+    background: var(--accent-bg); color: var(--accent-text);
+    letter-spacing: 0.5px;
+  }
+  .variant-desc {
+    color: var(--text-muted); font-size: 13px; margin: 0 0 18px;
+  }
+
+  /* ════════════════════════════════════════
+   * 안 A. Layered Architecture (4계층)
+   * 입력 / 파싱 / 처리 / 저장 — 각 계층 박스 내부에 컴포넌트
+   * ════════════════════════════════════════ */
+  .arch-a {
+    display: grid;
+    grid-template-columns: 1.05fr auto 1.6fr auto 1.3fr auto 1fr;
+    align-items: stretch;
+    gap: 0;
+    padding: 24px 18px;
+    background: linear-gradient(180deg, #fafbff 0%, #fff 100%);
+    border: 1.5px solid var(--accent-border);
+    border-radius: 12px;
+  }
+  .arch-a .layer {
+    background: var(--card-bg);
+    border: 1px solid var(--layer-border);
+    border-radius: 10px;
+    padding: 12px 12px 14px;
+    display: flex;
+    flex-direction: column;
+    min-height: 200px;
+  }
+  .arch-a .layer-label {
+    font-size: 9px; font-weight: 800;
+    letter-spacing: 1.2px; text-transform: uppercase;
+    color: var(--text-muted);
+    border-bottom: 1px dashed var(--border);
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+  }
+  .arch-a .layer-input { background: var(--info-bg); border-color: var(--info-border); }
+  .arch-a .layer-input .layer-label { color: var(--info); }
+  .arch-a .layer-storage { background: var(--warm-bg); border-color: var(--warm-border); }
+  .arch-a .layer-storage .layer-label { color: var(--warm); }
+  .arch-a .item {
+    background: #fff;
+    border: 1px solid var(--border-strong);
+    border-radius: 6px;
+    padding: 8px 10px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+  }
+  .arch-a .item:last-child { margin-bottom: 0; }
+  .arch-a .item .icon {
+    width: 22px; height: 22px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 4px;
+    background: var(--accent-bg);
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .arch-a .item .label { font-weight: 600; flex: 1; }
+  .arch-a .item .meta { color: var(--text-muted); font-size: 10px; font-family: 'JetBrains Mono', monospace; }
+  .arch-a .item.parser .icon { background: var(--info-bg); color: var(--info); }
+  .arch-a .item.merge { background: var(--accent-bg); border-color: var(--accent-border); }
+  .arch-a .item.merge .icon { background: var(--accent); color: white; }
+  .arch-a .item.merge .label { color: var(--accent-text); font-weight: 700; }
+  .arch-a .item.store {
+    background: #fff;
+    border: 1.5px solid var(--warm);
+    padding: 12px;
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    flex: 1;
+    justify-content: center;
+  }
+  .arch-a .item.store .icon { width: 32px; height: 32px; margin: 0 auto 6px; background: var(--warm); color: white; font-size: 14px; }
+  .arch-a .item.store .label { color: var(--warm); font-weight: 700; font-size: 13px; }
+  .arch-a .item.store .meta { display: block; margin-top: 2px; }
+  .arch-a .conn {
+    align-self: center;
+    color: var(--accent);
+    font-size: 18px;
+    font-weight: 700;
+    padding: 0 4px;
+  }
+
+  /* ════════════════════════════════════════
+   * 안 B. Hub & Spoke (Format Router 중심)
+   * 가로 좌우 레인 + 중앙에 라우터 허브
+   * ════════════════════════════════════════ */
+  .arch-b {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr 1fr 1fr 1fr;
+    align-items: center;
+    gap: 14px;
+    padding: 24px 18px;
+    background: #fff;
+    border: 1.5px solid var(--accent-border);
+    border-radius: 12px;
+    position: relative;
+  }
+  .arch-b .ingress, .arch-b .egress {
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .arch-b .doc-card {
+    background: var(--info-bg);
+    border: 1px solid var(--info-border);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 11px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .arch-b .doc-card .ext {
+    background: var(--info); color: white;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; font-weight: 700;
+    padding: 2px 6px; border-radius: 3px;
+    letter-spacing: 0.5px;
+  }
+  .arch-b .doc-card .lib { color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 10px; }
+  .arch-b .hub {
+    background: linear-gradient(135deg, var(--accent-bg) 0%, #fff 100%);
+    border: 2px solid var(--accent);
+    border-radius: 14px;
+    padding: 18px 14px;
+    text-align: center;
+    position: relative;
+  }
+  .arch-b .hub .hub-h {
+    color: var(--accent-text);
+    font-size: 13px; font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .arch-b .hub .hub-sub {
+    color: var(--text-muted);
+    font-size: 11px;
+    margin-bottom: 10px;
+  }
+  .arch-b .hub .modules {
+    display: flex; gap: 4px;
+    justify-content: center;
+  }
+  .arch-b .hub .mod {
+    background: #fff;
+    border: 1px solid var(--accent-border);
+    border-radius: 4px;
+    padding: 3px 6px;
+    font-size: 9px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent-text);
+    font-weight: 600;
+  }
+  .arch-b .stage {
+    background: #fff;
+    border: 1.5px solid var(--accent-border);
+    border-radius: 10px;
+    padding: 14px 10px;
+    text-align: center;
+  }
+  .arch-b .stage.merge { background: var(--accent-bg); }
+  .arch-b .stage h4 {
+    margin: 0 0 4px;
+    font-size: 12px;
+    color: var(--accent-text);
+    font-weight: 700;
+  }
+  .arch-b .stage small { color: var(--text-muted); font-size: 10px; }
+  .arch-b .stage.store {
+    background: var(--warm-bg);
+    border-color: var(--warm);
+  }
+  .arch-b .stage.store h4 { color: var(--warm); }
+
+  /* ════════════════════════════════════════
+   * 안 C. Boundary Diagram (시스템 경계 + 외부 데이터)
+   * 좌측 외부 입력 → 시스템 경계 박스 안에 모듈 → 외부 저장소
+   * ════════════════════════════════════════ */
+  .arch-c {
+    display: grid;
+    grid-template-columns: auto 24px 1fr 24px auto;
+    align-items: stretch;
+    gap: 0;
+    padding: 22px 18px;
+    background: #fff;
+    border: 1.5px solid var(--accent-border);
+    border-radius: 12px;
+  }
+  .arch-c .external {
+    display: flex; flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    min-width: 130px;
+  }
+  .arch-c .external h5 {
+    margin: 0 0 4px;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .arch-c .external .src {
+    background: #fff;
+    border: 1.5px dashed var(--info-border);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 11px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .arch-c .external .src .ext {
+    background: var(--info-bg); color: var(--info);
+    border-radius: 3px;
+    padding: 2px 6px;
+    font-size: 9px; font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .arch-c .conn-line {
+    align-self: center;
+    color: var(--accent);
+    font-size: 22px;
+    font-weight: 700;
+  }
+  .arch-c .system {
+    background: linear-gradient(180deg, #fafbff 0%, #fff 100%);
+    border: 1.5px solid var(--accent);
+    border-radius: 12px;
+    padding: 14px;
+    position: relative;
+  }
+  .arch-c .system::before {
+    content: 'INGESTION SYSTEM';
+    position: absolute;
+    top: -9px; left: 14px;
+    background: #fff;
+    padding: 0 8px;
+    font-size: 9px; font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--accent);
+  }
+  .arch-c .modules-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .arch-c .module {
+    background: #fff;
+    border: 1px solid var(--accent-border);
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+  }
+  .arch-c .module .m-h {
+    font-size: 11px; font-weight: 700;
+    color: var(--accent-text);
+    margin-bottom: 6px;
+  }
+  .arch-c .module .lib-list {
+    display: flex; flex-direction: column;
+    gap: 2px;
+  }
+  .arch-c .module .lib {
+    background: var(--accent-bg);
+    border-radius: 3px;
+    padding: 2px 6px;
+    font-size: 9px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent-text);
+  }
+  .arch-c .pipeline-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 6px;
+    align-items: center;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border);
+  }
+  /* ════════════════════════════════════════
+   * 안 D. Mermaid-Style Layout (CSS는 C안)
+   * 외부 ↔ 파서 1:1 화살표 3개 → Markdown 합류 → Chunker → DB
+   * ════════════════════════════════════════ */
+  .arch-d {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto auto;
+    align-items: stretch;
+    gap: 0 8px;
+    padding: 22px 18px;
+    background: #fff;
+    border: 1.5px solid var(--accent-border);
+    border-radius: 12px;
+  }
+  .arch-d .col-label {
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    text-align: center;
+  }
+  /* 외부 소스 영역 — 점선 박스 */
+  .arch-d .external-d {
+    display: flex; flex-direction: column;
+    gap: 6px;
+    padding: 8px 10px;
+    border: 1.5px dashed var(--info-border);
+    border-radius: 8px;
+    background: transparent;
+    position: relative;
+    min-width: 130px;
+  }
+  .arch-d .external-d::before {
+    content: 'EXTERNAL SOURCES';
+    position: absolute; top: -8px; left: 12px;
+    background: #fff; padding: 0 6px;
+    font-size: 8px; font-weight: 800;
+    letter-spacing: 1px; color: var(--info);
+  }
+  .arch-d .external-d .src {
+    background: var(--info-bg);
+    border: 1px solid var(--info-border);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 11px;
+    display: flex; align-items: center; gap: 6px;
+    min-height: 38px;
+    flex: 1;
+  }
+  .arch-d .external-d .src .ext {
+    background: var(--info); color: white;
+    padding: 2px 6px; border-radius: 3px;
+    font-size: 9px; font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  /* 1:1 화살표 3개 (외부 ↔ 파서) */
+  .arch-d .conn-3 {
+    display: flex; flex-direction: column;
+    justify-content: space-around;
+    gap: 6px;
+    padding: 8px 0;
+    color: var(--accent);
+    font-size: 18px; font-weight: 700;
+  }
+  .arch-d .conn-3 span {
+    display: block; text-align: center;
+    flex: 1;
+    line-height: 38px;
+  }
+  /* 시스템 박스 안 Parser Modules */
+  .arch-d .parsers-d {
+    display: flex; flex-direction: column;
+    gap: 6px;
+    padding: 8px 10px;
+    border: 1.5px dashed var(--accent-border);
+    border-radius: 8px;
+    background: transparent;
+    position: relative;
+    min-width: 150px;
+  }
+  .arch-d .parsers-d::before {
+    content: 'Parser Modules';
+    position: absolute; top: -8px; left: 12px;
+    background: #fff; padding: 0 6px;
+    font-size: 8px; font-weight: 700;
+    color: var(--accent-text);
+  }
+  .arch-d .parsers-d .module {
+    background: #fff;
+    border: 1px solid var(--accent-border);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 11px;
+    display: flex; align-items: center;
+    justify-content: space-between;
+    min-height: 38px;
+    flex: 1;
+  }
+  .arch-d .parsers-d .module .m-h {
+    color: var(--accent-text);
+    font-weight: 700;
+    font-size: 11px;
+  }
+  .arch-d .parsers-d .module .lib {
+    background: var(--accent-bg);
+    color: var(--accent-text);
+    padding: 1px 6px; border-radius: 3px;
+    font-size: 9px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+  }
+  /* 3 → 1 합류 화살표 (파서 → Markdown) */
+  .arch-d .merge-arrow {
+    display: flex; align-items: center; justify-content: center;
+    color: var(--accent);
+    font-size: 22px; font-weight: 700;
+    padding: 0 4px;
+    position: relative;
+  }
+  .arch-d .merge-arrow::before {
+    content: '';
+    position: absolute;
+    top: 25%; bottom: 25%; left: 50%;
+    width: 1.5px;
+    background: var(--accent-border);
+    transform: translateX(-50%);
+    z-index: 0;
+  }
+  .arch-d .merge-arrow span {
+    position: relative; z-index: 1;
+    background: #fff;
+    padding: 4px 0;
+  }
+  /* Pipeline (Markdown → Chunker) */
+  .arch-d .pipeline-d {
+    display: flex; flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border: 1.5px dashed var(--accent-border);
+    border-radius: 8px;
+    background: transparent;
+    position: relative;
+    min-width: 110px;
+  }
+  .arch-d .pipeline-d::before {
+    content: 'Pipeline';
+    position: absolute; top: -8px; left: 12px;
+    background: #fff; padding: 0 6px;
+    font-size: 8px; font-weight: 700;
+    color: var(--accent-text);
+  }
+  .arch-d .pipeline-d .stage {
+    background: #fff;
+    border: 1px solid var(--accent-border);
+    border-radius: 6px;
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent-text);
+    position: relative;
+  }
+  .arch-d .pipeline-d .stage small {
+    display: block;
+    font-weight: 500;
+    font-size: 9px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+  .arch-d .pipeline-d .stage.merge {
+    background: var(--warm-bg);
+    border-color: var(--warm-border);
+    color: var(--warm);
+  }
+  .arch-d .pipeline-d .down-arrow {
+    text-align: center;
+    color: var(--accent);
+    font-size: 14px; font-weight: 700;
+    line-height: 0.8;
+  }
+  /* 시스템 박스 안에 Parsers + merge + Pipeline 묶음 (큰 INGESTION SYSTEM 라벨) */
+  .arch-d .system-d {
+    display: contents;  /* grid 정렬 유지 */
+  }
+  /* 외부 → DB 끝 화살표 */
+  .arch-d .conn-line {
+    align-self: center;
+    color: var(--accent);
+    font-size: 22px; font-weight: 700;
+    padding: 0 4px;
+  }
+  /* 외부 저장소 */
+  .arch-d .storage-d {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 8px 10px;
+    border: 1.5px dashed var(--warm-border);
+    border-radius: 8px;
+    position: relative;
+    min-width: 130px;
+  }
+  .arch-d .storage-d::before {
+    content: 'EXTERNAL STORE';
+    position: absolute; top: -8px; left: 12px;
+    background: #fff; padding: 0 6px;
+    font-size: 8px; font-weight: 800;
+    letter-spacing: 1px; color: var(--warm);
+  }
+  .arch-d .storage-d .db {
+    background: var(--warm-bg);
+    border: 2px solid var(--warm);
+    border-radius: 10px;
+    padding: 14px 12px;
+    text-align: center;
+    width: 100%;
+  }
+  .arch-d .storage-d .db .db-h {
+    font-size: 12px; font-weight: 700;
+    color: var(--warm);
+  }
+  .arch-d .storage-d .db .db-sub {
+    color: var(--text-muted); font-size: 10px;
+    margin-top: 2px;
+  }
+  .arch-c .stage {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-radius: 8px;
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent-text);
+  }
+  .arch-c .stage small { display: block; color: var(--text-muted); font-weight: 500; font-size: 9px; margin-top: 2px; }
+  .arch-c .stage.merge { background: var(--warm-bg); border-color: var(--warm-border); color: var(--warm); }
+  .arch-c .pipe-arrow {
+    color: var(--accent); font-size: 14px; font-weight: 700;
+  }
+  .arch-c .storage {
+    display: flex; flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: 130px;
+  }
+  .arch-c .storage h5 {
+    margin: 0 0 6px;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .arch-c .storage .db {
+    background: var(--warm-bg);
+    border: 2px solid var(--warm);
+    border-radius: 10px;
+    padding: 14px 12px;
+    text-align: center;
+    width: 100%;
+  }
+  .arch-c .storage .db .db-h {
+    font-size: 12px; font-weight: 700;
+    color: var(--warm);
+  }
+  .arch-c .storage .db .db-sub {
+    color: var(--text-muted); font-size: 10px;
+    margin-top: 2px;
+  }
+
+  .pros-cons {
+    display: flex; gap: 16px; margin-top: 16px; font-size: 12px;
+  }
+  .pros-cons .col { flex: 1; padding: 10px 12px; border-radius: 8px; }
+  .pros-cons .pros { background: #ecfdf5; color: #047857; }
+  .pros-cons .cons { background: #fef2f2; color: #b91c1c; }
+  .pros-cons .col strong { display: block; font-size: 11px; letter-spacing: 0.5px; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>그림 3-3 — 시스템 아키텍처 4안 (가로)</h1>
+  <p class="subtitle">동일 시스템(사내 문서 인제스트 파이프라인)을 네 가지 아키텍처 다이어그램 스타일로. 흐름도가 아닌 컴포넌트·계층·관계 중심.</p>
+</header>
+
+<div class="container">
+
+<!-- ───────────── 안 A. Layered ───────────── -->
+<div class="variant-card">
+  <div class="variant-header">
+    <h2 class="variant-title">안 A. Layered Architecture</h2>
+    <span class="variant-tag">LAYERED</span>
+  </div>
+  <p class="variant-desc">4계층(Input · Parsing · Processing · Storage)을 가로로 배치. 각 계층 박스 안에 컴포넌트가 들어 있고, 계층 사이는 화살표로 연결. 시스템의 책임 분리가 한눈에.</p>
+
+  <div class="arch-a">
+    <div class="layer layer-input">
+      <div class="layer-label">Input Layer</div>
+      <div class="item">
+        <span class="icon">PDF</span>
+        <span class="label">규정·서약</span>
+        <span class="meta">.pdf</span>
+      </div>
+      <div class="item">
+        <span class="icon">DOC</span>
+        <span class="label">보안 규정</span>
+        <span class="meta">.docx</span>
+      </div>
+      <div class="item">
+        <span class="icon">XLS</span>
+        <span class="label">매출·예산</span>
+        <span class="meta">.xlsx</span>
+      </div>
+    </div>
+    <div class="conn">→</div>
+    <div class="layer">
+      <div class="layer-label">Parsing Layer</div>
+      <div class="item parser">
+        <span class="icon">PDF</span>
+        <span class="label">PDF Parser</span>
+        <span class="meta">pypdf</span>
+      </div>
+      <div class="item parser">
+        <span class="icon">DOC</span>
+        <span class="label">DOCX Parser</span>
+        <span class="meta">python-docx</span>
+      </div>
+      <div class="item parser">
+        <span class="icon">XLS</span>
+        <span class="label">XLSX Parser</span>
+        <span class="meta">openpyxl</span>
+      </div>
+    </div>
+    <div class="conn">→</div>
+    <div class="layer">
+      <div class="layer-label">Processing Layer</div>
+      <div class="item merge">
+        <span class="icon">M↓</span>
+        <span class="label">Markdown Unifier</span>
+      </div>
+      <div class="item">
+        <span class="icon">∷</span>
+        <span class="label">Chunker</span>
+        <span class="meta">의미 단위</span>
+      </div>
+      <div class="item">
+        <span class="icon">⊕</span>
+        <span class="label">Embedder</span>
+        <span class="meta">vec[768]</span>
+      </div>
+    </div>
+    <div class="conn">→</div>
+    <div class="layer layer-storage">
+      <div class="layer-label">Storage Layer</div>
+      <div class="item store">
+        <span class="icon">DB</span>
+        <span class="label">ChromaDB</span>
+        <span class="meta">Vector Store</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="pros-cons">
+    <div class="col pros"><strong>장점</strong>책임 분리(Layered)가 가장 명확. 시스템 다이어그램의 정석. 각 계층 안 컴포넌트 추가/교체가 시각적으로 쉬움.</div>
+    <div class="col cons"><strong>단점</strong>4계층 가로 배치라 좁은 폭에서 글씨가 작아짐. 계층 라벨 영문 약어 의존.</div>
+  </div>
+</div>
+
+<!-- ───────────── 안 B. Hub & Spoke ───────────── -->
+<div class="variant-card">
+  <div class="variant-header">
+    <h2 class="variant-title">안 B. Hub &amp; Spoke (Router 중심)</h2>
+    <span class="variant-tag">HUB</span>
+  </div>
+  <p class="variant-desc">중앙에 Format Router(허브)를 두고 좌측 입력, 우측으로 Markdown→청킹→DB 파이프라인. 라우팅 책임이 시각적으로 분리되어 "왜 분기되는지"가 즉시 보임.</p>
+
+  <div class="arch-b">
+    <div class="ingress">
+      <div class="doc-card"><span class="ext">PDF</span><span class="lib">.pdf</span></div>
+      <div class="doc-card"><span class="ext">DOCX</span><span class="lib">.docx</span></div>
+      <div class="doc-card"><span class="ext">XLSX</span><span class="lib">.xlsx</span></div>
+    </div>
+    <div class="hub">
+      <div class="hub-h">Format Router</div>
+      <div class="hub-sub">확장자 판정 → 파서 디스패치</div>
+      <div class="modules">
+        <span class="mod">pypdf</span>
+        <span class="mod">p-docx</span>
+        <span class="mod">openpyxl</span>
+      </div>
+    </div>
+    <div class="stage merge">
+      <h4>Markdown</h4>
+      <small>통합 텍스트</small>
+    </div>
+    <div class="stage">
+      <h4>Chunker</h4>
+      <small>의미 단위 분할</small>
+    </div>
+    <div class="stage store">
+      <h4>ChromaDB</h4>
+      <small>Vector Store</small>
+    </div>
+  </div>
+
+  <div class="pros-cons">
+    <div class="col pros"><strong>장점</strong>"라우팅"이라는 핵심 추상을 시각적으로 강조. 입력 형식이 늘어도 라우터만 확장하면 된다는 메시지. 가로 폭 활용도 높음.</div>
+    <div class="col cons"><strong>단점</strong>전통적인 좌→우 단일 흐름이 약간 깨짐(허브 안에 파서가 들어 있어 시선이 두 번 이동).</div>
+  </div>
+</div>
+
+<!-- ───────────── 안 C. Boundary Diagram ───────────── -->
+<div class="variant-card">
+  <div class="variant-header">
+    <h2 class="variant-title">안 C. System Boundary (외부·내부 경계)</h2>
+    <span class="variant-tag">BOUNDARY</span>
+  </div>
+  <p class="variant-desc">좌측 외부 데이터 소스 / 가운데 시스템 경계 박스(INGESTION SYSTEM) / 우측 외부 저장소. C4·UML 컨텍스트 다이어그램 스타일. 시스템과 외부의 경계가 가장 명확.</p>
+
+  <div class="arch-c">
+    <div class="external">
+      <h5>External Sources</h5>
+      <div class="src"><span class="ext">PDF</span>규정집·서약</div>
+      <div class="src"><span class="ext">DOCX</span>보안 규정</div>
+      <div class="src"><span class="ext">XLSX</span>매출·예산</div>
+    </div>
+    <div class="conn-line">⟶</div>
+    <div class="system">
+      <div class="modules-row">
+        <div class="module">
+          <div class="m-h">PDF Parser</div>
+          <div class="lib-list"><span class="lib">pypdf</span></div>
+        </div>
+        <div class="module">
+          <div class="m-h">DOCX Parser</div>
+          <div class="lib-list"><span class="lib">python-docx</span></div>
+        </div>
+        <div class="module">
+          <div class="m-h">XLSX Parser</div>
+          <div class="lib-list"><span class="lib">openpyxl</span></div>
+        </div>
+      </div>
+      <div class="pipeline-row">
+        <div class="stage merge">Markdown<small>통합 텍스트</small></div>
+        <div class="pipe-arrow">→</div>
+        <div class="stage">Chunker<small>의미 단위</small></div>
+      </div>
+    </div>
+    <div class="conn-line">⟶</div>
+    <div class="storage">
+      <h5>External Store</h5>
+      <div class="db">
+        <div class="db-h">ChromaDB</div>
+        <div class="db-sub">Vector DB</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pros-cons">
+    <div class="col pros"><strong>장점</strong>C4 모델 컨텍스트 다이어그램의 정석. "시스템 vs 외부"가 가장 명확. 인제스트 시스템의 경계가 책 전체에서 일관되게 재사용 가능.</div>
+    <div class="col cons"><strong>단점</strong>구조가 가장 빽빽함. 본문 폭에서 모듈 카드가 좁아질 수 있음. 영문 라벨 비중이 큼.</div>
+  </div>
+</div>
+
+<!-- ───────────── 안 D. C안 CSS + D안 흐름 ───────────── -->
+<div class="variant-card">
+  <div class="variant-header">
+    <h2 class="variant-title">안 D. System Boundary + 1:1 Parser Mapping</h2>
+    <span class="variant-tag">D = C-CSS × D-FLOW</span>
+  </div>
+  <p class="variant-desc">C안의 시스템 경계 디자인을 그대로 두고, 흐름은 D안처럼 PDF→PDF Parser, DOCX→DOCX Parser, XLSX→XLSX Parser의 1:1 매핑을 시각적으로 정렬. 외부 3개 카드와 시스템 안 3개 파서 모듈이 같은 행에 위치.</p>
+
+  <div class="arch-d">
+    <!-- 1열: 외부 소스 -->
+    <div class="external-d">
+      <div class="src"><span class="ext">PDF</span>규정·서약</div>
+      <div class="src"><span class="ext">DOCX</span>보안 규정</div>
+      <div class="src"><span class="ext">XLSX</span>매출·예산</div>
+    </div>
+    <!-- 2열: 1:1 화살표 3개 -->
+    <div class="conn-3">
+      <span>→</span>
+      <span>→</span>
+      <span>→</span>
+    </div>
+    <!-- 3열: Parser Modules (시스템 안 sub-area 1) -->
+    <div class="parsers-d">
+      <div class="module"><span class="m-h">PDF Parser</span><span class="lib">pypdf</span></div>
+      <div class="module"><span class="m-h">DOCX Parser</span><span class="lib">python-docx</span></div>
+      <div class="module"><span class="m-h">XLSX Parser</span><span class="lib">openpyxl</span></div>
+    </div>
+    <!-- 4열: 3→1 합류 화살표 -->
+    <div class="merge-arrow"><span>→</span></div>
+    <!-- 5열: Pipeline (시스템 안 sub-area 2) -->
+    <div class="pipeline-d">
+      <div class="stage merge">Markdown<small>통합 텍스트</small></div>
+      <div class="down-arrow">↓</div>
+      <div class="stage">Chunker<small>의미 단위 분할</small></div>
+    </div>
+    <!-- 6열: 끝 화살표 -->
+    <div class="conn-line">⟶</div>
+    <!-- 7열: 외부 저장소 -->
+    <div class="storage-d">
+      <div class="db">
+        <div class="db-h">ChromaDB</div>
+        <div class="db-sub">Vector DB</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pros-cons">
+    <div class="col pros"><strong>장점</strong>C안의 정돈된 시스템 경계 + D안의 1:1 파서 매핑 메시지. 외부 카드와 파서 모듈이 같은 행에 위치해 PDF→PDF Parser 매핑이 시각적으로 자연스럽게 읽힘. 순수 HTML/CSS — Mermaid 의존성 없음.</div>
+    <div class="col cons"><strong>단점</strong>3개 파서가 세로 스택이라 시스템 박스가 약간 길쭉해짐. 화살표가 영역 간 단일 화살표로 추상화되어 1:1 매핑은 위치 정렬에 의존.</div>
+  </div>
+</div>
+
+</div>
+
+</body>
+</html>

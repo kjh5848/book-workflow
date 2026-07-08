@@ -240,10 +240,9 @@ Style: architecture-infographic
 <div class="chapter-image gemini"><img src="../assets/CH06/gemini/06_librarian-two-rooms.png" alt="" /><div class="caption">그림 6-2. 어느 자료함을 열지는 사서가 알아서 판단합니다.</div></div>
 <p>AI 비서도 같은 구조가 됩니다. 한 명의 <strong>에이전트</strong>가 질문을 보고 장부 도구(<code>leave_balance</code> 등)를 열지, 문서 도구(<code>search_documents</code>)를 열지, 둘 다 열지 판단합니다. 판단 주체는 에이전트 속 LLM 자신이지, 바깥의 분류기가 아닙니다. 이번 챕터의 <strong>통합 에이전트</strong>가 이 &quot;만능 사서&quot;입니다.</p>
 <h3>6.3.1 파이프라인에서 에이전트로 (챕터 5 엔진은 유지됩니다)</h3>
-<p>챕터 5에서 만든 건 <strong>고정된 파이프라인</strong>이었습니다. 질문이 들어오면 언제나 같은 순서로 흐릅니다. Retriever로 문서 조각을 가져오고, Prompt로 감싸고, LLM에 보내고, 답을 돌려받죠. 입력 질문이 &quot;휴가 규정&quot;이든 &quot;A 사원 연차&quot;든 똑같은 경로를 탑니다. 문제는 그 경로 중간에 <strong>PostgreSQL 장부를 들여다보는 단계가 없다</strong>는 점입니다. 체인을 새로 짠다 해도 &quot;이 질문에는 DB를 볼까 문서만 볼까?&quot;를 <strong>실시간으로 판단할 자리가 없습니다</strong>. 고정 파이프는 분기가 약합니다.</p>
-<p><strong>에이전트는 다릅니다.</strong> 질문을 받으면 LLM이 먼저 &quot;지금 어느 자료함을 열어야 하지?&quot;를 스스로 판단합니다. 결과를 보고 &quot;충분한가, 아니면 한 곳 더?&quot;를 다시 판단합니다. 이 <strong>생각(Reason) → 행동(Act) → 관찰(Observe)</strong> 루프가 <strong>ReAct 패턴</strong>입니다. 경로가 질문마다 달라지죠.</p>
+<p>챕터 5에서 만든 건 <strong>고정된 파이프라인</strong>이었습니다. 질문이 들어오면 언제나 같은 순서로 흐릅니다. Retriever로 문서 조각을 가져오고, Prompt로 감싸고, LLM에 보내고, 답을 돌려받습니다. 입력 질문이 &quot;휴가 규정&quot;이든 &quot;A 사원 연차&quot;든 똑같은 경로를 탑니다. 문제는 그 경로 중간에 <strong>PostgreSQL 장부를 들여다보는 단계가 없다</strong>는 점입니다. 체인을 새로 짠다 해도 &quot;이 질문에는 DB를 볼까 문서만 볼까?&quot;를 <strong>실시간으로 판단할 자리가 없습니다</strong>. 고정 파이프는 분기가 약합니다.</p>
+<p><strong>에이전트는 다릅니다.</strong> 질문을 받으면 LLM이 먼저 &quot;지금 어느 자료함을 열어야 하지?&quot;를 스스로 판단합니다. 결과를 보고 &quot;충분한가, 아니면 한 곳 더?&quot;를 다시 판단합니다. 이 <strong>생각(Reason) → 행동(Act) → 관찰(Observe)</strong> 루프가 <strong>ReAct 패턴</strong>입니다. 경로가 질문마다 달라집니다.</p>
 <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-lg) var(--space-xl);margin:var(--space-lg) 0">
-<div style="font-size:var(--fs-sm);font-weight:700;color:var(--color-accent-text);margin-bottom:var(--space-md);text-align:center">그림 6-3. LCEL 체인 vs ReAct 에이전트</div>
 <table style="width:100%;border-collapse:collapse;font-size:var(--fs-xs)">
 <tr style="color:var(--color-text-muted);background:var(--color-surface-alt)"><th style="padding:6px 10px;text-align:left">항목</th><th style="padding:6px 10px;text-align:left">LCEL 체인 (챕터 5)</th><th style="padding:6px 10px;text-align:left">ReAct 에이전트 (이 챕터)</th></tr>
 <tr style="border-top:1px solid var(--color-border)"><td style="padding:6px 10px;font-weight:600">흐름</td><td style="padding:6px 10px">고정 순서. Retriever → Prompt → LLM</td><td style="padding:6px 10px">동적. 질문을 보고 매 턴 경로 결정</td></tr>
@@ -252,11 +251,11 @@ Style: architecture-infographic
 <tr style="border-top:1px solid var(--color-border)"><td style="padding:6px 10px;font-weight:600">적합한 질문</td><td style="padding:6px 10px">순수 문서 Q&A</td><td style="padding:6px 10px">정형·비정형·복합을 한 창구로</td></tr>
 </table>
 </div>
-<p><strong>&quot;그럼 파이프라인에서 Tool Calling만 붙이면 되지 않나?&quot;</strong> 사실 LCEL에서도 <code>llm.bind_tools([...])</code>로 도구를 묶을 수 있고, LLM이 어떤 도구를 호출할지 고르는 것까진 됩니다. 여기까지는 체인 한 번으로 충분하죠. 진짜 문제는 <strong>루프</strong>입니다. 도구가 답을 내놓으면 LLM은 그걸 보고 &quot;충분한가? 한 번 더?&quot;를 다시 판단해야 합니다. LCEL 체인은 입력 → 출력 한 번 흐르고 끝나는 구조라 이 <strong>재판단</strong>을 자동으로 돌리지 않습니다. 필요할 때마다 수동으로 while 루프를 짜야 하죠.</p>
+<div class="caption">그림 6-3. LCEL 체인 vs ReAct 에이전트</div>
+<p><strong>&quot;그럼 파이프라인에서 Tool Calling만 붙이면 되지 않나?&quot;</strong> 사실 LCEL에서도 <code>llm.bind_tools([...])</code>로 도구를 묶을 수 있고, LLM이 어떤 도구를 호출할지 고르는 것까진 됩니다. 여기까지는 체인 한 번으로 충분합니다. 진짜 문제는 <strong>루프</strong>입니다. 도구가 답을 내놓으면 LLM은 그걸 보고 &quot;충분한가? 한 번 더?&quot;를 다시 판단해야 합니다. LCEL 체인은 입력 → 출력 한 번 흐르고 끝나는 구조라 이 <strong>재판단</strong>을 자동으로 돌리지 않습니다. 필요할 때마다 수동으로 while 루프를 짜야 합니다.</p>
 <p><strong>ReAct 에이전트</strong>(AgentExecutor)는 그 루프를 <strong>한 줄 호출로 자동화</strong>합니다. 도구 선택 → 실행 → 결과 관찰 → 다음 판단 → (끝까지) 를 AgentExecutor가 알아서 돌립니다. 복합 질문(&quot;A 사원 연차 + 신청 절차&quot;)처럼 도구를 두세 번 연달아 써야 할 때 이 자동 루프가 빛을 발합니다.</p>
 <p>그림으로 보면 파이프라인이 어디에 박혀 있는지 한눈에 보입니다. 바깥을 <strong>ReAct 루프</strong>가 감싸고, 그 안에서 에이전트가 도구 4개를 골라 씁니다. 그중 <code>search_documents</code> 도구의 속을 열어 보면 챕터 5에서 만든 <strong>LCEL 파이프라인이 그대로</strong> 들어 있습니다.</p>
 <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-xl);margin:var(--space-xl) 0">
-<div style="font-size:var(--fs-sm);font-weight:700;color:var(--color-accent-text);margin-bottom:var(--space-lg);text-align:center">그림 6-4. ReAct 에이전트 안의 파이프라인. 챕터 5 엔진은 버려지지 않고 도구 하나로 감싸져 들어옵니다</div>
 <div style="border:2px dashed var(--color-border);border-radius:var(--radius-md);padding:var(--space-lg);background:var(--color-surface-alt)">
 <div style="font-size:var(--fs-xs);font-weight:600;color:var(--color-text-muted);margin-bottom:var(--space-sm);letter-spacing:1px;text-align:center">REACT 루프 (AgentExecutor가 자동 반복)</div>
 <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--space-sm);font-size:var(--fs-sm)">
@@ -318,6 +317,7 @@ Style: architecture-infographic
 <div style="margin-top:var(--space-md);font-size:var(--fs-xs);color:var(--color-text-muted);text-align:center">SQL 도구 3개는 DB 직접 호출, <code style="background:white;padding:1px 5px;border-radius:3px;border:1px solid var(--color-border)">search_documents</code>만 <strong>챕터 5 파이프라인</strong>을 품고 있습니다.</div>
 </div>
 </div>
+<div class="caption">그림 6-4. ReAct 에이전트 안의 파이프라인. 챕터 5 엔진은 버려지지 않고 도구 하나로 감싸져 들어옵니다</div>
 <p>정리하면 세 층입니다. <strong>바깥층</strong>은 ReAct 루프가 질문마다 경로를 정합니다. <strong>중간층</strong>은 도구 4개 중 어떤 걸 쓸지 선택하는 자리입니다. <strong>안쪽층</strong>이 <code>search_documents</code> 안에서 돌아가는 챕터 5의 LCEL 파이프라인이고요. 복합 질문이 들어오면 바깥 루프가 두 번 돕니다. 먼저 <code>leave_balance</code>로 SQL 한 번, 다음 턴에 <code>search_documents</code> 안의 파이프라인이 문서 한 번. 두 결과를 합쳐 최종 답변을 만듭니다.</p>
 <p>여기서 중요한 건 <strong>챕터 5 엔진을 버리지 않는다</strong>는 점입니다. <code>rag_chain.py</code>의 LCEL 파이프라인은 그대로 보존됩니다. 다만 이번 챕터에서는 그 엔진을 <strong>에이전트의 도구 하나</strong>(<code>search_documents</code>)로 감싸 넣고, 옆에 <code>leave_balance</code>·<code>sales_sum</code>·<code>list_employees</code> 세 도구를 나란히 둡니다. 엔진을 버리는 게 아니라 <strong>더 큰 판단 구조(에이전트) 아래에 배치</strong>하는 것입니다. 다음 챕터 7, 10도 이 에이전트 구조를 그대로 이어받습니다.</p>
 <p>다음 절부터 이 사서의 손에 들릴 <strong>도구</strong>를 하나씩 만들어 보겠습니다.</p>
@@ -390,8 +390,8 @@ Style: architecture-infographic
       </div>
     </div>
   </div>
-  <div class="pc-caption">그림 6-3. LangChain <code>@tool</code> 데코레이터와 MCP 방식의 도구 호출 비교. 전자는 에이전트와 함수가 한 프로세스, 후자는 MCP 서버로 분리된 별도 프로세스입니다</div>
 </div>
+<div class="caption">그림 6-5. LangChain <code>@tool</code> 데코레이터와 MCP 방식의 도구 호출 비교. 전자는 에이전트와 함수가 한 프로세스, 후자는 MCP 서버로 분리된 별도 프로세스입니다</div>
 <p>MCP 쪽 화살표에 적힌 <strong><code>stdio · HTTP</code></strong> 는 에이전트와 MCP 서버가 대화할 때 쓰는 통신 규격입니다. 두 프로세스가 따로 떠 있으니 직접 함수 호출은 못 하고, 중간에 약속된 메시지 형식이 필요합니다. 같은 컴퓨터 안에서는 <strong>stdio</strong>(표준 입출력 스트림)로, 원격 서버는 <strong>HTTP</strong>로 메시지를 주고받습니다. Claude Desktop·Cursor·IDE 에이전트 같은 여러 앱이 같은 MCP 서버에 붙을 수 있는 이유도 이 표준 규격 덕분입니다. 반대로 <code>@tool</code>은 파이썬 함수를 그대로 호출하므로 이런 프로토콜이 필요 없습니다.</p>
 <p>핵심 개념은 같습니다. &quot;AI가 함수의 이름과 설명을 보고 스스로 호출한다.&quot; 이 책에서는 <code>@tool</code>로 원리를 익혀 보겠습니다. 원리를 이해하면 MCP로 확장하는 건 어렵지 않습니다.</p>
 <p>각 도구 함수에 <code>@tool</code> 데코레이터와 독스트링(설명)을 붙여두면 LangChain이 도구의 이름과 설명, 파라미터를 자동으로 읽어갑니다. 에이전트는 이 정보를 보고 &quot;이 질문에는 어떤 도구가 맞지?&quot;를 판단합니다. 이처럼 LLM이 상황에 맞는 도구를 스스로 골라서 호출하는 기능을 <strong>도구 호출(Tool Calling)</strong> 이라고 합니다. 모든 LLM이 지원하는 건 아니라서 OpenAI의 <code>gpt-4o-mini</code>나 Ollama의 <code>llama3.1:8b</code>처럼 Tool Calling을 지원하는 모델을 골라야 합니다.</p>
@@ -401,7 +401,7 @@ Style: architecture-infographic
 </div>
 <h3>6.4.2 도구 구현하기</h3>
 <p><code>src/mcp_tools.py</code>에 네 개의 함수 TODO가 있습니다. 각 TODO의 <code>pass</code>를 지우고 <code>@tool</code>과 docstring, 인자를 채웁니다.</p>
-<div class="code-block highlight" data-lang="python"><div class="cb-title"><span class="badge">실습 2</span> ex06/src/mcp_tools.py. @tool 데코레이터</div><span class="kn">from</span><span class="w"> </span><span class="nn">src.db_helper</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_query</span><span class="p">,</span> <span class="n">get_vectorstore</span><span class="p">,</span> <span class="n">DB_ERROR_MSG</span>
+<div class="code-block highlight" data-lang="python"><div class="cb-title"><span class="badge">실습 1</span> ex06/src/mcp_tools.py. @tool 데코레이터</div><span class="kn">from</span><span class="w"> </span><span class="nn">src.db_helper</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_query</span><span class="p">,</span> <span class="n">get_vectorstore</span><span class="p">,</span> <span class="n">DB_ERROR_MSG</span>
 
 <span class="nd">@tool</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">leave_balance</span><span class="p">(</span><span class="n">emp_no</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
@@ -441,7 +441,7 @@ Style: architecture-infographic
     <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;results&quot;</span><span class="p">:</span> <span class="n">docs</span><span class="p">,</span> <span class="s2">&quot;total_found&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">docs</span><span class="p">)}</span></div>
 <p><code>run_query</code>·<code>get_vectorstore</code>는 <code>src/db_helper.py</code>의 보조 함수로, PostgreSQL 커넥션과 ChromaDB 컬렉션을 감싼 헬퍼입니다. 직접 작성하지 않고 import만 합니다.</p>
 <p>나머지 두 개는 DB 조회의 다른 변형입니다. <code>sales_sum</code>은 <strong>집계 쿼리</strong>(SUM + GROUP BY), <code>list_employees</code>는 <strong>동적 WHERE 조립</strong>(부서·이름 필터).</p>
-<div class="code-block highlight" data-lang="python"><div class="cb-title"><span class="badge">실습 2</span> ex06/src/mcp_tools.py. 집계·동적 필터</div><span class="nd">@tool</span>
+<div class="code-block highlight" data-lang="python"><div class="cb-title"><span class="badge">실습 1</span> ex06/src/mcp_tools.py. 집계·동적 필터</div><span class="nd">@tool</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">sales_sum</span><span class="p">(</span><span class="n">dept</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">start_date</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">end_date</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;부서별 또는 전체 매출 합계를 조회한다.&quot;&quot;&quot;</span>
     <span class="cb-todo"># TODO: sales_sum — 기간·부서 필터로 매출 집계</span>
@@ -489,7 +489,7 @@ Style: architecture-infographic
 <p><strong>MCP Tools? Tool?</strong> 이 책에서는 LangChain <code>@tool</code>로 만든 함수를 포괄해 <strong>MCP Tools</strong>라고 부릅니다. Model Context Protocol의 의미를 확장해 &quot;AI가 호출 가능한 도구 계층&quot;이라는 개념적 명칭으로 씁니다. 구현 수단은 LangChain의 Tool Calling이지만, 같은 역할(도구 호출 계층)을 MCP 서버로도 구현할 수 있습니다.</p>
 </div>
 <h2>6.5 ReAct 패턴 &amp; 에이전트 조립</h2>
-<p>챕터 1에서 &quot;리프레시 데이 몇 번 남았어?&quot;라는 질문을 던졌습니다. LLM이 규정을 읽고 &quot;매월 1회 → 6개월이면 6번 → 2번 썼으면 4번&quot;까지 스스로 계산해 냈죠. 생각의 고리가 사슬처럼 이어지는 <strong>사슬 추론(Chain-of-Thought)</strong> 입니다. ReAct는 여기에 <strong>도구 호출</strong>을 끼워 넣은 확장판입니다.</p>
+<p>챕터 1에서 &quot;리프레시 데이 몇 번 남았어?&quot;라는 질문을 던졌습니다. LLM이 규정을 읽고 &quot;매월 1회 → 6개월이면 6번 → 2번 썼으면 4번&quot;까지 스스로 계산해 냈습니다. 생각의 고리가 사슬처럼 이어지는 <strong>사슬 추론(Chain-of-Thought)</strong> 입니다. ReAct는 여기에 <strong>도구 호출</strong>을 끼워 넣은 확장판입니다.</p>
 <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-xl);margin:var(--space-xl) 0">
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-xl)">
 <div>
@@ -547,11 +547,11 @@ Style: architecture-infographic
     <div class="rl-arrow rl-arrow-back">↺</div>
   </div>
   <div class="rl-exit">최종 답이 충분하면 루프 종료 → 자연어 답변 생성</div>
-  <div class="rl-caption">그림 6-4. ReAct 루프는 충분한 정보를 모을 때까지 같은 순환을 반복하며, 매 Observe 단계의 결과가 다음 Reason의 입력이 됩니다</div>
 </div>
+<div class="caption">그림 6-6. ReAct 루프는 충분한 정보를 모을 때까지 같은 순환을 반복하며, 매 Observe 단계의 결과가 다음 Reason의 입력이 됩니다</div>
 <h3>6.5.1 에이전트 조립하기</h3>
 <p><code>src/agent.py</code>에 에이전트 조립 TODO가 있습니다. TODO의 <code>pass</code>를 지우고 아래 코드를 작성합니다. <code>create_tool_calling_agent</code> + <code>AgentExecutor</code>로 ReAct 루프를 만듭니다.</p>
-<div class="code-block highlight" data-lang="python"><div class="cb-title"><span class="badge">실습 3</span> ex06/src/agent.py. ReAct 에이전트</div><span class="kn">from</span><span class="w"> </span><span class="nn">src.mcp_tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">ALL_TOOLS</span>
+<div class="code-block highlight" data-lang="python"><div class="cb-title"><span class="badge">실습 2</span> ex06/src/agent.py. ReAct 에이전트</div><span class="kn">from</span><span class="w"> </span><span class="nn">src.mcp_tools</span><span class="w"> </span><span class="kn">import</span> <span class="n">ALL_TOOLS</span>
 
 <span class="n">SYSTEM_PROMPT</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;당신은 사내 HR 및 업무 질문에 답변하는 AI 어시스턴트입니다.</span>
 <span class="s2">- 정형 데이터(숫자·통계·목록)는 DB 조회 도구를 사용하세요.</span>
@@ -630,7 +630,7 @@ Style: architecture-infographic
 </tr>
 </tbody>
 </table>
-<div class="chapter-image terminal"><img src="../assets/CH06/terminal/06_chat-hybrid-demo.png" alt="" /><div class="caption">그림 6-5. 복합 질문 &quot;정시우 사원의 연차 잔여와 휴가 규정을 설명해주세요&quot;에 대한 답변입니다. DB에서 숫자를 꺼내고 문서에서 절차를 찾아 한 답으로 정리합니다</div></div>
+<div class="chapter-image terminal"><img src="../assets/CH06/terminal/06_chat-hybrid-demo.png" alt="" /><div class="caption">그림 6-7. 복합 질문 &quot;정시우 사원의 연차 잔여와 휴가 규정을 설명해주세요&quot;에 대한 답변입니다. DB에서 숫자를 꺼내고 문서에서 절차를 찾아 한 답으로 정리합니다</div></div>
 <p>&quot;정시우 사원의 연차 잔여와 휴가 규정을 설명해주세요&quot;라는 복합 질문이 들어왔을 때, 에이전트 머릿속의 사슬 추론은 이렇게 흘러갑니다.</p>
 <blockquote>
 <p><strong>Reason 1</strong>: &quot;연차 잔여일은 DB에 있겠지. leave_balance를 호출하자.&quot;
@@ -640,7 +640,7 @@ Style: architecture-infographic
 <strong>Reason 3</strong>: &quot;두 정보 다 모였다. 답변을 만들자.&quot;</p>
 </blockquote>
 <p>챕터 1의 사슬 추론은 머릿속에서 한 번에 끝났지만, ReAct는 <strong>도구를 호출하고 결과를 확인하는 행동</strong>이 추론 사이사이에 끼어듭니다. 생각의 고리가 행동으로 이어지고, 행동의 결과가 다음 생각의 입력이 됩니다.</p>
-<div class="chapter-image terminal"><img src="../assets/CH06/terminal/06_agent-run-real.png" alt="" /><div class="caption">그림 6-6. <code>python -m src.agent</code> 실행 결과입니다. 도구 호출 → 사후 분류 → 최종 답변까지 실제 단계별 로그가 찍힙니다</div></div>
+<div class="chapter-image terminal"><img src="../assets/CH06/terminal/06_agent-run-real.png" alt="" /><div class="caption">그림 6-8. <code>python -m src.agent</code> 실행 결과입니다. 도구 호출 → 사후 분류 → 최종 답변까지 실제 단계별 로그가 찍힙니다</div></div>
 <div class="dialogue"><span class="speaker">동료</span>: "이제 진짜 비서 같은데요."</div>
 <p>오픈이가 수첩을 꺼냈습니다. 입사 3일 차에 처음 AI 비서를 켰을 때와 지금의 차이를 한 장 안에 적어 두고 싶었습니다.</p>
 <div class="memo-box">
@@ -745,7 +745,7 @@ Style: architecture-infographic
   </div>
   <div class="ch-note">새로: <b>ReAct 루프 + llama3.1(Tool Calling) + MCP 4 도구</b></div>
 </div>
-<p class="thought">그림 6-7. 챕터 6의 결과. ReAct 루프와 MCP 4도구가 새로 자리를 잡았습니다</p>
+<div class="caption">그림 6-9. 챕터 6의 결과. ReAct 루프와 MCP 4도구가 새로 자리를 잡았습니다</div>
 <div class="tip">
 <p><strong>종료합니다</strong></p>
 <p><code>Ctrl + C</code>로 서버를 종료합니다. Docker 컨테이너는 챕터 7에서도 같은 PostgreSQL·ChromaDB를 쓰므로 그대로 두세요.</p>

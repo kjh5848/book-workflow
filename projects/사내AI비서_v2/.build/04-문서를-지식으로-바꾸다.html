@@ -61,7 +61,7 @@ py<span class="w"> </span>-3.12<span class="w"> </span>-m<span class="w"> </span
 pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt</div>
 <div class="tip">
 <p><strong>임베딩 모델은 첫 실행 시 약 400MB 다운로드</strong></p>
-<p><code>ko-sroberta-multitask</code>는 최초 실행 시 HuggingFace에서 자동 다운로드됩니다. 이후부터는 로컬 캐시를 사용하므로 한 번만 다운받으면 됩니다.</p>
+<p><code>ko-sroberta-multitask</code>는 최초 실행 시 <strong>허깅페이스(HuggingFace)</strong> 에서 자동 다운로드됩니다. 허깅페이스는 사전 학습된 AI 모델을 공개·다운로드할 수 있는 플랫폼인데, 이 책에서는 한국어 임베딩 모델을 받아 오는 출처로만 씁니다. 이후부터는 로컬 캐시를 사용하므로 한 번만 다운받으면 됩니다.</p>
 </div>
 <h3>3. 사용할 라이브러리</h3>
 <table>
@@ -151,7 +151,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 </tbody>
 </table>
 <div class="chapter-image gemini"><img src="../assets/CH04/gemini/04_vectordb-pipeline.png" alt="" /><div class="caption">그림 4-2. 손질 → 다지기 → 양념 → 냉장고 정리. 이 네 단계가 오프라인 파이프라인의 본체입니다</div></div>
-<h2>4.3 손질: 파싱부터 돌려본다</h2>
+<h2>4.3 손질 - 파싱부터 돌려본다</h2>
 <p>호기심에 <code>HR_취업규칙_v1.0.pdf</code>를 파이썬으로 그냥 <code>open()</code> 해봤습니다. 화면에 쏟아진 건 <code>%PDF-1.6\n%âãÏÓ…</code> 로 시작하는 뜻 모를 문자열이었습니다.</p>
 <p class="thought">아, 그냥 열면 안 되는구나.</p>
 <div class="chapter-image gemini"><img src="../assets/CH04/gemini/04_example_hr_rules.png" alt="" /><div class="caption">그림 4-3. 취업규칙 PDF 원본. 사람 눈에는 글자지만 컴퓨터에겐 바이너리입니다</div></div>
@@ -182,34 +182,31 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 </tr>
 </tbody>
 </table>
-<div class="sp-figure">
-  <div class="parser-flow">
-    <div class="pf-node input">
-      <strong>사내 문서</strong>
-      <small>.pdf · .docx · .xlsx</small>
-    </div>
-    <div class="pf-arrow-h">→</div>
-    <div class="pf-node decision">
-      <strong>extract_text()</strong>
-      <small>확장자 판정</small>
-    </div>
-    <div class="pf-arrow-h">→</div>
-    <div class="pf-branches">
-      <div class="pf-branch"><span class="pf-key">.pdf</span><span class="pf-value">pypdf</span></div>
-      <div class="pf-branch"><span class="pf-key">.docx</span><span class="pf-value">python-docx</span></div>
-      <div class="pf-branch"><span class="pf-key">.xlsx</span><span class="pf-value">openpyxl</span></div>
-    </div>
-    <div class="pf-arrow-h">→</div>
-    <div class="pf-node merge">
-      <strong>Markdown 통합</strong>
-      <small>텍스트 출력</small>
-    </div>
+<div class="parser-flow short">
+  <div class="pf-external">
+    <div class="pf-src"><span class="pf-ext">.pdf</span>규정·서약</div>
+    <div class="pf-src"><span class="pf-ext">.docx</span>보안 규정</div>
+    <div class="pf-src"><span class="pf-ext">.xlsx</span>매출·예산</div>
   </div>
-  <div class="sp-callout">
-    <strong>전략 패턴(Strategy)</strong>. 호출자는 <code>extract_text(path)</code> 하나만 알면 되고, 새 형식이 늘어도 매핑 한 줄만 추가하면 됩니다.
+  <div class="pf-conn-3">
+    <span>→</span>
+    <span>→</span>
+    <span>→</span>
   </div>
-  <div class="caption">그림 4-4. 파일이 들어오면 확장자에 따라 파서가 선택되고, 통합 텍스트(Markdown)로 출력됩니다</div>
+  <div class="pf-parsers">
+    <div class="pf-module"><span class="pf-m-h">PDF Parser</span><span class="pf-lib">pypdf</span></div>
+    <div class="pf-module"><span class="pf-m-h">DOCX Parser</span><span class="pf-lib">python-docx</span></div>
+    <div class="pf-module"><span class="pf-m-h">XLSX Parser</span><span class="pf-lib">openpyxl</span></div>
+  </div>
+  <div class="pf-merge-arrow"><span>→</span></div>
+  <div class="pf-pipeline">
+    <div class="pf-stage merge">Markdown<small>extract_text() 통합</small></div>
+  </div>
 </div>
+<div class="sp-callout">
+  <strong>전략 패턴(Strategy)</strong>. 호출자는 <code>extract_text(path)</code> 하나만 알면 되고, 새 형식이 늘어도 매핑 한 줄만 추가하면 됩니다.
+</div>
+<div class="caption">그림 4-4. 파일이 들어오면 확장자에 따라 파서가 선택되고, 통합 텍스트(Markdown)로 출력됩니다</div>
 <p><code>ex04/src/extractor.py</code>의 통합 함수가 확장자를 보고 파서를 자동 선택합니다. 이 함수는 이미 구현된 상태이고 우리는 <code>ex04/src/main.py</code>에서 호출만 합니다.</p>
 <div class="term-box">
 <p><strong>extractor의 전략 패턴</strong>. <code>ex04/src/extractor.py</code>의 <code>extract_text()</code> 함수는 <code>{&quot;.pdf&quot;: extract_from_pdf, &quot;.docx&quot;: extract_from_docx, &quot;.xlsx&quot;: extract_from_xlsx}</code> 같은 딕셔너리 매핑으로 파서를 고릅니다. 새 형식을 추가할 때 딕셔너리에 한 줄만 추가하면 되는 구조입니다.</p>
@@ -250,7 +247,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
     <span class="n">save_results_as_markdown</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">results</span></div>
 <p><code>extract_all_from_directory()</code> 는 <code>ex04/src/extractor.py</code>에 이미 구현돼 있고 <code>save_results_as_markdown()</code> 은 <code>_pipeline_utils.py</code>의 헬퍼입니다. 우리가 하는 일은 <strong>둘을 순서대로 호출</strong>하는 것뿐입니다.</p>
-<p>이어서 같은 파일 <code>ex04/src/main.py</code>의 <code>main()</code> 함수 분기 TODO를 채웁니다. <code>step1_python_parsing</code>을 <code>--step 1</code> 인자에 연결합니다.</p>
+<p>이어서 같은 파일 <code>ex04/src/main.py</code>의 <code>main()</code> 함수 분기 TODO의 <code>pass</code>를 지우고 아래 코드를 작성합니다. <code>step1_python_parsing</code>을 <code>--step 1</code> 인자에 연결합니다.</p>
 <div class="code-block highlight" data-lang="python"><div class="cb-title"><span class="badge">실습 1</span> ex04/src/main.py. main() 분기</div><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">parse_arguments</span><span class="p">()</span>
     <span class="n">steps_to_run</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">step</span><span class="p">))</span>
@@ -259,7 +256,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
     <span class="cb-todo"># TODO: 1 in steps_to_run이면 step1_python_parsing 실행</span>
     <span class="k">if</span> <span class="mi">1</span> <span class="ow">in</span> <span class="n">steps_to_run</span><span class="p">:</span>
         <span class="n">python_results</span> <span class="o">=</span> <span class="n">step1_python_parsing</span><span class="p">(</span><span class="n">docs_dir</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">docs_dir</span><span class="p">)</span></div>
-<p>이제 파싱만 돌려봅니다.</p>
+<p>이제 파싱만 실행합니다.</p>
 <div class="code-block highlight" data-lang="bash"><div class="cb-title"><span class="badge bash">터미널</span> 파싱만 실행</div>python<span class="w"> </span>src/main.py<span class="w"> </span>--step<span class="w"> </span><span class="m">1</span></div>
 <p><code>--step 1</code>은 파싱과 Markdown 변환만 수행합니다. 끝나면 <code>data/markdown/</code>에 변환 결과가 생깁니다. <code>HR_취업규칙_v1.0.md</code>를 열어 확인합니다.</p>
 <div class="code-block highlight" data-lang="markdown"><div class="cb-title">data/markdown/HR_취업규칙_v1.0.md</div><span class="gh"># HR_취업규칙_v1.0.pdf</span>
@@ -275,7 +272,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 버전: v2.0 (Draft)
 ...</div>
 <p>파일 정보가 상단에 요약돼 있고 <code>## 페이지 1</code> 단위로 텍스트가 잘 추출됐습니다.</p>
-<p>이번엔 XLSX 결과를 봅니다. <code>data/markdown/FIN_부서별_예산기안서.md</code>를 열면 시트가 <strong>Markdown 표 형식</strong>(<code>| 열1 | 열2 |</code>)으로 변환돼 있어요.</p>
+<p>이번엔 XLSX 결과를 확인합니다. <code>data/markdown/FIN_부서별_예산기안서.md</code>를 열면 시트가 <strong>Markdown 표 형식</strong>(<code>| 열1 | 열2 |</code>)으로 변환돼 있습니다.</p>
 <div class="code-block highlight" data-lang="markdown"><div class="cb-title">data/markdown/FIN_부서별_예산기안서.md</div><span class="gh"># FIN_부서별_예산기안서.xlsx</span>
 
 <span class="k">-</span><span class="w"> </span>파일 형식: xlsx
@@ -294,8 +291,8 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 <p>표 모양이 살짝 삐뚤해 보여도 벡터 DB 입장에서는 <strong>원본 엑셀보다 훨씬 이해하기 쉬운</strong> 형태입니다. 헤더 행과 구분선(<code>---</code>)이 있고 파이프(<code>|</code>) 기호로 행, 열 관계가 텍스트 흐름에 담겨 있어, &quot;경영지원본부 예산&quot;을 검색하면 표의 해당 데이터가 정확히 잡힙니다.</p>
 <h2>4.4 다지기, 양념, 냉장고, 전체 파이프라인</h2>
 <p>파싱이 깨끗한 걸 확인했으면 나머지 세 단계를 한 번에 돌립니다.</p>
-<h3>다지기: 청킹</h3>
-<p>취업규칙 전문을 한 덩어리로 넣으면 챕터 1에서 겪은 바로 그 문제가 반복됩니다. 관련 없는 내용까지 딸려옵니다. 챕터 3에서 설계한 대로 <strong>고정 크기 500자 + 100자 오버랩</strong>으로 자릅니다. 청크가 어떻게 잘리고 어떻게 겹치는지는 챕터 3.6 오버랩 도식에서 이미 눈으로 봤으니, 여기서는 구현만 짚습니다. <code>ex04/src/chunker.py</code>의 <code>split_text_into_chunks()</code> 함수 안에 TODO가 하나 있어요.</p>
+<h3>4.4.1 다지기 - 청킹</h3>
+<p>취업규칙 전문을 한 덩어리로 넣으면 챕터 1에서 겪은 바로 그 문제가 반복됩니다. 관련 없는 내용까지 딸려옵니다. 챕터 3에서 설계한 대로 <strong>고정 크기 500자 + 100자 오버랩</strong>으로 자릅니다. 청크가 어떻게 잘리고 어떻게 겹치는지는 챕터 3.6 오버랩 도식에서 이미 눈으로 봤으니, 여기서는 구현만 짚습니다. <code>ex04/src/chunker.py</code>를 열고 <code>split_text_into_chunks()</code> 함수 안 TODO의 <code>pass</code>를 지우고 아래 코드를 작성합니다.</p>
 <div class="code-block highlight" data-lang="python"><div class="cb-title"><span class="badge">실습 2</span> ex04/src/chunker.py. split_text_into_chunks</div><span class="k">def</span><span class="w"> </span><span class="nf">split_text_into_chunks</span><span class="p">(</span>
     <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">chunk_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">DEFAULT_CHUNK_SIZE</span><span class="p">,</span>
@@ -325,6 +322,9 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
     <span class="k">return</span> <span class="n">chunks</span></div>
 <p><code>DEFAULT_CHUNK_SIZE</code>(500), <code>DEFAULT_OVERLAP</code>(100)은 <code>chunker.py</code> 상단에 선언된 모듈 상수입니다. <code>main.py</code>에서 <code>--chunk-size</code>로 넘겨 덮어쓸 수 있습니다.</p>
 <p><code>step = chunk_size - overlap</code> 이 핵심입니다. 500자를 자르지만 다음 청크는 400자 뒤에서 시작하므로 결과적으로 <strong>100자가 겹칩니다</strong>. <code>while</code> 루프가 텍스트 끝까지 반복하며 청크 리스트를 쌓아 올립니다.</p>
+<div class="term-box">
+<p><strong>왜 overlap이 필요한가</strong>. 한 청크의 끝 문장이 다음 청크에 일부 포함되어야 의미가 잘리지 않습니다. 만약 overlap이 0이면 문장이 청크 경계에서 정확히 끊겨, 검색 결과로 받은 청크에 &quot;...연차는 입사 1년 후&quot; 같이 어중간한 문장이 들어올 수 있습니다. 100자 정도를 겹치게 두면 그런 경계 손실을 막아 줍니다. 너무 크게 하면 중복이 늘어 비용이 커지므로 보통 chunk_size의 <strong>15~25%</strong> 가 권장 범위입니다.</p>
+</div>
 <p>각 조각에는 <strong>메타데이터</strong>도 함께 붙습니다. 출처 파일명, 페이지, 분류. 챕터 3에서 설계한 라벨이 여기서 쓰이고, 나중에 에이전트가 &quot;이 답변의 출처는 취업규칙 3페이지입니다&quot;라고 당당하게 말할 수 있게 됩니다.</p>
 <div class="chunk-with-meta">
   <div class="cwm-title">청크 한 조각 = 본문 + 메타데이터 라벨</div>
@@ -341,7 +341,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
   </div>
   <div class="cwm-note">이 라벨들이 ChromaDB에 <code>metadata</code> 필드로 같이 저장됩니다. 검색할 때 "HR 폴더의 3페이지 근처 문서만"처럼 필터링도 가능하고, 답변에 출처를 붙일 때도 이 값을 그대로 씁니다.</div>
 </div>
-<h3>양념: 임베딩</h3>
+<h3>4.4.2 양념 - 임베딩</h3>
 <p>컴퓨터는 글자를 모릅니다. 숫자만 연산합니다. <strong>임베딩(Embedding)</strong> 은 텍스트의 의미를 숫자 벡터(768개 숫자 리스트)로 바꾸는 과정입니다. 핵심은 <strong>의미가 비슷한 텍스트는 비슷한 숫자</strong>가 된다는 점입니다.</p>
 <div class="embed-example-row">
   <div class="eer-card">
@@ -368,7 +368,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
     <img src="../assets/CH04/gemini/04_embedding-concept.png" alt="">
   </div>
 </div>
-<div class="eer-caption">그림 4-5. 왼쪽(문장 임베딩 벡터 예시. 앞 몇 자리만 봐도 비슷/다름이 드러남), 오른쪽(임베딩 공간에 찍힌 좌표. 의미가 가까운 문서가 한 곳에 모임)</div>
+<div class="caption">그림 4-5. 왼쪽(문장 임베딩 벡터 예시. 앞 몇 자리만 봐도 비슷/다름이 드러남), 오른쪽(임베딩 공간에 찍힌 좌표. 의미가 가까운 문서가 한 곳에 모임)</div>
 <p>&quot;숫자가 비슷하다&quot;는 걸 어떻게 판단할까요? 벡터를 좌표 위의 <strong>화살표</strong>라고 생각하시면 됩니다. 두 화살표가 같은 방향이면 의미가 비슷하고, 반대면 다릅니다. <strong>코사인 유사도(Cosine Similarity)</strong> 가 이 각도를 측정합니다.</p>
 <ul>
 <li>같은 방향(각도 0°) → 유사도 <strong>1</strong> (완전히 같은 의미)</li>
@@ -376,12 +376,15 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 <li>반대 방향(180°) → 유사도 <strong>-1</strong> (반대 의미)</li>
 </ul>
 <div class="chapter-image gemini"><img src="../assets/CH04/gemini/04_cosine-similarity.png" alt="" /><div class="caption">그림 4-6. 코사인 유사도. 각도로 의미 유사도를 측정합니다</div></div>
+<div class="tip">
+<p><strong>왜 코사인 유사도? — 유클리드 거리와의 차이</strong>. 두 벡터의 가까움을 재는 방법은 두 가지가 있습니다. <strong>유클리드 거리</strong>는 두 점의 직선 거리를 재고, <strong>코사인 유사도</strong>는 두 화살표의 각도를 잽니다. 텍스트 임베딩에서는 같은 의미라도 문장 길이에 따라 벡터 크기(magnitude)가 달라질 수 있어, 길이를 무시하고 방향만 보는 코사인 유사도가 더 안정적입니다. ChromaDB의 기본 metric도 코사인 유사도입니다.</p>
+</div>
 <p>임베딩 모델은 여럿 있지만 이 책은 <strong>ko-sroberta-multitask</strong>를 씁니다. 한국어 문장 유사도에 파인튜닝돼 있고(&quot;연차&quot;와 &quot;휴가&quot;가 가깝다는 걸 잘 잡습니다), 로컬 실행이라 API 비용이 없고, 사내 민감 정보를 외부로 보내지 않아도 됩니다.</p>
 <div class="tip">
 <p><strong>챕터 8에서 다른 모델과 비교</strong></p>
 <p>챕터 8에서 ko-sroberta와 다른 임베딩 모델의 검색 품질을 비교 실험합니다. 지금은 기본값으로 시작하고, 더 나은 선택지가 있는지는 챕터 8에서 확인합니다.</p>
 </div>
-<h3>냉장고: ChromaDB 저장</h3>
+<h3>4.4.3 냉장고 - ChromaDB 저장</h3>
 <p>양념까지 끝난 재료를 <strong>ChromaDB</strong>에 정리합니다. 챕터 1에서 <code>Chroma.from_documents()</code> 한 줄로 썼지만, 이번에는 <code>ex04/src/store.py</code>가 직접 넣습니다.</p>
 <div class="term-box">
 <p><strong>ChromaDB란?</strong> 텍스트 의미를 담은 <strong>벡터</strong>(768차원 숫자 배열)를 저장하고, 주어진 질문 벡터와 가장 가까운 벡터를 빠르게 찾아 주는 <strong>벡터 데이터베이스</strong>입니다. 일반 관계형 DB(PostgreSQL, MySQL)가 &quot;이름이 홍길동인 행&quot;처럼 정확한 값을 조회한다면, 벡터 DB는 &quot;이 질문과 의미가 비슷한 문서 Top-K&quot;를 조회합니다. 로컬에 파일로 영속 저장이 가능해 서버 재시작 후에도 데이터가 남아 있고, Python 한 줄로 띄울 수 있을 정도로 가볍습니다. 실무에서는 Pinecone, Weaviate, Milvus 같은 유료/대규모용 옵션도 쓰지만, 이 책처럼 로컬 실습, 소규모 운영에는 ChromaDB가 표준에 가깝습니다.</p>
@@ -417,7 +420,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 </tr>
 </tbody>
 </table>
-<p>저장은 <strong>upsert</strong>. 같은 ID가 있으면 덮어쓰고 없으면 새로 추가합니다. 파이프라인을 여러 번 실행해도 중복이 쌓이지 않습니다. 챕터 3에서 설계한 <strong>전체 재인덱싱</strong> 전략과 정확히 맞닿습니다.</p>
+<p>저장은 <strong>업서트(upsert)</strong>. 같은 ID가 있으면 덮어쓰고 없으면 새로 추가합니다. 파이프라인을 여러 번 실행해도 중복이 쌓이지 않습니다. 챕터 3에서 설계한 <strong>전체 재인덱싱</strong> 전략과 정확히 맞닿습니다.</p>
 <p><code>ex04/src/store.py</code>에는 <code>_store_utils.py</code>에서 import해 쓰는 <strong>모듈 상수 3개</strong>가 함수 시그니처 기본값으로 등장합니다. CLI 옵션으로 덮어쓸 수 있습니다.</p>
 <table>
 <thead>
@@ -445,7 +448,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 </tr>
 </tbody>
 </table>
-<p><code>store_chunks_to_chroma()</code> 함수 안에 TODO가 있습니다. 4단계를 순서대로 구현합니다.</p>
+<p><code>ex04/src/store.py</code>를 열고 <code>store_chunks_to_chroma()</code> 함수의 TODO의 <code>pass</code>를 지우고 아래 코드를 작성합니다. 4단계를 순서대로 구현합니다.</p>
 <div class="code-block highlight" data-lang="python"><div class="cb-title"><span class="badge">실습 3</span> ex04/src/store.py. store_chunks_to_chroma</div><span class="k">def</span><span class="w"> </span><span class="nf">store_chunks_to_chroma</span><span class="p">(</span>
     <span class="n">chunks</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span>
     <span class="n">chroma_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DEFAULT_CHROMA_DIR</span><span class="p">,</span>
@@ -512,13 +515,13 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 </tbody>
 </table>
 <p>우리가 할 일은 이 세 함수를 <strong>순서대로 호출</strong>하는 것뿐입니다.</p>
-<p>2단계에서 <code>chromadb.PersistentClient(path=chroma_dir)</code>가 <strong>벡터DB를 여는</strong> 부분입니다. 챕터 1에서는 <code>Chroma.from_documents()</code> 한 줄이 메모리에 임시 저장소를 만들고 프로그램이 끝나면 사라졌어요. 사내 실서비스에선 매번 문서를 다시 임베딩하는 건 낭비라서, 이번엔 <strong>디스크에 파일로 영속 저장</strong>합니다. <code>path</code>에 적은 폴더(<code>data/chroma_db/</code>)에 벡터가 파일로 쌓이고, 프로그램을 껐다 켜도 그대로 남아 있습니다. <code>Settings(anonymized_telemetry=False)</code>는 ChromaDB가 기본으로 켜 둔 익명 사용 통계 수집을 끄는 옵션. 사내 문서를 다루는 실습에선 꺼 두는 편이 안전합니다.</p>
+<p>2단계에서 <code>chromadb.PersistentClient(path=chroma_dir)</code>가 <strong>벡터DB를 여는</strong> 부분입니다. 챕터 1에서는 <code>Chroma.from_documents()</code> 한 줄이 메모리에 임시 저장소를 만들고 프로그램이 끝나면 사라졌습니다. 사내 실서비스에선 매번 문서를 다시 임베딩하는 건 낭비라서, 이번엔 <strong>디스크에 파일로 영속 저장</strong>합니다. <code>path</code>에 적은 폴더(<code>data/chroma_db/</code>)에 벡터가 파일로 쌓이고, 프로그램을 껐다 켜도 그대로 남아 있습니다. <code>Settings(anonymized_telemetry=False)</code>는 ChromaDB가 기본으로 켜 둔 익명 사용 통계 수집을 끄는 옵션. 사내 문서를 다루는 실습에선 꺼 두는 편이 안전합니다.</p>
 <div class="term-box">
 <p><strong><code>chromadb.Client</code> vs <code>chromadb.PersistentClient</code></strong>. 같은 ChromaDB지만 여는 방식이 다릅니다. <code>Client()</code>는 프로세스 메모리에만 존재하는 임시 저장소(프로그램 종료 시 휘발)고, <code>PersistentClient(path=...)</code>는 지정 디렉토리에 SQLite + Parquet 파일로 저장해 <strong>재시작 후에도 유지</strong>됩니다. 대규모 운영에선 Pinecone, Weaviate처럼 서버를 별도로 띄우지만, 로컬 실습이나 소규모 사내 시스템에는 <code>PersistentClient</code>만으로 충분합니다.</p>
 </div>
 <p>3단계에서 <code>embed_chunks()</code>가 청크를 768차원 벡터로 일괄 변환하고, 4단계 <code>collection.upsert()</code>가 이를 <code>BATCH_SIZE</code>(기본값 64)씩 끊어 저장합니다. <code>upsert</code>는 같은 ID가 있으면 덮어쓰는 연산이라, 파이프라인을 여러 번 돌려도 중복이 쌓이지 않습니다. 메모리가 부족하면 <code>BATCH_SIZE</code>를 32로 줄이고, 여유가 있고 임베딩이 느리면 128로 늘릴 수 있습니다.</p>
-<h3>실습: main.py로 한 번에 돌리기</h3>
-<p><code>ex04/src/main.py</code>의 <code>step2_embed_and_store</code> 함수에 청킹, 임베딩, 저장을 조합하는 TODO가 있습니다. 앞에서 파싱이 돌려둔 결과(<code>python_results</code>)를 받아 두 함수를 순서대로 호출합니다.</p>
+<h3>4.4.4 실습 - main.py로 한 번에 돌리기</h3>
+<p><code>ex04/src/main.py</code>를 열고 <code>step2_embed_and_store</code> 함수의 TODO의 <code>pass</code>를 지우고 아래 코드를 작성합니다. 앞에서 파싱이 돌려둔 결과(<code>python_results</code>)를 받아 청킹·임베딩·저장 두 함수를 순서대로 호출합니다.</p>
 <div class="code-block highlight" data-lang="python"><div class="cb-title"><span class="badge">실습 4</span> ex04/src/main.py. step2_embed_and_store</div><span class="k">def</span><span class="w"> </span><span class="nf">step2_embed_and_store</span><span class="p">(</span>
     <span class="n">python_results</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">],</span>
     <span class="n">chroma_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -538,7 +541,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
         <span class="n">embedding_model_name</span><span class="o">=</span><span class="n">embedding_model_name</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">store_result</span></div>
-<p>마지막으로 <code>main()</code> 의 <code>--step 2</code> 분기 TODO를 채워 step2와 연결합니다. (<code>--step 2</code>만 골라 돌리면 파싱이 없으므로 내부에서 step1을 다시 부릅니다.)</p>
+<p>마지막으로 같은 <code>ex04/src/main.py</code>의 <code>main()</code> 안 <code>--step 2</code> 분기 TODO의 <code>pass</code>를 지우고 아래 코드를 작성합니다. (<code>--step 2</code>만 골라 돌리면 파싱이 없으므로 내부에서 step1을 다시 부릅니다.)</p>
 <div class="code-block highlight" data-lang="python"><div class="cb-title"><span class="badge">실습 4</span> ex04/src/main.py. main() 의 step2 분기</div><span class="cb-todo"># TODO: 2 in steps_to_run이면 step2_embed_and_store 실행</span>
 <span class="k">if</span> <span class="mi">2</span> <span class="ow">in</span> <span class="n">steps_to_run</span><span class="p">:</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">python_results</span><span class="p">:</span>
@@ -607,15 +610,15 @@ python<span class="w"> </span>src/main.py<span class="w"> </span>--chunk-size<sp
 <div class="dual-image">
   <figure>
     <img src="../assets/CH04/terminal/04_pipeline-result_top.png" alt="">
-    <figcaption>그림 4-7 (왼쪽). Step 1 — 6개 사내 문서가 Markdown으로 변환</figcaption>
+    <div class="caption">그림 4-7 (왼쪽). Step 1 — 6개 사내 문서가 Markdown으로 변환</div>
   </figure>
   <figure>
     <img src="../assets/CH04/terminal/04_pipeline-result_bottom.png" alt="">
-    <figcaption>그림 4-7 (오른쪽). Step 2 — 18개 청크가 ChromaDB에 저장</figcaption>
+    <div class="caption">그림 4-7 (오른쪽). Step 2 — 18개 청크가 ChromaDB에 저장</div>
   </figure>
 </div>
-<h2>4.5 검색 확인: &quot;휴가 규정&quot;을 찾아오는가</h2>
-<p>파이프라인이 돌았으면 검색이 되는지 확인합니다. 검색 로직은 <code>ex04/src/store.py</code>의 <code>search_chroma()</code> 함수에 있고, TODO가 한 군데 있어요.</p>
+<h2>4.5 검색 확인 - &quot;휴가 규정&quot;을 찾아오는가</h2>
+<p>손질·다지기·양념·냉장고 정리까지 끝났으니, 이제 <strong>냉장고를 열어 재료를 꺼내는</strong> 단계입니다. 사용자의 질문(예: &quot;휴가 규정&quot;)이 들어오면 같은 임베딩 모델로 질문도 벡터화한 뒤, ChromaDB에서 가장 가까운 청크를 찾아 돌려줍니다. <code>ex04/src/store.py</code>를 열고 <code>search_chroma()</code> 함수의 TODO의 <code>pass</code>를 지우고 아래 코드를 작성합니다.</p>
 <div class="code-block highlight" data-lang="python"><div class="cb-title"><span class="badge">실습 5</span> ex04/src/store.py. search_chroma</div><span class="k">def</span><span class="w"> </span><span class="nf">search_chroma</span><span class="p">(</span>
     <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">chroma_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DEFAULT_CHROMA_DIR</span><span class="p">,</span>
@@ -668,17 +671,17 @@ python<span class="w"> </span>src/main.py<span class="w"> </span>--chunk-size<sp
 <div class="dual-image">
   <figure>
     <img src="../assets/CH04/terminal/04_cli-search_top.png" alt="">
-    <figcaption>그림 4-8 (왼쪽). 쿼리와 상위 1, 2위 검색 결과</figcaption>
+    <div class="caption">그림 4-8 (왼쪽). 쿼리와 상위 1, 2위 검색 결과</div>
   </figure>
   <figure>
     <img src="../assets/CH04/terminal/04_cli-search_bottom.png" alt="">
-    <figcaption>그림 4-8 (오른쪽). 3위 결과. 취업규칙의 휴가, 연차 관련 조항이 잡혔습니다</figcaption>
+    <div class="caption">그림 4-8 (오른쪽). 3위 결과. 취업규칙의 휴가, 연차 관련 조항이 잡혔습니다</div>
   </figure>
 </div>
 <p>1~3위가 모두 취업규칙 휴가 관련 내용입니다. 키워드가 정확히 일치하지 않아도 <strong>의미</strong>가 가까우면 찾아냅니다.</p>
 <p>옆자리 동료가 화면을 슬쩍 들여다봤습니다.</p>
 <div class="dialogue"><span class="speaker">동료</span>: "이제 인사팀 안 가도 되겠네요."</div>
-<p>웃음이 한 번 새어 나왔습니다. 그러나 화면을 다시 보니 1위 유사도가 <strong>71%</strong> 였습니다. <code>--top-k 5</code>로 늘려 보니 4, 5위에 결이 다른 청크가 섞여 있었어요.</p>
+<p>웃음이 한 번 새어 나왔습니다. 그러나 화면을 다시 보니 1위 유사도가 <strong>71%</strong> 였습니다. <code>--top-k 5</code>로 늘려 보니 4, 5위에 결이 다른 청크가 섞여 있었습니다.</p>
 <p class="thought">아직 완벽하지는 않다.</p>
 <p>벡터 DB는 &quot;그나마 가까운 순서&quot;로 k개를 <strong>무조건</strong> 채웁니다. 그래서 검색 개수를 늘리면 관련 없는 문서가 억지로 딸려와요. 검색 품질을 본격적으로 끌어올리는 작업은 챕터 8에서 다룹니다. 지금은 &quot;휴가 규정&quot;에 취업규칙이 1위로 잡히는 것까지가 이번 챕터의 도착선입니다.</p>
 <div class="tip">
@@ -794,7 +797,7 @@ python<span class="w"> </span>src/main.py<span class="w"> </span>--chunk-size<sp
   </div>
   <div class="ch-note">이전: <b>사용자·FastAPI·PostgreSQL</b> · 새로: <b>사내 문서 → MD → 임베딩 → ChromaDB</b></div>
 </div>
-<p class="thought">그림 4-7. 챕터 4의 결과. 사내 문서가 임베딩을 거쳐 ChromaDB에 새로 자리를 잡았습니다</p>
+<div class="caption">그림 4-9. 챕터 4의 결과. 사내 문서가 임베딩을 거쳐 ChromaDB에 새로 자리를 잡았습니다</div>
 <h2>용어 정리</h2>
 <table>
 <thead>
@@ -837,10 +840,16 @@ python<span class="w"> </span>src/main.py<span class="w"> </span>--chunk-size<sp
 </tr>
 </tbody>
 </table>
+<p>검색이 돌기 시작하자 옆자리 동료가 화면을 들여다봤습니다.</p>
+<div class="dialogue"><span class="speaker">동료</span>: "이제 단어가 달라도 찾아오네요. '휴가 규정'이라고 했는데 '연차 유급휴가'가 잡히는 거 신기하네요."</div>
+<p>오픈이가 1위 점수 0.71을 가리켰습니다.</p>
+<div class="dialogue"><span class="speaker">오픈이</span>: "1위가 71%까지 올라왔으니 일단 도착선은 넘었네요. 그런데 1·2·3위 사이 격차가 0.15밖에 안 돼서 누가 진짜 답인지 좀 애매하긴 해요."</div>
+<div class="dialogue"><span class="speaker">동료</span>: "그건 어떻게 해결해요?"</div>
+<div class="dialogue"><span class="speaker">오픈이</span>: "그게 챕터 8 검색 품질 튜닝에서 다룰 일이에요. 일단 챕터 5에서는 이 검색 결과를 LLM에 붙여서 자연어 답변부터 받아 봐요."</div>
 <div class="remember">
 <p><strong>이것만은 기억하자</strong></p>
 <ul>
-<li><strong>문서 → 지식은 네 단계를 거칩니다.</strong> 파싱(손질), 청킹(다지기), 임베딩(양념), ChromaDB 저장(냉장고). 어느 한 단계라도 소홀하면 검색이 엉망이 됩니다.</li>
+<li><strong>문서 → 지식은 네 단계를 거칩니다.</strong> 손질(파싱), 다지기(청킹), 양념(임베딩), 냉장고(ChromaDB 저장). 주방의 4단계가 그대로 코드의 4단계입니다.</li>
 <li><strong>파싱 결과를 먼저 눈으로 확인하세요.</strong> 챕터 3의 <strong>Garbage In, Garbage Out</strong> 원칙이 여기서 적용됩니다. 텍스트가 깨져 있으면 뒤에서 아무리 고쳐도 소용없습니다. <code>data/markdown/</code>의 결과를 반드시 검증합니다.</li>
 <li><strong>벡터 검색은 키워드 매칭이 아닙니다.</strong> &quot;휴가 규정&quot;이라고 물어도 &quot;연차 유급휴가&quot;가 잡힙니다. 의미가 가까우면 찾아냅니다. 다음 챕터 5에서는 이 검색 결과를 <strong>LCEL 체인</strong>에 붙여 실제 답변을 만들어 냅니다.</li>
 </ul>

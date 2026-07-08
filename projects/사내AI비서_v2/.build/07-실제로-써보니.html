@@ -165,9 +165,8 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 <div class="dialogue"><span class="speaker">팀장</span>: "그럼 뭐가 필요해요?"</div>
 <p>잠시 생각했습니다. 팀장은 답을 끌고 가는 스타일이 아니라 늘 질문을 던지는 쪽이었습니다.</p>
 <p class="thought">메모장. 한 번 찾은 답을 적어 두는 메모장이 있으면 되잖아.</p>
-<p>이번 챕터에서 <strong>챕터 6의 <code>IntegratedAgent</code>는 그대로 둡니다</strong>. 엔진을 재설계하는 게 아니라 바깥을 감싸는 작업이죠. 캐시·업무 일지·재시도 세 층을 차례로 얹고, 그 결과물을 <code>ConnectHRAgent</code>라고 부르겠습니다. 이름만 새 옷일 뿐 속은 챕터 6 그대로입니다.</p>
+<p>이번 챕터에서 <strong>챕터 6의 <code>IntegratedAgent</code>는 그대로 둡니다</strong>. 엔진을 재설계하는 게 아니라 바깥을 감싸는 작업입니다. 캐시·업무 일지·재시도 세 층을 차례로 얹고, 그 결과물을 <code>ConnectHRAgent</code>라고 부르겠습니다. 이름만 새 옷일 뿐 속은 챕터 6 그대로입니다.</p>
 <div style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-xl);margin:var(--space-xl) 0">
-<div style="font-size:var(--fs-sm);font-weight:700;color:var(--color-accent-text);margin-bottom:var(--space-lg);text-align:center">그림 7-2. 챕터 6 에이전트는 그대로, 바깥에 운영 래퍼 3층을 씌웁니다</div>
 <div style="display:grid;grid-template-columns:1fr 40px 1.4fr;gap:var(--space-md);align-items:stretch">
 <div style="border:2px solid var(--color-border);border-radius:var(--radius-md);padding:var(--space-lg) var(--space-md) var(--space-md);background:white;position:relative;display:flex;flex-direction:column;justify-content:center">
 <div style="position:absolute;top:-11px;left:16px;background:var(--color-text-muted);color:white;padding:3px 10px;border-radius:var(--radius-sm);font-size:var(--fs-xs);font-weight:700">챕터 6. 지금까지</div>
@@ -211,6 +210,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 </div>
 <div style="margin-top:var(--space-md);font-size:var(--fs-xs);color:var(--color-text-muted);text-align:center">같은 엔진(IntegratedAgent)이지만 바깥에 3층이 더 감싸져 있습니다. 호출이 들어오면 캐시 → 재시도 → 코어 → 토큰 기록 순으로 흐릅니다. 각 층의 상세 파이프라인은 7.4절 그림 7-6에서 다룹니다.</div>
 </div>
+<div class="caption">그림 7-2. 챕터 6 에이전트는 그대로, 바깥에 운영 래퍼 3층을 씌웁니다</div>
 <h2>7.2 ResponseCache + EmbeddingCache</h2>
 <p>메모장 이야기는 팀장 자리로도 이어졌습니다. 오픈이가 화이트보드 앞에 서서 마커 뚜껑을 딸깍 열었습니다.</p>
 <div class="dialogue"><span class="speaker">팀장</span>: "메모장에 유통기한은 어떻게 할 건데요?"</div>
@@ -253,8 +253,8 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
   <div class="rc-tl-store">
     <code>self._store = {hash: (answer, expires_at)}</code>
   </div>
-  <div class="cf-caption">그림 7-4. ResponseCache는 <b>유통기한이 있는 메모장</b>. 같은 질문이 TTL 안에 다시 오면 서가(LLM)를 건너뜁니다</div>
 </div>
+<div class="caption">그림 7-4. ResponseCache는 <b>유통기한이 있는 메모장</b>. 같은 질문이 TTL 안에 다시 오면 서가(LLM)를 건너뜁니다</div>
 <h3>임베딩 메모장 (EmbeddingCache)</h3>
 <p>질문을 벡터로 바꾸는 데에도 시간이 듭니다. 같은 문장을 여러 번 변환할 필요는 없습니다. 한 번 계산한 벡터를 파일로 저장해 두면 다음엔 바로 꺼내 씁니다. EmbeddingCache는 유통기한이 없습니다. 벡터 값은 텍스트만 같으면 언제든 같기 때문입니다.</p>
 <div class="ec-cabinet">
@@ -294,8 +294,8 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
       </div>
     </div>
   </div>
-  <div class="cf-caption">그림 7-5. EmbeddingCache는 <b>텍스트별 전용 서랍</b>. 서랍이 있으면 파일을 그대로 꺼내고, 없으면 계산 후 서랍 하나를 추가합니다</div>
 </div>
+<div class="caption">그림 7-5. EmbeddingCache는 <b>텍스트별 전용 서랍</b>. 서랍이 있으면 파일을 그대로 꺼내고, 없으면 계산 후 서랍 하나를 추가합니다</div>
 <h3>실습 1. cache.py</h3>
 <p><code>ex07/src/cache.py</code> 상단에는 캐시 동작을 조절하는 상수 세 개가 이미 선언돼 있습니다. <code>.env</code> 값이 없으면 이 기본값을 씁니다.</p>
 <div class="code-block highlight" data-lang="python"><div class="cb-title"><span class="badge explain">설명</span> ex07/src/cache.py. 모듈 상수</div><span class="n">DEFAULT_RESPONSE_TTL</span> <span class="o">=</span> <span class="mi">3600</span>                  <span class="c1"># 응답 캐시 TTL (초). 1시간</span>
@@ -317,7 +317,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
         <span class="bp">self</span><span class="o">.</span><span class="n">_misses</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;[ResponseCache] 초기화 완료 (TTL: </span><span class="si">%d</span><span class="s2">초, 최대 크기: </span><span class="si">%d</span><span class="s2">)&quot;</span><span class="p">,</span> <span class="n">ttl</span><span class="p">,</span> <span class="n">max_size</span><span class="p">)</span></div>
 <p><code>self._store</code>가 <strong>메모장 본체</strong>입니다. 키 하나당 <code>(실제 답변, 만료 시각)</code> 튜플을 담습니다. 만료 시각을 같이 저장해 두는 것이 TTL 구현의 핵심입니다.</p>
-<p>이제 조회 메서드 <code>get()</code>입니다. <strong>세 가지 경로</strong>로 갈라집니다. 키 없음 → 만료됨 → 적중. 어느 쪽이든 카운터 갱신과 로깅을 잊지 않아야 합니다.</p>
+<p>이제 조회 메서드 <code>get()</code>입니다. <code>ex07/src/cache.py</code>의 <code>ResponseCache.get()</code> TODO의 <code>pass</code>를 지우고 아래 코드를 작성합니다. <strong>세 가지 경로</strong>로 갈라집니다. 키 없음 → 만료됨 → 적중. 어느 쪽이든 카운터 갱신과 로깅을 잊지 않아야 합니다.</p>
 <div class="code-block highlight" data-lang="python"><div class="cb-title"><span class="badge">실습 1</span> ex07/src/cache.py. ResponseCache.get</div>    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;캐시에서 응답을 조회합니다 (TTL 만료 체크).&quot;&quot;&quot;</span>
         <span class="cb-todo"># TODO: get — TTL 검사 후 HIT/MISS 반환</span>
@@ -344,7 +344,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;[ResponseCache] 적중: key=</span><span class="si">%s</span><span class="s2">... (잔여 TTL: </span><span class="si">%.0f</span><span class="s2">초)&quot;</span><span class="p">,</span> <span class="n">key</span><span class="p">[:</span><span class="mi">12</span><span class="p">],</span> <span class="n">expires_at</span> <span class="o">-</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span>
         <span class="k">return</span> <span class="n">value</span></div>
 <p>핵심은 <strong>2·3·4 분기가 모두 카운터를 갱신</strong>한다는 점입니다. 만료된 항목은 그 자리에서 삭제하고 MISS로 처리합니다. 같은 질문이어도 유통기한이 지났으면 새 답을 받아 와야 하기 때문입니다.</p>
-<p>저장할 때는 <strong>용량 관리</strong>가 함께 들어갑니다. 메모장 페이지가 <code>max_size</code>(기본 1000)를 넘으면 <strong>만료 시각이 가장 이른 항목</strong>부터 한 건 지우고 새 항목을 넣습니다.</p>
+<p>이어서 <code>ex07/src/cache.py</code>의 <code>ResponseCache.set()</code> TODO의 <code>pass</code>를 지우고 아래 코드를 작성합니다. 저장할 때는 <strong>용량 관리</strong>가 함께 들어갑니다. 메모장 페이지가 <code>max_size</code>(기본 1000)를 넘으면 <strong>만료 시각이 가장 이른 항목</strong>부터 한 건 지우고 새 항목을 넣습니다.</p>
 <div class="code-block highlight" data-lang="python"><div class="cb-title"><span class="badge">실습 1</span> ex07/src/cache.py. ResponseCache.set</div>    <span class="k">def</span><span class="w"> </span><span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;캐시에 응답을 저장합니다 (max_size 초과 시 오래된 항목 제거).&quot;&quot;&quot;</span>
         <span class="cb-todo"># TODO: set — max_size 초과 시 가장 오래된 항목 제거</span>
@@ -402,7 +402,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 <div class="term-box">
 <p><strong><code>compute_fn</code>이란?</strong> <strong>캐시 미스일 때 값을 계산할 함수</strong>입니다. <code>&quot;연차 규정&quot;</code> 같은 텍스트를 받으면 768차원 벡터를 돌려주는 임베딩 함수를 여기에 넘깁니다. <code>EmbeddingCache</code>가 미스 시 <code>compute_fn(text)</code>로 호출해 계산하고 결과를 파일에 저장합니다.</p>
 </div>
-<p>파일 I/O의 귀찮은 부분(해시 파일명, <code>pickle</code> 직렬화, 히트·미스 카운팅)은 <code>_cache_utils.py</code>의 <code>embedding_get</code> · <code>embedding_set</code>이 맡습니다. 우리는 <strong>이 두 헬퍼를 어떤 순서로 호출할지</strong>만 결정합니다.</p>
+<p><code>ex07/src/cache.py</code>의 <code>EmbeddingCache</code> 클래스 TODO의 <code>pass</code>를 지우고 아래 코드를 작성합니다. 파일 I/O의 귀찮은 부분(해시 파일명, <code>pickle</code> 직렬화, 히트·미스 카운팅)은 <code>_cache_utils.py</code>의 <code>embedding_get</code> · <code>embedding_set</code>이 맡습니다. 우리는 <strong>이 두 헬퍼를 어떤 순서로 호출할지</strong>만 결정합니다.</p>
 <div class="code-block highlight" data-lang="python"><div class="cb-title"><span class="badge">실습 1</span> ex07/src/cache.py. EmbeddingCache</div><span class="k">class</span><span class="w"> </span><span class="nc">EmbeddingCache</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;로컬 파일 기반 임베딩 캐시.&quot;&quot;&quot;</span>
 
@@ -598,8 +598,8 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
       </div>
     </div>
   </div>
-  <div class="wa-caption">그림 7-6. 챕터 6의 에이전트는 그대로 두고, 바깥을 <b>운영 래퍼 3종</b>(캐시·추적·재시도)으로 감쌉니다. 요청은 위에서 들어와 래퍼 3층을 거쳐 코어에 닿고, 응답은 반대 방향으로 나오면서 각 층이 추가 작업(저장·기록)을 수행합니다</div>
 </div>
+<div class="caption">그림 7-6. 챕터 6의 에이전트는 그대로 두고, 바깥을 <b>운영 래퍼 3종</b>(캐시·추적·재시도)으로 감쌉니다. 요청은 위에서 들어와 래퍼 3층을 거쳐 코어에 닿고, 응답은 반대 방향으로 나오면서 각 층이 추가 작업(저장·기록)을 수행합니다</div>
 <h3>실습 3. agent_config.py</h3>
 <p><code>ex07/src/agent_config.py</code>의 <code>ConnectHRAgent.run()</code> 메서드 TODO의 <code>pass</code>를 지우고 <strong>5단계 운영 파이프라인</strong>을 구현합니다. 챕터 6의 <code>IntegratedAgent</code> 엔진(AgentExecutor + ReAct 루프)은 그대로 쓰고, 바깥에 <strong>캐시 · 재시도 · 토큰 기록</strong>을 두르는 게 이 챕터의 핵심입니다. Router는 ex06에서 하던 것처럼 <strong>질문 유형 라벨</strong>을 붙이는 용도로만 호출합니다. 재시도 루프와 AgentExecutor 빌드는 <code>_agent_utils.py</code>의 <code>build_agent_executor()</code> · <code>run_with_retry()</code> 헬퍼가 맡고, 우리는 <strong>단계를 조립하는 데만</strong> 집중하면 됩니다.</p>
 <p><code>run_with_retry</code>는 상수 두 개로 동작을 조절합니다. <code>RETRY_MAX_ATTEMPTS</code>(기본값 3)가 최대 시도 횟수, <code>RETRY_DELAY_SECONDS</code>(기본값 2.0)가 시도 사이 대기 시간입니다. 두 값 모두 <code>_agent_utils.py</code> 상단에 선언돼 있고 챕터 6의 에이전트 실행 로직을 이 루프 안으로 옮겨 넣습니다.</p>
@@ -632,7 +632,8 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 
     <span class="c1"># 5. 3회 모두 실패 — 사용자에게 보여줄 안전한 에러 메시지를 반환</span>
     <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;output&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;처리 중 오류가 발생했습니다: </span><span class="si">{</span><span class="n">last_error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span></div>
-<p><code>run_with_retry</code>는 최대 3회까지 <code>agent_executor.invoke</code>를 재시도하고 시도 사이에 2초씩 쉽니다. 매 실패에 <code>logger.warning</code>으로 몇 번째 시도가 왜 실패했는지 남기고, 전부 실패하면 에러 메시지를 담은 결과를 반환합니다. 이제 <code>ConnectHRAgent.run()</code> 차례입니다.</p>
+<p><code>run_with_retry</code>는 최대 3회까지 <code>agent_executor.invoke</code>를 재시도하고 시도 사이에 2초씩 쉽니다. 매 실패에 <code>logger.warning</code>으로 몇 번째 시도가 왜 실패했는지 남기고, 전부 실패하면 에러 메시지를 담은 결과를 반환합니다.</p>
+<p>이제 <code>ex07/src/agent_config.py</code>의 <code>ConnectHRAgent.run()</code> TODO의 <code>pass</code>를 지우고 아래 코드를 작성합니다.</p>
 <div class="code-block highlight" data-lang="python"><div class="cb-title"><span class="badge">실습 3</span> ex07/src/agent_config.py. ConnectHRAgent.run</div><span class="k">class</span><span class="w"> </span><span class="nc">ConnectHRAgent</span><span class="p">:</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">chat_history</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_cache</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;사용자 질문을 처리하고 답변을 반환합니다.&quot;&quot;&quot;</span>
@@ -831,7 +832,7 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
   </div>
   <div class="ch-note">새로: <b>ops 3 chip · Cache · Monitor · Retry</b> · 나머지 기존 유지</div>
 </div>
-<p class="thought">그림 7-10. 챕터 7의 결과. Cache, Monitor, Retry 세 운영 chip이 Runtime 위에 새로 자리를 잡았습니다</p>
+<div class="caption">그림 7-10. 챕터 7의 결과. Cache, Monitor, Retry 세 운영 chip이 Runtime 위에 새로 자리를 잡았습니다</div>
 <div class="tip">
 <p><strong>종료합니다</strong></p>
 <p><code>Ctrl + C</code>로 서버를 종료합니다. Docker 컨테이너는 챕터 8에서도 같은 PostgreSQL·ChromaDB를 쓰므로 그대로 두세요.</p>

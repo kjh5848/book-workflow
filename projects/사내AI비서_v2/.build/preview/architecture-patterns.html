@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>아키텍처 다이어그램 패턴 카탈로그 — 오픈스킬북스</title>
+<link rel="stylesheet" href="../styles/fonts.css">
+<link rel="stylesheet" href="../styles/tokens.css">
+<link rel="stylesheet" href="../styles/base.css">
+<link rel="stylesheet" href="../styles/components.css">
+<link rel="stylesheet" href="../styles/diagrams.css">
+<style>
+  body { max-width: 1180px; margin: 40px auto 120px; padding: 0 24px; font-family: var(--font-body); color: var(--color-text); background: var(--color-bg); }
+  .brand-sub { font-family: var(--font-mono); font-size: 11px; color: var(--color-text-subtle); letter-spacing: 3px; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
+  h1 { font-size: 28px; font-weight: 800; color: var(--color-text-heading); margin: 0 0 8px; letter-spacing: -0.3px; }
+  h2 { font-size: 20px; font-weight: 700; margin: 56px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--color-border-dashed); color: var(--color-text-heading); }
+  .lead { color: var(--color-text-secondary); font-size: 14px; line-height: 1.7; margin-bottom: 24px; }
+
+  .pattern-card { margin: 28px 0 36px; padding: 18px 22px; border: 1px solid var(--color-border); border-radius: 10px; background: #fff; }
+  .pattern-card h3 { display: flex; align-items: center; gap: 12px; font-size: 17px; font-weight: 800; margin: 0 0 8px; color: var(--color-text-heading); }
+  .pattern-tag { display: inline-block; padding: 2px 9px; background: var(--color-accent-bg); color: var(--color-accent-text); font-family: var(--font-mono); font-size: 11px; font-weight: 700; border-radius: 4px; letter-spacing: 0.5px; }
+  .pattern-when { color: var(--color-text-muted); font-size: 13px; margin-bottom: 14px; line-height: 1.6; }
+  .pattern-when b { color: var(--color-text-heading); }
+  .pattern-request { background: var(--color-accent-bg); border-left: 3px solid var(--color-accent); padding: 8px 14px; margin: 14px 0 8px; font-size: 12.5px; color: var(--color-accent-text); font-style: italic; line-height: 1.55; }
+  .pattern-request b { font-style: normal; color: var(--color-accent); font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.3px; }
+  .demo-area { padding: 14px 0; }
+
+  /* 시안 A — Subgraph Container */
+  .sca { background: #fff; border: 1.5px dashed var(--color-border); border-radius: 12px; padding: 20px 18px 16px; }
+  .sca-actor { width: 88px; padding: 10px; border: 1.5px solid var(--color-border); border-radius: 8px; text-align: center; font-size: 12px; font-weight: 700; margin: 0 auto 10px; background: #fff; }
+  .sca-bridge { display: flex; justify-content: center; margin: 4px 0 10px; color: var(--color-text-muted); font-size: 16px; }
+  .sca-cluster { background: var(--color-surface); border: 1.5px dashed var(--color-accent-border); border-radius: 12px; padding: 14px 12px; }
+  .sca-cluster-label { font-size: 11px; font-weight: 700; color: var(--color-accent); margin-bottom: 12px; letter-spacing: 0.5px; }
+  .sca-groups { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .sca-group { background: #fff; border: 1.5px dashed var(--color-border-dashed); border-radius: 10px; padding: 12px; }
+  .sca-group-label { font-size: 11px; font-weight: 700; color: var(--color-text-muted); margin-bottom: 10px; }
+  .sca-node { background: #fff; border: 1.5px solid var(--color-border); border-radius: 8px; padding: 8px 10px; font-size: 12px; font-weight: 700; text-align: center; color: var(--color-text-heading); margin-bottom: 8px; }
+  .sca-node:last-child { margin-bottom: 0; }
+  .sca-node.external { border-color: var(--color-accent-warm); color: var(--color-accent-warm-text); }
+  .sca-arrow-vert { text-align: center; font-size: 14px; color: var(--color-text-muted); margin: 4px 0; }
+
+  /* 시안 B — System Boundary + Layer Flow */
+  .scb { background: #fff; border: 1.5px solid var(--color-accent-border); border-radius: 12px; padding: 22px 18px 16px; position: relative; }
+  .scb-bound-label { position: absolute; top: -10px; left: 16px; background: #fff; padding: 0 10px; font-size: 11px; font-weight: 700; color: var(--color-accent); letter-spacing: 0.6px; }
+  .scb-layer { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .scb-layer-tag { flex: 0 0 auto; min-width: 56px; padding: 5px 8px; font-size: 10.5px; font-weight: 700; border-radius: 6px; text-align: center; letter-spacing: 0.4px; }
+  .scb-layer.metaphor .scb-layer-tag { background: var(--color-accent-warm-bg); color: var(--color-accent-warm-text); }
+  .scb-layer.code .scb-layer-tag { background: var(--color-accent-bg); color: var(--color-accent-text); }
+  .scb-flow { flex: 1; display: grid; grid-template-columns: repeat(7, auto); gap: 5px; align-items: center; justify-items: center; }
+  .scb-node { min-width: 70px; padding: 7px 8px; text-align: center; border-radius: 16px; font-size: 11.5px; font-weight: 700; border: 1.5px solid; background: #fff; }
+  .scb-layer.metaphor .scb-node { border-color: var(--color-accent-warm); color: var(--color-accent-warm-text); }
+  .scb-layer.code .scb-node { border-color: var(--color-accent); color: var(--color-accent-text); }
+  .scb-arrow { color: var(--color-text-muted); font-weight: 700; }
+
+  /* 시안 C — Branch-Merge */
+  .scc { background: #fff; border: 1.5px solid var(--color-accent-border); border-radius: 12px; padding: 16px; box-shadow: var(--shadow-figure); }
+  .scc-row { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; }
+  .scc-node { padding: 8px 10px; border: 1.5px solid var(--color-border); border-radius: 8px; font-size: 11px; font-weight: 700; min-width: 70px; text-align: center; background: var(--color-surface); }
+  .scc-node.input { background: var(--color-info-bg); border-color: var(--color-info); }
+  .scc-node.merge { background: var(--color-accent-warm-bg); border-color: var(--color-accent-warm); }
+  .scc-arrow { font-size: 16px; color: var(--color-accent); font-weight: 700; }
+  .scc-branches { display: flex; flex-direction: column; gap: 4px; }
+  .scc-branch { padding: 5px 10px; border: 1px solid var(--color-border); border-radius: 6px; background: #fff; font-family: var(--font-mono); font-size: 10.5px; font-weight: 700; }
+
+  /* 시안 D — Side-by-side Compare */
+  .scd { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; background: #fff; border: 1.5px solid var(--color-border); border-radius: 12px; padding: 16px; }
+  .scd-card { background: var(--color-surface); border: 1px solid var(--color-border-dashed); border-radius: 10px; padding: 12px; }
+  .scd-card-head { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; }
+  .scd-badge { padding: 3px 9px; border-radius: 4px; font-size: 10.5px; font-weight: 700; }
+  .scd-badge.left { background: var(--color-accent-warm-bg); color: var(--color-accent-warm-text); }
+  .scd-badge.right { background: var(--color-accent-bg); color: var(--color-accent-text); }
+  .scd-card-sub { font-size: 11px; color: var(--color-text-muted); }
+  .scd-line { padding: 4px 0; font-size: 11.5px; color: var(--color-text-heading); border-bottom: 1px dashed var(--color-border-dashed); }
+  .scd-line:last-child { border-bottom: none; }
+
+  /* 시안 E — Cumulative Architecture */
+  .sce { background: #fff; border: 1.5px solid var(--color-accent-border); border-radius: 12px; padding: 16px; }
+  .sce-row { display: flex; gap: 6px; margin-bottom: 6px; align-items: center; }
+  .sce-row:last-child { margin-bottom: 0; }
+  .sce-cell { flex: 1; padding: 6px 9px; font-size: 10.5px; font-weight: 700; border: 1px solid var(--color-border); border-radius: 6px; text-align: center; background: var(--color-surface); color: var(--color-text-muted); }
+  .sce-cell.new { background: var(--color-accent-bg); border-color: var(--color-accent); color: var(--color-accent-text); position: relative; }
+  .sce-cell.new::before { content: 'NEW'; position: absolute; top: -7px; right: -4px; background: var(--color-accent-warm); color: #fff; font-size: 8px; padding: 1px 4px; border-radius: 3px; }
+  .sce-arr { color: var(--color-text-muted); font-size: 12px; }
+
+  /* 시안 F — Sequence Timeline */
+  .scf { background: #fff; border: 1.5px solid var(--color-border); border-radius: 12px; padding: 16px; }
+  .scf-head { background: var(--color-accent-bg); border: 1.5px solid var(--color-accent-border); border-radius: 8px; padding: 6px 12px; margin-bottom: 12px; display: flex; gap: 10px; align-items: center; }
+  .scf-kind { font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: var(--color-accent); }
+  .scf-axis { display: flex; gap: 30px; padding: 0 14px; font-size: 10px; color: var(--color-text-muted); margin-bottom: 6px; }
+  .scf-events { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .scf-event { padding: 8px; border: 1px solid var(--color-border); border-radius: 6px; font-size: 10.5px; font-weight: 700; text-align: center; }
+  .scf-event.miss { background: #fee2e2; color: #991b1b; }
+  .scf-event.hit { background: #d1fae5; color: #065f46; }
+  .scf-event.expired { background: var(--color-surface); color: var(--color-text-muted); }
+</style>
+</head>
+<body>
+
+<div class="brand-sub">오픈스킬북스 시각 단일 진실원</div>
+<h1>아키텍처 다이어그램 패턴 카탈로그</h1>
+<p class="lead">
+챕터에 다이어그램이 필요할 때 이 6가지 패턴 중에서 골라 요청하시면 일관된 시각 언어로 빠르게 작성됩니다. 각 카드 하단의 <b>요청 표현 예</b>를 그대로 사용하시거나 변형해서 쓰세요.
+</p>
+
+<h2>1. 시안 A — Subgraph Container</h2>
+<div class="pattern-card">
+  <h3><span class="pattern-tag">SCA</span>시스템 전체 구성 (그룹 + 노드 + 화살표)</h3>
+  <div class="pattern-when"><b>언제</b>: 시스템 전체 구성을 보여줄 때. 영역(프론트·백·데이터)을 점선 그룹으로 나누고 그 안에 노드를 배치. 외부 사용자(브라우저)와 외부 의존성(MySQL·Redis)을 컬러로 강조.</div>
+
+  <div class="demo-area">
+    <div class="sca">
+      <div class="sca-actor">브라우저</div>
+      <div class="sca-bridge">↕</div>
+      <div class="sca-cluster">
+        <div class="sca-cluster-label">CLUSTER (NAMESPACE: METACODING)</div>
+        <div class="sca-groups">
+          <div class="sca-group">
+            <div class="sca-group-label">프론트엔드</div>
+            <div class="sca-node">Ingress</div>
+            <div class="sca-arrow-vert">↓</div>
+            <div class="sca-node">frontend-service</div>
+            <div class="sca-arrow-vert">↓</div>
+            <div class="sca-node">Frontend Pod</div>
+          </div>
+          <div class="sca-group">
+            <div class="sca-group-label">백엔드</div>
+            <div class="sca-node">backend-service</div>
+            <div class="sca-arrow-vert">↓</div>
+            <div class="sca-node">Backend Pod ×2</div>
+            <div class="sca-arrow-vert">↓ envFrom</div>
+            <div class="sca-node">ConfigMap · Secret</div>
+          </div>
+          <div class="sca-group">
+            <div class="sca-group-label">데이터</div>
+            <div class="sca-node">db-service</div>
+            <div class="sca-arrow-vert">→</div>
+            <div class="sca-node external">MySQL Pod</div>
+            <div class="sca-arrow-vert">→</div>
+            <div class="sca-node external">Redis Pod</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pattern-request">
+    <b>요청 표현 예 →</b> "시안 A 스타일로 그려 줘. 시스템 경계 안에 [그룹A·그룹B·그룹C] 점선 영역 + 노드 + 화살표. 외부 의존성은 컬러 강조."
+  </div>
+</div>
+
+<h2>2. 시안 B — System Boundary + Layer Flow</h2>
+<div class="pattern-card">
+  <h3><span class="pattern-tag">SCB</span>비유 ↔ 기술 두 레이어 매핑</h3>
+  <div class="pattern-when"><b>언제</b>: 비유와 기술을 일대일 매핑해서 보여줄 때. 두 레이어가 같은 4단계로 가로 흐름. 시스템 boundary 라벨 + 가로 화살표.</div>
+
+  <div class="demo-area">
+    <div class="scb">
+      <span class="scb-bound-label">METAPHOR ↔ CODE</span>
+      <div class="scb-layer metaphor">
+        <span class="scb-layer-tag">주방</span>
+        <div class="scb-flow">
+          <div class="scb-node">손질</div><span class="scb-arrow">→</span>
+          <div class="scb-node">다지기</div><span class="scb-arrow">→</span>
+          <div class="scb-node">양념</div><span class="scb-arrow">→</span>
+          <div class="scb-node">냉장고</div>
+        </div>
+      </div>
+      <div class="scb-layer code">
+        <span class="scb-layer-tag">코드</span>
+        <div class="scb-flow">
+          <div class="scb-node">파싱</div><span class="scb-arrow">→</span>
+          <div class="scb-node">청킹</div><span class="scb-arrow">→</span>
+          <div class="scb-node">임베딩</div><span class="scb-arrow">→</span>
+          <div class="scb-node">ChromaDB</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pattern-request">
+    <b>요청 표현 예 →</b> "시안 B 스타일로 그려 줘. 비유 레이어와 코드 레이어 두 줄에 각 4단계 노드를 가로 흐름으로. 외곽은 시스템 boundary 라벨."
+  </div>
+</div>
+
+<h2>3. 시안 C — Branch-Merge Flow</h2>
+<div class="pattern-card">
+  <h3><span class="pattern-tag">SCC</span>입력 → 분기 → 합류 → 출력</h3>
+  <div class="pattern-when"><b>언제</b>: 한 입력이 N갈래로 분기됐다가 다시 합쳐져서 최종 출력으로. 파서 분기·전략 패턴·라우팅 등.</div>
+
+  <div class="demo-area">
+    <div class="scc">
+      <div class="scc-row">
+        <div class="scc-node input">사내 문서</div>
+        <span class="scc-arrow">→</span>
+        <div class="scc-node">파서 선택</div>
+        <span class="scc-arrow">→</span>
+        <div class="scc-branches">
+          <div class="scc-branch">PDF · pypdf</div>
+          <div class="scc-branch">DOCX · python-docx</div>
+          <div class="scc-branch">XLSX · openpyxl</div>
+        </div>
+        <span class="scc-arrow">→</span>
+        <div class="scc-node merge">Markdown</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pattern-request">
+    <b>요청 표현 예 →</b> "시안 C 스타일로 그려 줘. 입력 → 분류기 → N갈래 분기 → 합류 노드. 끝에 통합 출력."
+  </div>
+</div>
+
+<h2>4. 시안 D — Side-by-side Compare</h2>
+<div class="pattern-card">
+  <h3><span class="pattern-tag">SCD</span>좌·우 두 카드 비교</h3>
+  <div class="pattern-when"><b>언제</b>: 두 가지 옵션·전략·접근의 장단점을 같은 항목으로 비교. 전체 재인덱싱 vs 증분, OCR vs Vision LLM, LCEL vs ReAct 등.</div>
+
+  <div class="demo-area">
+    <div class="scd">
+      <div class="scd-card">
+        <div class="scd-card-head">
+          <span class="scd-badge left">전체 재인덱싱</span>
+          <span class="scd-card-sub">모두 지우고 처음부터</span>
+        </div>
+        <div class="scd-line">+ 구현이 단순</div>
+        <div class="scd-line">+ 일관성 100%</div>
+        <div class="scd-line">- 시간·비용 많이</div>
+      </div>
+      <div class="scd-card">
+        <div class="scd-card-head">
+          <span class="scd-badge right">증분 재인덱싱</span>
+          <span class="scd-card-sub">바뀐 것만 갈아끼우기</span>
+        </div>
+        <div class="scd-line">+ 빠름</div>
+        <div class="scd-line">- 추적 필요</div>
+        <div class="scd-line">- 오염 가능</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pattern-request">
+    <b>요청 표현 예 →</b> "시안 D 스타일로 그려 줘. 좌·우 두 카드에 [옵션 A] vs [옵션 B] 장단점을 +/- 라인으로 비교."
+  </div>
+</div>
+
+<h2>5. 시안 E — Cumulative Architecture (누적 + NEW)</h2>
+<div class="pattern-card">
+  <h3><span class="pattern-tag">SCE</span>챕터별 누적 + 이번 챕터의 NEW</h3>
+  <div class="pattern-when"><b>언제</b>: 챕터 마무리에서 "이전 챕터까지 누적된 부분" + "이번 챕터에서 새로 추가된 부분(NEW)"을 한 화면에. 스토리 진화 추적용.</div>
+
+  <div class="demo-area">
+    <div class="sce">
+      <div class="sce-row">
+        <div class="sce-cell">사용자</div>
+        <span class="sce-arr">→</span>
+        <div class="sce-cell">FastAPI</div>
+        <span class="sce-arr">→</span>
+        <div class="sce-cell new">RAG Engine</div>
+        <span class="sce-arr">→</span>
+        <div class="sce-cell new">LLM</div>
+      </div>
+      <div class="sce-row">
+        <div class="sce-cell">PostgreSQL</div>
+        <span class="sce-arr">·</span>
+        <div class="sce-cell">ChromaDB</div>
+        <span class="sce-arr">·</span>
+        <div class="sce-cell">stage 02·04·06 NEW</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pattern-request">
+    <b>요청 표현 예 →</b> "시안 E 스타일로 그려 줘. 챕터별 누적 박스 + 이번 챕터에 새로 추가된 부분만 NEW 뱃지로 강조."
+  </div>
+</div>
+
+<h2>6. 시안 F — Sequence Timeline</h2>
+<div class="pattern-card">
+  <h3><span class="pattern-tag">SCF</span>시간축 + 이벤트 (HIT/MISS/EXPIRED)</h3>
+  <div class="pattern-when"><b>언제</b>: 시간 흐름에 따른 상태 변화를 보여줄 때. 캐시 HIT/MISS, 요청 처리 흐름, TTL 만료 등.</div>
+
+  <div class="demo-area">
+    <div class="scf">
+      <div class="scf-head">
+        <span class="scf-kind">ResponseCache</span>
+        <span style="font-size:11px;color:var(--color-text-muted);">같은 질문을 시간 순서로 추적</span>
+      </div>
+      <div class="scf-axis"><span>09:00</span><span>09:30</span><span>10:01</span></div>
+      <div class="scf-events">
+        <div class="scf-event miss">MISS<br>20초</div>
+        <div class="scf-event hit">HIT<br>0.1초</div>
+        <div class="scf-event expired">EXPIRED<br>새 TTL</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pattern-request">
+    <b>요청 표현 예 →</b> "시안 F 스타일로 그려 줘. 시간축 위에 이벤트 3~5개 (각 이벤트마다 상태·소요 시간 라벨)."
+  </div>
+</div>
+
+<h2>호출 방법</h2>
+<p class="lead">
+이 시안집은 어느 책에서든 다음 명령으로 호출할 수 있습니다 (스킬 내장):
+</p>
+<pre style="background:var(--color-surface-alt); border:1px solid var(--color-border); border-radius:8px; padding:14px 16px; font-family:var(--font-mono); font-size:13px; color:var(--color-text); overflow-x:auto;">python3 .claude/skills/pub-html-build/build_html.py \
+  --project-root projects/&lt;책&gt; \
+  --preview architecture-patterns</pre>
+
+<p class="lead" style="margin-top:18px;">
+호출 시 책의 <code>.build/preview/architecture-patterns.html</code>에 자동 복사된 후 브라우저로 열립니다. 실제 다이어그램을 챕터에 적용할 때는 시안 번호(A·B·C·D·E·F)를 명시해 요청하세요.
+</p>
+
+</body>
+</html>
