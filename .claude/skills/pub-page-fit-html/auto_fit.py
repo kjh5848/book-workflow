@@ -21,7 +21,8 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[3]
 BUILD_HTML = REPO_ROOT / ".claude/skills/pub-html-build/build_html.py"
 BUILD_PDF = REPO_ROOT / ".claude/skills/pub-html-to-pdf/build_pdf.py"
-PDF_VENV_PY = REPO_ROOT / ".claude/skills/pub-html-to-pdf/.venv/bin/python"
+_MAC_VENV = REPO_ROOT / ".claude/skills/pub-html-to-pdf/.venv/bin/python"
+PDF_VENV_PY = _MAC_VENV if _MAC_VENV.exists() else Path(sys.executable)
 LAYOUT_CHECKER = REPO_ROOT / ".claude/skills/pub-layout-check/references/scripts/pdf_layout_checker.py"
 
 
@@ -88,7 +89,7 @@ def run_layout_check(pdf_path: Path, min_usage: int) -> tuple[int, list[tuple[in
 def rebuild(project_root: Path, chapter: int) -> Path:
     """HTML + PDF 재빌드. 생성된 PDF 경로 반환."""
     subprocess.run(
-        ["python3", str(BUILD_HTML), "--project-root", str(project_root), "--chapter", str(chapter)],
+        [str(PDF_VENV_PY), str(BUILD_HTML), "--project-root", str(project_root), "--chapter", str(chapter)],
         check=True, cwd=REPO_ROOT,
     )
     subprocess.run(
