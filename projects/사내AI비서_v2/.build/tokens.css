@@ -1,9 +1,9 @@
 /* 사내AI비서 프로젝트 오버라이드 — 화면·PDF 공통 적용 (CSS cascade)
    브랜드 토큰 변수 외에 이 책 전용 그림 크기 예외를 담는다. */
 
-/* 그림 2-1 챕터 오프닝 개념도: autocrop 후 확대. gemini 기본 50%는 이 그림에 작음.
-   src 속성 선택자로 이 이미지 하나만 지정 — 다른 gemini 개념도는 기본값 유지 */
-.chapter-image.gemini img[src*="02_chapter-opening"] {
+/* 챕터 오프닝 개념도: autocrop 후 확대. gemini 기본 50%는 오프닝 히어로 그림에 작음.
+   src 속성 선택자로 오프닝 이미지만 지정 — 다른 gemini 개념도는 기본값 유지 */
+.chapter-image.gemini img[src*="chapter-opening"] {
   max-width: 70%;
   max-height: 9cm;
 }
