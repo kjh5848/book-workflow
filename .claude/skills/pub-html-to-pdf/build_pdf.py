@@ -194,6 +194,15 @@ def render_pdf(
                     el.parentNode.insertBefore(wrap, el);
                     wrap.appendChild(el);
                 });
+                // 분할 허용 박스(.tip 등)라도 작은 박스가 페이지 경계에 걸리면 빈 껍데기
+                // 조각을 남긴다. 페이지의 60% 미만인 박스만 통째로 넘겨 정책(큰 박스는
+                // 분할 허용)을 유지한 채 껍데기·제목 고아를 막는다.
+                document.querySelectorAll('.tip, .remember, .preview-notice, .memo-box, .prep-note, .result').forEach(b => {
+                    if (b.getBoundingClientRect().height < 570) {
+                        b.style.breakInside = 'avoid';
+                        b.style.pageBreakInside = 'avoid';
+                    }
+                });
                 // "전체 구성도" 섹션은 제목+구성도가 페이지 하나를 거의 채운다. Paged.js의
                 // break-after:avoid가 이 경계 케이스에서 제목만 고아 페이지로 밀어내므로,
                 // 섹션을 통째로 새 페이지에서 시작시켜 제목과 구성도를 항상 붙인다.

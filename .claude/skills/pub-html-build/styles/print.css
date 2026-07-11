@@ -129,6 +129,18 @@ h2 { page-break-before: auto; }
   zoom: 0.78;
 }
 
+/* 분할 허용 박스(.tip·.remember 등)라도 첫 요소(제목 <p><strong>)만 페이지 끝에
+   남고 내용이 다음 페이지로 넘어가는 "제목 고아"는 금지 — 제목은 내용 첫 줄과 묶는다 */
+.tip > :first-child,
+.remember > :first-child,
+.preview-notice > :first-child,
+.memo-box > :first-child,
+.prep-note > :first-child,
+.result > :first-child {
+  page-break-after: avoid;
+  break-after: avoid;
+}
+
 /* 단, annotated-compare 내부의 개별 블록은 묶여 있게 */
 .annotated-compare .ac-block,
 .journey-forward .jf-group,
