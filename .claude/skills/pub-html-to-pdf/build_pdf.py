@@ -143,6 +143,11 @@ def render_pdf(
         density_css = html_path.parent / "_pdf-density.css"
         if density_css.exists():
             page.add_style_tag(path=str(density_css))
+        # 페이지 단위 개별 조정(특정 이미지 크기·강제 분할 등). density와 달리
+        # 빌드 루프가 덮어쓰지 않는 영구 파일 — 저자·에이전트가 직접 관리한다.
+        tweaks_css = html_path.parent / "_pdf-tweaks.css"
+        if tweaks_css.exists():
+            page.add_style_tag(path=str(tweaks_css))
         if pagedjs:
             # Paged.js는 "공백 전용 텍스트 노드"(span 사이 공백·줄바꿈)를 조판 중 제거해
             # 코드가 한 덩어리로 뭉개진다. <pre>로 감싸면 보존되지만 코드블록이 통짜가 되어

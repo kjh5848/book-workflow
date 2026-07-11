@@ -1,0 +1,18 @@
+﻿/* PDF 페이지 단위 개별 조정 — build_pdf.py가 렌더 시 주입 (화면 프리뷰 영향 없음)
+   각 규칙은 "그림이 앞 페이지의 남은 공간에 들어가도록" 특정 이미지만 소폭 축소한다.
+   빌드 루프가 덮어쓰지 않는 영구 파일. 이미지 교체·원고 이동 시 해당 규칙 삭제. */
+
+/* CH09 p25 공백 + p27 고아 2줄: 9.6절 파이프라인 다이어그램 축소로 흐름 전체를 당김. 12cm→9.5cm */
+img[src*="09_sequence-pipeline"] {
+  max-height: 9.5cm !important;
+}
+
+/* CH11 p10 55% 공백: 그림 11-4 터미널 캡처가 2pt 차이로 못 들어감. 11.5cm→8.5cm */
+img[src*="11_chat-sick-leave"] {
+  max-height: 8.5cm !important;
+}
+
+/* CH11 p12 54% 공백: 그림 11-6 터미널 캡처가 근소하게 못 들어감. 12cm→9.5cm */
+img[src*="11_chat-wfh"] {
+  max-height: 9.5cm !important;
+}
