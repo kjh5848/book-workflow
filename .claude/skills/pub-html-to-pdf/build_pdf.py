@@ -90,11 +90,9 @@ def build_merged_html(build_dir: Path, files: list[Path]) -> Path:
         text = html_file.read_text(encoding="utf-8")
         body_m = body_re.search(text)
         body = body_m.group(1) if body_m else text
-        if i > 0:
-            # 챕터 사이 강제 페이지 분할
-            bodies.append(
-                '<div style="page-break-before:always; break-before:page; height:0;"></div>'
-            )
+        # 챕터 사이 별도 page-break 구분자를 넣지 않는다. 각 챕터 첫 <h1>이
+        # print.css에서 page-break-before:always로 이미 새 페이지를 강제하므로,
+        # 구분자를 추가하면 이중 브레이크가 되어 챕터 사이에 빈 페이지가 낀다.
         bodies.append(body)
 
     merged = (
