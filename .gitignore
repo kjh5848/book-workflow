@@ -10,3 +10,8 @@ outputs/
 .pdf-build/
 .playwright-mcp/
 .vscode/
+
+# 의존성·로컬 전용
+node_modules/
+.claude/worktrees/
+projects/*/.build/styles
